@@ -10,5 +10,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnArticleController.AsyGetTestId(System.Int32)">
+            <summary>
+            条件查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.GetSnNavigation">
+            <summary>
+            同步查询
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

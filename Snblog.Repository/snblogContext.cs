@@ -1,12 +1,10 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Snblog.IRepository;
 using Snblog.Models;
 
 namespace Snblog.Repository
 {
-    public partial class snblogContext : DbContext, IconcardContext
+     public partial class snblogContext : DbContext, IconcardContext
     {
         public snblogContext()
         {
@@ -17,23 +15,15 @@ namespace Snblog.Repository
         {
         }
 
-
-
         public virtual DbSet<SnArticle> SnArticle { get; set; }
         public virtual DbSet<SnComments> SnComments { get; set; }
         public virtual DbSet<SnLabels> SnLabels { get; set; }
+        public virtual DbSet<SnNavigation> SnNavigation { get; set; }
         public virtual DbSet<SnSort> SnSort { get; set; }
         public virtual DbSet<SnUser> SnUser { get; set; }
         public virtual DbSet<SnUserFriends> SnUserFriends { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", x => x.ServerVersion("8.0.16-mysql"));
-//            }
-//        }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -201,6 +191,48 @@ namespace Snblog.Repository
                     .HasColumnName("label_name")
                     .HasColumnType("varchar(20)")
                     .HasComment("标签名称")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<SnNavigation>(entity =>
+            {
+                entity.HasKey(e => e.NavId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("sn_navigation");
+
+                entity.Property(e => e.NavId)
+                    .HasColumnName("nav_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.NavImg)
+                    .HasColumnName("nav_img")
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.NavText)
+                    .HasColumnName("nav_text")
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.NavTitle)
+                    .HasColumnName("nav_title")
+                    .HasColumnType("varchar(10)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.NavType)
+                    .HasColumnName("nav_type")
+                    .HasColumnType("varchar(20)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.NavUrl)
+                    .HasColumnName("nav_url")
+                    .HasColumnType("varchar(255)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });

@@ -30,8 +30,11 @@ namespace Snblog.Controllers
           return Ok(_service.GetTest());
          }
 
-
-        //条件查询
+        /// <summary>
+        /// 条件查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
          [HttpGet("AsyGetTestID")]
         public async Task<IActionResult> AsyGetTestId(int id)
         {

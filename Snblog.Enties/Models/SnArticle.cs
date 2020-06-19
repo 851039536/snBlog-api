@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Snblog.Models
 {
     public partial class SnArticle
     {
+        [Key]
         public int ArticleId { get; set; }
         public int? UserId { get; set; }
         public string Title { get; set; }

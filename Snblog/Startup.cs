@@ -97,6 +97,7 @@ namespace Snblog
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//·ºÐÍ¹¤³§
             services.AddScoped<IconcardContext, snblogContext>();//db
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
+            services.AddScoped<ISnNavigationService, SnNavigationService>();//ioc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
