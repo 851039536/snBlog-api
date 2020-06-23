@@ -12,9 +12,29 @@
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.AsyGetTestId(System.Int32)">
             <summary>
-            条件查询
+            id条件查询
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnArticleController.AsyInsArticle(Snblog.Models.SnArticle)">
+            <summary>
+            异步添加数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnArticleController.AsyDetArticleId(System.Int32)">
+            <summary>
+            异步删除数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnArticleController.AysUpArticle(Snblog.Models.SnArticle)">
+            <summary>
+            异步更新数据
+            </summary>
+            <param name="test"></param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnNavigationController.GetSnNavigation">

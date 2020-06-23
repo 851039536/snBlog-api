@@ -15,9 +15,16 @@ namespace Snblog.Service
         {
         }
 
-        public Task<string> AsyDetTestId(int id)
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<string> AsyDetArticleId(int id)
         {
-            throw new NotImplementedException();
+          int da= await Task.Run(() => CreateService<SnArticle>().AsyDelete(id));
+           string data = da == 1 ? "删除成功" : "删除失败";
+           return data;
         }
 
         public Task<List<SnArticle>> AsyGetTest()
@@ -30,14 +37,22 @@ namespace Snblog.Service
            return await CreateService<SnArticle>().AysGetById(id);
         }
 
-        public Task<SnArticle> AsyIntTest(SnArticle test)
+        /// <summary>
+        /// 添加数据
+        /// </summary>
+        /// <param name="test"></param>
+        /// <returns></returns>
+        public async Task<SnArticle> AsyInsArticle(SnArticle test)
         {
-            throw new NotImplementedException();
+             return await Task.Run(()=> CreateService<SnArticle>().AysAdd(test));
         }
 
-        public Task<string> AysUpTest(SnArticle test)
+        public async Task<string> AysUpArticle(SnArticle test)
         {
-            throw new NotImplementedException();
+             //int da=  CreateService<typecho_test>().Update(test);
+            int da= await Task.Run(()=> CreateService<SnArticle>().AysUpdate(test));
+            string data = da == 1 ? "更新成功" : "更新失败";
+            return data;
         }
 
         public string DetTestId(int id)

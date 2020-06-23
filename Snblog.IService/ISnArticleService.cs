@@ -35,7 +35,7 @@ namespace Snblog.IService
         /// <summary>
         /// 按id删除
         /// </summary>
-          Task<string> AsyDetTestId(int id);
+          Task<string> AsyDetArticleId(int id);
         /// <summary>
         /// 按id删除
         /// </summary>
@@ -46,7 +46,7 @@ namespace Snblog.IService
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnArticle> AsyIntTest(SnArticle test);
+        Task<SnArticle> AsyInsArticle(SnArticle test);
 
           
         /// <summary>
@@ -55,7 +55,7 @@ namespace Snblog.IService
         /// <returns></returns>
          SnArticle IntTest(SnArticle test);
 
-         Task<string> AysUpTest(SnArticle test);
+         Task<string> AysUpArticle(SnArticle test);
 
           string UpTest(SnArticle test);
     }
