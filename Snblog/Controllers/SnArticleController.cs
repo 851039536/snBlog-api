@@ -21,6 +21,16 @@ namespace Snblog.Controllers
              _service=service;
          }
 
+         /// <summary>
+         /// 查询总数
+         /// </summary>
+         /// <returns></returns>
+         [HttpGet("GetArticleCount")]
+        public IActionResult GetArticleCount()
+        {
+            return Ok( _service.GetArticleCount());
+        }
+
         /// <summary>
         /// 同步查询
         /// </summary>

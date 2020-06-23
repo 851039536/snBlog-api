@@ -17,6 +17,7 @@ namespace Snblog.IService
         /// <returns></returns>
          List<SnArticle> GetTest();
 
+         int GetArticleCount();
         /// <summary>
         /// 异步查询
         /// </summary>

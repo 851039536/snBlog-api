@@ -60,6 +60,12 @@ namespace Snblog.Service
             throw new NotImplementedException();
         }
 
+        public int GetArticleCount()
+        {
+           int data = CreateService<SnArticle>().Count();
+          return  data;
+        }
+
         public List<SnArticle> GetTest()
         {
              var data = this.CreateService<SnArticle>();

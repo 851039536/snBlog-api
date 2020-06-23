@@ -4,6 +4,12 @@
         <name>Snblog</name>
     </assembly>
     <members>
+        <member name="M:Snblog.Controllers.SnArticleController.GetArticleCount">
+            <summary>
+            查询总数
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnArticleController.GetTest">
             <summary>
             同步查询
