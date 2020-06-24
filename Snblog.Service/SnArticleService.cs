@@ -68,7 +68,7 @@ namespace Snblog.Service
 
         public List<SnArticle> GetTest()
         {
-             var data = this.CreateService<SnArticle>();
+          var data = this.CreateService<SnArticle>();
            return data.GetAll().ToList();
         }
 
