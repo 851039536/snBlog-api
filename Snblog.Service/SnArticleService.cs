@@ -22,7 +22,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetArticleId(int id)
         {
-          int da= await Task.Run(() => CreateService<SnArticle>().AsyDelete(id));
+           int da= await Task.Run(() => CreateService<SnArticle>().AsyDelete(id));
            string data = da == 1 ? "删除成功" : "删除失败";
            return data;
         }

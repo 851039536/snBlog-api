@@ -62,7 +62,7 @@ namespace Snblog.Controllers
             return Ok(await _service.AsyInsArticle(test));
         }
 
-         /// <summary>
+        /// <summary>
         /// 异步删除数据
         /// </summary>
         /// <param name="id"></param>
@@ -73,7 +73,7 @@ namespace Snblog.Controllers
           return Ok(await _service.AsyDetArticleId(id));
         }
 
-            /// <summary>
+        /// <summary>
         /// 异步更新数据
         /// </summary>
         /// <param name="test"></param>

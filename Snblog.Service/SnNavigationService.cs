@@ -15,9 +15,16 @@ namespace Snblog.Service
         {
         }
 
-        public Task<string> AsyDetTestId(int id)
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<string> AsyDelNavigation(int id)
         {
-            throw new NotImplementedException();
+           int da= await Task.Run(() => CreateService<SnNavigation>().AsyDelete(id));
+           string data = da == 1 ? "删除成功" : "删除失败";
+           return data;
         }
 
         public Task<List<SnNavigation>> AsyGetTest()
@@ -30,12 +37,24 @@ namespace Snblog.Service
             throw new NotImplementedException();
         }
 
-        public Task<SnArticle> AsyIntTest(SnArticle test)
+        /// <summary>
+        /// 添加数据
+        /// </summary>
+        /// <param name="test"></param>
+        /// <returns></returns>
+        public async Task<SnNavigation> AsyIntNavigation(SnNavigation test)
         {
-            throw new NotImplementedException();
+             return await Task.Run(()=> CreateService<SnNavigation>().AysAdd(test));
         }
 
-        public Task<string> AysUpTest(SnArticle test)
+        public async Task<string> AysUpNavigation(SnNavigation test)
+        {
+            int da= await Task.Run(()=> CreateService<SnNavigation>().AysUpdate(test));
+            string data = da == 1 ? "更新成功" : "更新失败";
+            return data;
+        }
+
+        public Task<string> AysUpTest(SnNavigation test)
         {
             throw new NotImplementedException();
         }
@@ -43,6 +62,12 @@ namespace Snblog.Service
         public string DetTestId(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public int GetNavigationCount()
+        {
+           int data = CreateService<SnNavigation>().Count();
+          return  data;
         }
 
         public List<SnNavigation> GetSnNavigation()
@@ -56,7 +81,22 @@ namespace Snblog.Service
             throw new NotImplementedException();
         }
 
+        public SnArticle IntTest(SnNavigation test)
+        {
+            throw new NotImplementedException();
+        }
+
         public string UpTest(SnArticle test)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string UpTest(SnNavigation test)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<SnNavigation> ISnNavigationService.AsyGetTestName(int id)
         {
             throw new NotImplementedException();
         }

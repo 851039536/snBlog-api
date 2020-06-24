@@ -11,6 +11,12 @@ namespace Snblog.IService
     /// </summary>
    public interface ISnNavigationService
     {
+
+        /// <summary>
+        /// 查询总数
+        /// </summary>
+        /// <returns></returns>
+         int GetNavigationCount();
         /// <summary>
         /// 查询所有
         /// </summary>
@@ -29,13 +35,13 @@ namespace Snblog.IService
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        Task<SnArticle> AsyGetTestName(int id);
+        Task<SnNavigation> AsyGetTestName(int id);
 
 
         /// <summary>
         /// 按id删除
         /// </summary>
-          Task<string> AsyDetTestId(int id);
+          Task<string> AsyDelNavigation(int id);
         /// <summary>
         /// 按id删除
         /// </summary>
@@ -46,17 +52,22 @@ namespace Snblog.IService
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnArticle> AsyIntTest(SnArticle test);
+        Task<SnNavigation> AsyIntNavigation(SnNavigation test);
 
           
         /// <summary>
         /// 同步添加数据
         /// </summary>
         /// <returns></returns>
-         SnArticle IntTest(SnArticle test);
+         SnArticle IntTest(SnNavigation test);
 
-         Task<string> AysUpTest(SnArticle test);
+        /// <summary>
+        /// 更新操作
+        /// </summary>
+        /// <param name="test"></param>
+        /// <returns></returns>
+         Task<string> AysUpNavigation(SnNavigation test);
 
-          string UpTest(SnArticle test);
+          string UpTest(SnNavigation test);
     }
 }

@@ -49,5 +49,31 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.GetNavigationCount">
+            <summary>
+            查询Navigation表总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.AsyIntNavigation(Snblog.Models.SnNavigation)">
+            <summary>
+            异步添加数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.AysUpNavigation(Snblog.Models.SnNavigation)">
+            <summary>
+            异步更新数据
+            </summary>
+            <param name="test"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.AsyDelNavigation(System.Int32)">
+            <summary>
+            异步删除数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
