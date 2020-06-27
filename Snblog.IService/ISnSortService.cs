@@ -6,30 +6,31 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService
 {
-   public interface ISnLabelsService
+  public interface ISnSortService
     {
-        /// <summary>
+
+         /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-         List<SnLabels> GetLabels();
+         List<SnSort> GetSort();
 
         /// <summary>
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnLabels> AsyInsLabels(SnLabels test);
+        Task<SnSort> AsyInsSort(SnSort test);
 
         /// <summary>
         /// 异步更新数据
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>
-          Task<string> AysUpLabels(SnLabels test);
+         Task<string> AysUpSort(SnSort test);
 
-        /// <summary>
+         /// <summary>
         /// 异步按id删除
         /// </summary>
-          Task<string> AsyDetLabels(int id);
+          Task<string> AsyDetSort(int id);
     }
 }

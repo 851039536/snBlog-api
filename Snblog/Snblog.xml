@@ -101,5 +101,31 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnSortController.GetSort">
+            <summary>
+            同步查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnSortController.AsyInsLabels(Snblog.Models.SnSort)">
+            <summary>
+            异步添加数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnSortController.AysUpSort(Snblog.Models.SnSort)">
+            <summary>
+            异步更新数据
+            </summary>
+            <param name="test"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnSortController.AsyDetSort(System.Int32)">
+            <summary>
+            异步删除数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

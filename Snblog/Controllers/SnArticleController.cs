@@ -11,6 +11,7 @@ using Snblog.Models;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class SnArticleController : ControllerBase

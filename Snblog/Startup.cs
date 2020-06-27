@@ -99,6 +99,7 @@ namespace Snblog
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
             services.AddScoped<ISnNavigationService, SnNavigationService>();//ioc
             services.AddScoped<ISnLabelsService, SnLabelsService>();//ioc
+            services.AddScoped<ISnSortService, SnSortService>();//ioc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
