@@ -23,6 +23,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnArticleController.AsyGetTestString(System.Int32)">
+            <summary>
+            类型条件查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnArticleController.AsyInsArticle(Snblog.Models.SnArticle)">
             <summary>
             异步添加数据

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Snblog.IService;
 using Snblog.Models;
+using Snblog.Repository;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -16,10 +18,12 @@ namespace Snblog.Controllers
     [ApiController]
     public class SnArticleController : ControllerBase
     {
+          private readonly snblogContext _coreDbContext;
           private readonly ISnArticleService _service; //IOC依赖注入
-         public SnArticleController(ISnArticleService service)
+         public SnArticleController(ISnArticleService service , snblogContext coreDbContext)
          {
              _service=service;
+             _coreDbContext = coreDbContext;
          }
 
          /// <summary>
@@ -51,6 +55,20 @@ namespace Snblog.Controllers
         public async Task<IActionResult> AsyGetTestId(int id)
         {
           return Ok(await _service.AsyGetTestName(id));
+        }
+
+        /// <summary>
+        /// 类型条件查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+         [HttpGet("AsyGetTestString")]
+        public async Task<IActionResult> AsyGetTestString(int LabelId)
+        {
+            var query = from c in _coreDbContext.SnArticle
+                 where c.LabelId == LabelId
+                 select new {c.ArticleId, c.TitleText ,c.Title,c.Time};
+            return Ok(await query.ToListAsync());
         }
 
         /// <summary>

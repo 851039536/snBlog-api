@@ -320,6 +320,7 @@ namespace Snblog.Repository
             return await _dbSet.FindAsync(id);
         }
 
+
         public TType Max<TType>(Expression<Func<T, TType>> column)
         {
             if (this._dbSet.AsNoTracking().Any())

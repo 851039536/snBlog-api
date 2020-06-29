@@ -37,6 +37,7 @@ namespace Snblog.Service
            return await CreateService<SnArticle>().AysGetById(id);
         }
 
+
         /// <summary>
         /// 添加数据
         /// </summary>
