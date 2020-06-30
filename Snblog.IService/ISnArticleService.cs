@@ -42,7 +42,12 @@ namespace Snblog.IService
         /// <returns></returns>
          List<SnArticle> GetTestWhere(int id);
 
-
+        /// <summary>
+        /// 查询分类总数
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+          int ConutLabel(int type);
         /// <summary>
         /// 按id删除
         /// </summary>

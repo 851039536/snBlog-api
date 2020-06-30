@@ -94,5 +94,15 @@ namespace Snblog.Service
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// 查询分类总数
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public int ConutLabel(int type)
+        {
+            return CreateService<SnArticle>().Count(c=> c.LabelId == type);
+        }
     }
 }

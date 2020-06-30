@@ -36,6 +36,17 @@ namespace Snblog.Controllers
             return Ok( _service.GetArticleCount());
         }
 
+          /// <summary>
+          /// 过滤查询总数
+          /// </summary>
+          /// <param name="type">分类</param>
+          /// <returns></returns>
+         [HttpGet("ConutLabel")]
+        public IActionResult ConutLabel(int type)
+        {
+            return Ok( _service.ConutLabel(type));
+        }
+
         /// <summary>
         /// 按分类id查询
         /// </summary>

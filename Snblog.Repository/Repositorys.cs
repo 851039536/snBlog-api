@@ -184,8 +184,7 @@ namespace Snblog.Repository
 
         public async Task<int> AysUpdate(T entity)
         {
-            
-            var entry = this._dbContext.Entry(entity);
+            var entry = _dbContext.Entry(entity);
             if (entry.State == EntityState.Detached)
             {
                 entry.State = EntityState.Modified;
