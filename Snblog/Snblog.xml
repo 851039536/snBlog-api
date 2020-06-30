@@ -10,6 +10,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnArticleController.GetTestWhere(System.Int32)">
+            <summary>
+            按分类id查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnArticleController.GetTest">
             <summary>
             同步查询

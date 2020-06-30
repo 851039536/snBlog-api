@@ -3,6 +3,7 @@ using Snblog.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -408,5 +409,217 @@ namespace Snblog.Repository
         {
             this._dbContext.Dispose();
         }
+
+
+        # region 插入数据
+
+        /// <summary>
+        /// 插入数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="isSaveChange"></param>
+        /// <returns></returns>
+        public bool Insert(T entity, bool isSaveChange = true)
+        {
+            _dbSet.Add(entity);
+            if (isSaveChange)
+            {
+                return SaveChanges() > 0;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 异步插入
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="isSaveChange"></param>
+        /// <returns></returns>
+        public async Task<bool> InsertAsync(T entity, bool isSaveChange = true)
+        {
+            _dbSet.Add(entity);
+            if (isSaveChange)
+            {
+                return await SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+
+
+        public bool Insert(List<T> entitys, bool isSaveChange = true)
+        {
+            _dbSet.AddRange(entitys);
+            if (isSaveChange)
+            {
+                return SaveChanges() > 0;
+            }
+            return false;
+        }
+
+        public async Task<bool> InsertAsync(List<T> entitys, bool isSaveChange = true)
+        {
+             _dbSet.AddRange(entitys);
+            if (isSaveChange)
+            {
+                return await SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+        #endregion
+
+        #region 删除
+        public bool Delete(List<T> entitys, bool isSaveChange = true)
+        {
+            entitys.ForEach(entity =>
+            {
+                _dbSet.Attach(entity);
+                _dbSet.Remove(entity);
+            });
+            return isSaveChange ? SaveChanges() > 0 : false;
+        }
+
+        public virtual async Task<bool> DeleteAsync(T entity, bool isSaveChange = true)
+        {
+            _dbSet.Attach(entity);
+            _dbSet.Remove(entity);
+            return isSaveChange ? await SaveChangesAsync() > 0 : false;
+        }
+        public virtual async Task<bool> DeleteAsync(List<T> entitys, bool isSaveChange = true)
+        {
+            entitys.ForEach(entity =>
+            {
+                _dbSet.Attach(entity);
+                _dbSet.Remove(entity);
+            });
+            return isSaveChange ? await SaveChangesAsync() > 0 : false;
+        }
+        #endregion
+
+        #region 更新数据
+        public bool Update(T entity, bool isSaveChange = true, List<string> updatePropertyList = null)
+        {
+            if (entity == null)
+            {
+                return false;
+            }
+            _dbSet.Attach(entity);
+            var entry = _dbContext.Entry(entity);
+            if (updatePropertyList == null)
+            {
+                entry.State = EntityState.Modified;//全字段更新
+            }
+            else
+            {
+               
+                    updatePropertyList.ForEach(c => {
+                        entry.Property(c).IsModified = true; //部分字段更新的写法
+                    });
+               
+               
+            }
+            if (isSaveChange)
+            {
+                return SaveChanges() > 0;
+            }
+            return false;
+        }
+        public bool Update(List<T> entitys, bool isSaveChange = true)
+        {
+            if (entitys == null || entitys.Count == 0)
+            {
+                return false;
+            }
+            entitys.ForEach(c => {
+                Update(c, false);
+            });
+            if (isSaveChange)
+            {
+                return SaveChanges() > 0;
+            }
+            return false;
+        }
+        public async Task<bool> UpdateAsync(T entity, bool isSaveChange = true, List<string> updatePropertyList = null)
+        {
+            if (entity == null)
+            {
+                return false;
+            }
+            _dbSet.Attach(entity);
+            var entry = _dbContext.Entry<T>(entity);
+            if (updatePropertyList == null)
+            {
+                entry.State = EntityState.Modified;//全字段更新
+            }
+            else
+            {
+                updatePropertyList.ForEach(c => {
+                        entry.Property(c).IsModified = true; //部分字段更新的写法
+                    });
+              
+            }
+            if (isSaveChange)
+            {
+                return await SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+        public async Task<bool> UpdateAsync(List<T> entitys, bool isSaveChange = true)
+        {
+            if (entitys == null || entitys.Count == 0)
+            {
+                return false;
+            }
+            entitys.ForEach(c => {
+                _dbSet.Attach(c);
+                _dbContext.Entry<T>(c).State = EntityState.Modified;
+            });
+            if (isSaveChange)
+            {
+                return await SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+
+       
+        #endregion
+
+         #region SQL语句
+        public virtual void BulkInsert<T>(List<T> entities)
+        { }
+        public int ExecuteSql(string sql)
+        {
+            return _dbContext.Database.ExecuteSqlCommand(sql) ; 
+        }
+
+        public Task<int> ExecuteSqlAsync(string sql)
+        {
+             return _dbContext.Database.ExecuteSqlCommandAsync(sql);  
+        }
+
+        public int ExecuteSql(string sql, List<DbParameter> spList)
+        {
+           return  _dbContext.Database.ExecuteSqlCommand(sql, spList.ToArray());
+        }
+
+        public Task<int>  ExecuteSqlAsync(string sql, List<DbParameter> spList)
+        {   
+             return  _dbContext.Database.ExecuteSqlCommandAsync(sql, spList.ToArray());
+        }
+
+      
+        public virtual DataTable GetDataTableWithSql(string sql)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual DataTable GetDataTableWithSql(string sql, List<DbParameter> spList)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+
+
     }
 }

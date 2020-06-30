@@ -17,6 +17,8 @@ namespace Snblog.IService
         /// <returns></returns>
          List<SnArticle> GetTest();
 
+
+
          int GetArticleCount();
         /// <summary>
         /// 异步查询
@@ -31,6 +33,14 @@ namespace Snblog.IService
         /// <param name="name"></param>
         /// <returns></returns>
         Task<SnArticle> AsyGetTestName(int id);
+
+         /// <summary>
+        /// where条件查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+         List<SnArticle> GetTestWhere(int id);
 
 
         /// <summary>

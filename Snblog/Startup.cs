@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Repository;
@@ -75,9 +76,6 @@ namespace Snblog
 
              //注册DbContext
             services.AddDbContext<snblogContext>(options=>options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-
-       
-
 
              //找一找教程网原创文章
           

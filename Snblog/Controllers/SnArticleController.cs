@@ -25,7 +25,7 @@ namespace Snblog.Controllers
              _service=service;
              _coreDbContext = coreDbContext;
          }
-
+        
          /// <summary>
          /// 查询总数
          /// </summary>
@@ -34,6 +34,17 @@ namespace Snblog.Controllers
         public IActionResult GetArticleCount()
         {
             return Ok( _service.GetArticleCount());
+        }
+
+        /// <summary>
+        /// 按分类id查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+          [HttpGet("GetTestWhere")]
+        public IActionResult GetTestWhere(int id)
+        {
+            return Ok( _service.GetTestWhere(id));
         }
 
         /// <summary>

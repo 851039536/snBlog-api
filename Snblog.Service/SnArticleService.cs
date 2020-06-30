@@ -1,4 +1,5 @@
-﻿using Snblog.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
 using System;
@@ -35,6 +36,17 @@ namespace Snblog.Service
         public async Task<SnArticle> AsyGetTestName(int id)
         {
            return await CreateService<SnArticle>().AysGetById(id);
+        }
+
+        /// <summary>
+        /// 按分类查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<SnArticle> GetTestWhere(int id)
+        {
+           var data=  CreateService<SnArticle>().Where(s => s.LabelId == id);
+            return  data.ToList();
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -42,6 +43,8 @@ namespace Snblog.IRepository
         /// </summary>
         IQueryable<T> TrackEntities { get; }
 
+
+        #region 插入数据
         /// <summary>
         /// 插入 - 通过实体对象添加
         /// </summary>
@@ -56,6 +59,20 @@ namespace Snblog.IRepository
         /// <param name="entitys">实体对象集合</param>
         /// <param name="isSave">是否执行</param>
         void AddRange(IEnumerable<T> entitys, bool isSave = true);
+
+        bool Insert(T entity, bool isSaveChange);
+        Task<bool> InsertAsync(T entity, bool isSaveChange);
+        bool Insert(List<T> entitys, bool isSaveChange = true);
+        Task<bool> InsertAsync(List<T> entitys, bool isSaveChange);
+
+        #endregion
+
+
+        #region 删除(删除之前需要查询)
+        bool Delete(List<T> entitys, bool isSaveChange);
+        Task<bool> DeleteAsync(T entity, bool isSaveChange);
+        Task<bool> DeleteAsync(List<T> entitys, bool isSaveChange = true);
+        #endregion
 
         /// <summary>
         /// 删除 - 通过实体对象删除
@@ -83,6 +100,15 @@ namespace Snblog.IRepository
         /// <param name="where">过滤条件</param>
         /// <param name="isSave">是否执行</param>
         void Delete(Expression<Func<T, bool>> @where, bool isSave = true);
+
+
+        #region 修改数据
+       bool Update(T entity, bool isSaveChange, List<string> updatePropertyList);
+       Task<bool> UpdateAsync(T entity, bool isSaveChange, List<string> updatePropertyList);
+       bool Update(List<T> entitys, bool isSaveChange);
+       Task<bool> UpdateAsync(List<T> entitys, bool isSaveChange );
+       #endregion
+
 
         /// <summary>
         /// 修改 - 通过实体对象修改
@@ -133,6 +159,11 @@ namespace Snblog.IRepository
         /// <param name="isDesc">排序方式</param>
         /// <returns></returns>
         T FirstOrDefault<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false);
+
+        # region 查找数据
+
+      
+
 
         /// <summary>
         /// 去重查询
@@ -250,5 +281,18 @@ namespace Snblog.IRepository
         /// <param name="where">过滤条件</param>
         /// <returns></returns>
         TType Sum<TType>(Expression<Func<T, TType>> selector, Expression<Func<T, bool>> @where) where TType : new();
+
+        #endregion
+
+
+        #region 执行Sql语句
+        void BulkInsert<T>(List<T> entities);
+        int ExecuteSql(string sql);
+        Task<int> ExecuteSqlAsync(string sql);
+        int ExecuteSql(string sql, List<DbParameter> spList);
+        Task<int> ExecuteSqlAsync(string sql, List<DbParameter> spList);
+        DataTable GetDataTableWithSql(string sql);
+        DataTable GetDataTableWithSql(string sql, List<DbParameter> spList);
+        #endregion
     }
 }
