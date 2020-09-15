@@ -23,6 +23,7 @@ namespace Snblog.IService
         /// <returns></returns>
          List<SnNavigation> GetSnNavigation();
 
+        Task<List<SnNavigation>> AsyGetWhereTest(string type ,bool fag);
         /// <summary>
         /// 异步查询
         /// </summary>

@@ -110,6 +110,14 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.AsyGetWhereTest(System.String,System.Boolean)">
+            <summary>
+            条件-排序-查询
+            </summary>
+            <param name="type">分类条件</param>
+            <param name="fag">排序</param>
+            <returns>List</returns>
+        </member>
         <member name="M:Snblog.Controllers.SnNavigationController.AsyIntNavigation(Snblog.Models.SnNavigation)">
             <summary>
             异步添加数据

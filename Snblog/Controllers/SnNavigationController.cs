@@ -41,6 +41,19 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
+        /// 条件-排序-查询
+        /// </summary>
+        /// <param name="type">分类条件</param>
+        /// <param name="fag">排序</param>
+        /// <returns>List</returns>
+         [HttpGet("AsyGetWhereTest")]
+         public async Task<IActionResult> AsyGetWhereTest(string type, bool fag)
+        {
+            return Ok(await _service.AsyGetWhereTest(type,fag));
+        }
+      
+
+        /// <summary>
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>

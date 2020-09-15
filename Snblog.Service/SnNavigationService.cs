@@ -1,4 +1,5 @@
-﻿using Snblog.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
 using System;
@@ -35,6 +36,12 @@ namespace Snblog.Service
         public Task<SnArticle> AsyGetTestName(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<SnNavigation>> AsyGetWhereTest(string type,bool fag)
+        {
+           var data = this.CreateService<SnNavigation>().Where(c=> c.NavType==type,s=>s.NavId,fag);
+            return await data.ToListAsync();
         }
 
         /// <summary>
