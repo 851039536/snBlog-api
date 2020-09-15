@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Snblog.IRepository;
 using Snblog.IService;
+using Snblog.Models;
 using Snblog.Repository;
 using Snblog.Service;
 
@@ -102,6 +103,7 @@ namespace Snblog
             services.AddScoped<ISnNavigationService, SnNavigationService>();//ioc
             services.AddScoped<ISnLabelsService, SnLabelsService>();//ioc
             services.AddScoped<ISnSortService, SnSortService>();//ioc
+             services.AddScoped<ISnOneService, SnOneService>();//ioc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

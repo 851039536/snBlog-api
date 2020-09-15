@@ -138,6 +138,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnOneController.GetTest">
+            <summary>
+            同步查询
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnSortController.GetSort">
             <summary>
             同步查询

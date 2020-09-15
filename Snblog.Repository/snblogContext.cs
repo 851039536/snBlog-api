@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Snblog.IRepository;
-using Snblog.Models;
 
-namespace Snblog.Repository
+namespace Snblog.Models
 {
-     public partial class snblogContext : DbContext, IconcardContext
+    public partial class snblogContext : DbContext,IconcardContext
     {
         public snblogContext()
         {
@@ -19,11 +20,19 @@ namespace Snblog.Repository
         public virtual DbSet<SnComments> SnComments { get; set; }
         public virtual DbSet<SnLabels> SnLabels { get; set; }
         public virtual DbSet<SnNavigation> SnNavigation { get; set; }
+        public virtual DbSet<SnOne> SnOne { get; set; }
         public virtual DbSet<SnSort> SnSort { get; set; }
         public virtual DbSet<SnUser> SnUser { get; set; }
         public virtual DbSet<SnUserFriends> SnUserFriends { get; set; }
 
-       
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", x => x.ServerVersion("8.0.16-mysql"));
+//            }
+//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -83,7 +92,7 @@ namespace Snblog.Repository
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("title")
-                    .HasColumnType("varchar(30)")
+                    .HasColumnType("varchar(100)")
                     .HasComment("标题 ")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
@@ -208,7 +217,7 @@ namespace Snblog.Repository
 
                 entity.Property(e => e.NavImg)
                     .HasColumnName("nav_img")
-                    .HasColumnType("varchar(50)")
+                    .HasColumnType("varchar(255)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -233,6 +242,68 @@ namespace Snblog.Repository
                 entity.Property(e => e.NavUrl)
                     .HasColumnName("nav_url")
                     .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<SnOne>(entity =>
+            {
+                entity.HasKey(e => e.OneId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("sn_one");
+
+                entity.Property(e => e.OneId)
+                    .HasColumnName("one_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.OneAuthor)
+                    .HasColumnName("one_author")
+                    .HasColumnType("varchar(20)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.OneClassify)
+                    .HasColumnName("one_classify")
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.OneComment)
+                    .HasColumnName("one_comment")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.OneData)
+                    .HasColumnName("one_data")
+                    .HasColumnType("varchar(40)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.OneGive)
+                    .HasColumnName("one_give")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.OneImg)
+                    .HasColumnName("one_img")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.OneRead)
+                    .HasColumnName("one_read")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.OneText)
+                    .HasColumnName("one_text")
+                    .HasColumnType("text")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.OneTitle)
+                    .HasColumnName("one_title")
+                    .HasColumnType("varchar(100)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });

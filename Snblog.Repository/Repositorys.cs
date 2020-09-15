@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Snblog.IRepository;
+using Snblog.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
