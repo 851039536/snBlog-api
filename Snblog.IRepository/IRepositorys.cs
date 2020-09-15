@@ -189,6 +189,20 @@ namespace Snblog.IRepository
         /// <returns></returns>
         IQueryable<T> Where<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false);
 
+
+
+                /// <summary>
+        /// 条件分页查询 - 支持排序
+        /// </summary>
+        /// <typeparam name="TOrder">排序约束</typeparam>
+        /// <param name="where">过滤条件</param>
+        /// <param name="order">排序条件</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="count">返回总条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        /// <returns></returns>
+        IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc = false);
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
@@ -213,7 +227,7 @@ namespace Snblog.IRepository
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <returns></returns>
-        IQueryable<T> Where<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, int pageIndex, int pageSize, out int count, bool isDesc = false);
+        IQueryable<T> Where1<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, int pageIndex, int pageSize, out int count, bool isDesc = false);
 
         /// <summary>
         /// 获取所有数据

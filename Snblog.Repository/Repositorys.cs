@@ -268,6 +268,20 @@ namespace Snblog.Repository
             }
         }
 
+
+              public IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc = false)
+        {
+            count = Count();
+            if (isDesc)
+            {
+                return this._dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            }
+            else
+            {
+                return this._dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            }
+        }
+
         public IEnumerable<T> Where<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc = false)
         {
             count = Count();
@@ -612,6 +626,11 @@ namespace Snblog.Repository
         }
 
         public virtual DataTable GetDataTableWithSql(string sql, List<DbParameter> spList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<T> Where1<TOrder>(Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, int pageIndex, int pageSize, out int count, bool isDesc = false)
         {
             throw new NotImplementedException();
         }

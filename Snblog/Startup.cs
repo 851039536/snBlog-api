@@ -79,15 +79,19 @@ namespace Snblog
 
              //找一找教程网原创文章
           
-            services.AddCors(options =>
+           #region Cors跨域请求
+            services.AddCors(c =>
             {
-                options.AddPolicy(MyAllowSpecificOrigins,
-                    builder => builder.AllowAnyOrigin()
-                    .WithMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
- 
-                    );
- 
+                c.AddPolicy("AllRequests", policy =>
+                {
+                    policy
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+
+                });
             });
+            #endregion
             services.AddControllers();
 
                      //DI依赖注入配置。
@@ -124,8 +128,8 @@ namespace Snblog
 
             app.UseRouting();
 
-            //跨域
-             app.UseCors(MyAllowSpecificOrigins);
+             //开启Cors跨域请求中间件
+            app.UseCors("AllRequests");
 
             app.UseAuthorization();
 

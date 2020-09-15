@@ -69,6 +69,19 @@ namespace Snblog.Controllers
          }
 
         /// <summary>
+        /// 条件分页查询 - 支持排序
+        /// </summary>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+         [HttpGet("GetfyTest")]
+        public IActionResult GetfyTest(int pageIndex, int pageSize,bool isDesc)
+        {
+            int count;
+            return Ok(_service.GetPagingWhere(pageIndex,pageSize,out count,isDesc));
+        }
+
+        /// <summary>
         /// id条件查询
         /// </summary>
         /// <param name="id"></param>
@@ -89,7 +102,7 @@ namespace Snblog.Controllers
         {
             var query = from c in _coreDbContext.SnArticle
                  where c.LabelId == LabelId
-                 select new {c.ArticleId, c.TitleText ,c.Title,c.Time};
+                 select new {c.ArticleId, c.TitleText ,c.Title,c.Time,c.Read,c.Give};
             return Ok(await query.ToListAsync());
         }
 
