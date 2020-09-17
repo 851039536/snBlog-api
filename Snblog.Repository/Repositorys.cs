@@ -270,7 +270,7 @@ namespace Snblog.Repository
         }
 
 
-              public IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc = false)
+              public IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc)
         {
             count = Count();
             if (isDesc)

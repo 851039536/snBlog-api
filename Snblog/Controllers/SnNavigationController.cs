@@ -51,6 +51,19 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.AsyGetWhereTest(type,fag));
         }
+
+         /// <summary>
+        /// 条件分页查询 - 支持排序
+        /// </summary>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+         [HttpGet("GetfyNavigation")]
+        public IActionResult GetfyNavigation(int pageIndex, int pageSize,bool isDesc)
+        {
+            int count;
+            return Ok(_service.GetPagingWhere(pageIndex,pageSize,out count,isDesc));
+        }
       
 
         /// <summary>

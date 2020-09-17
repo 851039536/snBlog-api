@@ -51,7 +51,7 @@ namespace Snblog.Service
 
         
 
-       /// <summary>
+        /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
         /// <typeparam name="TOrder">排序约束</typeparam>
@@ -63,7 +63,7 @@ namespace Snblog.Service
         /// <param name="isDesc">是否倒序</param>
         public List<SnArticle> GetPagingWhere(int pageIndex, int pageSize, out int count,bool isDesc)
         {
-           var data=  CreateService<SnArticle>().Wherepage(s => s.ArticleId!=null,c => c.ArticleId,pageIndex,pageSize ,out count);
+           var data=  CreateService<SnArticle>().Wherepage(s => s.ArticleId!=null,c => c.ArticleId,pageIndex,pageSize ,out count,isDesc);
             return  data.ToList();
         }
 

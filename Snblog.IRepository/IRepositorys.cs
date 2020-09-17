@@ -202,7 +202,7 @@ namespace Snblog.IRepository
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <returns></returns>
-        IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc = false);
+        IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc);
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>

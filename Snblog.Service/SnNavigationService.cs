@@ -16,6 +16,22 @@ namespace Snblog.Service
         {
         }
 
+         /// <summary>
+        /// 条件分页查询 - 支持排序
+        /// </summary>
+        /// <typeparam name="TOrder">排序约束</typeparam>
+        /// <param name="where">过滤条件</param>
+        /// <param name="order">排序条件</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="count">返回总条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        public List<SnNavigation> GetPagingWhere(int pageIndex, int pageSize, out int count,bool isDesc)
+        {
+           var data=  CreateService<SnNavigation>().Wherepage(s => s.NavId!=null,c => c.NavId,pageIndex,pageSize ,out count,isDesc);
+            return  data.ToList();
+        }
+
         /// <summary>
         /// 删除
         /// </summary>

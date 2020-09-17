@@ -118,6 +118,14 @@
             <param name="fag">排序</param>
             <returns>List</returns>
         </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.GetfyNavigation(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            条件分页查询 - 支持排序
+            </summary>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
+        </member>
         <member name="M:Snblog.Controllers.SnNavigationController.AsyIntNavigation(Snblog.Models.SnNavigation)">
             <summary>
             异步添加数据
