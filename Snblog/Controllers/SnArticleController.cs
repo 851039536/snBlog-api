@@ -16,6 +16,7 @@ namespace Snblog.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
+
     public class SnArticleController : ControllerBase
     {
           private readonly snblogContext _coreDbContext;
@@ -27,7 +28,7 @@ namespace Snblog.Controllers
          }
         
          /// <summary>
-         /// 查询总数
+         /// 查询文章总条数
          /// </summary>
          /// <returns></returns>
          [HttpGet("GetArticleCount")]
@@ -39,7 +40,7 @@ namespace Snblog.Controllers
           /// <summary>
           /// 过滤查询总数
           /// </summary>
-          /// <param name="type">分类</param>
+          /// <param name="type">条件分类</param>
           /// <returns></returns>
          [HttpGet("ConutLabel")]
         public IActionResult ConutLabel(int type)
@@ -53,13 +54,13 @@ namespace Snblog.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
           [HttpGet("GetTestWhere")]
-        public IActionResult GetTestWhere(int id)
+        public IActionResult GetTestWhere(int SortId)
         {
-            return Ok( _service.GetTestWhere(id));
+            return Ok( _service.GetTestWhere(SortId));
         }
 
         /// <summary>
-        /// 同步查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetTest")]
@@ -71,14 +72,15 @@ namespace Snblog.Controllers
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
+        /// <param name="label">分类 : 00-表示查询所有</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
          [HttpGet("GetfyTest")]
-        public IActionResult GetfyTest(int pageIndex, int pageSize,bool isDesc)
+        public IActionResult GetfyTest(int label,int pageIndex, int pageSize,bool isDesc)
         {
             int count;
-            return Ok(_service.GetPagingWhere(pageIndex,pageSize,out count,isDesc));
+            return Ok(_service.GetPagingWhere(label,pageIndex,pageSize,out count,isDesc));
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 类型条件查询
+        /// 标签条件查询
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

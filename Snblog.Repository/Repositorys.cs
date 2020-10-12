@@ -250,7 +250,9 @@ namespace Snblog.Repository
         public IQueryable<T> Distinct(Expression<Func<T, bool>> @where)
         {
             return this._dbSet.AsNoTracking().Where(@where).Distinct();
+            
         }
+        
 
         public IQueryable<T> Where(Expression<Func<T, bool>> @where)
         {
@@ -635,6 +637,7 @@ namespace Snblog.Repository
         {
             throw new NotImplementedException();
         }
+
 
         #endregion
 

@@ -15,10 +15,12 @@ namespace Snblog.Controllers
     [ApiController]
     public class SnNavigationController : ControllerBase
     {
+          private readonly snblogContext _coreDbContext;
             private readonly ISnNavigationService _service; //IOC依赖注入
-         public SnNavigationController(ISnNavigationService service)
+         public SnNavigationController(ISnNavigationService service, snblogContext coreDbContext)
          {
              _service=service;
+            _coreDbContext = coreDbContext;
          }
 
         /// <summary>
@@ -30,6 +32,17 @@ namespace Snblog.Controllers
         {
           return Ok(_service.GetSnNavigation());
          }
+
+        /// <summary>
+        ///根据id查询
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+         [HttpGet("GetNavigationId")]
+        public IActionResult GetNavigationId(int id)
+        {
+            return Ok(_service.GetNavigationId(id));
+        }
           /// <summary>
          /// 查询Navigation表总数
          /// </summary>
@@ -39,7 +52,18 @@ namespace Snblog.Controllers
         {
             return Ok( _service.GetNavigationCount());
         }
-
+   
+        /// <summary>
+        /// 去重查询
+        /// </summary>
+        /// <param name="type">查询条件</param>
+        /// <returns></returns>
+         [HttpGet("GetDistTest")]
+        public IActionResult GetDistTest(string type)
+        {
+            
+            return Ok( _service.GetDistTest(type));
+        }
         /// <summary>
         /// 条件-排序-查询
         /// </summary>
@@ -55,14 +79,15 @@ namespace Snblog.Controllers
          /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
+         /// <param name="type">查询条件:all -表示查询所有</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
          [HttpGet("GetfyNavigation")]
-        public IActionResult GetfyNavigation(int pageIndex, int pageSize,bool isDesc)
+        public IActionResult GetfyNavigation(string type,int pageIndex, int pageSize,bool isDesc)
         {
             int count;
-            return Ok(_service.GetPagingWhere(pageIndex,pageSize,out count,isDesc));
+            return Ok(_service.GetPagingWhere(type,pageIndex,pageSize,out count,isDesc));
         }
       
 

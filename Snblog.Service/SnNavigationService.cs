@@ -26,9 +26,18 @@ namespace Snblog.Service
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        public List<SnNavigation> GetPagingWhere(int pageIndex, int pageSize, out int count,bool isDesc)
+        public List<SnNavigation> GetPagingWhere(string type,int pageIndex, int pageSize, out int count,bool isDesc)
         {
-           var data=  CreateService<SnNavigation>().Wherepage(s => s.NavId!=null,c => c.NavId,pageIndex,pageSize ,out count,isDesc);
+             IEnumerable<SnNavigation> data;
+            if (type == "all")
+            {
+                   data=  CreateService<SnNavigation>().Wherepage(s => s.NavType!=null,c => c.NavId,pageIndex,pageSize ,out count,isDesc);
+            }
+            else
+            {
+                   data=  CreateService<SnNavigation>().Wherepage(s => s.NavType==type,c => c.NavId,pageIndex,pageSize ,out count,isDesc);
+            }
+          
             return  data.ToList();
         }
 
@@ -46,7 +55,8 @@ namespace Snblog.Service
 
         public Task<List<SnNavigation>> AsyGetTest()
         {
-            throw new NotImplementedException();
+             throw new NotImplementedException();
+            //var data = CreateService<SnNavigation>()
         }
 
         public Task<SnArticle> AsyGetTestName(int id)
@@ -122,6 +132,18 @@ namespace Snblog.Service
         Task<SnNavigation> ISnNavigationService.AsyGetTestName(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public List<SnNavigation> GetDistTest(string type)
+        {
+           var data = CreateService<SnNavigation>().Distinct(s=> s.NavType== type);
+
+            return data.ToList();
+        }
+
+        public  SnNavigation GetNavigationId(int id)
+        {
+          return  CreateService<SnNavigation>().GetById(id);
         }
     }
 }

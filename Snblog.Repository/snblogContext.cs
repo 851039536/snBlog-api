@@ -21,9 +21,13 @@ namespace Snblog.Models
         public virtual DbSet<SnLabels> SnLabels { get; set; }
         public virtual DbSet<SnNavigation> SnNavigation { get; set; }
         public virtual DbSet<SnOne> SnOne { get; set; }
+        public virtual DbSet<SnSoftware> SnSoftware { get; set; }
+        public virtual DbSet<SnSoftwareType> SnSoftwareType { get; set; }
         public virtual DbSet<SnSort> SnSort { get; set; }
         public virtual DbSet<SnUser> SnUser { get; set; }
         public virtual DbSet<SnUserFriends> SnUserFriends { get; set; }
+        public virtual DbSet<SnVideo> SnVideo { get; set; }
+        public virtual DbSet<SnVideoType> SnVideoType { get; set; }
 
 //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //        {
@@ -229,7 +233,7 @@ namespace Snblog.Models
 
                 entity.Property(e => e.NavTitle)
                     .HasColumnName("nav_title")
-                    .HasColumnType("varchar(10)")
+                    .HasColumnType("varchar(50)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -304,6 +308,67 @@ namespace Snblog.Models
                 entity.Property(e => e.OneTitle)
                     .HasColumnName("one_title")
                     .HasColumnType("varchar(100)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<SnSoftware>(entity =>
+            {
+                entity.HasKey(e => e.SoId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("sn_software");
+
+                entity.Property(e => e.SoId)
+                    .HasColumnName("so_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.SoComment)
+                    .HasColumnName("so_comment")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SoData)
+                    .HasColumnName("so_data")
+                    .HasColumnType("varchar(20)")
+                    .HasComment("时间")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SoImg)
+                    .HasColumnName("so_img")
+                    .HasColumnType("varchar(200)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SoTitle)
+                    .HasColumnName("so_title")
+                    .HasColumnType("varchar(100)")
+                    .HasComment("标题")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SoTypeid)
+                    .HasColumnName("so_typeid")
+                    .HasColumnType("int(11)")
+                    .HasComment("分类");
+            });
+
+            modelBuilder.Entity<SnSoftwareType>(entity =>
+            {
+                entity.HasKey(e => e.SoId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("sn_software_type");
+
+                entity.Property(e => e.SoId)
+                    .HasColumnName("so_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.SoType)
+                    .HasColumnName("so-type")
+                    .HasColumnType("varchar(20)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
@@ -441,6 +506,62 @@ namespace Snblog.Models
                     .HasColumnName("user_status")
                     .HasColumnType("varchar(20)")
                     .HasComment("好友状态")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<SnVideo>(entity =>
+            {
+                entity.HasKey(e => e.VId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("sn_video");
+
+                entity.Property(e => e.VId)
+                    .HasColumnName("v_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.VData)
+                    .HasColumnName("v_data")
+                    .HasColumnType("varchar(20)")
+                    .HasComment("时间")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.VImg)
+                    .HasColumnName("v_img")
+                    .HasColumnType("varchar(255)")
+                    .HasComment("图片")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.VTielte)
+                    .HasColumnName("v_tielte")
+                    .HasColumnType("varchar(50)")
+                    .HasComment("标题")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.VTypeid)
+                    .HasColumnName("v_typeid")
+                    .HasColumnType("int(11)")
+                    .HasComment("分类");
+            });
+
+            modelBuilder.Entity<SnVideoType>(entity =>
+            {
+                entity.HasKey(e => e.VId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("sn_video_type");
+
+                entity.Property(e => e.VId)
+                    .HasColumnName("v_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.VType)
+                    .HasColumnName("v_type")
+                    .HasColumnType("varchar(20)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });

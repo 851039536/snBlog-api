@@ -6,7 +6,7 @@
     <members>
         <member name="M:Snblog.Controllers.SnArticleController.GetArticleCount">
             <summary>
-            查询总数
+            查询文章总条数
             </summary>
             <returns></returns>
         </member>
@@ -14,7 +14,7 @@
             <summary>
             过滤查询总数
             </summary>
-            <param name="type">分类</param>
+            <param name="type">条件分类</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.GetTestWhere(System.Int32)">
@@ -26,14 +26,15 @@
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.GetTest">
             <summary>
-            同步查询
+            查询所有
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnArticleController.GetfyTest(System.Int32,System.Int32,System.Boolean)">
+        <member name="M:Snblog.Controllers.SnArticleController.GetfyTest(System.Int32,System.Int32,System.Int32,System.Boolean)">
             <summary>
             条件分页查询 - 支持排序
             </summary>
+            <param name="label">分类 : 00-表示查询所有</param>
             <param name="pageIndex">当前页码</param>
             <param name="pageSize">每页记录条数</param>
             <param name="isDesc">是否倒序</param>
@@ -47,7 +48,7 @@
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.AsyGetTestString(System.Int32)">
             <summary>
-            类型条件查询
+            标签条件查询
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -104,10 +105,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.GetNavigationId(System.Int32)">
+             <summary>
+            根据id查询
+             </summary>
+             <param name="id">id</param>
+             <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnNavigationController.GetNavigationCount">
             <summary>
             查询Navigation表总数
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.GetDistTest(System.String)">
+            <summary>
+            去重查询
+            </summary>
+            <param name="type">查询条件</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnNavigationController.AsyGetWhereTest(System.String,System.Boolean)">
@@ -118,10 +133,11 @@
             <param name="fag">排序</param>
             <returns>List</returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.GetfyNavigation(System.Int32,System.Int32,System.Boolean)">
+        <member name="M:Snblog.Controllers.SnNavigationController.GetfyNavigation(System.String,System.Int32,System.Int32,System.Boolean)">
             <summary>
             条件分页查询 - 支持排序
             </summary>
+            <param name="type">查询条件:all -表示查询所有</param>
             <param name="pageIndex">当前页码</param>
             <param name="pageSize">每页记录条数</param>
             <param name="isDesc">是否倒序</param>

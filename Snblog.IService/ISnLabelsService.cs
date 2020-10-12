@@ -14,6 +14,7 @@ namespace Snblog.IService
         /// <returns></returns>
          List<SnLabels> GetLabels();
 
+
         /// <summary>
         /// 异步添加数据
         /// </summary>

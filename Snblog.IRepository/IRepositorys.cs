@@ -172,6 +172,7 @@ namespace Snblog.IRepository
         /// <returns></returns>
         IQueryable<T> Distinct(Expression<Func<T, bool>> @where);
 
+
         /// <summary>
         /// 条件查询
         /// </summary>
@@ -227,13 +228,14 @@ namespace Snblog.IRepository
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <returns></returns>
-        IQueryable<T> Where1<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, int pageIndex, int pageSize, out int count, bool isDesc = false);
+        IQueryable<T> Where<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, int pageIndex, int pageSize, out int count, bool isDesc = false);
 
         /// <summary>
         /// 获取所有数据
         /// </summary>
         /// <returns></returns>
         IQueryable<T> GetAll();
+
 
         /// <summary>
         /// 获取所有数据 - 支持排序

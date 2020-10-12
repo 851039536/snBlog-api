@@ -30,8 +30,8 @@ namespace Snblog.IService
         /// <returns></returns>
          Task<List<SnNavigation>> AsyGetTest();
 
-
-        // <summary>
+         SnNavigation GetNavigationId(int id);
+        /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
         /// <typeparam name="TOrder">排序约束</typeparam>
@@ -41,8 +41,14 @@ namespace Snblog.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-         List<SnNavigation> GetPagingWhere(int pageIndex, int pageSize, out int count,bool isDesc);
+         List<SnNavigation> GetPagingWhere(string type, int pageIndex, int pageSize, out int count,bool isDesc);
 
+        /// <summary>
+        /// 去重查询
+        /// </summary>
+        /// <param name="type">查询条件</param>
+        /// <returns></returns>
+        List<SnNavigation> GetDistTest(string type);
         /// <summary>
         /// 条件查询
         /// </summary>

@@ -43,9 +43,9 @@ namespace Snblog.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public List<SnArticle> GetTestWhere(int id)
+        public List<SnArticle> GetTestWhere(int SortId)
         {
-           var data=  CreateService<SnArticle>().Where(s => s.LabelId == id);
+           var data=  CreateService<SnArticle>().Where(s => s.SortId == SortId);
             return  data.ToList();
         }
 
@@ -61,10 +61,20 @@ namespace Snblog.Service
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        public List<SnArticle> GetPagingWhere(int pageIndex, int pageSize, out int count,bool isDesc)
+        public List<SnArticle> GetPagingWhere(int label,int pageIndex, int pageSize, out int count,bool isDesc)
         {
-           var data=  CreateService<SnArticle>().Wherepage(s => s.ArticleId!=null,c => c.ArticleId,pageIndex,pageSize ,out count,isDesc);
+            IEnumerable<SnArticle> data;
+            if (label == 00)
+            {
+                  data=  CreateService<SnArticle>().Wherepage(s => s.ArticleId!=null,c => c.ArticleId,pageIndex,pageSize ,out count,isDesc);
+            }
+            else
+            {
+                   data=  CreateService<SnArticle>().Wherepage(s => s.LabelId==label,c => c.ArticleId,pageIndex,pageSize ,out count,isDesc);
+            }
+            
             return  data.ToList();
+
         }
 
 
@@ -91,6 +101,10 @@ namespace Snblog.Service
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 返回总条数
+        /// </summary>
+        /// <returns></returns>
         public int GetArticleCount()
         {
            int data = CreateService<SnArticle>().Count();
@@ -105,7 +119,7 @@ namespace Snblog.Service
 
         public SnArticle IntTest(SnArticle test)
         {
-            throw new NotImplementedException();
+          throw new NotImplementedException();
         }
 
         public string UpTest(SnArticle test)

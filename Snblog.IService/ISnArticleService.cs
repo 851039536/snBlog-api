@@ -40,7 +40,7 @@ namespace Snblog.IService
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-         List<SnArticle> GetTestWhere(int id);
+         List<SnArticle> GetTestWhere(int SortId);
 
 
          /// <summary>
@@ -53,7 +53,7 @@ namespace Snblog.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-         List<SnArticle> GetPagingWhere(int pageIndex, int pageSize, out int count,bool isDesc);
+         List<SnArticle> GetPagingWhere(int label, int pageIndex, int pageSize, out int count,bool isDesc);
 
         /// <summary>
         /// 查询分类总数
