@@ -25,7 +25,7 @@ namespace Snblog.Controllers
          }
 
         /// <summary>
-        /// 同步查询
+        /// 文章查询
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetTest")]

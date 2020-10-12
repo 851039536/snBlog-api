@@ -164,7 +164,7 @@
         </member>
         <member name="M:Snblog.Controllers.SnOneController.GetTest">
             <summary>
-            同步查询
+            文章查询
             </summary>
             <returns></returns>
         </member>
@@ -192,6 +192,45 @@
             异步删除数据
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.GetTest">
+            <summary>
+            视频查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.AsyGestTest">
+            <summary>
+            视频查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.GetTestWhere(System.Int32)">
+            <summary>
+            分类查询
+            </summary>
+            <param name="type">int类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.AsyDetVideo(System.Int32)">
+            <summary>
+            删除视频
+            </summary>
+            <param name="id">主键</param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.AsyInsVideo(Snblog.Models.SnVideo)">
+            <summary>
+            添加视频
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.AysUpVideo(Snblog.Models.SnVideo)">
+            <summary>
+            更新视频
+            </summary>
+            <param name="test"></param>
             <returns></returns>
         </member>
     </members>

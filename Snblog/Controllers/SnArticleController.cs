@@ -137,7 +137,7 @@ namespace Snblog.Controllers
         [HttpPut("AysUpArticle")]
         public async Task<IActionResult> AysUpArticle(SnArticle test)
         {
-           var data=await Task.Run(()=> _service.AysUpArticle(test));
+           var data=await  _service.AysUpArticle(test);
            return Ok(data);
         }
     }

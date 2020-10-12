@@ -50,7 +50,7 @@ namespace Snblog.Controllers
         [HttpPut("AysUpSort")]
         public async Task<IActionResult> AysUpSort(SnSort test)
         {
-           var data=await Task.Run(()=> _service.AysUpSort(test));
+           var data= await  _service.AysUpSort(test);
            return Ok(data);
         }
 

@@ -85,13 +85,13 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnArticle> AsyInsArticle(SnArticle test)
         {
-             return await Task.Run(()=> CreateService<SnArticle>().AysAdd(test));
+             return await CreateService<SnArticle>().AysAdd(test);
         }
 
         public async Task<string> AysUpArticle(SnArticle test)
         {
              //int da=  CreateService<typecho_test>().Update(test);
-            int da= await Task.Run(()=> CreateService<SnArticle>().AysUpdate(test));
+            int da= await  CreateService<SnArticle>().AysUpdate(test);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }

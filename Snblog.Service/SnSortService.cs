@@ -39,7 +39,7 @@ namespace Snblog.Service
 
         public async Task<string> AysUpSort(SnSort test)
         {
-            int da= await Task.Run(()=> CreateService<SnSort>().AysUpdate(test));
+            int da= await CreateService<SnSort>().AysUpdate(test);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }
