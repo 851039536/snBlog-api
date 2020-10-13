@@ -16,7 +16,7 @@ namespace Snblog.IService
 
 
 
-         int GetArticleCount();
+         int GetVideoCount();
         /// <summary>
         /// 异步查询
         /// </summary>
@@ -27,9 +27,8 @@ namespace Snblog.IService
         /// 条件查询
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="name"></param>
         /// <returns></returns>
-        Task<SnVideo> AsyGetTestName(int id);
+        Task<List<SnVideo>> AsyGetTestId(int id);
 
          /// <summary>
         /// where条件查询
@@ -50,14 +49,14 @@ namespace Snblog.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-         List<SnVideo> GetPagingWhere(int pageIndex, int pageSize, out int count,bool isDesc);
+         List<SnVideo> GetPagingWhere(int type, int pageIndex, int pageSize, out int count,bool isDesc);
 
         /// <summary>
         /// 查询分类总数
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-          int ConutLabel(int type);
+          int ConutType(int type);
         /// <summary>
         /// 按id删除
         /// </summary>

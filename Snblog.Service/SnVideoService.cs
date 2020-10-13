@@ -29,9 +29,10 @@ namespace Snblog.Service
             return await data.GetAll().ToListAsync();
         }
 
-        public Task<SnVideo> AsyGetTestName(int type)
+        public async Task<List<SnVideo>> AsyGetTestId(int id)
         {
-          throw new NotImplementedException();
+          var data = CreateService<SnVideo>().Where( s => s.VId == id);
+            return  await data.ToListAsync();
         }
 
         public async Task<SnVideo> AsyInsVideo(SnVideo test)
@@ -53,9 +54,10 @@ namespace Snblog.Service
             }
         }
 
-        public int ConutLabel(int type)
+        public int ConutType(int type)
         {
-            throw new NotImplementedException();
+            var data = CreateService<SnVideo>().Where(s => s.VTypeid ==type);
+            return data.Count();
         }
 
         public string DetTestId(int id)
@@ -63,14 +65,35 @@ namespace Snblog.Service
             throw new NotImplementedException();
         }
 
-        public int GetArticleCount()
+        public int GetVideoCount()
         {
-            throw new NotImplementedException();
+         int data = CreateService<SnVideo>().Count();
+          return  data;
         }
 
-        public List<SnVideo> GetPagingWhere(int pageIndex, int pageSize, out int count, bool isDesc)
+           /// <summary>
+        /// 条件分页查询 - 支持排序
+        /// </summary>
+        /// <typeparam name="TOrder">排序约束</typeparam>
+        /// <param name="where">过滤条件</param>
+        /// <param name="order">排序条件</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="count">返回总条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        public List<SnVideo> GetPagingWhere(int type,int pageIndex, int pageSize, out int count,bool isDesc)
         {
-            throw new NotImplementedException();
+             IEnumerable<SnVideo> data;
+            if (type == 99999)
+            {
+                   data=  CreateService<SnVideo>().Wherepage(s => s.VTypeid!=null,c => c.VId,pageIndex,pageSize ,out count,isDesc);
+            }
+            else
+            {
+                   data=  CreateService<SnVideo>().Wherepage(s => s.VTypeid==type,c => c.VId,pageIndex,pageSize ,out count,isDesc);
+            }
+          
+            return  data.ToList();
         }
 
         public List<SnVideo> GetTest()

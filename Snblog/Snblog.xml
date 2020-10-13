@@ -206,6 +206,35 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnVideoController.AsyGetTestId(System.Int32)">
+            <summary>
+            id查询视频
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.GetfyVideo(System.Int32,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            分页查询视频 - 支持排序
+            </summary>
+            <param name="type">分类条件:99999 -表示查询所有</param>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.GetVideoCount">
+            <summary>
+            查询总条数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoController.ConutType(System.Int32)">
+            <summary>
+            条件查询文章总条数
+            </summary>
+            <param name="type">分类</param>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnVideoController.GetTestWhere(System.Int32)">
             <summary>
             分类查询
@@ -231,6 +260,12 @@
             更新视频
             </summary>
             <param name="test"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoTypeController.AsyGestTest">
+            <summary>
+            分类视频查询
+            </summary>
             <returns></returns>
         </member>
     </members>

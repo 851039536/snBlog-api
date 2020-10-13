@@ -107,7 +107,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public int GetArticleCount()
         {
-           int data = CreateService<SnArticle>().Count();
+         int data = CreateService<SnArticle>().Count();
           return  data;
         }
 

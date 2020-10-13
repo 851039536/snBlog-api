@@ -535,8 +535,8 @@ namespace Snblog.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.VTielte)
-                    .HasColumnName("v_tielte")
+                entity.Property(e => e.VTitle)
+                    .HasColumnName("v_title")
                     .HasColumnType("varchar(50)")
                     .HasComment("标题")
                     .HasCharSet("utf8")
@@ -546,6 +546,12 @@ namespace Snblog.Models
                     .HasColumnName("v_typeid")
                     .HasColumnType("int(11)")
                     .HasComment("分类");
+
+                entity.Property(e => e.VUrl)
+                    .HasColumnName("v_url")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
             });
 
             modelBuilder.Entity<SnVideoType>(entity =>
