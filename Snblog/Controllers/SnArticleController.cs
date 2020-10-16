@@ -49,9 +49,9 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 按分类id查询
+        /// 分类查询文章
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="SortId">分类id</param>
         /// <returns></returns>
         [HttpGet("GetTestWhere")]
         public IActionResult GetTestWhere(int SortId)
@@ -84,9 +84,9 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// id条件查询
+        /// 按文章id查询
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">文章id</param>
         /// <returns></returns>
         [HttpGet("AsyGetTestID")]
         public async Task<IActionResult> AsyGetTestId(int id)
@@ -97,7 +97,7 @@ namespace Snblog.Controllers
         /// <summary>
         /// 标签条件查询
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="LabelId">标签id</param>
         /// <returns></returns>
         [HttpGet("AsyGetTestString")]
         public async Task<IActionResult> AsyGetTestString(int LabelId)
@@ -109,7 +109,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步添加数据
+        /// 添加数据
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsArticle")]
@@ -119,7 +119,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步删除数据
+        /// 删除数据
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -130,7 +130,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步更新数据
+        /// 更新数据
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>

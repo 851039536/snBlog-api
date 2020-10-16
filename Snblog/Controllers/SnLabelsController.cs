@@ -23,7 +23,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 同步查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetLabels")]
@@ -33,7 +33,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步添加数据
+        /// 添加标签
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsLabels")]
@@ -43,21 +43,21 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步更新数据
+        /// 更新标签
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="id">标签id</param>
         /// <returns></returns>
         [HttpPut("AysUpLabels")]
-        public async Task<IActionResult> AysUpLabels(SnLabels test)
+        public async Task<IActionResult> AysUpLabels(SnLabels id)
         {
-            var data = await _service.AysUpLabels(test);
+            var data = await _service.AysUpLabels(id);
             return Ok(data);
         }
 
         /// <summary>
-        /// 异步删除数据
+        /// 删除标签
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">标签id</param>
         /// <returns></returns>
         [HttpDelete("AsyDetLabels")]
         public async Task<IActionResult> AsyDetLabels(int id)

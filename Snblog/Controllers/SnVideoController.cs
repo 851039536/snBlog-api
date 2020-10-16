@@ -46,7 +46,7 @@ namespace Snblog.Controllers
         /// <summary>
         /// id查询视频
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">视频id</param>
         /// <returns></returns>
         [HttpGet("AsyGetTestId")]
         public async Task<IActionResult> AsyGetTestId(int id)
@@ -70,7 +70,7 @@ namespace Snblog.Controllers
 
 
         /// <summary>
-        /// 视频总条数
+        /// 视频总数
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetVideoCount")]
@@ -81,21 +81,21 @@ namespace Snblog.Controllers
 
 
         /// <summary>
-        /// 条件视频文章总数
+        /// 条件查视频总数
         /// </summary>
-        /// <param name="type">标签分类</param>
+        /// <param name="typeID">视频分类id</param>
         /// <returns></returns>
         [HttpGet("GetVideoCountType")]
-        public IActionResult GetVideoCountType(int type)
+        public IActionResult GetVideoCountType(int typeID)
         {
-            return Ok(_service.GetVideoCount(type));
+            return Ok(_service.GetVideoCount(typeID));
         }
 
 
         /// <summary>
         /// 分类查询
         /// </summary>
-        /// <param name="type">int类型</param>
+        /// <param name="type">ID</param>
         /// <returns></returns>
         [HttpGet("GetTestWhere")]
         public IActionResult GetTestWhere(int type)
@@ -106,7 +106,7 @@ namespace Snblog.Controllers
         /// <summary>
         /// 删除视频
         /// </summary>
-        /// <param name="id">主键</param>
+        /// <param name="id">视频id</param>
         /// <returns></returns>
         [HttpDelete("AsyDetVideo")]
         public async Task<IActionResult> AsyDetVideo(int id)

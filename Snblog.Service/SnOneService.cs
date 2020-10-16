@@ -1,4 +1,5 @@
-﻿using Snblog.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
 using System;
@@ -15,19 +16,34 @@ namespace Snblog.Service
         {
         }
 
+
+        public List<SnOne> GetOne()
+        {
+            var data = this.CreateService<SnOne>();
+            return data.GetAll().ToList();
+        }
+        public async Task<List<SnOne>> AsyGetOne()
+        {
+            var data = CreateService<SnOne>();
+            return await data.GetAll().ToListAsync();
+        }
+
+        public int OneCount()
+        {
+           int data = CreateService<SnOne>().Count();
+            return  data;
+        }
+
         public Task<string> AsyDetArticleId(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<SnOne>> AsyGetTest()
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<SnOne> AsyGetTestName(int id)
+
+        public async Task<SnOne> AsyGetOneId(int id)
         {
-            throw new NotImplementedException();
+             return await CreateService<SnOne>().AysGetById(id);
         }
 
         public Task<SnArticle> AsyInsArticle(SnArticle test)
@@ -40,9 +56,9 @@ namespace Snblog.Service
             throw new NotImplementedException();
         }
 
-        public int ConutLabel(int type)
+        public int OneCountType(string type)
         {
-            throw new NotImplementedException();
+           return CreateService<SnOne>().Count(c => c.OneAuthor == type);
         }
 
         public string DetTestId(int id)
@@ -50,21 +66,13 @@ namespace Snblog.Service
             throw new NotImplementedException();
         }
 
-        public int GetArticleCount()
-        {
-            throw new NotImplementedException();
-        }
+     
 
         public List<SnArticle> GetPagingWhere(int pageIndex, int pageSize, out int count, bool isDesc)
         {
             throw new NotImplementedException();
         }
 
-        public List<SnOne> GetTest()
-        {
-            var data = this.CreateService<SnOne>();
-            return data.GetAll().ToList();
-        }
 
         public List<SnOne> GetTestWhere(int id)
         {
@@ -80,5 +88,6 @@ namespace Snblog.Service
         {
             throw new NotImplementedException();
         }
+
     }
 }

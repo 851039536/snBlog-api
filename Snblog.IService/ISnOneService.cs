@@ -12,16 +12,13 @@ namespace Snblog.IService
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-        List<SnOne> GetTest();
-
-
-
-        int GetArticleCount();
+        List<SnOne> GetOne();
         /// <summary>
         /// 异步查询
         /// </summary>
         /// <returns></returns>
-        Task<List<SnOne>> AsyGetTest();
+        Task<List<SnOne>> AsyGetOne();
+        int OneCount();
 
         /// <summary>
         /// 条件查询
@@ -29,7 +26,7 @@ namespace Snblog.IService
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        Task<SnOne> AsyGetTestName(int id);
+        Task<SnOne> AsyGetOneId(int id);
 
         /// <summary>
         /// where条件查询
@@ -52,12 +49,8 @@ namespace Snblog.IService
         /// <param name="isDesc">是否倒序</param>
         List<SnArticle> GetPagingWhere(int pageIndex, int pageSize, out int count, bool isDesc);
 
-        /// <summary>
-        /// 查询分类总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        int ConutLabel(int type);
+       
+        int OneCountType(string type);
         /// <summary>
         /// 按id删除
         /// </summary>

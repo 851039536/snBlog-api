@@ -24,7 +24,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 同步查询
+        /// 查询
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetSnNavigation")]
@@ -36,7 +36,7 @@ namespace Snblog.Controllers
         /// <summary>
         ///根据id查询
         /// </summary>
-        /// <param name="id">id</param>
+        /// <param name="id">Navigation id</param>
         /// <returns></returns>
         [HttpGet("GetNavigationId")]
         public IActionResult GetNavigationId(int id)
@@ -44,7 +44,7 @@ namespace Snblog.Controllers
             return Ok(_service.GetNavigationId(id));
         }
         /// <summary>
-        /// 查询Navigation表总数
+        /// Navigation表总数
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetNavigationCount")]
@@ -56,7 +56,7 @@ namespace Snblog.Controllers
         /// <summary>
         /// 条件查询Navigation总数
         /// </summary>
-        /// <param name="type">标签分类</param>
+        /// <param name="type">分类</param>
         /// <returns></returns>
         [HttpGet("GetNavigationCountType")]
         public IActionResult GetNavigationCountType(string type)
@@ -103,7 +103,7 @@ namespace Snblog.Controllers
 
 
         /// <summary>
-        /// 异步添加数据
+        /// 添加数据
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyIntNavigation")]
@@ -113,7 +113,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步更新数据
+        /// 更新数据
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>
@@ -125,7 +125,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步删除数据
+        /// 删除数据
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

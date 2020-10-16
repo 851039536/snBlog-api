@@ -23,7 +23,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 同步查询
+        /// 查询分类
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetSort")]
@@ -33,7 +33,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步添加数据
+        /// 添加数据
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsSort")]
@@ -43,19 +43,19 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 异步更新数据
+        /// 更新数据
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut("AysUpSort")]
-        public async Task<IActionResult> AysUpSort(SnSort test)
+        public async Task<IActionResult> AysUpSort(SnSort id)
         {
-            var data = await _service.AysUpSort(test);
+            var data = await _service.AysUpSort(id);
             return Ok(data);
         }
 
         /// <summary>
-        /// 异步删除数据
+        /// 删除数据
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
