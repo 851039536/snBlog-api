@@ -63,7 +63,7 @@ namespace Snblog.Service
         public List<SnOne> GetTest()
         {
             var data = this.CreateService<SnOne>();
-           return data.GetAll().ToList();
+            return data.GetAll().ToList();
         }
 
         public List<SnOne> GetTestWhere(int id)

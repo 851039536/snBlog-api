@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Snblog.IService
 {
-   public interface IBaseService
+    public interface IBaseService
     {
         IRepositorys<T> CreateService<T>() where T : class, new();
     }

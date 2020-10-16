@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService
 {
-   public interface ISnVideoTypeService
+    public interface ISnVideoTypeService
     {
-         /// <summary>
+        /// <summary>
         /// 异步查询
         /// </summary>
         /// <returns></returns>
-         Task<List<SnVideoType>> AsyGetTest();
+        Task<List<SnVideoType>> AsyGetTest();
 
-        
+
     }
 }

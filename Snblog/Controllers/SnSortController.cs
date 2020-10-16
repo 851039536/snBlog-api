@@ -17,20 +17,20 @@ namespace Snblog.Controllers
     {
         private readonly ISnSortService _service; //IOC依赖注入
 
-         public SnSortController(ISnSortService service)
-         {
-             _service=service;
-         }
+        public SnSortController(ISnSortService service)
+        {
+            _service = service;
+        }
 
-         /// <summary>
+        /// <summary>
         /// 同步查询
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetSort")]
         public IActionResult GetSort()
         {
-          return Ok(_service.GetSort());
-         }
+            return Ok(_service.GetSort());
+        }
 
         /// <summary>
         /// 异步添加数据
@@ -42,7 +42,7 @@ namespace Snblog.Controllers
             return Ok(await _service.AsyInsSort(test));
         }
 
-           /// <summary>
+        /// <summary>
         /// 异步更新数据
         /// </summary>
         /// <param name="test"></param>
@@ -50,11 +50,11 @@ namespace Snblog.Controllers
         [HttpPut("AysUpSort")]
         public async Task<IActionResult> AysUpSort(SnSort test)
         {
-           var data= await  _service.AysUpSort(test);
-           return Ok(data);
+            var data = await _service.AysUpSort(test);
+            return Ok(data);
         }
 
-         /// <summary>
+        /// <summary>
         /// 异步删除数据
         /// </summary>
         /// <param name="id"></param>
@@ -62,7 +62,7 @@ namespace Snblog.Controllers
         [HttpDelete("AsyDetSort")]
         public async Task<IActionResult> AsyDetSort(int id)
         {
-          return Ok(await _service.AsyDetSort(id));
+            return Ok(await _service.AsyDetSort(id));
         }
 
     }

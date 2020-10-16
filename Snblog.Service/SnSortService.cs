@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Snblog.Service
 {
-   public class SnSortService : BaseService, ISnSortService
+    public class SnSortService : BaseService, ISnSortService
     {
         public SnSortService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
@@ -22,9 +22,9 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetSort(int id)
         {
-           int da= await Task.Run(() => CreateService<SnSort>().AsyDelete(id));
-           string data = da == 1 ? "删除成功" : "删除失败";
-           return data;
+            int da = await Task.Run(() => CreateService<SnSort>().AsyDelete(id));
+            string data = da == 1 ? "删除成功" : "删除失败";
+            return data;
         }
 
         /// <summary>
@@ -34,12 +34,12 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnSort> AsyInsSort(SnSort test)
         {
-             return await Task.Run(()=> CreateService<SnSort>().AysAdd(test));
+            return await Task.Run(() => CreateService<SnSort>().AysAdd(test));
         }
 
         public async Task<string> AysUpSort(SnSort test)
         {
-            int da= await CreateService<SnSort>().AysUpdate(test);
+            int da = await CreateService<SnSort>().AysUpdate(test);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }
@@ -50,8 +50,8 @@ namespace Snblog.Service
         /// <returns></returns>
         public List<SnSort> GetSort()
         {
-          var data = this.CreateService<SnSort>();
-           return data.GetAll().ToList();
+            var data = this.CreateService<SnSort>();
+            return data.GetAll().ToList();
         }
     }
 }

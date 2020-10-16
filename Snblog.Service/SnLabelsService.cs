@@ -22,9 +22,9 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetLabels(int id)
         {
-           int da= await Task.Run(() => CreateService<SnLabels>().AsyDelete(id));
-           string data = da == 1 ? "删除成功" : "删除失败";
-           return data;
+            int da = await Task.Run(() => CreateService<SnLabels>().AsyDelete(id));
+            string data = da == 1 ? "删除成功" : "删除失败";
+            return data;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnLabels> AsyInsLabels(SnLabels test)
         {
-            return await Task.Run(()=> CreateService<SnLabels>().AysAdd(test));
+            return await Task.Run(() => CreateService<SnLabels>().AysAdd(test));
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AysUpLabels(SnLabels test)
         {
-            int da= await Task.Run(()=> CreateService<SnLabels>().AysUpdate(test));
+            int da = await CreateService<SnLabels>().AysUpdate(test);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }
@@ -56,7 +56,7 @@ namespace Snblog.Service
         public List<SnLabels> GetLabels()
         {
             var data = this.CreateService<SnLabels>();
-           return data.GetAll().ToList();
+            return data.GetAll().ToList();
         }
     }
 }

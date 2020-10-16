@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Snblog.Service
 {
-     public class BaseService : IBaseService
+    public class BaseService : IBaseService
     {
         private IRepositoryFactory _repositoryFactory;
         private IconcardContext _mydbcontext;

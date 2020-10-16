@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace Snblog.Repository
 {
-   // Repository.cs仓储类，它是一个泛型类，并且拥有一个带有参数的构造方法，通过构造方法获得当前DbContext上下文对象，
-     //泛型类为指定Model类型，通过DbContext.Set<T>()方法最终得到相应的DbSet<T>对象来操作工作单元。
-     //实现了CRUD基本功能的封装
-      public class Repositorys<T> : IRepositorys<T> where T : class
+    // Repository.cs仓储类，它是一个泛型类，并且拥有一个带有参数的构造方法，通过构造方法获得当前DbContext上下文对象，
+    //泛型类为指定Model类型，通过DbContext.Set<T>()方法最终得到相应的DbSet<T>对象来操作工作单元。
+    //实现了CRUD基本功能的封装
+    public class Repositorys<T> : IRepositorys<T> where T : class
     {
         private snblogContext _dbContext;
         private readonly DbSet<T> _dbSet;
@@ -70,7 +70,7 @@ namespace Snblog.Repository
         {
             return _dbContext.SaveChanges();
         }
-          public async Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
             return await _dbContext.SaveChangesAsync();
         }
@@ -97,12 +97,12 @@ namespace Snblog.Repository
             return entity;
         }
 
-         public async Task<T> AysAdd(T entity, bool isSave = true)
+        public async Task<T> AysAdd(T entity, bool isSave = true)
         {
-           await _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
             if (isSave)
             {
-               await  SaveChangesAsync();
+                await SaveChangesAsync();
             }
             return entity;
         }
@@ -136,9 +136,9 @@ namespace Snblog.Repository
 
         public async Task<int> AsyDelete(object id)
         {
-             int de = 0;
-             //执行查询
-             var todoItem = await _dbSet.FindAsync(id);
+            int de = 0;
+            //执行查询
+            var todoItem = await _dbSet.FindAsync(id);
             if (todoItem == null)
             {
                 //return NotFound();
@@ -146,17 +146,17 @@ namespace Snblog.Repository
             }
             else
             {
-              _dbSet.Remove(todoItem);
-             de = SaveChanges();
+                _dbSet.Remove(todoItem);
+                de = SaveChanges();
             }
             return de;
         }
 
-           public int Delete(object id)
+        public int Delete(object id)
         {
-             int de = 0;
-             //执行查询
-             var todoItem =_dbSet.Find(id);
+            int de = 0;
+            //执行查询
+            var todoItem = _dbSet.Find(id);
             if (todoItem == null)
             {
                 //return NotFound();
@@ -164,8 +164,8 @@ namespace Snblog.Repository
             }
             else
             {
-              _dbSet.Remove(todoItem);
-             de = SaveChanges();
+                _dbSet.Remove(todoItem);
+                de = SaveChanges();
             }
             return de;
         }
@@ -196,7 +196,7 @@ namespace Snblog.Repository
 
         public int Update(T entity)
         {
-            
+
             var entry = this._dbContext.Entry(entity);
             if (entry.State == EntityState.Detached)
             {
@@ -205,7 +205,7 @@ namespace Snblog.Repository
             var da = SaveChanges();
             return da;
         }
-        public void Update( params T[] entitys)
+        public void Update(params T[] entitys)
         {
             var entry = this._dbContext.Entry(entitys);
             if (entry.State == EntityState.Detached)
@@ -250,9 +250,9 @@ namespace Snblog.Repository
         public IQueryable<T> Distinct(Expression<Func<T, bool>> @where)
         {
             return this._dbSet.AsNoTracking().Where(@where).Distinct();
-            
+
         }
-        
+
 
         public IQueryable<T> Where(Expression<Func<T, bool>> @where)
         {
@@ -272,7 +272,7 @@ namespace Snblog.Repository
         }
 
 
-              public IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc)
+        public IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc)
         {
             count = Count();
             if (isDesc)
@@ -332,7 +332,7 @@ namespace Snblog.Repository
         {
             return this._dbSet.Find(id);
         }
-         public async Task<T> AysGetById<TType>(TType id)
+        public async Task<T> AysGetById<TType>(TType id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -474,7 +474,7 @@ namespace Snblog.Repository
 
         public async Task<bool> InsertAsync(List<T> entitys, bool isSaveChange = true)
         {
-             _dbSet.AddRange(entitys);
+            _dbSet.AddRange(entitys);
             if (isSaveChange)
             {
                 return await SaveChangesAsync() > 0;
@@ -526,12 +526,13 @@ namespace Snblog.Repository
             }
             else
             {
-               
-                    updatePropertyList.ForEach(c => {
-                        entry.Property(c).IsModified = true; //部分字段更新的写法
-                    });
-               
-               
+
+                updatePropertyList.ForEach(c =>
+                {
+                    entry.Property(c).IsModified = true; //部分字段更新的写法
+                });
+
+
             }
             if (isSaveChange)
             {
@@ -545,7 +546,8 @@ namespace Snblog.Repository
             {
                 return false;
             }
-            entitys.ForEach(c => {
+            entitys.ForEach(c =>
+            {
                 Update(c, false);
             });
             if (isSaveChange)
@@ -568,10 +570,11 @@ namespace Snblog.Repository
             }
             else
             {
-                updatePropertyList.ForEach(c => {
-                        entry.Property(c).IsModified = true; //部分字段更新的写法
-                    });
-              
+                updatePropertyList.ForEach(c =>
+                {
+                    entry.Property(c).IsModified = true; //部分字段更新的写法
+                });
+
             }
             if (isSaveChange)
             {
@@ -585,7 +588,8 @@ namespace Snblog.Repository
             {
                 return false;
             }
-            entitys.ForEach(c => {
+            entitys.ForEach(c =>
+            {
                 _dbSet.Attach(c);
                 _dbContext.Entry<T>(c).State = EntityState.Modified;
             });
@@ -596,33 +600,33 @@ namespace Snblog.Repository
             return false;
         }
 
-       
+
         #endregion
 
-         #region SQL语句
+        #region SQL语句
         public virtual void BulkInsert<T>(List<T> entities)
         { }
         public int ExecuteSql(string sql)
         {
-            return _dbContext.Database.ExecuteSqlCommand(sql) ; 
+            return _dbContext.Database.ExecuteSqlCommand(sql);
         }
 
         public Task<int> ExecuteSqlAsync(string sql)
         {
-             return _dbContext.Database.ExecuteSqlCommandAsync(sql);  
+            return _dbContext.Database.ExecuteSqlCommandAsync(sql);
         }
 
         public int ExecuteSql(string sql, List<DbParameter> spList)
         {
-           return  _dbContext.Database.ExecuteSqlCommand(sql, spList.ToArray());
+            return _dbContext.Database.ExecuteSqlCommand(sql, spList.ToArray());
         }
 
-        public Task<int>  ExecuteSqlAsync(string sql, List<DbParameter> spList)
-        {   
-             return  _dbContext.Database.ExecuteSqlCommandAsync(sql, spList.ToArray());
+        public Task<int> ExecuteSqlAsync(string sql, List<DbParameter> spList)
+        {
+            return _dbContext.Database.ExecuteSqlCommandAsync(sql, spList.ToArray());
         }
 
-      
+
         public virtual DataTable GetDataTableWithSql(string sql)
         {
             throw new NotImplementedException();

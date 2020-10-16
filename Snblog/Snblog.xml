@@ -12,9 +12,9 @@
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.ConutLabel(System.Int32)">
             <summary>
-            过滤查询总数
+            条件查询文章总数
             </summary>
-            <param name="type">条件分类</param>
+            <param name="type">标签分类</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.GetTestWhere(System.Int32)">
@@ -116,6 +116,13 @@
             <summary>
             查询Navigation表总数
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnNavigationController.GetNavigationCountType(System.String)">
+            <summary>
+            条件查询Navigation总数
+            </summary>
+            <param name="type">标签分类</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnNavigationController.GetDistTest(System.String)">
@@ -224,15 +231,15 @@
         </member>
         <member name="M:Snblog.Controllers.SnVideoController.GetVideoCount">
             <summary>
-            查询总条数
+            视频总条数
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnVideoController.ConutType(System.Int32)">
+        <member name="M:Snblog.Controllers.SnVideoController.GetVideoCountType(System.Int32)">
             <summary>
-            条件查询文章总条数
+            条件视频文章总数
             </summary>
-            <param name="type">分类</param>
+            <param name="type">标签分类</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnVideoController.GetTestWhere(System.Int32)">

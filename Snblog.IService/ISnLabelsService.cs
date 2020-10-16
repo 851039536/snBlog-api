@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService
 {
-   public interface ISnLabelsService
+    public interface ISnLabelsService
     {
         /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-         List<SnLabels> GetLabels();
+        List<SnLabels> GetLabels();
 
 
         /// <summary>
@@ -26,11 +26,11 @@ namespace Snblog.IService
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>
-          Task<string> AysUpLabels(SnLabels test);
+        Task<string> AysUpLabels(SnLabels test);
 
         /// <summary>
         /// 异步按id删除
         /// </summary>
-          Task<string> AsyDetLabels(int id);
+        Task<string> AsyDetLabels(int id);
     }
 }

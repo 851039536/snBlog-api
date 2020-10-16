@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService
 {
-  public  interface ISnOneService
+    public interface ISnOneService
     {
-           /// <summary>
+        /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-         List<SnOne> GetTest();
+        List<SnOne> GetTest();
 
 
 
-         int GetArticleCount();
+        int GetArticleCount();
         /// <summary>
         /// 异步查询
         /// </summary>
         /// <returns></returns>
-         Task<List<SnOne>> AsyGetTest();
+        Task<List<SnOne>> AsyGetTest();
 
         /// <summary>
         /// 条件查询
@@ -31,16 +31,16 @@ namespace Snblog.IService
         /// <returns></returns>
         Task<SnOne> AsyGetTestName(int id);
 
-         /// <summary>
+        /// <summary>
         /// where条件查询
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-         List<SnOne> GetTestWhere(int id);
+        List<SnOne> GetTestWhere(int id);
 
 
-         /// <summary>
+        /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
         /// <typeparam name="TOrder">排序约束</typeparam>
@@ -50,22 +50,22 @@ namespace Snblog.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-         List<SnArticle> GetPagingWhere(int pageIndex, int pageSize, out int count,bool isDesc);
+        List<SnArticle> GetPagingWhere(int pageIndex, int pageSize, out int count, bool isDesc);
 
         /// <summary>
         /// 查询分类总数
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-          int ConutLabel(int type);
+        int ConutLabel(int type);
         /// <summary>
         /// 按id删除
         /// </summary>
-          Task<string> AsyDetArticleId(int id);
+        Task<string> AsyDetArticleId(int id);
         /// <summary>
         /// 按id删除
         /// </summary>
-           string  DetTestId(int id);
+        string DetTestId(int id);
 
 
         /// <summary>
@@ -74,16 +74,16 @@ namespace Snblog.IService
         /// <returns></returns>
         Task<SnArticle> AsyInsArticle(SnArticle test);
 
-          
+
         /// <summary>
         /// 同步添加数据
         /// </summary>
         /// <returns></returns>
-         SnArticle IntTest(SnArticle test);
+        SnArticle IntTest(SnArticle test);
 
-         Task<string> AysUpArticle(SnArticle test);
+        Task<string> AysUpArticle(SnArticle test);
 
-         string UpTest(SnArticle test);
+        string UpTest(SnArticle test);
 
 
     }

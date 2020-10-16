@@ -17,20 +17,20 @@ namespace Snblog.Controllers
 
         private readonly ISnLabelsService _service; //IOC依赖注入
 
-         public SnLabelsController(ISnLabelsService service)
-         {
-             _service=service;
-         }
+        public SnLabelsController(ISnLabelsService service)
+        {
+            _service = service;
+        }
 
-         /// <summary>
+        /// <summary>
         /// 同步查询
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetLabels")]
         public IActionResult GetLabels()
         {
-          return Ok(_service.GetLabels());
-         }
+            return Ok(_service.GetLabels());
+        }
 
         /// <summary>
         /// 异步添加数据
@@ -50,11 +50,11 @@ namespace Snblog.Controllers
         [HttpPut("AysUpLabels")]
         public async Task<IActionResult> AysUpLabels(SnLabels test)
         {
-           var data=await Task.Run(()=> _service.AysUpLabels(test));
-           return Ok(data);
+            var data = await _service.AysUpLabels(test);
+            return Ok(data);
         }
 
-         /// <summary>
+        /// <summary>
         /// 异步删除数据
         /// </summary>
         /// <param name="id"></param>
@@ -62,7 +62,7 @@ namespace Snblog.Controllers
         [HttpDelete("AsyDetLabels")]
         public async Task<IActionResult> AsyDetLabels(int id)
         {
-          return Ok(await _service.AsyDetLabels(id));
+            return Ok(await _service.AsyDetLabels(id));
         }
     }
 }

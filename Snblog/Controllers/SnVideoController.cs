@@ -17,12 +17,12 @@ namespace Snblog.Controllers
     public class SnVideoController : Controller
     {
         private readonly snblogContext _coreDbContext;
-          private readonly ISnVideoService _service; //IOC依赖注入
-         public SnVideoController(ISnVideoService service , snblogContext coreDbContext)
-         {
-             _service=service;
-             _coreDbContext = coreDbContext;
-         }
+        private readonly ISnVideoService _service; //IOC依赖注入
+        public SnVideoController(ISnVideoService service, snblogContext coreDbContext)
+        {
+            _service = service;
+            _coreDbContext = coreDbContext;
+        }
 
         /// <summary>
         /// 视频查询
@@ -31,8 +31,8 @@ namespace Snblog.Controllers
         [HttpGet("GetTest")]
         public IActionResult GetTest()
         {
-          return Ok(_service.GetTest());
-         }
+            return Ok(_service.GetTest());
+        }
         /// <summary>
         /// 视频查询
         /// </summary>
@@ -41,7 +41,7 @@ namespace Snblog.Controllers
         public async Task<IActionResult> AsyGestTest()
         {
             return Ok(await _service.AsyGetTest());
-        }  
+        }
 
         /// <summary>
         /// id查询视频
@@ -57,37 +57,38 @@ namespace Snblog.Controllers
         /// <summary>
         /// 分页查询视频 - 支持排序
         /// </summary>
-         /// <param name="type">分类条件:99999 -表示查询所有</param>
+        /// <param name="type">分类条件:99999 -表示查询所有</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-         [HttpGet("GetfyVideo")]
-        public IActionResult GetfyVideo(int type,int pageIndex, int pageSize,bool isDesc)
+        [HttpGet("GetfyVideo")]
+        public IActionResult GetfyVideo(int type, int pageIndex, int pageSize, bool isDesc)
         {
             int count;
-            return Ok(_service.GetPagingWhere(type,pageIndex,pageSize,out count,isDesc));
+            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out count, isDesc));
         }
 
-        
-         /// <summary>
-         /// 查询总条数
-         /// </summary>
-         /// <returns></returns>
-         [HttpGet("GetVideoCount")]
+
+        /// <summary>
+        /// 视频总条数
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetVideoCount")]
         public IActionResult GetVideoCount()
         {
-            return Ok( _service.GetVideoCount());
+            return Ok(_service.GetVideoCount());
         }
 
-      /// <summary>
-      /// 条件查询文章总条数
-      /// </summary>
-      /// <param name="type">分类</param>
-      /// <returns></returns>
-         [HttpGet("ConutType")]
-        public IActionResult ConutType(int type)
+
+        /// <summary>
+        /// 条件视频文章总数
+        /// </summary>
+        /// <param name="type">标签分类</param>
+        /// <returns></returns>
+        [HttpGet("GetVideoCountType")]
+        public IActionResult GetVideoCountType(int type)
         {
-            return Ok( _service.ConutType(type));
+            return Ok(_service.GetVideoCount(type));
         }
 
 
@@ -96,10 +97,10 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="type">int类型</param>
         /// <returns></returns>
-         [HttpGet("GetTestWhere")]
+        [HttpGet("GetTestWhere")]
         public IActionResult GetTestWhere(int type)
         {
-            return Ok( _service.GetTestWhere(type));
+            return Ok(_service.GetTestWhere(type));
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace Snblog.Controllers
         [HttpDelete("AsyDetVideo")]
         public async Task<IActionResult> AsyDetVideo(int id)
         {
-          return Ok(await _service.AsyDetVideo(id));
+            return Ok(await _service.AsyDetVideo(id));
         }
 
         /// <summary>
@@ -123,7 +124,7 @@ namespace Snblog.Controllers
             return Ok(await _service.AsyInsVideo(test));
         }
 
-         /// <summary>
+        /// <summary>
         /// 更新视频
         /// </summary>
         /// <param name="test"></param>
@@ -131,8 +132,8 @@ namespace Snblog.Controllers
         [HttpPut("AysUpVideo")]
         public async Task<IActionResult> AysUpVideo(SnVideo test)
         {
-           var data=await  _service.AysUpVideo(test);
-           return Ok(data);
+            var data = await _service.AysUpVideo(test);
+            return Ok(data);
         }
     }
 }

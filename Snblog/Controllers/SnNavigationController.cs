@@ -15,13 +15,13 @@ namespace Snblog.Controllers
     [ApiController]
     public class SnNavigationController : ControllerBase
     {
-          private readonly snblogContext _coreDbContext;
-            private readonly ISnNavigationService _service; //IOC依赖注入
-         public SnNavigationController(ISnNavigationService service, snblogContext coreDbContext)
-         {
-             _service=service;
+        private readonly snblogContext _coreDbContext;
+        private readonly ISnNavigationService _service; //IOC依赖注入
+        public SnNavigationController(ISnNavigationService service, snblogContext coreDbContext)
+        {
+            _service = service;
             _coreDbContext = coreDbContext;
-         }
+        }
 
         /// <summary>
         /// 同步查询
@@ -30,39 +30,50 @@ namespace Snblog.Controllers
         [HttpGet("GetSnNavigation")]
         public IActionResult GetSnNavigation()
         {
-          return Ok(_service.GetSnNavigation());
-         }
+            return Ok(_service.GetSnNavigation());
+        }
 
         /// <summary>
         ///根据id查询
         /// </summary>
         /// <param name="id">id</param>
         /// <returns></returns>
-         [HttpGet("GetNavigationId")]
+        [HttpGet("GetNavigationId")]
         public IActionResult GetNavigationId(int id)
         {
             return Ok(_service.GetNavigationId(id));
         }
-          /// <summary>
-         /// 查询Navigation表总数
-         /// </summary>
-         /// <returns></returns>
-         [HttpGet("GetNavigationCount")]
+        /// <summary>
+        /// 查询Navigation表总数
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetNavigationCount")]
         public IActionResult GetNavigationCount()
         {
-            return Ok( _service.GetNavigationCount());
+            return Ok(_service.GetNavigationCount());
         }
-   
+
+        /// <summary>
+        /// 条件查询Navigation总数
+        /// </summary>
+        /// <param name="type">标签分类</param>
+        /// <returns></returns>
+        [HttpGet("GetNavigationCountType")]
+        public IActionResult GetNavigationCountType(string type)
+        {
+            return Ok(_service.GetNavigationCount(type));
+        }
+
         /// <summary>
         /// 去重查询
         /// </summary>
         /// <param name="type">查询条件</param>
         /// <returns></returns>
-         [HttpGet("GetDistTest")]
+        [HttpGet("GetDistTest")]
         public IActionResult GetDistTest(string type)
         {
-            
-            return Ok( _service.GetDistTest(type));
+
+            return Ok(_service.GetDistTest(type));
         }
         /// <summary>
         /// 条件-排序-查询
@@ -70,26 +81,26 @@ namespace Snblog.Controllers
         /// <param name="type">分类条件</param>
         /// <param name="fag">排序</param>
         /// <returns>List</returns>
-         [HttpGet("AsyGetWhereTest")]
-         public async Task<IActionResult> AsyGetWhereTest(string type, bool fag)
+        [HttpGet("AsyGetWhereTest")]
+        public async Task<IActionResult> AsyGetWhereTest(string type, bool fag)
         {
-            return Ok(await _service.AsyGetWhereTest(type,fag));
+            return Ok(await _service.AsyGetWhereTest(type, fag));
         }
 
-         /// <summary>
+        /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
-         /// <param name="type">查询条件:all -表示查询所有</param>
+        /// <param name="type">查询条件:all -表示查询所有</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-         [HttpGet("GetfyNavigation")]
-        public IActionResult GetfyNavigation(string type,int pageIndex, int pageSize,bool isDesc)
+        [HttpGet("GetfyNavigation")]
+        public IActionResult GetfyNavigation(string type, int pageIndex, int pageSize, bool isDesc)
         {
             int count;
-            return Ok(_service.GetPagingWhere(type,pageIndex,pageSize,out count,isDesc));
+            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out count, isDesc));
         }
-      
+
 
         /// <summary>
         /// 异步添加数据
@@ -109,20 +120,20 @@ namespace Snblog.Controllers
         [HttpPut("AysUpNavigation")]
         public async Task<IActionResult> AysUpNavigation(SnNavigation test)
         {
-           var data=await Task.Run(()=> _service.AysUpNavigation(test));
-           return Ok(data);
+            var data = await _service.AysUpNavigation(test);
+            return Ok(data);
         }
 
-                /// <summary>
-                /// 异步删除数据
-                /// </summary>
-                /// <param name="id"></param>
-                /// <returns></returns>
-                [HttpDelete("AsyDelNavigation")]
-                public async Task<IActionResult> AsyDelNavigation(int id)
-                {
-                  return Ok(await _service.AsyDelNavigation(id));
-                }
+        /// <summary>
+        /// 异步删除数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("AsyDelNavigation")]
+        public async Task<IActionResult> AsyDelNavigation(int id)
+        {
+            return Ok(await _service.AsyDelNavigation(id));
+        }
 
     }
 }

@@ -12,17 +12,17 @@ using Snblog.Models;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-     [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class SnOneController : Controller
     {
-          private readonly snblogContext _coreDbContext;
-          private readonly ISnOneService _service; //IOC依赖注入
-         public SnOneController(ISnOneService service , snblogContext coreDbContext)
-         {
-             _service=service;
-             _coreDbContext = coreDbContext;
-         }
+        private readonly snblogContext _coreDbContext;
+        private readonly ISnOneService _service; //IOC依赖注入
+        public SnOneController(ISnOneService service, snblogContext coreDbContext)
+        {
+            _service = service;
+            _coreDbContext = coreDbContext;
+        }
 
         /// <summary>
         /// 文章查询
@@ -31,8 +31,8 @@ namespace Snblog.Controllers
         [HttpGet("GetTest")]
         public IActionResult GetTest()
         {
-          return Ok(_service.GetTest());
-         }
-      
+            return Ok(_service.GetTest());
+        }
+
     }
 }

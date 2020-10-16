@@ -13,39 +13,39 @@ using Snblog.Repository;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
 
     public class SnArticleController : ControllerBase
     {
-          private readonly snblogContext _coreDbContext;
-          private readonly ISnArticleService _service; //IOC依赖注入
-         public SnArticleController(ISnArticleService service , snblogContext coreDbContext)
-         {
-             _service=service;
-             _coreDbContext = coreDbContext;
-         }
-        
-         /// <summary>
-         /// 查询文章总条数
-         /// </summary>
-         /// <returns></returns>
-         [HttpGet("GetArticleCount")]
-        public IActionResult GetArticleCount()
+        private readonly snblogContext _coreDbContext;
+        private readonly ISnArticleService _service; //IOC依赖注入
+        public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
         {
-            return Ok( _service.GetArticleCount());
+            _service = service;
+            _coreDbContext = coreDbContext;
         }
 
-          /// <summary>
-          /// 过滤查询总数
-          /// </summary>
-          /// <param name="type">条件分类</param>
-          /// <returns></returns>
-         [HttpGet("ConutLabel")]
+        /// <summary>
+        /// 查询文章总条数
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetArticleCount")]
+        public IActionResult GetArticleCount()
+        {
+            return Ok(_service.GetArticleCount());
+        }
+
+        /// <summary>
+        /// 条件查询文章总数
+        /// </summary>
+        /// <param name="type">标签分类</param>
+        /// <returns></returns>
+        [HttpGet("ConutLabel")]
         public IActionResult ConutLabel(int type)
         {
-            return Ok( _service.ConutLabel(type));
+            return Ok(_service.ConutLabel(type));
         }
 
         /// <summary>
@@ -53,10 +53,10 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-          [HttpGet("GetTestWhere")]
+        [HttpGet("GetTestWhere")]
         public IActionResult GetTestWhere(int SortId)
         {
-            return Ok( _service.GetTestWhere(SortId));
+            return Ok(_service.GetTestWhere(SortId));
         }
 
         /// <summary>
@@ -66,8 +66,8 @@ namespace Snblog.Controllers
         [HttpGet("GetTest")]
         public IActionResult GetTest()
         {
-          return Ok(_service.GetTest());
-         }
+            return Ok(_service.GetTest());
+        }
 
         /// <summary>
         /// 条件分页查询 - 支持排序
@@ -76,11 +76,11 @@ namespace Snblog.Controllers
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-         [HttpGet("GetfyTest")]
-        public IActionResult GetfyTest(int label,int pageIndex, int pageSize,bool isDesc)
+        [HttpGet("GetfyTest")]
+        public IActionResult GetfyTest(int label, int pageIndex, int pageSize, bool isDesc)
         {
             int count;
-            return Ok(_service.GetPagingWhere(label,pageIndex,pageSize,out count,isDesc));
+            return Ok(_service.GetPagingWhere(label, pageIndex, pageSize, out count, isDesc));
         }
 
         /// <summary>
@@ -88,10 +88,10 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-         [HttpGet("AsyGetTestID")]
+        [HttpGet("AsyGetTestID")]
         public async Task<IActionResult> AsyGetTestId(int id)
         {
-          return Ok(await _service.AsyGetTestName(id));
+            return Ok(await _service.AsyGetTestName(id));
         }
 
         /// <summary>
@@ -99,12 +99,12 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-         [HttpGet("AsyGetTestString")]
+        [HttpGet("AsyGetTestString")]
         public async Task<IActionResult> AsyGetTestString(int LabelId)
         {
             var query = from c in _coreDbContext.SnArticle
-                 where c.LabelId == LabelId
-                 select new {c.ArticleId, c.TitleText ,c.Title,c.Time,c.Read,c.Give};
+                        where c.LabelId == LabelId
+                        select new { c.ArticleId, c.TitleText, c.Title, c.Time, c.Read, c.Give };
             return Ok(await query.ToListAsync());
         }
 
@@ -126,7 +126,7 @@ namespace Snblog.Controllers
         [HttpDelete("AsyDetArticleId")]
         public async Task<IActionResult> AsyDetArticleId(int id)
         {
-          return Ok(await _service.AsyDetArticleId(id));
+            return Ok(await _service.AsyDetArticleId(id));
         }
 
         /// <summary>
@@ -137,8 +137,8 @@ namespace Snblog.Controllers
         [HttpPut("AysUpArticle")]
         public async Task<IActionResult> AysUpArticle(SnArticle test)
         {
-           var data=await  _service.AysUpArticle(test);
-           return Ok(data);
+            var data = await _service.AysUpArticle(test);
+            return Ok(data);
         }
     }
 }

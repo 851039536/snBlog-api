@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Snblog.IRepository
 {
-     public interface IRepositorys<T> : IDisposable where T : class
+    public interface IRepositorys<T> : IDisposable where T : class
     {
         /// <summary>
         /// 显式开启数据上下文事务
@@ -31,7 +31,7 @@ namespace Snblog.IRepository
         /// 提交当前单元操作的更改
         /// </summary>
         int SaveChanges();
-         Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync();
 
         /// <summary>
         /// 获取 当前实体类型的查询数据集，数据将使用不跟踪变化的方式来查询，当数据用于展现时，推荐使用此数据集，如果用于新增，更新，删除时，请使用<see cref="TrackEntities"/>数据集
@@ -52,7 +52,7 @@ namespace Snblog.IRepository
         /// <param name="isSave">是否执行</param>
         /// /// <returns></returns>
         T Add(T entity, bool isSave = true);
-         Task<T> AysAdd(T entity, bool isSave = true);
+        Task<T> AysAdd(T entity, bool isSave = true);
         /// <summary>
         /// 批量插入 - 通过实体对象集合添加
         /// </summary>
@@ -103,11 +103,11 @@ namespace Snblog.IRepository
 
 
         #region 修改数据
-       bool Update(T entity, bool isSaveChange, List<string> updatePropertyList);
-       Task<bool> UpdateAsync(T entity, bool isSaveChange, List<string> updatePropertyList);
-       bool Update(List<T> entitys, bool isSaveChange);
-       Task<bool> UpdateAsync(List<T> entitys, bool isSaveChange );
-       #endregion
+        bool Update(T entity, bool isSaveChange, List<string> updatePropertyList);
+        Task<bool> UpdateAsync(T entity, bool isSaveChange, List<string> updatePropertyList);
+        bool Update(List<T> entitys, bool isSaveChange);
+        Task<bool> UpdateAsync(List<T> entitys, bool isSaveChange);
+        #endregion
 
 
         /// <summary>
@@ -116,12 +116,12 @@ namespace Snblog.IRepository
         /// <param name="entity">实体对象</param>
         Task<int> AysUpdate(T entity);
 
-        int  Update(T entity);
+        int Update(T entity);
         /// <summary>
         /// 批量修改 - 通过实体对象集合修改
         /// </summary>
         /// <param name="entitys">实体对象集合</param>
-        void Update( params T[] entitys);
+        void Update(params T[] entitys);
 
         /// <summary>
         /// 是否满足条件
@@ -160,9 +160,9 @@ namespace Snblog.IRepository
         /// <returns></returns>
         T FirstOrDefault<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false);
 
-        # region 查找数据
+        #region 查找数据
 
-      
+
 
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace Snblog.IRepository
 
 
 
-                /// <summary>
+        /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
         /// <typeparam name="TOrder">排序约束</typeparam>

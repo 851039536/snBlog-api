@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService
 {
-  public interface ISnSortService
+    public interface ISnSortService
     {
 
-         /// <summary>
+        /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-         List<SnSort> GetSort();
+        List<SnSort> GetSort();
 
         /// <summary>
         /// 异步添加数据
@@ -26,11 +26,11 @@ namespace Snblog.IService
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>
-         Task<string> AysUpSort(SnSort test);
+        Task<string> AysUpSort(SnSort test);
 
-         /// <summary>
+        /// <summary>
         /// 异步按id删除
         /// </summary>
-          Task<string> AsyDetSort(int id);
+        Task<string> AsyDetSort(int id);
     }
 }

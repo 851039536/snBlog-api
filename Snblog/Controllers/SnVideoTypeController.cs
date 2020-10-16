@@ -10,20 +10,20 @@ using Snblog.Models;
 namespace Snblog.Controllers
 {
 
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class SnVideoTypeController : Controller
     {
-       private readonly snblogContext _coreDbContext;
-          private readonly ISnVideoTypeService _service; //IOC依赖注入
-         public SnVideoTypeController(ISnVideoTypeService service , snblogContext coreDbContext)
-         {
-             _service=service;
-             _coreDbContext = coreDbContext;
-         }
+        private readonly snblogContext _coreDbContext;
+        private readonly ISnVideoTypeService _service; //IOC依赖注入
+        public SnVideoTypeController(ISnVideoTypeService service, snblogContext coreDbContext)
+        {
+            _service = service;
+            _coreDbContext = coreDbContext;
+        }
 
-         /// <summary>
+        /// <summary>
         /// 分类视频查询
         /// </summary>
         /// <returns></returns>
@@ -31,6 +31,6 @@ namespace Snblog.Controllers
         public async Task<IActionResult> AsyGestTest()
         {
             return Ok(await _service.AsyGetTest());
-        }  
+        }
     }
 }
