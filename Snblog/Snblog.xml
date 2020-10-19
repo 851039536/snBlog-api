@@ -201,6 +201,34 @@
             <param name="type">作者</param>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnOneController.GetPagingOne(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            条件分页查询 - 支持排序
+            </summary>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneController.AsyInsOne(Snblog.Models.SnOne)">
+            <summary>
+            添加数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneController.AsyDetOne(System.Int32)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneController.AysUpOne(Snblog.Models.SnOne)">
+            <summary>
+            更新数据
+            </summary>
+            <param name="one"></param>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnSortController.GetSort">
             <summary>
             查询分类
@@ -225,6 +253,108 @@
             删除数据
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserController.AsyGetUser">
+            <summary>
+            用户查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserController.AsyGetUserId(System.Int32)">
+            <summary>
+            主键id查询
+            </summary>
+            <param name="UserId">主键id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserController.GetUserCount">
+            <summary>
+            用户总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserController.GetPagingUser(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            条件分页查询 - 支持排序
+            </summary>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserController.AsyInsArticle(Snblog.Models.SnUser)">
+            <summary>
+            添加数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserController.AsyDetUserId(System.Int32)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserController.AysUpUser(Snblog.Models.SnUser)">
+            <summary>
+            更新数据
+            </summary>
+            <param name="User"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.AsyGetUserTalk">
+            <summary>
+            说说查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.GetUserTalkFirst(System.Int32,System.Boolean)">
+            <summary>
+            查询当前用户的说说
+            </summary>
+            <param name="UserId">查询条件</param>
+            <param name="isdesc">排序方式</param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.GetTalkCount">
+            <summary>
+            查询总条数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.UserTalkTypeConut(System.Int32)">
+            <summary>
+            条件查询总数
+            </summary>
+            <param name="UserId">用户Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.GetPagingUserTalk(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            条件分页查询 - 支持排序
+            </summary>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.AsyInsUserTalk(Snblog.Models.SnUserTalk)">
+            <summary>
+            添加数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.AsyDetUserTalk(System.Int32)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.AysUpUserTalk(Snblog.Models.SnUserTalk)">
+            <summary>
+            更新数据
+            </summary>
+            <param name="talk"></param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnVideoController.GetTest">

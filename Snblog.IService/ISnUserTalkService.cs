@@ -6,27 +6,40 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService
 {
-    public interface ISnOneService
+    /// <summary>
+    /// 业务类接口
+    /// </summary>
+    public interface ISnUserTalkService
     {
+
         /// <summary>
-        /// 查询所有
+        /// 查询总数
         /// </summary>
         /// <returns></returns>
-        List<SnOne> GetOne();
+        int GetTalkCount();
+
+        /// <summary>
+        /// 条件查询总数
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        int UserTalkTypeConut(int UserId);
         /// <summary>
         /// 异步查询
         /// </summary>
         /// <returns></returns>
-        Task<List<SnOne>> AsyGetOne();
-        int OneCount();
+        Task<List<SnUserTalk>> AsyGetUserTalk();
 
         /// <summary>
-        /// 条件查询
+        /// 查询当前用户的说说
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
+        /// <param name="UserId"></param>
+        /// <param name="isdesc"></param>
         /// <returns></returns>
-        Task<SnOne> AsyGetOneId(int id);
+        string GetUserTalkFirst(int UserId, bool isdesc);
+
+
+
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
@@ -37,35 +50,30 @@ namespace Snblog.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc);
+        List<SnUserTalk> GetPagingUserTalk(int label, int pageIndex, int pageSize, out int count, bool isDesc);
 
-        /// <summary>
-        ///  条件查询一文总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        int OneCountType(string type);
 
         /// <summary>
         /// 按id删除
         /// </summary>
-        Task<string> AsyDetOne(int id);
+        Task<string> AsyDetUserTalk(int id);
+      
+
 
         /// <summary>
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnOne> AsyInsOne(SnOne one);
+        Task<SnUserTalk> AsyInsUserTalk(SnUserTalk talk);
 
+
+     
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="one"></param>
+        /// <param name="talk"></param>
         /// <returns></returns>
-        Task<string> AysUpOne(SnOne one);
-
-
-
+        Task<string> AysUpUserTalk(SnUserTalk talk);
 
     }
 }

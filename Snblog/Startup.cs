@@ -106,6 +106,8 @@ namespace Snblog
             services.AddScoped<ISnOneService, SnOneService>();//ioc
             services.AddScoped<ISnVideoService, SnVideoService>();//ioc
             services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();//ioc
+            services.AddScoped<ISnUserTalkService, SnUserTalkService>();//ioc
+            services.AddScoped<ISnUserService, SnUserService>();//ioc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

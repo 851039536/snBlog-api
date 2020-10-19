@@ -15,8 +15,6 @@ namespace Snblog.Service
         public SnOneService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
         }
-
-
         public List<SnOne> GetOne()
         {
             var data = this.CreateService<SnOne>();
@@ -27,67 +25,54 @@ namespace Snblog.Service
             var data = CreateService<SnOne>();
             return await data.GetAll().ToListAsync();
         }
-
         public int OneCount()
         {
-           int data = CreateService<SnOne>().Count();
-            return  data;
+            int data = CreateService<SnOne>().Count();
+            return data;
         }
-
-        public Task<string> AsyDetArticleId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-
 
         public async Task<SnOne> AsyGetOneId(int id)
         {
-             return await CreateService<SnOne>().AysGetById(id);
-        }
-
-        public Task<SnArticle> AsyInsArticle(SnArticle test)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> AysUpArticle(SnArticle test)
-        {
-            throw new NotImplementedException();
+            return await CreateService<SnOne>().AysGetById(id);
         }
 
         public int OneCountType(string type)
         {
-           return CreateService<SnOne>().Count(c => c.OneAuthor == type);
+            return CreateService<SnOne>().Count(c => c.OneAuthor == type);
         }
 
-        public string DetTestId(int id)
+        public List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc)
         {
-            throw new NotImplementedException();
+            IEnumerable<SnOne> data;
+            data = CreateService<SnOne>().Wherepage(s => s.OneId != null, c => c.OneRead, pageIndex, pageSize, out count, isDesc);
+            return data.ToList();
         }
-
-     
-
-        public List<SnArticle> GetPagingWhere(int pageIndex, int pageSize, out int count, bool isDesc)
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<string> AsyDetOne(int id)
         {
-            throw new NotImplementedException();
+            int da = await CreateService<SnOne>().AsyDelete(id);
+            string data = da == 1 ? "删除成功" : "删除失败";
+            return data; ;
         }
-
-
-        public List<SnOne> GetTestWhere(int id)
+        /// <summary>
+        /// 添加数据
+        /// </summary>
+        /// <param name="one"></param>
+        /// <returns></returns>
+        public async Task<SnOne> AsyInsOne(SnOne one)
         {
-            throw new NotImplementedException();
+             return await CreateService<SnOne>().AysAdd(one);
         }
 
-        public SnArticle IntTest(SnArticle test)
+        public async Task<string> AysUpOne(SnOne one)
         {
-            throw new NotImplementedException();
+            int da = await CreateService<SnOne>().AysUpdate(one);
+            string data = da == 1 ? "更新成功" : "更新失败";
+            return data;
         }
-
-        public string UpTest(SnArticle test)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

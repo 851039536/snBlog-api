@@ -26,17 +26,18 @@ namespace Snblog.Models
         public virtual DbSet<SnSort> SnSort { get; set; }
         public virtual DbSet<SnUser> SnUser { get; set; }
         public virtual DbSet<SnUserFriends> SnUserFriends { get; set; }
+        public virtual DbSet<SnUserTalk> SnUserTalk { get; set; }
         public virtual DbSet<SnVideo> SnVideo { get; set; }
         public virtual DbSet<SnVideoType> SnVideoType { get; set; }
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-        //                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", x => x.ServerVersion("8.0.16-mysql"));
-        //            }
-        //        }
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", x => x.ServerVersion("8.0.16-mysql"));
+//            }
+//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -510,6 +511,44 @@ namespace Snblog.Models
                     .HasCollation("utf8_general_ci");
             });
 
+            modelBuilder.Entity<SnUserTalk>(entity =>
+            {
+                entity.ToTable("sn_user_talk");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.CommentId)
+                    .HasColumnName("comment_id")
+                    .HasColumnType("int(11)")
+                    .HasComment("评论id");
+
+                entity.Property(e => e.TalkGive)
+                    .HasColumnName("talk_give")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.TalkRead)
+                    .HasColumnName("talk_read")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.TalkText)
+                    .HasColumnName("talk_text")
+                    .HasColumnType("varchar(255)")
+                    .HasComment("说说内容")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.TalkTime)
+                    .HasColumnName("talk_time")
+                    .HasColumnType("datetime")
+                    .HasComment("发表时间");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("user_id")
+                    .HasColumnType("int(11)");
+            });
+
             modelBuilder.Entity<SnVideo>(entity =>
             {
                 entity.HasKey(e => e.VId)
@@ -523,7 +562,7 @@ namespace Snblog.Models
 
                 entity.Property(e => e.VData)
                     .HasColumnName("v_data")
-                    .HasColumnType("varchar(20)")
+                    .HasColumnType("varchar(50)")
                     .HasComment("时间")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");

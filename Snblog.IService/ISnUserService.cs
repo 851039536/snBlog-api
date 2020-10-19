@@ -6,27 +6,27 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService
 {
-    public interface ISnOneService
+    public interface ISnUserService
     {
-        /// <summary>
-        /// 查询所有
-        /// </summary>
-        /// <returns></returns>
-        List<SnOne> GetOne();
         /// <summary>
         /// 异步查询
         /// </summary>
         /// <returns></returns>
-        Task<List<SnOne>> AsyGetOne();
-        int OneCount();
+        Task<List<SnUser>> AsyGetUser();
 
         /// <summary>
-        /// 条件查询
+        /// 主键id查询
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
+        /// <param name="UserId"></param>
         /// <returns></returns>
-        Task<SnOne> AsyGetOneId(int id);
+        Task<List<SnUser>> AsyGetUserId(int UserId);
+
+        /// <summary>
+        /// 查询用户总数
+        /// </summary>
+        /// <returns></returns>
+        int GetUserCount();
+
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
@@ -37,35 +37,25 @@ namespace Snblog.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc);
+        List<SnUser> GetPagingUser(int label, int pageIndex, int pageSize, out int count, bool isDesc);
 
-        /// <summary>
-        ///  条件查询一文总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        int OneCountType(string type);
-
-        /// <summary>
-        /// 按id删除
-        /// </summary>
-        Task<string> AsyDetOne(int id);
 
         /// <summary>
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnOne> AsyInsOne(SnOne one);
+        Task<SnUser> AsyInsUser(SnUser test);
+
+        /// <summary>
+        /// 按id删除
+        /// </summary>
+        Task<string> AsyDetUserId(int UserId);
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="one"></param>
+        /// <param name="User"></param>
         /// <returns></returns>
-        Task<string> AysUpOne(SnOne one);
-
-
-
-
+        Task<string> AysUpUser(SnUser User);
     }
 }
