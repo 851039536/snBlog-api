@@ -1,4 +1,5 @@
-﻿using Snblog.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
 using System;
@@ -27,6 +28,18 @@ namespace Snblog.Service
             return data;
         }
 
+        public async Task<List<SnSort>> AsyGetSort()
+        {
+             var data = CreateService<SnSort>();
+            return await data.GetAll().ToListAsync();
+        }
+
+        public async Task<List<SnSort>> AsyGetSortId(int id)
+        {
+            var data = CreateService<SnSort>().Where(s => s.SortId == id);
+            return await data.ToListAsync();
+        }
+
         /// <summary>
         /// 添加数据
         /// </summary>
@@ -52,6 +65,12 @@ namespace Snblog.Service
         {
             var data = this.CreateService<SnSort>();
             return data.GetAll().ToList();
+        }
+
+        public int GetSortCount()
+        {
+            int data = CreateService<SnSort>().Count();
+            return data;
         }
     }
 }

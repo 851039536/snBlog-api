@@ -36,6 +36,17 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
+        /// 主键id查询
+        /// </summary>
+        /// <param name="TalkId">主键id</param>
+        /// <returns></returns>
+        [HttpGet("AsyGetTalk")]
+        public async Task<IActionResult> AsyGetTalk(int TalkId)
+        {
+            return Ok(await _service.AsyGetTalk(TalkId));
+        }
+
+        /// <summary>
         /// 查询当前用户的说说
         /// </summary>
         /// <param name="UserId">查询条件</param>

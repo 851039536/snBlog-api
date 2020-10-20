@@ -31,6 +31,14 @@ namespace Snblog.IService
         Task<List<SnUserTalk>> AsyGetUserTalk();
 
         /// <summary>
+        /// 主键id查询
+        /// </summary>
+        /// <param name="TalkId"></param>
+        /// <returns></returns>
+        Task<List<SnUserTalk>> AsyGetTalk(int TalkId);
+
+
+        /// <summary>
         /// 查询当前用户的说说
         /// </summary>
         /// <param name="UserId"></param>

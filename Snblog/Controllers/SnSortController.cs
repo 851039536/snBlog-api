@@ -33,6 +33,36 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
+        /// 查询分类
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("AsyGetSort")]
+        public async Task<IActionResult> AsyGetSort()
+        {
+            return Ok(await _service.AsyGetSort());
+        }
+
+        /// <summary>
+        /// 主键id查询
+        /// </summary>
+        /// <param name="SortId">主键id</param>
+        /// <returns></returns>
+        [HttpGet("AsyGetSortId")]
+        public async Task<IActionResult> AsyGetSortId(int SortId)
+        {
+            return Ok(await _service.AsyGetSortId(SortId));
+        }
+        /// <summary>
+        /// 分类总数
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetSortCount")]
+        public IActionResult GetSortCount()
+        {
+            return Ok(_service.GetSortCount());
+        }
+
+        /// <summary>
         /// 添加数据
         /// </summary>
         /// <returns></returns>

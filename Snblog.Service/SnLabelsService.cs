@@ -58,5 +58,11 @@ namespace Snblog.Service
             var data = this.CreateService<SnLabels>();
             return data.GetAll().ToList();
         }
+
+        public int GetLabelsCount()
+        {
+            int data = CreateService<SnLabels>().Count();
+            return data;
+        }
     }
 }

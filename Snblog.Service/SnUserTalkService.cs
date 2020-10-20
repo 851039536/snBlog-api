@@ -84,8 +84,10 @@ namespace Snblog.Service
 
         }
 
-      
-
-
+        public async Task<List<SnUserTalk>> AsyGetTalk(int TalkId)
+        {
+           var data = CreateService<SnUserTalk>().Where(s => s.Id == TalkId);
+            return await data.ToListAsync();
+        }
     }
 }

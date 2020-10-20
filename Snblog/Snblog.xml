@@ -79,6 +79,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnLabelsController.GetLabelsCount">
+            <summary>
+            标签总数
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnLabelsController.AsyInsLabels(Snblog.Models.SnLabels)">
             <summary>
             添加标签
@@ -235,6 +241,25 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnSortController.AsyGetSort">
+            <summary>
+            查询分类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnSortController.AsyGetSortId(System.Int32)">
+            <summary>
+            主键id查询
+            </summary>
+            <param name="SortId">主键id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnSortController.GetSortCount">
+            <summary>
+            分类总数
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnSortController.AsyInsLabels(Snblog.Models.SnSort)">
             <summary>
             添加数据
@@ -306,6 +331,13 @@
             <summary>
             说说查询
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnUserTalkController.AsyGetTalk(System.Int32)">
+            <summary>
+            主键id查询
+            </summary>
+            <param name="TalkId">主键id</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnUserTalkController.GetUserTalkFirst(System.Int32,System.Boolean)">

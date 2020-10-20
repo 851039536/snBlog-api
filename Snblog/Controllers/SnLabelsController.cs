@@ -31,6 +31,16 @@ namespace Snblog.Controllers
         {
             return Ok(_service.GetLabels());
         }
+        /// <summary>
+        /// 标签总数
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetLabelsCount")]
+        public IActionResult GetLabelsCount()
+        {
+            return Ok(_service.GetLabelsCount());
+        }
+
 
         /// <summary>
         /// 添加标签

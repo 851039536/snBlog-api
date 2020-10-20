@@ -14,6 +14,11 @@ namespace Snblog.IService
         /// <returns></returns>
         List<SnLabels> GetLabels();
 
+         /// <summary>
+        /// 查询标签总数
+        /// </summary>
+        /// <returns></returns>
+        int GetLabelsCount();
 
         /// <summary>
         /// 异步添加数据
