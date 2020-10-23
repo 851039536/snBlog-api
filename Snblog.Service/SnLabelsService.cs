@@ -1,4 +1,5 @@
-﻿using Snblog.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
 using System;
@@ -25,6 +26,18 @@ namespace Snblog.Service
             int da = await Task.Run(() => CreateService<SnLabels>().AsyDelete(id));
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
+        }
+
+        public async Task<List<SnLabels>> AsyGetLabels()
+        {
+            var data = CreateService<SnLabels>();
+            return await data.GetAll().ToListAsync();
+        }
+
+        public async Task<List<SnLabels>> AsyGetLabelsId(int id)
+        {
+            var data = CreateService<SnLabels>().Where(s => s.LabelId == id);
+            return await data.ToListAsync();
         }
 
         /// <summary>

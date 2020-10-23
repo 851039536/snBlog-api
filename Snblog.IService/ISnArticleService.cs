@@ -86,6 +86,7 @@ namespace Snblog.IService
 
         Task<string> AysUpArticle(SnArticle test);
 
+
         string UpTest(SnArticle test);
 
 

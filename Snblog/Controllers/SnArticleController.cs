@@ -30,7 +30,10 @@ namespace Snblog.Controllers
         /// <summary>
         /// 查询文章总条数
         /// </summary>
-        /// <returns></returns>
+        /// <remarks>
+        /// 例子:
+        /// Get api/Values/1
+        /// </remarks>
         [HttpGet("GetArticleCount")]
         public IActionResult GetArticleCount()
         {
@@ -140,5 +143,7 @@ namespace Snblog.Controllers
             var data = await _service.AysUpArticle(test);
             return Ok(data);
         }
+
+
     }
 }

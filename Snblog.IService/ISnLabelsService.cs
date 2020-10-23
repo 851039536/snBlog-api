@@ -13,8 +13,20 @@ namespace Snblog.IService
         /// </summary>
         /// <returns></returns>
         List<SnLabels> GetLabels();
+        /// <summary>
+        /// 异步查询
+        /// </summary>
+        /// <returns></returns>
+        Task<List<SnLabels>> AsyGetLabels();
 
-         /// <summary>
+        /// <summary>
+        /// 主键查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<List<SnLabels>> AsyGetLabelsId(int id);
+
+        /// <summary>
         /// 查询标签总数
         /// </summary>
         /// <returns></returns>

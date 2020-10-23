@@ -136,6 +136,6 @@ namespace Snblog.Service
         {
             return CreateService<SnArticle>().Count(c => c.LabelId == type);
         }
-
+      
     }
 }

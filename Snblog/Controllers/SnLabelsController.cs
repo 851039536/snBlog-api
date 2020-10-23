@@ -23,7 +23,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 查询所有
+        /// 查询标签
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetLabels")]
@@ -31,6 +31,26 @@ namespace Snblog.Controllers
         {
             return Ok(_service.GetLabels());
         }
+        /// <summary>
+        /// 查询标签
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("AsyGetLabels")]
+        public async Task<IActionResult> AsyGetLabels()
+        {
+            return Ok(await _service.AsyGetLabels());
+        }
+        /// <summary>
+        /// id查询标签
+        /// </summary>
+        /// <param name="LabelsId">主键</param>
+        /// <returns></returns>
+        [HttpGet("AsyGetLabelsId")]
+        public async Task<IActionResult> AsyGetLabelsId(int LabelsId)
+        {
+            return Ok(await _service.AsyGetLabelsId(LabelsId));
+        }
+
         /// <summary>
         /// 标签总数
         /// </summary>
