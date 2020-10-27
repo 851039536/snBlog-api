@@ -2,10 +2,8 @@
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.Service
@@ -16,9 +14,9 @@ namespace Snblog.Service
         {
         }
 
-        public async Task<string> AsyDetUserId(int UserId)
+        public async Task<string> AsyDetUserId(int userId)
         {
-            int da = await Task.Run(() => CreateService<SnUser>().AsyDelete(UserId));
+            int da = await Task.Run(() => CreateService<SnUser>().AsyDelete(userId));
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -29,9 +27,9 @@ namespace Snblog.Service
             return await data.GetAll().ToListAsync();
         }
 
-        public async Task<List<SnUser>> AsyGetUserId(int UserId)
+        public async Task<List<SnUser>> AsyGetUserId(int userId)
         {
-            var data = CreateService<SnUser>().Where(s => s.UserId == UserId);
+            var data = CreateService<SnUser>().Where(s => s.UserId == userId);
             return await data.ToListAsync();
         }
 
@@ -40,9 +38,9 @@ namespace Snblog.Service
             return await CreateService<SnUser>().AysAdd(test);
         }
 
-        public async Task<string> AysUpUser(SnUser User)
+        public async Task<string> AysUpUser(SnUser user)
         {
-           int da = await CreateService<SnUser>().AysUpdate(User);
+           int da = await CreateService<SnUser>().AysUpdate(user);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }
@@ -51,17 +49,14 @@ namespace Snblog.Service
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
-        /// <typeparam name="TOrder">排序约束</typeparam>
-        /// <param name="where">过滤条件</param>
-        /// <param name="order">排序条件</param>
+        /// <param name="label"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
         public List<SnUser> GetPagingUser(int label, int pageIndex, int pageSize, out int count, bool isDesc)
         {
-            IEnumerable<SnUser> data;
-            data = CreateService<SnUser>().Wherepage(s => s.UserId != null, c => c.UserId, pageIndex, pageSize, out count, isDesc);
+            var data = CreateService<SnUser>().Wherepage(s => true, c => c.UserId, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
         }
 

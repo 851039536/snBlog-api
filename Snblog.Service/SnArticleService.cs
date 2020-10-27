@@ -1,11 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.IRepository;
+﻿using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.Service
@@ -41,22 +39,19 @@ namespace Snblog.Service
         /// <summary>
         /// 按分类查询
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="sortId"></param>
         /// <returns></returns>
-        public List<SnArticle> GetTestWhere(int SortId)
+        public List<SnArticle> GetTestWhere(int sortId)
         {
-            var data = CreateService<SnArticle>().Where(s => s.SortId == SortId);
+            var data = CreateService<SnArticle>().Where(s => s.SortId == sortId);
             return data.ToList();
         }
-
 
 
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
-        /// <typeparam name="TOrder">排序约束</typeparam>
-        /// <param name="where">过滤条件</param>
-        /// <param name="order">排序条件</param>
+        /// <param name="label"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
@@ -64,15 +59,15 @@ namespace Snblog.Service
         public List<SnArticle> GetPagingWhere(int label, int pageIndex, int pageSize, out int count, bool isDesc)
         {
             IEnumerable<SnArticle> data;
-            if (label == 00)
-            {
-                data = CreateService<SnArticle>().Wherepage(s => s.ArticleId != null, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
-            }
-            else
-            {
-                data = CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
-            }
-
+            // if (label == 00)
+            //{
+            //    data = CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
+            //}
+            //else
+            //{
+            //    data = CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
+            //}
+            data = label == 00 ? CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out count, isDesc) : CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
 
         }
@@ -90,10 +85,10 @@ namespace Snblog.Service
 
         public async Task<string> AysUpArticle(SnArticle test)
         {
-            //int da=  CreateService<typecho_test>().Update(test);
             int da = await CreateService<SnArticle>().AysUpdate(test);
-            string data = da == 1 ? "更新成功" : "更新失败";
-            return data;
+            // string data = da == 1 ? "更新成功" : "更新失败";
+            string Func(int data) => data == 1 ? "更新成功" : "更新失败";
+            return  Func(da);
         }
 
         public string DetTestId(int id)
@@ -136,6 +131,5 @@ namespace Snblog.Service
         {
             return CreateService<SnArticle>().Count(c => c.LabelId == type);
         }
-      
     }
 }

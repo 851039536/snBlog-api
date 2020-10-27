@@ -2,10 +2,8 @@
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.Service
@@ -24,7 +22,7 @@ namespace Snblog.Service
         {
             int da = await  CreateService<SnUserTalk>().AsyDelete(id);
             string data = da == 1 ? "删除成功" : "删除失败";
-            return data; ;
+            return data;
         }
 
         public async Task<List<SnUserTalk>> AsyGetUserTalk()
@@ -51,16 +49,15 @@ namespace Snblog.Service
             return data;
         }
 
-        public int UserTalkTypeConut(int UserId)
+        public int UserTalkTypeConut(int userId)
         {
-            return CreateService<SnUserTalk>().Count(c => c.UserId == UserId);
+            return CreateService<SnUserTalk>().Count(c => c.UserId == userId);
         }
 
 
         public List<SnUserTalk> GetPagingUserTalk(int label, int pageIndex, int pageSize, out int count, bool isDesc)
         {
-            IEnumerable<SnUserTalk> data;
-            data = CreateService<SnUserTalk>().Wherepage(s => s.Id != null, c => c.TalkTime, pageIndex, pageSize, out count, isDesc);
+            var data = CreateService<SnUserTalk>().Wherepage(s => true, c => c.TalkTime, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
         }
 
@@ -77,16 +74,16 @@ namespace Snblog.Service
 
 
 
-        public string GetUserTalkFirst(int UserId, bool isdesc)
+        public string GetUserTalkFirst(int userId, bool isdesc)
         {
-            var data = CreateService<SnUserTalk>().FirstOrDefault(u => u.UserId == UserId, c => c.TalkTime, isdesc);
+            var data = CreateService<SnUserTalk>().FirstOrDefault(u => u.UserId == userId, c => c.TalkTime, isdesc);
             return data.TalkText;
 
         }
 
-        public async Task<List<SnUserTalk>> AsyGetTalk(int TalkId)
+        public async Task<List<SnUserTalk>> AsyGetTalk(int talkId)
         {
-           var data = CreateService<SnUserTalk>().Where(s => s.Id == TalkId);
+           var data = CreateService<SnUserTalk>().Where(s => s.Id == talkId);
             return await data.ToListAsync();
         }
     }

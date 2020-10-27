@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
@@ -97,8 +93,7 @@ namespace Snblog.Controllers
         [HttpGet("GetfyNavigation")]
         public IActionResult GetfyNavigation(string type, int pageIndex, int pageSize, bool isDesc)
         {
-            int count;
-            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out count, isDesc));
+            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out _, isDesc));
         }
 
 

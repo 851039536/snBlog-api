@@ -2,10 +2,8 @@
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.Service
@@ -44,7 +42,7 @@ namespace Snblog.Service
         public List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc)
         {
             IEnumerable<SnOne> data;
-            data = CreateService<SnOne>().Wherepage(s => s.OneId != null, c => c.OneRead, pageIndex, pageSize, out count, isDesc);
+            data = CreateService<SnOne>().Wherepage(s => true, c => c.OneRead, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
         }
         /// <summary>
@@ -56,7 +54,7 @@ namespace Snblog.Service
         {
             int da = await CreateService<SnOne>().AsyDelete(id);
             string data = da == 1 ? "删除成功" : "删除失败";
-            return data; ;
+            return data;
         }
         /// <summary>
         /// 添加数据

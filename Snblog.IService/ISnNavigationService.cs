@@ -1,7 +1,5 @@
 ﻿using Snblog.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.IService
@@ -38,12 +36,11 @@ namespace Snblog.IService
         Task<List<SnNavigation>> AsyGetTest();
 
         SnNavigation GetNavigationId(int id);
+
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
-        /// <typeparam name="TOrder">排序约束</typeparam>
-        /// <param name="where">过滤条件</param>
-        /// <param name="order">排序条件</param>
+        /// <param name="type"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
@@ -56,11 +53,11 @@ namespace Snblog.IService
         /// <param name="type">查询条件</param>
         /// <returns></returns>
         List<SnNavigation> GetDistTest(string type);
+
         /// <summary>
         /// 条件查询
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="name"></param>
         /// <returns></returns>
         Task<SnNavigation> AsyGetTestName(int id);
 

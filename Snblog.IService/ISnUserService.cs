@@ -1,7 +1,5 @@
 ﻿using Snblog.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.IService
@@ -17,9 +15,9 @@ namespace Snblog.IService
         /// <summary>
         /// 主键id查询
         /// </summary>
-        /// <param name="UserId"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        Task<List<SnUser>> AsyGetUserId(int UserId);
+        Task<List<SnUser>> AsyGetUserId(int userId);
 
         /// <summary>
         /// 查询用户总数
@@ -30,9 +28,7 @@ namespace Snblog.IService
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
-        /// <typeparam name="TOrder">排序约束</typeparam>
-        /// <param name="where">过滤条件</param>
-        /// <param name="order">排序条件</param>
+        /// <param name="label"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
@@ -49,13 +45,13 @@ namespace Snblog.IService
         /// <summary>
         /// 按id删除
         /// </summary>
-        Task<string> AsyDetUserId(int UserId);
+        Task<string> AsyDetUserId(int userId);
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="User"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        Task<string> AysUpUser(SnUser User);
+        Task<string> AysUpUser(SnUser user);
     }
 }

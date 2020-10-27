@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Snblog.IService;
 using Snblog.Models;
-using Snblog.Repository;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -54,12 +51,12 @@ namespace Snblog.Controllers
         /// <summary>
         /// 分类查询文章
         /// </summary>
-        /// <param name="SortId">分类id</param>
+        /// <param name="sortId">分类id</param>
         /// <returns></returns>
         [HttpGet("GetTestWhere")]
-        public IActionResult GetTestWhere(int SortId)
+        public IActionResult GetTestWhere(int sortId)
         {
-            return Ok(_service.GetTestWhere(SortId));
+            return Ok(_service.GetTestWhere(sortId));
         }
 
         /// <summary>
@@ -82,8 +79,7 @@ namespace Snblog.Controllers
         [HttpGet("GetfyTest")]
         public IActionResult GetfyTest(int label, int pageIndex, int pageSize, bool isDesc)
         {
-            int count;
-            return Ok(_service.GetPagingWhere(label, pageIndex, pageSize, out count, isDesc));
+            return Ok(_service.GetPagingWhere(label, pageIndex, pageSize, out _, isDesc));
         }
 
         /// <summary>
@@ -100,13 +96,13 @@ namespace Snblog.Controllers
         /// <summary>
         /// 标签条件查询
         /// </summary>
-        /// <param name="LabelId">标签id</param>
+        /// <param name="labelId">标签id</param>
         /// <returns></returns>
         [HttpGet("AsyGetTestString")]
-        public async Task<IActionResult> AsyGetTestString(int LabelId)
+        public async Task<IActionResult> AsyGetTestString(int labelId)
         {
             var query = from c in _coreDbContext.SnArticle
-                        where c.LabelId == LabelId
+                        where c.LabelId == labelId
                         select new { c.ArticleId, c.TitleText, c.Title, c.Time, c.Read, c.Give };
             return Ok(await query.ToListAsync());
         }

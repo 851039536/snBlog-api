@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
@@ -64,8 +61,7 @@ namespace Snblog.Controllers
         [HttpGet("GetfyVideo")]
         public IActionResult GetfyVideo(int type, int pageIndex, int pageSize, bool isDesc)
         {
-            int count;
-            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out count, isDesc));
+            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out _, isDesc));
         }
 
 
@@ -83,12 +79,12 @@ namespace Snblog.Controllers
         /// <summary>
         /// 条件查视频总数
         /// </summary>
-        /// <param name="typeID">视频分类id</param>
+        /// <param name="typeId">视频分类id</param>
         /// <returns></returns>
         [HttpGet("GetVideoCountType")]
-        public IActionResult GetVideoCountType(int typeID)
+        public IActionResult GetVideoCountType(int typeId)
         {
-            return Ok(_service.GetVideoCount(typeID));
+            return Ok(_service.GetVideoCount(typeId));
         }
 
 

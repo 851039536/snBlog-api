@@ -1,7 +1,5 @@
 ﻿using Snblog.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.IService
@@ -24,15 +22,12 @@ namespace Snblog.IService
         /// 条件查询
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="name"></param>
         /// <returns></returns>
         Task<SnOne> AsyGetOneId(int id);
+
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
-        /// <typeparam name="TOrder">排序约束</typeparam>
-        /// <param name="where">过滤条件</param>
-        /// <param name="order">排序条件</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>

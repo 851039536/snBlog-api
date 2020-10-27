@@ -1,7 +1,4 @@
 ﻿using Snblog.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Snblog.IService
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
@@ -40,12 +37,12 @@ namespace Snblog.Controllers
         /// <summary>
         /// 主键id查询
         /// </summary>
-        /// <param name="UserId">主键id</param>
+        /// <param name="userId">主键id</param>
         /// <returns></returns>
         [HttpGet("AsyGetUserId")]
-        public async Task<IActionResult> AsyGetUserId(int UserId)
+        public async Task<IActionResult> AsyGetUserId(int userId)
         {
-            return Ok(await _service.AsyGetUserId(UserId));
+            return Ok(await _service.AsyGetUserId(userId));
         }
 
         /// <summary>
@@ -67,8 +64,7 @@ namespace Snblog.Controllers
         [HttpGet("GetPagingUser")]
         public IActionResult GetPagingUser(int pageIndex, int pageSize, bool isDesc)
         {
-            int count;
-            return Ok(_service.GetPagingUser(1, pageIndex, pageSize, out count, isDesc));
+            return Ok(_service.GetPagingUser(1, pageIndex, pageSize, out _, isDesc));
         }
 
         /// <summary>
@@ -84,23 +80,23 @@ namespace Snblog.Controllers
         /// <summary>
         /// 删除数据
         /// </summary>
-        /// <param name="UserId"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpDelete("AsyDetUserId")]
-        public async Task<IActionResult> AsyDetUserId(int UserId)
+        public async Task<IActionResult> AsyDetUserId(int userId)
         {
-            return Ok(await _service.AsyDetUserId(UserId));
+            return Ok(await _service.AsyDetUserId(userId));
         }
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="User"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
         [HttpPut("AysUpUser")]
-        public async Task<IActionResult> AysUpUser(SnUser User)
+        public async Task<IActionResult> AysUpUser(SnUser user)
         {
-            var data = await _service.AysUpUser(User);
+            var data = await _service.AysUpUser(user);
             return Ok(data);
         }
 

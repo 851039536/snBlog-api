@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
@@ -45,12 +41,12 @@ namespace Snblog.Controllers
         /// <summary>
         /// 主键id查询
         /// </summary>
-        /// <param name="SortId">主键id</param>
+        /// <param name="sortId">主键id</param>
         /// <returns></returns>
         [HttpGet("AsyGetSortId")]
-        public async Task<IActionResult> AsyGetSortId(int SortId)
+        public async Task<IActionResult> AsyGetSortId(int sortId)
         {
-            return Ok(await _service.AsyGetSortId(SortId));
+            return Ok(await _service.AsyGetSortId(sortId));
         }
         /// <summary>
         /// 分类总数

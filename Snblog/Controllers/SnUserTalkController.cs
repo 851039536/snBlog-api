@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
@@ -38,24 +35,24 @@ namespace Snblog.Controllers
         /// <summary>
         /// 主键id查询
         /// </summary>
-        /// <param name="TalkId">主键id</param>
+        /// <param name="talkId">主键id</param>
         /// <returns></returns>
         [HttpGet("AsyGetTalk")]
-        public async Task<IActionResult> AsyGetTalk(int TalkId)
+        public async Task<IActionResult> AsyGetTalk(int talkId)
         {
-            return Ok(await _service.AsyGetTalk(TalkId));
+            return Ok(await _service.AsyGetTalk(talkId));
         }
 
         /// <summary>
         /// 查询当前用户的说说
         /// </summary>
-        /// <param name="UserId">查询条件</param>
+        /// <param name="userId">查询条件</param>
         /// <param name="isdesc">排序方式</param>
         /// <returns></returns>
         [HttpGet("GetUserTalkFirst")]
-        public IActionResult GetUserTalkFirst(int UserId, bool isdesc)
+        public IActionResult GetUserTalkFirst(int userId, bool isdesc)
         {
-            return Ok(_service.GetUserTalkFirst(UserId, isdesc));
+            return Ok(_service.GetUserTalkFirst(userId, isdesc));
         }
 
         /// <summary>
@@ -71,12 +68,12 @@ namespace Snblog.Controllers
         /// <summary>
         /// 条件查询总数
         /// </summary>
-        /// <param name="UserId">用户Id</param>
+        /// <param name="userId">用户Id</param>
         /// <returns></returns>
         [HttpGet("UserTalkTypeConut")]
-        public IActionResult UserTalkTypeConut(int UserId)
+        public IActionResult UserTalkTypeConut(int userId)
         {
-            return Ok(_service.UserTalkTypeConut(UserId));
+            return Ok(_service.UserTalkTypeConut(userId));
         }
 
 
@@ -89,8 +86,7 @@ namespace Snblog.Controllers
         [HttpGet("GetPagingUserTalk")]
         public IActionResult GetPagingUserTalk(int pageIndex, int pageSize, bool isDesc)
         {
-            int count;
-            return Ok(_service.GetPagingUserTalk(1, pageIndex, pageSize, out count, isDesc));
+            return Ok(_service.GetPagingUserTalk(1, pageIndex, pageSize, out _, isDesc));
         }
 
         /// <summary>

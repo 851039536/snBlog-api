@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
@@ -43,12 +39,12 @@ namespace Snblog.Controllers
         /// <summary>
         /// id查询标签
         /// </summary>
-        /// <param name="LabelsId">主键</param>
+        /// <param name="labelsId">主键</param>
         /// <returns></returns>
         [HttpGet("AsyGetLabelsId")]
-        public async Task<IActionResult> AsyGetLabelsId(int LabelsId)
+        public async Task<IActionResult> AsyGetLabelsId(int labelsId)
         {
-            return Ok(await _service.AsyGetLabelsId(LabelsId));
+            return Ok(await _service.AsyGetLabelsId(labelsId));
         }
 
         /// <summary>

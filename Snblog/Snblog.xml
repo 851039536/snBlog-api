@@ -12,7 +12,6 @@
             例子:
             Get api/Values/1
             </remarks>
-            <returns>查询总数</returns>
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.ConutLabel(System.Int32)">
             <summary>
@@ -25,7 +24,7 @@
             <summary>
             分类查询文章
             </summary>
-            <param name="SortId">分类id</param>
+            <param name="sortId">分类id</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.GetTest">
@@ -54,7 +53,7 @@
             <summary>
             标签条件查询
             </summary>
-            <param name="LabelId">标签id</param>
+            <param name="labelId">标签id</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnArticleController.AsyInsArticle(Snblog.Models.SnArticle)">
@@ -93,7 +92,7 @@
             <summary>
             id查询标签
             </summary>
-            <param name="LabelsId">主键</param>
+            <param name="labelsId">主键</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnLabelsController.GetLabelsCount">
@@ -268,7 +267,7 @@
             <summary>
             主键id查询
             </summary>
-            <param name="SortId">主键id</param>
+            <param name="sortId">主键id</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnSortController.GetSortCount">
@@ -307,7 +306,7 @@
             <summary>
             主键id查询
             </summary>
-            <param name="UserId">主键id</param>
+            <param name="userId">主键id</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnUserController.GetUserCount">
@@ -334,14 +333,14 @@
             <summary>
             删除数据
             </summary>
-            <param name="UserId"></param>
+            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnUserController.AysUpUser(Snblog.Models.SnUser)">
             <summary>
             更新数据
             </summary>
-            <param name="User"></param>
+            <param name="user"></param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnUserTalkController.AsyGetUserTalk">
@@ -354,14 +353,14 @@
             <summary>
             主键id查询
             </summary>
-            <param name="TalkId">主键id</param>
+            <param name="talkId">主键id</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnUserTalkController.GetUserTalkFirst(System.Int32,System.Boolean)">
             <summary>
             查询当前用户的说说
             </summary>
-            <param name="UserId">查询条件</param>
+            <param name="userId">查询条件</param>
             <param name="isdesc">排序方式</param>
             <returns></returns>
         </member>
@@ -375,7 +374,7 @@
             <summary>
             条件查询总数
             </summary>
-            <param name="UserId">用户Id</param>
+            <param name="userId">用户Id</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnUserTalkController.GetPagingUserTalk(System.Int32,System.Int32,System.Boolean)">
@@ -444,7 +443,7 @@
             <summary>
             条件查视频总数
             </summary>
-            <param name="typeID">视频分类id</param>
+            <param name="typeId">视频分类id</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnVideoController.GetTestWhere(System.Int32)">
