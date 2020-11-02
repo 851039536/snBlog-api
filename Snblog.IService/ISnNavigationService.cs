@@ -29,11 +29,7 @@ namespace Snblog.IService
         List<SnNavigation> GetSnNavigation();
 
         Task<List<SnNavigation>> AsyGetWhereTest(string type, bool fag);
-        /// <summary>
-        /// 异步查询
-        /// </summary>
-        /// <returns></returns>
-        Task<List<SnNavigation>> AsyGetTest();
+      
 
         SnNavigation GetNavigationId(int id);
 
@@ -54,22 +50,14 @@ namespace Snblog.IService
         /// <returns></returns>
         List<SnNavigation> GetDistTest(string type);
 
-        /// <summary>
-        /// 条件查询
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Task<SnNavigation> AsyGetTestName(int id);
+      
 
 
         /// <summary>
         /// 按id删除
         /// </summary>
         Task<string> AsyDelNavigation(int id);
-        /// <summary>
-        /// 按id删除
-        /// </summary>
-        string DetTestId(int id);
+    
 
 
         /// <summary>
@@ -80,18 +68,12 @@ namespace Snblog.IService
 
 
         /// <summary>
-        /// 同步添加数据
-        /// </summary>
-        /// <returns></returns>
-        SnArticle IntTest(SnNavigation test);
-
-        /// <summary>
         /// 更新操作
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>
         Task<string> AysUpNavigation(SnNavigation test);
 
-        string UpTest(SnNavigation test);
+      
     }
 }

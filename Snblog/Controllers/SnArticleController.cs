@@ -18,6 +18,7 @@ namespace Snblog.Controllers
     {
         private readonly snblogContext _coreDbContext;
         private readonly ISnArticleService _service; //IOC依赖注入
+      
         public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
         {
             _service = service;
@@ -60,6 +61,26 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
+        /// 查询所有(Linq)
+        /// </summary>
+        /// <returns></returns>
+       // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            return Ok(await _service.GetAllAsync());
+        }
+        /// <summary>
+        /// 查询总数(Linq)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync()
+        {
+            return Ok(await _service.CountAsync());
+        }
+
+        /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
@@ -81,7 +102,6 @@ namespace Snblog.Controllers
         {
             return Ok(_service.GetPagingWhere(label, pageIndex, pageSize, out _, isDesc));
         }
-
         /// <summary>
         /// 按文章id查询
         /// </summary>
@@ -92,7 +112,6 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.AsyGetTestName(id));
         }
-
         /// <summary>
         /// 标签条件查询
         /// </summary>
@@ -106,7 +125,6 @@ namespace Snblog.Controllers
                         select new { c.ArticleId, c.TitleText, c.Title, c.Time, c.Read, c.Give };
             return Ok(await query.ToListAsync());
         }
-
         /// <summary>
         /// 添加数据
         /// </summary>
@@ -116,7 +134,6 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.AsyInsArticle(test));
         }
-
         /// <summary>
         /// 删除数据
         /// </summary>

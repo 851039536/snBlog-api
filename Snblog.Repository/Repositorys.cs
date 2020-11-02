@@ -136,20 +136,19 @@ namespace Snblog.Repository
 
         public async Task<int> AsyDelete(object id)
         {
-            int de = 0;
+            int data = 0;
             //执行查询
             var todoItem = await _dbSet.FindAsync(id);
             if (todoItem == null)
             {
-                //return NotFound();
-                de = 0;
+                data = 0;
             }
             else
             {
                 _dbSet.Remove(todoItem);
-                de = SaveChanges();
+                data = SaveChanges();
             }
-            return de;
+            return data;
         }
 
         public int Delete(object id)
@@ -197,7 +196,7 @@ namespace Snblog.Repository
         public int Update(T entity)
         {
 
-            var entry = this._dbContext.Entry(entity);
+            var entry = _dbContext.Entry(entity);
             if (entry.State == EntityState.Detached)
             {
                 entry.State = EntityState.Modified;
@@ -217,22 +216,22 @@ namespace Snblog.Repository
 
         public bool Any(Expression<Func<T, bool>> @where)
         {
-            return this._dbSet.AsNoTracking().Any(@where);
+            return _dbSet.AsNoTracking().Any(@where);
         }
 
         public int Count()
         {
-            return this._dbSet.AsNoTracking().Count();
+            return _dbSet.AsNoTracking().Count();
         }
 
         public int Count(Expression<Func<T, bool>> @where)
         {
-            return this._dbSet.AsNoTracking().Count(@where);
+            return _dbSet.AsNoTracking().Count(@where);
         }
 
         public T FirstOrDefault(Expression<Func<T, bool>> @where)
         {
-            return this._dbSet.AsNoTracking().FirstOrDefault(@where);
+            return _dbSet.AsNoTracking().FirstOrDefault(@where);
         }
 
         public T FirstOrDefault<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false)

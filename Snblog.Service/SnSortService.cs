@@ -45,7 +45,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnSort> AsyInsSort(SnSort test)
         {
-            return await Task.Run(() => CreateService<SnSort>().AysAdd(test));
+            return await CreateService<SnSort>().AysAdd(test);
         }
 
         public async Task<string> AysUpSort(SnSort test)

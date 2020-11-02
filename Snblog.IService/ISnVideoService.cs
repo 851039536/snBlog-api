@@ -75,15 +75,9 @@ namespace Snblog.IService
         Task<SnVideo> AsyInsVideo(SnVideo test);
 
 
-        /// <summary>
-        /// 同步添加数据
-        /// </summary>
-        /// <returns></returns>
-        SnArticle IntTest(SnVideo test);
 
         Task<string> AysUpVideo(SnVideo test);
 
-        string UpTest(SnVideo test);
 
 
     }

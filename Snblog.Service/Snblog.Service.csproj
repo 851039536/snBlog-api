@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Snblog.IService\Snblog.IService.csproj" />
+    <ProjectReference Include="..\Snblog.Repository\Snblog.Repository.csproj" />
   </ItemGroup>
 
 </Project>

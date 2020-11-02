@@ -5,6 +5,9 @@ namespace Snblog.Models
 {
     public partial class SnArticle
     {
+        /// <summary>
+        /// 文章主键
+        /// </summary>
         public int ArticleId { get; set; }
         public int? UserId { get; set; }
         public string Title { get; set; }

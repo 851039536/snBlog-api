@@ -17,7 +17,7 @@ namespace Snblog.Service
 
         public async Task<string> AsyDetVideo(int id)
         {
-            int da = await Task.Run(() => CreateService<SnVideo>().AsyDelete(id));
+            int da = await  CreateService<SnVideo>().AsyDelete(id);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -115,14 +115,6 @@ namespace Snblog.Service
             return data.ToList();
         }
 
-        public SnArticle IntTest(SnVideo test)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string UpTest(SnVideo test)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

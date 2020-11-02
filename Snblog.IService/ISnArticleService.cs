@@ -15,14 +15,14 @@ namespace Snblog.IService
         /// <returns></returns>
         List<SnArticle> GetTest();
 
-
-
-        int GetArticleCount();
         /// <summary>
-        /// 异步查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
-        Task<List<SnArticle>> AsyGetTest();
+        Task<List<SnArticle>> GetAllAsync();
+
+        int GetArticleCount();
+
 
         /// <summary>
         /// 条件查询
@@ -59,10 +59,7 @@ namespace Snblog.IService
         /// 按id删除
         /// </summary>
         Task<string> AsyDetArticleId(int id);
-        /// <summary>
-        /// 按id删除
-        /// </summary>
-        string DetTestId(int id);
+
 
 
         /// <summary>
@@ -72,17 +69,15 @@ namespace Snblog.IService
         Task<SnArticle> AsyInsArticle(SnArticle test);
 
 
-        /// <summary>
-        /// 同步添加数据
-        /// </summary>
-        /// <returns></returns>
-        SnArticle IntTest(SnArticle test);
 
         Task<string> AysUpArticle(SnArticle test);
 
 
-        string UpTest(SnArticle test);
 
-
+        /// <summary>
+        /// 查询总条数
+        /// </summary>
+        /// <returns></returns>
+        Task<int> CountAsync();
     }
 }

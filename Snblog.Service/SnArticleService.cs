@@ -1,4 +1,5 @@
-﻿using Snblog.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
 using System;
@@ -10,8 +11,11 @@ namespace Snblog.Service
 {
     public class SnArticleService : BaseService, ISnArticleService
     {
-        public SnArticleService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        private readonly snblogContext _coreDbContext;//DB
+        public SnArticleService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext) : base(repositoryFactory, mydbcontext)
         {
+            _coreDbContext = coreDbContext;
+
         }
 
         /// <summary>
@@ -21,14 +25,9 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetArticleId(int id)
         {
-            int da = await Task.Run(() => CreateService<SnArticle>().AsyDelete(id));
-            string data = da == 1 ? "删除成功" : "删除失败";
+            int dataid = await Task.Run(() => CreateService<SnArticle>().AsyDelete(id));
+            string data = dataid == 1 ? "删除成功" : "删除失败";
             return data;
-        }
-
-        public Task<List<SnArticle>> AsyGetTest()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<SnArticle> AsyGetTestName(int id)
@@ -58,7 +57,6 @@ namespace Snblog.Service
         /// <param name="isDesc">是否倒序</param>
         public List<SnArticle> GetPagingWhere(int label, int pageIndex, int pageSize, out int count, bool isDesc)
         {
-            IEnumerable<SnArticle> data;
             // if (label == 00)
             //{
             //    data = CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
@@ -67,9 +65,8 @@ namespace Snblog.Service
             //{
             //    data = CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
             //}
-            data = label == 00 ? CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out count, isDesc) : CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
+            var data = label == 00 ? CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out count, isDesc) : CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
-
         }
 
 
@@ -88,13 +85,9 @@ namespace Snblog.Service
             int da = await CreateService<SnArticle>().AysUpdate(test);
             // string data = da == 1 ? "更新成功" : "更新失败";
             string Func(int data) => data == 1 ? "更新成功" : "更新失败";
-            return  Func(da);
+            return Func(da);
         }
 
-        public string DetTestId(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// 返回总条数
@@ -112,15 +105,6 @@ namespace Snblog.Service
             return data.GetAll().ToList();
         }
 
-        public SnArticle IntTest(SnArticle test)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string UpTest(SnArticle test)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// 查询标签总数
@@ -130,6 +114,16 @@ namespace Snblog.Service
         public int ConutLabel(int type)
         {
             return CreateService<SnArticle>().Count(c => c.LabelId == type);
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await _coreDbContext.SnArticle.CountAsync();
+        }
+
+        public async Task<List<SnArticle>> GetAllAsync()
+        {
+            return await _coreDbContext.SnArticle.ToListAsync();
         }
     }
 }

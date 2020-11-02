@@ -21,7 +21,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetLabels(int id)
         {
-            int da = await Task.Run(() => CreateService<SnLabels>().AsyDelete(id));
+            int da = await CreateService<SnLabels>().AsyDelete(id);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -45,7 +45,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnLabels> AsyInsLabels(SnLabels test)
         {
-            return await Task.Run(() => CreateService<SnLabels>().AysAdd(test));
+            return await CreateService<SnLabels>().AysAdd(test);
         }
 
         /// <summary>

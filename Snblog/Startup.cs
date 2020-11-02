@@ -36,7 +36,7 @@ namespace Snblog
                   c.SwaggerDoc("v1", new OpenApiInfo
                   {
                       Version = "v1",
-                      Title = "ToDo API",
+                      Title = "SN博客 API",
                       Description = "EFCore数据操作 ASP.NET Core Web API",
                       TermsOfService = new Uri("https://example.com/terms"),
                       Contact = new OpenApiContact
@@ -117,7 +117,7 @@ namespace Snblog
                 //和Swagger UI
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SN博客API");
                     c.RoutePrefix = string.Empty;
                 });
                 #endregion

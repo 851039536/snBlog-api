@@ -16,7 +16,7 @@ namespace Snblog.Service
 
         public async Task<string> AsyDetUserId(int userId)
         {
-            int da = await Task.Run(() => CreateService<SnUser>().AsyDelete(userId));
+            int da = await  CreateService<SnUser>().AsyDelete(userId);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }

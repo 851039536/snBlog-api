@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Snblog.IService;
 using Snblog.Models;
 
@@ -18,12 +20,37 @@ namespace Snblog.Controllers
 
         private readonly snblogContext _coreDbContext;
         private readonly ISnUserService _service; //IOC依赖注入
+        private readonly DbSet<SnUser> user;
 
         public SnUserController(ISnUserService service, snblogContext coreDbContext)
         {
             _service = service;
             _coreDbContext = coreDbContext;
+            user = coreDbContext.SnUser;
         }
+
+
+        [HttpGet("Login")]
+        public IActionResult Login(string users, string pwd)
+        {
+            if (string.IsNullOrEmpty(users) && string.IsNullOrEmpty(pwd))
+            {
+                return Ok("用户密码不能为空");
+            }
+            var data = from u in user
+                       where u.UserName == users && u.UserPwd == pwd
+                       select u.UserName;
+            if (data.Count() == 0)
+            {
+                return Ok("登录失败");
+            }
+            else
+            {
+                return Ok("登录成功");
+            }
+
+        }
+
         /// <summary>
         /// 用户查询
         /// </summary>
