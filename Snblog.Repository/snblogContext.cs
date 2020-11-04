@@ -10,17 +10,16 @@ namespace Snblog.Models
         public snblogContext()
         {
         }
-
         public snblogContext(DbContextOptions<snblogContext> options)
             : base(options)
         {
         }
-
         public virtual DbSet<SnArticle> SnArticle { get; set; }
         public virtual DbSet<SnComments> SnComments { get; set; }
         public virtual DbSet<SnLabels> SnLabels { get; set; }
         public virtual DbSet<SnNavigation> SnNavigation { get; set; }
         public virtual DbSet<SnOne> SnOne { get; set; }
+        public virtual DbSet<SnOneType> SnOneType { get; set; }
         public virtual DbSet<SnSoftware> SnSoftware { get; set; }
         public virtual DbSet<SnSoftwareType> SnSoftwareType { get; set; }
         public virtual DbSet<SnSort> SnSort { get; set; }
@@ -104,7 +103,7 @@ namespace Snblog.Models
 
                 entity.Property(e => e.TitleText)
                     .HasColumnName("title_text")
-                    .HasColumnType("varchar(100)")
+                    .HasColumnType("text")
                     .HasComment("内容简述")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
@@ -260,54 +259,77 @@ namespace Snblog.Models
 
                 entity.Property(e => e.OneId)
                     .HasColumnName("one_id")
-                    .HasColumnType("int(11)");
+                    .HasColumnType("int(11)")
+                    .HasComment("主键");
 
                 entity.Property(e => e.OneAuthor)
                     .HasColumnName("one_author")
                     .HasColumnType("varchar(20)")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.OneClassify)
-                    .HasColumnName("one_classify")
-                    .HasColumnType("varchar(50)")
+                    .HasComment("作者")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.OneComment)
                     .HasColumnName("one_comment")
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                    .HasColumnType("int(11) unsigned zerofill")
+                    .HasComment("评论");
 
                 entity.Property(e => e.OneData)
                     .HasColumnName("one_data")
-                    .HasColumnType("varchar(40)")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                    .HasColumnType("datetime")
+                    .HasComment("时间");
 
                 entity.Property(e => e.OneGive)
                     .HasColumnName("one_give")
-                    .HasColumnType("int(11)");
+                    .HasColumnType("int(11)")
+                    .HasComment("点赞");
 
                 entity.Property(e => e.OneImg)
                     .HasColumnName("one_img")
                     .HasColumnType("varchar(255)")
+                    .HasComment("图片")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.OneRead)
                     .HasColumnName("one_read")
-                    .HasColumnType("int(11)");
+                    .HasColumnType("int(11)")
+                    .HasComment("阅读数");
 
                 entity.Property(e => e.OneText)
                     .HasColumnName("one_text")
                     .HasColumnType("text")
+                    .HasComment("内容")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.OneTitle)
                     .HasColumnName("one_title")
+                    .HasColumnType("varchar(200)")
+                    .HasComment("标题")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.OneTypeId)
+                    .HasColumnName("one_type_id")
+                    .HasColumnType("int(11)")
+                    .HasComment("分类");
+            });
+
+            modelBuilder.Entity<SnOneType>(entity =>
+            {
+                entity.ToTable("sn_one_type");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.SoTypeId)
+                    .HasColumnName("so_type_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.SoTypeTitle)
+                    .HasColumnName("so_type_title")
                     .HasColumnType("varchar(100)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");

@@ -24,17 +24,8 @@ namespace Snblog.Controllers
         /// 一文查询
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetOne")]
-        public IActionResult GetOne()
-        {
-            return Ok(_service.GetOne());
-        }
-        /// <summary>
-        /// 一文查询
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("AsyGetOne")]
-        public async Task<IActionResult> AsyGetOne()
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync()
         {
             return Ok(await _service.AsyGetOne());
         }
@@ -44,31 +35,32 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id">文章id</param>
         /// <returns></returns>
-        [HttpGet("AsyGetOneId")]
-        public async Task<IActionResult> AsyGetOneId(int id)
+        [HttpGet("GetOneIdAsync")]
+        public async Task<IActionResult> GetOneIdAsync(int id)
         {
             return Ok(await _service.AsyGetOneId(id));
         }
+
 
         /// <summary>
         /// 查询一文总条数
         /// </summary>
         /// <returns></returns>
-        [HttpGet("OneCount")]
-        public IActionResult OneCount()
+        [HttpGet("CountAsync")]
+        public async Task<IActionResult> CountAsync()
         {
-            return Ok(_service.OneCount());
+            return Ok(await _service.CountAsync());
         }
 
         /// <summary>
         /// 条件查询一文总数
         /// </summary>
-        /// <param name="type">作者</param>
+        /// <param name="type">分类</param>
         /// <returns></returns>
-        [HttpGet("OneCountType")]
-        public IActionResult OneCountType(string type)
+        [HttpGet("CountTypeAsync")]
+        public async Task<IActionResult> CountTypeAsync(int type)
         {
-            return Ok(_service.OneCountType(type));
+            return Ok(await _service.CountTypeAsync(type));
         }
 
 

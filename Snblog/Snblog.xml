@@ -203,36 +203,30 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.GetOne">
+        <member name="M:Snblog.Controllers.SnOneController.GetAllAsync">
             <summary>
             一文查询
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.AsyGetOne">
-            <summary>
-            一文查询
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Snblog.Controllers.SnOneController.AsyGetOneId(System.Int32)">
+        <member name="M:Snblog.Controllers.SnOneController.GetOneIdAsync(System.Int32)">
             <summary>
             按文章id查询
             </summary>
             <param name="id">文章id</param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.OneCount">
+        <member name="M:Snblog.Controllers.SnOneController.CountAsync">
             <summary>
             查询一文总条数
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.OneCountType(System.String)">
+        <member name="M:Snblog.Controllers.SnOneController.CountTypeAsync(System.Int32)">
             <summary>
             条件查询一文总数
             </summary>
-            <param name="type">作者</param>
+            <param name="type">分类</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnOneController.GetPagingOne(System.Int32,System.Int32,System.Boolean)">
@@ -261,6 +255,46 @@
             更新数据
             </summary>
             <param name="one"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneTypeController.GetAll">
+            <summary>
+            查询所有
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneTypeController.GetFirst(System.Int32)">
+            <summary>
+            主键查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneTypeController.GetTypeFirst(System.Int32)">
+            <summary>
+            类别查询
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneTypeController.CountAsync">
+            <summary>
+            查询总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneTypeController.AddAsync(Snblog.Models.SnOneType)">
+            <summary>
+            添加数据
+            </summary>
+            <param name="Entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnOneTypeController.DeleteAsync(Snblog.Models.SnOneType)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="Entity"></param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnSortController.GetSort">

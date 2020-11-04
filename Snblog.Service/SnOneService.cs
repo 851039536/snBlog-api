@@ -10,33 +10,23 @@ namespace Snblog.Service
 {
     public class SnOneService : BaseService, ISnOneService
     {
-        public SnOneService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+
+        private readonly snblogContext _coreDbContext;//DB
+        public SnOneService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext) : base(repositoryFactory, mydbcontext)
         {
+            _coreDbContext = coreDbContext;
         }
-        public List<SnOne> GetOne()
-        {
-            var data = this.CreateService<SnOne>();
-            return data.GetAll().ToList();
-        }
+
         public async Task<List<SnOne>> AsyGetOne()
         {
             var data = CreateService<SnOne>();
             return await data.GetAll().ToListAsync();
         }
-        public int OneCount()
-        {
-            int data = CreateService<SnOne>().Count();
-            return data;
-        }
+
 
         public async Task<SnOne> AsyGetOneId(int id)
         {
             return await CreateService<SnOne>().AysGetById(id);
-        }
-
-        public int OneCountType(string type)
-        {
-            return CreateService<SnOne>().Count(c => c.OneAuthor == type);
         }
 
         public List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc)
@@ -44,6 +34,8 @@ namespace Snblog.Service
             IEnumerable<SnOne> data;
             data = CreateService<SnOne>().Wherepage(s => true, c => c.OneRead, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
+            //_coreDbContext.SnOne.Where(s => true).OrderByDescending(c => c.OneRead).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
         }
         /// <summary>
         /// 删除数据
@@ -63,7 +55,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnOne> AsyInsOne(SnOne one)
         {
-             return await CreateService<SnOne>().AysAdd(one);
+            return await CreateService<SnOne>().AysAdd(one);
         }
 
         public async Task<string> AysUpOne(SnOne one)
@@ -71,6 +63,18 @@ namespace Snblog.Service
             int da = await CreateService<SnOne>().AysUpdate(one);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await _coreDbContext.SnOne.CountAsync();
+        }
+
+        public async Task<int> CountTypeAsync(int type)
+        {
+            int count = await _coreDbContext.SnOne.Where(s => s.OneTypeId == type).CountAsync();
+
+            return count;
         }
     }
 }

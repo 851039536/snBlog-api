@@ -6,17 +6,25 @@ namespace Snblog.IService
 {
     public interface ISnOneService
     {
-        /// <summary>
-        /// 查询所有
-        /// </summary>
-        /// <returns></returns>
-        List<SnOne> GetOne();
+     
         /// <summary>
         /// 异步查询
         /// </summary>
         /// <returns></returns>
         Task<List<SnOne>> AsyGetOne();
-        int OneCount();
+
+        /// <summary>
+        /// 查询总数
+        /// </summary>
+        /// <returns></returns>
+        Task<int> CountAsync();
+
+        /// <summary>
+        /// 条件查询总数量
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        Task<int> CountTypeAsync(int type);
 
         /// <summary>
         /// 条件查询
@@ -34,12 +42,6 @@ namespace Snblog.IService
         /// <param name="isDesc">是否倒序</param>
         List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc);
 
-        /// <summary>
-        ///  条件查询一文总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        int OneCountType(string type);
 
         /// <summary>
         /// 按id删除
