@@ -55,6 +55,12 @@ namespace Snblog.Service
             return data;
         }
 
+        public List<SnSort> GetPagingWhere( int pageIndex, int pageSize, out int count, bool isDesc)
+        {
+           var data = CreateService<SnSort>().Wherepage(s => true, c => c.SortId, pageIndex, pageSize, out count, isDesc);
+            return data.ToList();
+        }
+
         /// <summary>
         /// 查询
         /// </summary>

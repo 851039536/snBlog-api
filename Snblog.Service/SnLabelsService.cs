@@ -75,5 +75,11 @@ namespace Snblog.Service
             int data = CreateService<SnLabels>().Count();
             return data;
         }
+
+        public List<SnLabels> GetPagingWhere( int pageIndex, int pageSize, out int count, bool isDesc)
+        {
+             var data = CreateService<SnLabels>().Wherepage(s => true, c => c.LabelId, pageIndex, pageSize, out count, isDesc);
+            return data.ToList();
+        }
     }
 }

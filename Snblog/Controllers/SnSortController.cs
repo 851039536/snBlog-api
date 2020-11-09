@@ -39,9 +39,9 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 主键id查询
+        /// 主键查询
         /// </summary>
-        /// <param name="sortId">主键id</param>
+        /// <param name="sortId">主键</param>
         /// <returns></returns>
         [HttpGet("AsyGetSortId")]
         public async Task<IActionResult> AsyGetSortId(int sortId)
@@ -66,6 +66,19 @@ namespace Snblog.Controllers
         public async Task<ActionResult<SnSort>> AsyInsLabels(SnSort test)
         {
             return Ok(await _service.AsyInsSort(test));
+        }
+
+          /// <summary>
+        /// 条件分页查询 - 支持排序
+        /// </summary>
+        /// <param name="label">分类 : 00-表示查询所有</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        [HttpGet("GetfyTest")]
+        public IActionResult GetfyTest( int pageIndex, int pageSize, bool isDesc)
+        {
+            return Ok(_service.GetPagingWhere( pageIndex, pageSize, out _, isDesc));
         }
 
         /// <summary>

@@ -107,6 +107,15 @@
             <param name="labelsId">主键</param>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnLabelsController.GetfyTest(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            条件分页查询 - 支持排序
+            </summary>
+            <param name="label">分类 : 00-表示查询所有</param>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
+        </member>
         <member name="M:Snblog.Controllers.SnLabelsController.GetLabelsCount">
             <summary>
             标签总数
@@ -311,9 +320,9 @@
         </member>
         <member name="M:Snblog.Controllers.SnSortController.AsyGetSortId(System.Int32)">
             <summary>
-            主键id查询
+            主键查询
             </summary>
-            <param name="sortId">主键id</param>
+            <param name="sortId">主键</param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnSortController.GetSortCount">
@@ -327,6 +336,15 @@
             添加数据
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnSortController.GetfyTest(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            条件分页查询 - 支持排序
+            </summary>
+            <param name="label">分类 : 00-表示查询所有</param>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
         </member>
         <member name="M:Snblog.Controllers.SnSortController.AysUpSort(Snblog.Models.SnSort)">
             <summary>

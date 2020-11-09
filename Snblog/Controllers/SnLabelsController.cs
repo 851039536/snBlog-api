@@ -47,6 +47,19 @@ namespace Snblog.Controllers
             return Ok(await _service.AsyGetLabelsId(labelsId));
         }
 
+         /// <summary>
+        /// 条件分页查询 - 支持排序
+        /// </summary>
+        /// <param name="label">分类 : 00-表示查询所有</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        [HttpGet("GetfyTest")]
+        public IActionResult GetfyTest( int pageIndex, int pageSize, bool isDesc)
+        {
+            return Ok(_service.GetPagingWhere( pageIndex, pageSize, out _, isDesc));
+        }
+
         /// <summary>
         /// 标签总数
         /// </summary>
