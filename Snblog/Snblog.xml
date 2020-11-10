@@ -306,6 +306,106 @@
             <param name="Entity"></param>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnPictureController.GetAllAsync">
+            <summary>
+            图床查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureController.GetAllAsync(System.Int32)">
+            <summary>
+            主键查询
+            </summary>
+            <param name="id">id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureController.GetFyAllAsync(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            分页查询 - 支持排序
+            </summary>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureController.GetFyTypeAllAsync(System.Int32,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            条件分页查询
+            </summary>
+            <param name="type"></param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <param name="isDesc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureController.CountAsync">
+            <summary>
+            图床总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureController.AddAsync(Snblog.Models.SnPicture)">
+            <summary>
+            添加数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureController.DeleteAsync(Snblog.Models.SnPicture)">
+            <summary>
+            删除数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureController.UpdateAsync(Snblog.Models.SnPicture)">
+            <summary>
+            更新数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureTypeController.GetAllAsync">
+            <summary>
+            查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureTypeController.GetAllAsync(System.Int32)">
+            <summary>
+            主键查询
+            </summary>
+            <param name="id">id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureTypeController.GetFyAllAsync(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            分页查询 - 支持排序
+            </summary>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页记录条数</param>
+            <param name="isDesc">是否倒序</param>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureTypeController.CountAsync">
+            <summary>
+            查询总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureTypeController.AddAsync(Snblog.Models.SnPictureType)">
+            <summary>
+            添加数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureTypeController.DeleteAsync(Snblog.Models.SnPictureType)">
+            <summary>
+            删除数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnPictureTypeController.UpdateAsync(Snblog.Models.SnPictureType)">
+            <summary>
+            更新数据
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnSortController.GetSort">
             <summary>
             查询分类
@@ -535,46 +635,6 @@
             更新视频
             </summary>
             <param name="test"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Snblog.Controllers.SnVideoTypeController.AsyGestTest">
-            <summary>
-            分类视频查询
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Snblog.Controllers.SnVideoTypeController.GetAllAsync(System.Int32)">
-            <summary>
-            主键查询
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Snblog.Controllers.SnVideoTypeController.CountAsync">
-            <summary>
-            查询总数
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Snblog.Controllers.SnVideoTypeController.AddAsync(Snblog.Models.SnVideoType)">
-            <summary>
-            添加数据
-            </summary>
-            <param name="Entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Snblog.Controllers.SnVideoTypeController.DelectAsync(Snblog.Models.SnVideoType)">
-            <summary>
-            删除数据
-            </summary>
-            <param name="Entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Snblog.Controllers.SnVideoTypeController.UpdateAsync(Snblog.Models.SnVideoType)">
-            <summary>
-            更新数据
-            </summary>
-            <param name="Entity"></param>
             <returns></returns>
         </member>
     </members>

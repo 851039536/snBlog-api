@@ -54,9 +54,9 @@ namespace Snblog
 
                   // 为 Swagger 设置xml文档注释路径
                   var basePath2 = AppContext.BaseDirectory;// xml路径
-                 // var xmlModelPath = Path.Combine(basePath2, "Snblog.Enties.xml");//Model层的xml文件名
+                                                           // var xmlModelPath = Path.Combine(basePath2, "Snblog.Enties.xml");//Model层的xml文件名
                   var corePath = Path.Combine(basePath2, "Snblog.xml");//API层的xml文件名
-                //  c.IncludeXmlComments(xmlModelPath);
+                                                                       //  c.IncludeXmlComments(xmlModelPath);
                   c.IncludeXmlComments(corePath, true);
                   //添加对控制器的标签(描述)
                   c.CustomSchemaIds(type => type.FullName);// 可以解决相同类名会报错的问题
@@ -102,6 +102,8 @@ namespace Snblog
             services.AddScoped<ISnUserTalkService, SnUserTalkService>();//ioc
             services.AddScoped<ISnUserService, SnUserService>();//ioc
             services.AddScoped<ISnOneTypeService, SnOneTypeService>();//ioc
+            services.AddScoped<ISnPictureService, SnPictureService>();//ioc
+            services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();//ioc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,16 +114,16 @@ namespace Snblog
                 app.UseDeveloperExceptionPage();
             }
 
-             #region Swagger
-                //可以将Swagger的UI页面配置在Configure的开发环境之中
-                app.UseSwagger();
-                //和Swagger UI
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SN博客API");
-                    c.RoutePrefix = string.Empty;
-                });
-                #endregion
+            #region Swagger
+            //可以将Swagger的UI页面配置在Configure的开发环境之中
+            app.UseSwagger();
+            //和Swagger UI
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SN博客API");
+                c.RoutePrefix = string.Empty;
+            });
+            #endregion
 
             app.UseHttpsRedirection();
 

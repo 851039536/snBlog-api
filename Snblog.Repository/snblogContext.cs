@@ -28,15 +28,17 @@ namespace Snblog.Models
         public virtual DbSet<SnUserTalk> SnUserTalk { get; set; }
         public virtual DbSet<SnVideo> SnVideo { get; set; }
         public virtual DbSet<SnVideoType> SnVideoType { get; set; }
+        public virtual DbSet<SnPicture> SnPicture { get; set; }
+        public virtual DbSet<SnPictureType> SnPictureType { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", x => x.ServerVersion("8.0.16-mysql"));
-//            }
-//        }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+        //                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", x => x.ServerVersion("8.0.16-mysql"));
+        //            }
+        //        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -633,6 +635,57 @@ namespace Snblog.Models
                     .HasCollation("utf8_general_ci");
             });
 
+            modelBuilder.Entity<SnPicture>(entity =>
+           {
+               entity.HasKey(e => e.PictureId)
+                   .HasName("PRIMARY");
+
+               entity.ToTable("sn_picture");
+
+               entity.Property(e => e.PictureId)
+                   .HasColumnName("picture_id")
+                   .HasColumnType("int(11)");
+
+               entity.Property(e => e.PictureTitle)
+                   .HasColumnName("picture_title")
+                   .HasColumnType("varchar(255)")
+                   .HasComment("标题")
+                   .HasCharSet("utf8")
+                   .HasCollation("utf8_general_ci");
+
+               entity.Property(e => e.PictureTypeId)
+                   .HasColumnName("picture_type_id")
+                   .HasColumnType("int(11)")
+                   .HasComment("分类");
+
+               entity.Property(e => e.PictureUrl)
+                   .HasColumnName("picture_url")
+                   .HasColumnType("varchar(255)")
+                   .HasComment("图片地址")
+                   .HasCharSet("utf8")
+                   .HasCollation("utf8_general_ci");
+           });
+
+            modelBuilder.Entity<SnPictureType>(entity =>
+          {
+              entity.ToTable("sn_picture_type");
+
+              entity.Property(e => e.Id)
+                  .HasColumnName("id")
+                  .HasColumnType("int(11)");
+
+              entity.Property(e => e.PictureTypeId)
+                  .HasColumnName("picture_type_id")
+                  .HasColumnType("int(11)")
+                  .HasComment("分类");
+
+              entity.Property(e => e.PictureTypeName)
+                  .HasColumnName("picture_type_name")
+                  .HasColumnType("varchar(100)")
+                  .HasComment("分类名称")
+                  .HasCharSet("utf8")
+                  .HasCollation("utf8_general_ci");
+          });
             OnModelCreatingPartial(modelBuilder);
         }
 
