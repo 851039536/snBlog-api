@@ -80,9 +80,9 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        public async Task<IActionResult> DeleteAsync(SnPictureType Entity)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(Entity));
+            return Ok(await _service.DeleteAsync(id));
         }
         /// <summary>
         /// 更新数据

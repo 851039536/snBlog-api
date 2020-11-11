@@ -46,7 +46,7 @@ namespace Snblog.IService
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
-        Task<bool> DeleteAsync(SnOneType Entity);
+        Task<bool> DeleteAsync(int id);
 
         /// <summary>
         /// 更新数据

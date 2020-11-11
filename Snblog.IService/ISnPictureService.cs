@@ -46,6 +46,13 @@ namespace Snblog.IService
         Task<int> CountAsync();
 
         /// <summary>
+        /// 条件查询总数
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        Task<int> CountAsync(int type);
+
+        /// <summary>
         /// 添加数据
         /// </summary>
         /// <param name="Entity"></param>
@@ -56,7 +63,7 @@ namespace Snblog.IService
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
-        Task<bool> DeleteAsync(SnPicture Entity);
+        Task<bool> DeleteAsync(int id);
 
         /// <summary>
         /// 更新数据

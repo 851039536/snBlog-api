@@ -34,10 +34,15 @@ namespace Snblog.Service
             return await _coreDbContext.SnPicture.CountAsync();
         }
 
-        public async Task<bool> DeleteAsync(SnPicture Entity)
+        public async Task<bool> DeleteAsync(int id)
         {
-             _coreDbContext.SnPicture.Remove(Entity);
-            return await _coreDbContext.SaveChangesAsync()>0;
+            // _coreDbContext.SnPicture.Remove(Entity);
+            //return await _coreDbContext.SaveChangesAsync()>0;
+            //执行查询
+            var todoItem = await _coreDbContext.SnPicture.FindAsync(id);
+              _coreDbContext.SnPicture.Remove(todoItem);
+            return  await _coreDbContext.SaveChangesAsync()>0;
+
         }
 
         public async Task<List<SnPicture>> GetAllAsync(int id)
@@ -82,6 +87,11 @@ namespace Snblog.Service
                 .OrderBy(c => c.PictureId).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).ToListAsync();
             }
+        }
+
+        public async Task<int> CountAsync(int type)
+        {
+           return await _coreDbContext.SnPicture.Where(s=>s.PictureTypeId == type).CountAsync();
         }
     }
 }

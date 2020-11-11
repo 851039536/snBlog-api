@@ -28,10 +28,13 @@ namespace Snblog.Service
             return await _coreDbContext.SnOneType.CountAsync();
         }
 
-        public async Task<bool> DeleteAsync(SnOneType Entity)
+        public async Task<bool> DeleteAsync(int id)
         {
-           _coreDbContext.SnOneType.Remove(Entity);
-            return await _coreDbContext.SaveChangesAsync()>0;
+           //_coreDbContext.SnOneType.Remove(Entity);
+           // return await _coreDbContext.SaveChangesAsync()>0;
+             var todoItem = await _coreDbContext.SnOneType.FindAsync(id);
+              _coreDbContext.SnOneType.Remove(todoItem);
+            return  await _coreDbContext.SaveChangesAsync()>0;
         }
 
         public async Task<List<SnOneType>> GetAll()

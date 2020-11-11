@@ -76,6 +76,15 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.CountAsync());
         }
+          /// <summary>
+        /// 条件查询总数
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("CountTypeAsync")]
+        public async Task<IActionResult> CountAsync(int type)
+        {
+            return Ok(await _service.CountAsync(type));
+        }
 
         /// <summary>
         /// 添加数据
@@ -92,9 +101,9 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        public async Task<IActionResult> DeleteAsync(SnPicture Entity)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(Entity));
+            return Ok(await _service.DeleteAsync(id));
         }
         /// <summary>
         /// 更新数据

@@ -299,7 +299,7 @@
             <param name="Entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneTypeController.DeleteAsync(Snblog.Models.SnOneType)">
+        <member name="M:Snblog.Controllers.SnOneTypeController.DeleteAsync(System.Int32)">
             <summary>
             删除数据
             </summary>
@@ -343,13 +343,19 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Snblog.Controllers.SnPictureController.CountAsync(System.Int32)">
+            <summary>
+            条件查询总数
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Snblog.Controllers.SnPictureController.AddAsync(Snblog.Models.SnPicture)">
             <summary>
             添加数据
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnPictureController.DeleteAsync(Snblog.Models.SnPicture)">
+        <member name="M:Snblog.Controllers.SnPictureController.DeleteAsync(System.Int32)">
             <summary>
             删除数据
             </summary>
@@ -394,7 +400,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnPictureTypeController.DeleteAsync(Snblog.Models.SnPictureType)">
+        <member name="M:Snblog.Controllers.SnPictureTypeController.DeleteAsync(System.Int32)">
             <summary>
             删除数据
             </summary>
@@ -635,6 +641,46 @@
             更新视频
             </summary>
             <param name="test"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoTypeController.AsyGestTest">
+            <summary>
+            分类视频查询
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoTypeController.GetAllAsync(System.Int32)">
+            <summary>
+            主键查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoTypeController.CountAsync">
+            <summary>
+            查询总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoTypeController.AddAsync(Snblog.Models.SnVideoType)">
+            <summary>
+            添加数据
+            </summary>
+            <param name="Entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoTypeController.DelectAsync(Snblog.Models.SnVideoType)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="Entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Snblog.Controllers.SnVideoTypeController.UpdateAsync(Snblog.Models.SnVideoType)">
+            <summary>
+            更新数据
+            </summary>
+            <param name="Entity"></param>
             <returns></returns>
         </member>
     </members>

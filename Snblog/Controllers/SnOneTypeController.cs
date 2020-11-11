@@ -78,9 +78,9 @@ namespace Snblog.Controllers
         /// <param name="Entity"></param>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        public async Task<IActionResult> DeleteAsync(SnOneType Entity)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(Entity));
+            return Ok(await _service.DeleteAsync(id));
         }
     }
 }

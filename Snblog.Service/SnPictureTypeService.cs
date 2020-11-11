@@ -34,10 +34,13 @@ namespace Snblog.Service
             return await _coreDbContext.SnPictureType.CountAsync();
         }
 
-        public async Task<bool> DeleteAsync(SnPictureType Entity)
+        public async Task<bool> DeleteAsync(int id)
         {
-             _coreDbContext.SnPictureType.Remove(Entity);
-            return await _coreDbContext.SaveChangesAsync()>0;
+            // _coreDbContext.SnPictureType.Remove(Entity);
+            //return await _coreDbContext.SaveChangesAsync()>0;
+              var todoItem = await _coreDbContext.SnPictureType.FindAsync(id);
+              _coreDbContext.SnPictureType.Remove(todoItem);
+            return  await _coreDbContext.SaveChangesAsync()>0;
         }
 
         public async Task<List<SnPictureType>> GetAllAsync(int id)
