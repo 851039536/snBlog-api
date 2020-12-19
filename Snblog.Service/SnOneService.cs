@@ -32,7 +32,7 @@ namespace Snblog.Service
         public List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc)
         {
             IEnumerable<SnOne> data;
-            data = CreateService<SnOne>().Wherepage(s => true, c => c.OneRead, pageIndex, pageSize, out count, isDesc);
+            data = CreateService<SnOne>().Wherepage(s => true, c => c.OneId, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
             //_coreDbContext.SnOne.Where(s => true).OrderByDescending(c => c.OneRead).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 

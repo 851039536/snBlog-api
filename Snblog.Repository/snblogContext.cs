@@ -30,6 +30,8 @@ namespace Snblog.Models
         public virtual DbSet<SnVideoType> SnVideoType { get; set; }
         public virtual DbSet<SnPicture> SnPicture { get; set; }
         public virtual DbSet<SnPictureType> SnPictureType { get; set; }
+        public virtual DbSet<SnTalk> SnTalk { get; set; }
+        public virtual DbSet<SnTalkType> SnTalkType { get; set; }
 
         //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //        {
@@ -669,7 +671,6 @@ namespace Snblog.Models
             modelBuilder.Entity<SnPictureType>(entity =>
           {
               entity.ToTable("sn_picture_type");
-
               entity.Property(e => e.Id)
                   .HasColumnName("id")
                   .HasColumnType("int(11)");
@@ -686,6 +687,88 @@ namespace Snblog.Models
                   .HasCharSet("utf8")
                   .HasCollation("utf8_general_ci");
           });
+
+
+            modelBuilder.Entity<SnTalk>(entity =>
+          {
+              entity.HasKey(e => e.Id)
+                 .HasName("PRIMARY");
+              entity.ToTable("sn_talk");
+              entity.Property(e => e.Id)
+                  .HasColumnName("id")
+                  .HasColumnType("int(11)");
+
+              entity.Property(e => e.TalkBrief)
+                  .HasColumnName("talk_brief")
+                  .HasColumnType("varchar(255)")
+                  .HasComment("简介")
+                  .HasCharSet("utf8")
+                  .HasCollation("utf8_general_ci");
+
+              entity.Property(e => e.TalkComment)
+                  .HasColumnName("talk_comment")
+                  .HasColumnType("int(11)")
+                  .HasComment("评论");
+
+              entity.Property(e => e.TalkGive)
+                  .HasColumnName("talk_give")
+                  .HasColumnType("int(11)")
+                  .HasComment("点赞");
+
+              entity.Property(e => e.TalkRead)
+                  .HasColumnName("talk_read")
+                  .HasColumnType("int(11)")
+                  .HasComment("阅读量");
+
+              entity.Property(e => e.TalkText)
+                  .HasColumnName("talk_text")
+                  .HasColumnType("text")
+                  .HasComment("内容")
+                  .HasCharSet("utf8")
+                  .HasCollation("utf8_general_ci");
+
+              entity.Property(e => e.TalkTime)
+                  .HasColumnName("talk_time")
+                  .HasColumnType("datetime")
+                  .HasComment("发表时间");
+
+              entity.Property(e => e.TalkTitle)
+                  .HasColumnName("talk_title")
+                  .HasColumnType("varchar(255)")
+                  .HasComment("标题")
+                  .HasCharSet("utf8")
+                  .HasCollation("utf8_general_ci");
+
+              entity.Property(e => e.TalkTypeId)
+                  .HasColumnName("talk_type_id")
+                  .HasColumnType("int(11)");
+
+              entity.Property(e => e.UserId)
+                  .HasColumnName("user_id")
+                  .HasColumnType("int(11)")
+                  .HasComment("用户");
+          });
+
+            modelBuilder.Entity<SnTalkType>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                 .HasName("PRIMARY");
+                entity.ToTable("sn_talk_type");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.TalkId)
+                    .HasColumnName("talk_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Type)
+                    .HasColumnName("type")
+                    .HasColumnType("varchar(100)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
             OnModelCreatingPartial(modelBuilder);
         }
 

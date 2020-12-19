@@ -18,7 +18,7 @@ namespace Snblog.Controllers
     {
         private readonly snblogContext _coreDbContext;
         private readonly ISnArticleService _service; //IOC依赖注入
-      
+
         public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
         {
             _service = service;
@@ -50,7 +50,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 分类查询文章
+        /// 按分类查询文章
         /// </summary>
         /// <param name="sortId">分类id</param>
         /// <returns></returns>
@@ -157,7 +157,7 @@ namespace Snblog.Controllers
             return Ok(data);
         }
 
-      
+
 
 
     }

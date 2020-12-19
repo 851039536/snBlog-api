@@ -102,8 +102,10 @@ namespace Snblog
             services.AddScoped<ISnUserTalkService, SnUserTalkService>();//ioc
             services.AddScoped<ISnUserService, SnUserService>();//ioc
             services.AddScoped<ISnOneTypeService, SnOneTypeService>();//ioc
-            services.AddScoped<ISnPictureService, SnPictureService>();//ioc
-            services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();//ioc
+            services.AddScoped<ISnPictureService, SnPictureService>();
+            services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
+            services.AddScoped<ISnTalkService, SnTalkService>();
+            services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,8 +12,6 @@ namespace Snblog.IService
         /// <returns></returns>
         List<SnVideo> GetTest();
 
-
-
         int GetVideoCount();
         /// <summary>
         /// 查询视频总数
