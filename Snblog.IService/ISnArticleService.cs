@@ -23,6 +23,11 @@ namespace Snblog.IService
 
         int GetArticleCount();
 
+        /// <summary>
+        /// 读取总阅读数
+        /// </summary>
+        /// <returns></returns>
+        Task<int> GetReadAsync();
 
         /// <summary>
         /// 条件查询

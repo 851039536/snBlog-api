@@ -125,5 +125,16 @@ namespace Snblog.Service
         {
             return await _coreDbContext.SnArticle.ToListAsync();
         }
+
+        public async Task<int> GetReadAsync()
+        { 
+            int num=0;
+            var count =  await _coreDbContext.SnArticle.Select(c=>c.Read).ToListAsync();
+            foreach (int item in count)
+            {
+               num += item;
+            }
+            return num;
+        }
     }
 }

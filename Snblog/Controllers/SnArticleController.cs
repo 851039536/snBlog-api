@@ -80,6 +80,18 @@ namespace Snblog.Controllers
             return Ok(await _service.CountAsync());
         }
 
+
+        /// <summary>
+        /// 查询文章总阅读量
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("IActionResult")]
+        public async Task<IActionResult> GetReadAsync()
+        {
+            return Ok(await _service.GetReadAsync());
+        }
+
+
         /// <summary>
         /// 查询所有
         /// </summary>
