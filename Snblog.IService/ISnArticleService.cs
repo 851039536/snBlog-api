@@ -28,7 +28,11 @@ namespace Snblog.IService
         /// </summary>
         /// <returns></returns>
         Task<int> GetReadAsync();
-
+        /// <summary>
+        /// 读取文章字段数量
+        /// </summary>
+        /// <returns></returns>
+         Task<int> GetArticleAsync();
         /// <summary>
         /// 条件查询
         /// </summary>

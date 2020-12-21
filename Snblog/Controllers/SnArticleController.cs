@@ -85,10 +85,19 @@ namespace Snblog.Controllers
         /// 查询文章总阅读量
         /// </summary>
         /// <returns></returns>
-        [HttpGet("IActionResult")]
+        [HttpGet("GetReadAsync")]
         public async Task<IActionResult> GetReadAsync()
         {
             return Ok(await _service.GetReadAsync());
+        }
+         /// <summary>
+        /// 查询文章总阅读量
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetArticleAsync")]
+        public async Task<IActionResult> GetArticleAsync()
+        {
+            return Ok(await _service.GetArticleAsync());
         }
 
 

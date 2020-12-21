@@ -136,5 +136,17 @@ namespace Snblog.Service
             }
             return num;
         }
+           public async Task<int>  GetArticleAsync()
+           { 
+            int num=0;
+            var count =  await _coreDbContext.SnArticle.Select(c=>c.Text).ToListAsync();
+            for (int i = 0; i < count.Count; i++)
+            {
+                num+= count[i].Length;
+            }
+            return num;
+        }
+
+       
     }
 }
