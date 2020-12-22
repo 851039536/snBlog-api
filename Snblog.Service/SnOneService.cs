@@ -76,5 +76,82 @@ namespace Snblog.Service
 
             return count;
         }
+
+        public async Task<List<SnOne>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc)
+        {
+            if (isDesc) //降序
+            {
+                if (type.Equals(999))//表示查所有
+                {
+
+                    switch (name)
+                    {
+                        case "read":
+                            return await _coreDbContext.SnOne.Where(s => true)
+                            .OrderByDescending(c => c.OneRead).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                        case "data":
+                            return await _coreDbContext.SnOne.Where(s => true)
+                           .OrderByDescending(c => c.OneData).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                        case " give":
+                            return await _coreDbContext.SnOne.Where(s => true)
+                           .OrderByDescending(c => c.OneGive).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                        case " comment":
+                            return await _coreDbContext.SnOne.Where(s => true)
+                           .OrderByDescending(c => c.OneComment).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                        default:
+                            return await _coreDbContext.SnOne.Where(s => true)
+                            .OrderByDescending(c => c.OneId).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                    }
+                }
+                else
+                {
+                    return await _coreDbContext.SnOne.Where(s => s.OneTypeId == type)
+                  .OrderByDescending(c => c.OneId).Skip((pageIndex - 1) * pageSize)
+                  .Take(pageSize).ToListAsync();
+                }
+
+            }
+            else   //升序
+            {
+                if (type.Equals(999))//表示查所有
+                {
+                    switch (name)
+                    {
+                        case "read":
+                            return await _coreDbContext.SnOne.Where(s => true)
+                          .OrderBy(c => c.OneRead).Skip((pageIndex - 1) * pageSize)
+                          .Take(pageSize).ToListAsync();
+                        case "data":
+                            return await _coreDbContext.SnOne.Where(s => true)
+                          .OrderBy(c => c.OneData).Skip((pageIndex - 1) * pageSize)
+                          .Take(pageSize).ToListAsync();
+                        case " give":
+                            return await _coreDbContext.SnOne.Where(s => true)
+                          .OrderBy(c => c.OneGive).Skip((pageIndex - 1) * pageSize)
+                          .Take(pageSize).ToListAsync();
+                        case " comment":
+                            return await _coreDbContext.SnOne.Where(s => true)
+                          .OrderBy(c => c.OneComment).Skip((pageIndex - 1) * pageSize)
+                          .Take(pageSize).ToListAsync();
+                        default:
+                            return await _coreDbContext.SnOne.Where(s => true)
+                            .OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize).ToListAsync();
+                    }
+                }
+                else
+                {
+                    return await _coreDbContext.SnOne.Where(s => s.OneTypeId == type)
+                     .OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize)
+                      .Take(pageSize).ToListAsync();
+                }
+
+            }
+        }
     }
 }

@@ -24,15 +24,10 @@ namespace Snblog.IService
         int GetArticleCount();
 
         /// <summary>
-        /// 读取总阅读数
+        /// 读取[字段/阅读/点赞]数量
         /// </summary>
         /// <returns></returns>
-        Task<int> GetReadAsync();
-        /// <summary>
-        /// 读取文章字段数量
-        /// </summary>
-        /// <returns></returns>
-         Task<int> GetArticleAsync();
+         Task<int> GetSumAsync(string type);
         /// <summary>
         /// 条件查询
         /// </summary>

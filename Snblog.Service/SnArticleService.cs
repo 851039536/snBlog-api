@@ -125,28 +125,39 @@ namespace Snblog.Service
         {
             return await _coreDbContext.SnArticle.ToListAsync();
         }
-
-        public async Task<int> GetReadAsync()
-        { 
-            int num=0;
-            var count =  await _coreDbContext.SnArticle.Select(c=>c.Read).ToListAsync();
-            foreach (int item in count)
+     
+        public async Task<int> GetSumAsync(string type)
+        {
+            int num = 0;
+            switch (type) //按类型查询
             {
-               num += item;
+                case "read":
+                    var read = await _coreDbContext.SnArticle.Select(c => c.Read).ToListAsync();
+                    foreach (int item in read)
+                    {
+                        num += item;
+                    }
+                    break;
+                case "text":
+                    var text = await _coreDbContext.SnArticle.Select(c => c.Text).ToListAsync();
+                    for (int i = 0; i < text.Count; i++)
+                    {
+                        num += text[i].Length;
+                    }
+                    break;
+                case "give":
+                    var give = await _coreDbContext.SnArticle.Select(c => c.Give).ToListAsync();
+                    foreach (int item in give)
+                    {
+                        num += item;
+                    }
+                    break;
+                default:
+                    break;
             }
             return num;
         }
-           public async Task<int>  GetArticleAsync()
-           { 
-            int num=0;
-            var count =  await _coreDbContext.SnArticle.Select(c=>c.Text).ToListAsync();
-            for (int i = 0; i < count.Count; i++)
-            {
-                num+= count[i].Length;
-            }
-            return num;
-        }
 
-       
+
     }
 }

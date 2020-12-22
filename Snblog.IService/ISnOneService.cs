@@ -6,7 +6,7 @@ namespace Snblog.IService
 {
     public interface ISnOneService
     {
-     
+
         /// <summary>
         /// 异步查询
         /// </summary>
@@ -34,7 +34,7 @@ namespace Snblog.IService
         Task<SnOne> AsyGetOneId(int id);
 
         /// <summary>
-        /// 条件分页查询 - 支持排序
+        /// 分页查询
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
@@ -43,6 +43,16 @@ namespace Snblog.IService
         List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc);
 
 
+        /// <summary>
+        /// 条件分页查询
+        /// </summary>
+        /// <param name="type">查询条件</param>
+        /// <param name="pageIndex">每页记录条数</param>
+        /// <param name="pageSize">返回总条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        /// <param name="name">排序条件</param>
+        /// <returns></returns>
+        Task<List<SnOne>> GetFyTypeAsync(int type, int pageIndex, int pageSize,string name, bool isDesc);
         /// <summary>
         /// 按id删除
         /// </summary>

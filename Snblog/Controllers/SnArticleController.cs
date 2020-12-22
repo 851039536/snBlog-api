@@ -79,25 +79,15 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.CountAsync());
         }
-
-
         /// <summary>
-        /// 查询文章总阅读量
+        /// 读取[字段/阅读/点赞]总数量
         /// </summary>
+        /// <param name="type">text:内容字段数-read:阅读数量-give:点赞数量</param>
         /// <returns></returns>
-        [HttpGet("GetReadAsync")]
-        public async Task<IActionResult> GetReadAsync()
+        [HttpGet("GetSumAsync")]
+        public async Task<IActionResult> GetSumAsync(string type)
         {
-            return Ok(await _service.GetReadAsync());
-        }
-         /// <summary>
-        /// 查询文章总阅读量
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetArticleAsync")]
-        public async Task<IActionResult> GetArticleAsync()
-        {
-            return Ok(await _service.GetArticleAsync());
+            return Ok(await _service.GetSumAsync(type));
         }
 
 
