@@ -33,6 +33,13 @@ namespace Snblog.IService
         /// <returns></returns>
         Task<SnOne> AsyGetOneId(int id);
 
+
+        /// <summary>
+        /// 读取[字段/阅读/点赞]数量
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        Task<int> GetSumAsync(string type);
         /// <summary>
         /// 分页查询
         /// </summary>

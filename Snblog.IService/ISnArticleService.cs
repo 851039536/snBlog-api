@@ -27,7 +27,7 @@ namespace Snblog.IService
         /// 读取[字段/阅读/点赞]数量
         /// </summary>
         /// <returns></returns>
-         Task<int> GetSumAsync(string type);
+        Task<int> GetSumAsync(string type);
         /// <summary>
         /// 条件查询
         /// </summary>
@@ -53,6 +53,16 @@ namespace Snblog.IService
         /// <param name="isDesc">是否倒序</param>
         List<SnArticle> GetPagingWhere(int label, int pageIndex, int pageSize, out int count, bool isDesc);
 
+        /// <summary>
+        /// 条件分页查询
+        /// </summary>
+        /// <param name="type">查询条件</param>
+        /// <param name="pageIndex">每页记录条数</param>
+        /// <param name="pageSize">返回总条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        /// <param name="name">排序条件</param>
+        /// <returns></returns>
+        Task<List<SnArticle>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc);
         /// <summary>
         /// 查询分类总数
         /// </summary>

@@ -94,11 +94,11 @@ namespace Snblog.Service
                             return await _coreDbContext.SnOne.Where(s => true)
                            .OrderByDescending(c => c.OneData).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).ToListAsync();
-                        case " give":
+                        case "give":
                             return await _coreDbContext.SnOne.Where(s => true)
                            .OrderByDescending(c => c.OneGive).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).ToListAsync();
-                        case " comment":
+                        case "comment":
                             return await _coreDbContext.SnOne.Where(s => true)
                            .OrderByDescending(c => c.OneComment).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).ToListAsync();
@@ -130,11 +130,11 @@ namespace Snblog.Service
                             return await _coreDbContext.SnOne.Where(s => true)
                           .OrderBy(c => c.OneData).Skip((pageIndex - 1) * pageSize)
                           .Take(pageSize).ToListAsync();
-                        case " give":
+                        case "give":
                             return await _coreDbContext.SnOne.Where(s => true)
                           .OrderBy(c => c.OneGive).Skip((pageIndex - 1) * pageSize)
                           .Take(pageSize).ToListAsync();
-                        case " comment":
+                        case "comment":
                             return await _coreDbContext.SnOne.Where(s => true)
                           .OrderBy(c => c.OneComment).Skip((pageIndex - 1) * pageSize)
                           .Take(pageSize).ToListAsync();
@@ -152,6 +152,38 @@ namespace Snblog.Service
                 }
 
             }
+        }
+
+        public async Task<int> GetSumAsync(string type)
+        {
+            int num = 0;
+            switch (type) //按类型查询
+            {
+                case "read":
+                    var read = await _coreDbContext.SnOne.Select(c => c.OneRead).ToListAsync();
+                    foreach (int item in read)
+                    {
+                        num += item;
+                    }
+                    break;
+                case "text":
+                    var text = await _coreDbContext.SnOne.Select(c => c.OneText).ToListAsync();
+                    for (int i = 0; i < text.Count; i++)
+                    {
+                        num += text[i].Length;
+                    }
+                    break;
+                case "give":
+                    var give = await _coreDbContext.SnOne.Select(c => c.OneGive).ToListAsync();
+                    foreach (int item in give)
+                    {
+                        num += item;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return num;
         }
     }
 }

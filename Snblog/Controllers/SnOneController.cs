@@ -21,7 +21,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 一文查询
+        /// 查询
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
@@ -31,7 +31,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 按文章id查询
+        /// 按id查询
         /// </summary>
         /// <param name="id">文章id</param>
         /// <returns></returns>
@@ -43,7 +43,7 @@ namespace Snblog.Controllers
 
 
         /// <summary>
-        /// 查询一文总条数
+        /// 查询总数
         /// </summary>
         /// <returns></returns>
         [HttpGet("CountAsync")]
@@ -53,7 +53,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 条件查询一文总数
+        /// 条件查总数
         /// </summary>
         /// <param name="type">分类</param>
         /// <returns></returns>
@@ -62,7 +62,16 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.CountTypeAsync(type));
         }
-
+        /// <summary>
+        /// 读取[字段/阅读/点赞]总数量
+        /// </summary>
+        /// <param name="type">text:内容字段数-read:阅读数量-give:点赞数量</param>
+        /// <returns></returns>
+        [HttpGet("GetSumAsync")]
+        public async Task<IActionResult> GetSumAsync(string type)
+        {
+            return Ok(await _service.GetSumAsync(type));
+        }
 
         /// <summary>
         /// 分页查询 
@@ -76,7 +85,7 @@ namespace Snblog.Controllers
             return Ok(_service.GetPagingOne(pageIndex, pageSize, out _, isDesc));
         }
 
-         /// <summary>
+        /// <summary>
         /// 条件分页查询
         /// </summary>
         /// <param name="type">查询条件[999查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
@@ -88,7 +97,7 @@ namespace Snblog.Controllers
         [HttpGet("GetFyTypeAsync")]
         public async Task<IActionResult> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc)
         {
-            return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize,name, isDesc));
+            return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize, name, isDesc));
         }
 
         /// <summary>

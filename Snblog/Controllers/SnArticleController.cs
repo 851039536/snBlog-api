@@ -114,6 +114,22 @@ namespace Snblog.Controllers
             return Ok(_service.GetPagingWhere(label, pageIndex, pageSize, out _, isDesc));
         }
         /// <summary>
+        /// 条件分页查询
+        /// </summary>
+        /// <param name="type">查询条件[999查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
+        /// <param name="pageIndex">当前页码[1]</param>
+        /// <param name="pageSize">每页记录条数[10]</param>
+        /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <param name="name">排序条件[data:时间,read:阅读,give:点赞,comment:评论]默认按id排序</param>
+        /// <returns></returns>
+        [HttpGet("GetFyTypeAsync")]
+        public async Task<IActionResult> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc)
+        {
+            return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize, name, isDesc));
+        }
+
+
+        /// <summary>
         /// 按文章id查询
         /// </summary>
         /// <param name="id">文章id</param>

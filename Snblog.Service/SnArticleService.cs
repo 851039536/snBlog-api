@@ -125,7 +125,7 @@ namespace Snblog.Service
         {
             return await _coreDbContext.SnArticle.ToListAsync();
         }
-     
+
         public async Task<int> GetSumAsync(string type)
         {
             int num = 0;
@@ -158,6 +158,80 @@ namespace Snblog.Service
             return num;
         }
 
+        public async Task<List<SnArticle>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc)
+        {
+            if (isDesc) //降序
+            {
+                if (type.Equals(999))//表示查所有
+                {
+                    switch (name)
+                    {
+                        case "read":
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                            .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                        case "data":
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                           .OrderByDescending(c => c.Time).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                        case "give":
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                           .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                        case "comment":
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                           .OrderByDescending(c => c.Comment).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                        default:
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                            .OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                    }
+                }
+                else
+                {
+                    return await _coreDbContext.SnArticle.Where(s => s.SortId == type)
+                  .OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
+                  .Take(pageSize).ToListAsync();
+                }
 
+            }
+            else   //升序
+            {
+                if (type.Equals(999))//表示查所有
+                {
+                    switch (name)
+                    {
+                        case "read":
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                          .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
+                          .Take(pageSize).ToListAsync();
+                        case "data":
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                          .OrderBy(c => c.Time).Skip((pageIndex - 1) * pageSize)
+                          .Take(pageSize).ToListAsync();
+                        case "give":
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                          .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
+                          .Take(pageSize).ToListAsync();
+                        case "comment":
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                          .OrderBy(c => c.Comment).Skip((pageIndex - 1) * pageSize)
+                          .Take(pageSize).ToListAsync();
+                        default:
+                            return await _coreDbContext.SnArticle.Where(s => true)
+                            .OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize).ToListAsync();
+                    }
+                }
+                else
+                {
+                    return await _coreDbContext.SnArticle.Where(s => s.SortId == type)
+                     .OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
+                      .Take(pageSize).ToListAsync();
+                }
+
+            }
+        }
     }
 }
