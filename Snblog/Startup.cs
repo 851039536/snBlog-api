@@ -9,9 +9,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Snblog.IRepository;
 using Snblog.IService;
+using Snblog.IService.IService;
 using Snblog.Models;
 using Snblog.Repository;
 using Snblog.Service;
+using Snblog.Service.Service;
 
 namespace Snblog
 {
@@ -89,23 +91,24 @@ namespace Snblog
             services.AddControllers();
 
             //DI依赖注入配置。
-
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
             services.AddScoped<IconcardContext, snblogContext>();//db
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
-            services.AddScoped<ISnNavigationService, SnNavigationService>();//ioc
-            services.AddScoped<ISnLabelsService, SnLabelsService>();//ioc
-            services.AddScoped<ISnSortService, SnSortService>();//ioc
-            services.AddScoped<ISnOneService, SnOneService>();//ioc
-            services.AddScoped<ISnVideoService, SnVideoService>();//ioc
-            services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();//ioc
-            services.AddScoped<ISnUserTalkService, SnUserTalkService>();//ioc
-            services.AddScoped<ISnUserService, SnUserService>();//ioc
-            services.AddScoped<ISnOneTypeService, SnOneTypeService>();//ioc
+            services.AddScoped<ISnNavigationService, SnNavigationService>();
+            services.AddScoped<ISnLabelsService, SnLabelsService>();
+            services.AddScoped<ISnSortService, SnSortService>();
+            services.AddScoped<ISnOneService, SnOneService>();
+            services.AddScoped<ISnVideoService, SnVideoService>();
+            services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
+            services.AddScoped<ISnUserTalkService, SnUserTalkService>();
+            services.AddScoped<ISnUserService, SnUserService>();
+            services.AddScoped<ISnOneTypeService, SnOneTypeService>();
             services.AddScoped<ISnPictureService, SnPictureService>();
             services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
             services.AddScoped<ISnTalkService, SnTalkService>();
             services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
+            services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
+            services.AddScoped<ISnleaveService, SnleaveService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

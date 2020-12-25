@@ -32,6 +32,8 @@ namespace Snblog.Models
         public virtual DbSet<SnPictureType> SnPictureType { get; set; }
         public virtual DbSet<SnTalk> SnTalk { get; set; }
         public virtual DbSet<SnTalkType> SnTalkType { get; set; }
+        public virtual DbSet<SnLeave> SnLeave { get; set; }
+        public virtual DbSet<SnNavigationType> SnNavigationType { get; set; }
 
         //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //        {
@@ -769,6 +771,50 @@ namespace Snblog.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
+
+            modelBuilder.Entity<SnLeave>(entity =>
+           {
+               entity.ToTable("sn_leave");
+
+               entity.Property(e => e.Id)
+                   .HasColumnName("id")
+                   .HasColumnType("int(11)");
+
+               entity.Property(e => e.Time)
+                   .HasColumnName("time")
+                   .HasColumnType("datetime");
+
+               entity.Property(e => e.Title)
+                   .HasColumnName("title")
+                   .HasColumnType("text")
+                   .HasCharSet("utf8")
+                   .HasCollation("utf8_general_ci");
+
+               entity.Property(e => e.UserId)
+                   .HasColumnName("user_id")
+                   .HasColumnType("int(11)");
+           });
+
+            modelBuilder.Entity<SnNavigationType>(entity =>
+        {
+            entity.ToTable("sn_navigation_type");
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id")
+                .HasColumnType("int(11)");
+
+            entity.Property(e => e.NavType)
+                .HasColumnName("nav_type")
+                .HasColumnType("varchar(50)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_general_ci");
+
+            entity.Property(e => e.Title)
+                .HasColumnName("title")
+                .HasColumnType("varchar(255)")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_general_ci");
+        });
             OnModelCreatingPartial(modelBuilder);
         }
 
