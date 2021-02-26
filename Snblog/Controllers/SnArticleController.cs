@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Snblog.IService;
@@ -10,7 +11,7 @@ using Snblog.Models;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-
+     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
 
@@ -32,6 +33,7 @@ namespace Snblog.Controllers
         /// 例子:
         /// Get api/Values/1
         /// </remarks>
+       
         [HttpGet("GetArticleCount")]
         public IActionResult GetArticleCount()
         {

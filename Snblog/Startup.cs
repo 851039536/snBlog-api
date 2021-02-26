@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.IService.IService;
+using Snblog.Jwt;
 using Snblog.Models;
 using Snblog.Repository;
 using Snblog.Service;
@@ -75,6 +76,12 @@ namespace Snblog
 
             //找一找教程网原创文章
 
+
+            //配置jwt
+            services.ConfigureJwt(Configuration);
+            //注入JWT配置文件
+            services.Configure<JwtConfig>(Configuration.GetSection("Authentication:JwtBearer"));
+
             #region Cors跨域请求
             services.AddCors(c =>
             {
@@ -136,6 +143,8 @@ namespace Snblog
 
             //开启Cors跨域请求中间件
             app.UseCors("AllRequests");
+            //jwt
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

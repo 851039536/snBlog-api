@@ -1,8 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Snblog.IService;
+using Snblog.Jwt;
 using Snblog.Models;
 
 
@@ -21,12 +29,15 @@ namespace Snblog.Controllers
         private readonly snblogContext _coreDbContext;
         private readonly ISnUserService _service; //IOC依赖注入
         private readonly DbSet<SnUser> user;
+        private readonly JwtConfig jwtModel = null;
 
-        public SnUserController(ISnUserService service, snblogContext coreDbContext)
+
+        public SnUserController(ISnUserService service, snblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;
             user = coreDbContext.SnUser;
+            jwtModel = _jwtModel.Value;
         }
 
 
@@ -46,7 +57,32 @@ namespace Snblog.Controllers
             }
             else
             {
-                return Ok("登录成功");
+                //return Ok("登录成功");
+
+
+            var claims = new List<Claim>();
+            claims.AddRange(new[]
+            {
+                new Claim("UserName", "111"),
+                new Claim(JwtRegisteredClaimNames.Sub,"111"),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+            });
+ 
+            DateTime now = DateTime.UtcNow;
+            var jwtSecurityToken = new JwtSecurityToken(
+                issuer: jwtModel.Issuer,
+                audience: jwtModel.Audience,
+                claims: claims,
+                notBefore: now,
+                expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)),
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
+            );
+            
+            string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+ 
+            return  Ok(token);
+
             }
 
         }
