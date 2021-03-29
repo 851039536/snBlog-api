@@ -1,4 +1,5 @@
 ﻿﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
@@ -10,6 +11,7 @@ namespace Snblog.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SnVideoTypeController : Controller
     {
         private readonly snblogContext _coreDbContext;

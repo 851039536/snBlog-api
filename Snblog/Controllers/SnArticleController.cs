@@ -6,15 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Snblog.IService;
 using Snblog.Models;
+using StackExchange.Profiling;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-  
+
     [Route("api/[controller]")]
     [ApiController]
-       [Authorize]
+    [Authorize]
 
     public class SnArticleController : ControllerBase
     {
@@ -27,6 +28,7 @@ namespace Snblog.Controllers
             _coreDbContext = coreDbContext;
         }
 
+
         /// <summary>
         /// 查询总数
         /// </summary>
@@ -34,7 +36,7 @@ namespace Snblog.Controllers
         /// 例子:
         /// Get api/Values/1
         /// </remarks>
-       
+
         [HttpGet("GetArticleCount")]
         public IActionResult GetArticleCount()
         {

@@ -33,8 +33,12 @@ namespace Snblog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            // 注册Swagger服务
+            #region MiniProfiler 性能分析
+            services.AddMiniProfiler(options =>
+            options.RouteBasePath = "/profiler"
+             );
+            #endregion
+            #region 注册Swagger服务
             services.AddSwaggerGen(c =>
               {
                   // 添加文档信息
@@ -58,16 +62,6 @@ namespace Snblog
                   });
 
 
-
-
-                  // 为 Swagger 设置xml文档注释路径
-                  //var basePath2 = AppContext.BaseDirectory;// xml路径
-                  //                                         // var xmlModelPath = Path.Combine(basePath2, "Snblog.Enties.xml");//Model层的xml文件名
-                  //var corePath = Path.Combine(basePath2, "Snblog.xml");//API层的xml文件名
-                  //                                                     //  c.IncludeXmlComments(xmlModelPath);
-                  //c.IncludeXmlComments(corePath, true);
-                  //添加对控制器的标签(描述)
-
                   // 使用反射获取xml文件。并构造出文件的路径
                   var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                   var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
@@ -78,7 +72,7 @@ namespace Snblog
 
 
                   #region 配置Authorization
-                   //Bearer 的scheme定义
+                  //Bearer 的scheme定义
                   var securityScheme = new OpenApiSecurityScheme()
                   {
                       Description = "JWT授权(数据将在请求头中进行传输) 参数结构: \"Authorization: Bearer {token}\"",
@@ -112,22 +106,17 @@ namespace Snblog
                   c.AddSecurityDefinition("bearerAuth", securityScheme);
                   c.AddSecurityRequirement(securityRequirement);
                   #endregion
-                  
-                 
 
-        });
 
+
+              });
+            #endregion
             //注册DbContext
             services.AddDbContext<snblogContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-
-            //找一找教程网原创文章
-
-
             //配置jwt
             services.ConfigureJwt(Configuration);
             //注入JWT配置文件
             services.Configure<JwtConfig>(Configuration.GetSection("Authentication:JwtBearer"));
-
             #region Cors跨域请求
             services.AddCors(c =>
             {
@@ -138,74 +127,81 @@ namespace Snblog
                     .AllowAnyMethod()
                     .AllowAnyHeader();
 
-    });
+                });
             });
-#endregion
+            #endregion
+            #region DI依赖注入配置。
+            services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
+            services.AddScoped<IconcardContext, snblogContext>();//db
+            services.AddScoped<ISnArticleService, SnArticleService>();//ioc
+            services.AddScoped<ISnNavigationService, SnNavigationService>();
+            services.AddScoped<ISnLabelsService, SnLabelsService>();
+            services.AddScoped<ISnSortService, SnSortService>();
+            services.AddScoped<ISnOneService, SnOneService>();
+            services.AddScoped<ISnVideoService, SnVideoService>();
+            services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
+            services.AddScoped<ISnUserTalkService, SnUserTalkService>();
+            services.AddScoped<ISnUserService, SnUserService>();
+            services.AddScoped<ISnOneTypeService, SnOneTypeService>();
+            services.AddScoped<ISnPictureService, SnPictureService>();
+            services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
+            services.AddScoped<ISnTalkService, SnTalkService>();
+            services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
+            services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
+            services.AddScoped<ISnleaveService, SnleaveService>();
 
-
-services.AddControllers();
-
-//DI依赖注入配置。
-services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
-services.AddScoped<IconcardContext, snblogContext>();//db
-services.AddScoped<ISnArticleService, SnArticleService>();//ioc
-services.AddScoped<ISnNavigationService, SnNavigationService>();
-services.AddScoped<ISnLabelsService, SnLabelsService>();
-services.AddScoped<ISnSortService, SnSortService>();
-services.AddScoped<ISnOneService, SnOneService>();
-services.AddScoped<ISnVideoService, SnVideoService>();
-services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
-services.AddScoped<ISnUserTalkService, SnUserTalkService>();
-services.AddScoped<ISnUserService, SnUserService>();
-services.AddScoped<ISnOneTypeService, SnOneTypeService>();
-services.AddScoped<ISnPictureService, SnPictureService>();
-services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
-services.AddScoped<ISnTalkService, SnTalkService>();
-services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
-services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
-services.AddScoped<ISnleaveService, SnleaveService>();
+            #endregion
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-{
-    if (env.IsDevelopment())
-    {
-        app.UseDeveloperExceptionPage();
-    }
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+           
+            #region Swagger+性能分析（MiniProfiler）+自定义页面
 
-    #region Swagger
-    //可以将Swagger的UI页面配置在Configure的开发环境之中
-    // 启用Swagger中间件
-    app.UseSwagger();
-    //配置SwaggerUI
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SN博客API");
-                //设置首页为Swagger
+            //激活UseMiniProfiler
+            app.UseMiniProfiler();
+            //可以将Swagger的UI页面配置在Configure的开发环境之中
+            // 启用Swagger中间件
+            app.UseSwagger();
+
+            //配置SwaggerUI
+            app.UseSwaggerUI(c =>
+            {
+                c.IndexStream = () => GetType().GetTypeInfo()
+                .Assembly.GetManifestResourceStream("Snblog.index.html");
+                ////设置首页为Swagger
                 c.RoutePrefix = string.Empty;
-                //设置为none可折叠所有方法
+                //自定义页面 集成性能分析
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SN博客API");
+                ////设置为none可折叠所有方法
                 c.DocExpansion(DocExpansion.None);
-                //设置为-1 可不显示models
+                ////设置为-1 可不显示models
                 c.DefaultModelsExpandDepth(-1);
-    });
-    #endregion
 
-    app.UseHttpsRedirection();
+            });
+            #endregion
 
-    app.UseRouting();
+            app.UseHttpsRedirection();
 
-    //开启Cors跨域请求中间件
-    app.UseCors("AllRequests");
-    //jwt
-    app.UseAuthentication();
+            app.UseRouting();
 
-    app.UseAuthorization();
+            //开启Cors跨域请求中间件
+            app.UseCors("AllRequests");
+            //jwt
+            app.UseAuthentication();
 
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllers();
-    });
-}
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
     }
 }

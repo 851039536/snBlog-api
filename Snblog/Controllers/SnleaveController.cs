@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IService;
 using Snblog.Models;
 using System;
@@ -10,6 +11,7 @@ namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SnleaveController : Controller
     {
         private readonly ISnleaveService _service; //IOC依赖注入

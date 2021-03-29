@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
 using System;
@@ -11,6 +12,7 @@ namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SnOneTypeController : Controller
     {
 
