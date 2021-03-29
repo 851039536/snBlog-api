@@ -11,9 +11,10 @@ using Snblog.Models;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-     [Authorize]
+  
     [Route("api/[controller]")]
     [ApiController]
+       [Authorize]
 
     public class SnArticleController : ControllerBase
     {
@@ -27,7 +28,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 查询文章总条数
+        /// 查询总数
         /// </summary>
         /// <remarks>
         /// 例子:
@@ -41,7 +42,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 条件查询文章总数
+        /// 条件查询总数
         /// </summary>
         /// <param name="type">标签分类</param>
         /// <returns></returns>

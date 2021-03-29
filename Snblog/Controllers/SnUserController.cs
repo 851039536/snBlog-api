@@ -30,8 +30,6 @@ namespace Snblog.Controllers
         private readonly ISnUserService _service; //IOC依赖注入
         private readonly DbSet<SnUser> user;
         private readonly JwtConfig jwtModel = null;
-
-
         public SnUserController(ISnUserService service, snblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
         {
             _service = service;
@@ -53,13 +51,10 @@ namespace Snblog.Controllers
                        select u.UserName;
             if (data.Count() == 0)
             {
-                return Ok("登录失败");
+                return Ok("用户或密码错误");
             }
             else
             {
-                //return Ok("登录成功");
-
-
             var claims = new List<Claim>();
             claims.AddRange(new[]
             {
@@ -68,7 +63,6 @@ namespace Snblog.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             });
- 
             DateTime now = DateTime.UtcNow;
             var jwtSecurityToken = new JwtSecurityToken(
                 issuer: jwtModel.Issuer,
@@ -78,11 +72,8 @@ namespace Snblog.Controllers
                 expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
             );
-            
             string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
- 
             return  Ok(token);
-
             }
 
         }

@@ -75,7 +75,6 @@ namespace Snblog.Controllers
         /// <summary>
         /// 删除数据
         /// </summary>
-        /// <param name="Entity"></param>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
         public async Task<IActionResult> DeleteAsync(int id)

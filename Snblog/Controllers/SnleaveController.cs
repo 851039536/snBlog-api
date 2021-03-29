@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Snblog.Controllers
 {
-     [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class SnleaveController : Controller
     {
@@ -19,7 +19,7 @@ namespace Snblog.Controllers
             _service = service;
         }
 
-           /// <summary>
+        /// <summary>
         /// 查询
         /// </summary>
         /// <returns></returns>

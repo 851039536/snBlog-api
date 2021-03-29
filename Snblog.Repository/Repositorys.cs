@@ -605,21 +605,26 @@ namespace Snblog.Repository
         #region SQL语句
         public virtual void BulkInsert<T>(List<T> entities)
         { }
+
+        [Obsolete]
         public int ExecuteSql(string sql)
         {
             return _dbContext.Database.ExecuteSqlCommand(sql);
         }
 
+        [Obsolete]
         public Task<int> ExecuteSqlAsync(string sql)
         {
             return _dbContext.Database.ExecuteSqlCommandAsync(sql);
         }
 
+        [Obsolete]
         public int ExecuteSql(string sql, List<DbParameter> spList)
         {
             return _dbContext.Database.ExecuteSqlCommand(sql, spList.ToArray());
         }
 
+        [Obsolete]
         public Task<int> ExecuteSqlAsync(string sql, List<DbParameter> spList)
         {
             return _dbContext.Database.ExecuteSqlCommandAsync(sql, spList.ToArray());
