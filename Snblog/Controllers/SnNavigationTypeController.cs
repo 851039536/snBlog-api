@@ -8,8 +8,8 @@ namespace Snblog.Controllers
 {
 
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
     public class SnNavigationTypeController : Controller
     {
         private readonly ISnNavigationTypeService _service; //IOC依赖注入
@@ -66,6 +66,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AddAsync(SnNavigationType Entity)
         {
             return Ok(await _service.AddAsync(Entity));
@@ -75,6 +76,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));
@@ -84,6 +86,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> UpdateAsync(SnNavigationType Entity)
         {
             return Ok(await _service.UpdateAsync(Entity));

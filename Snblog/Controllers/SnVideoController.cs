@@ -11,8 +11,8 @@ namespace Snblog.Controllers
 {
 
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
     public class SnVideoController : Controller
     {
         private readonly snblogContext _coreDbContext;
@@ -107,6 +107,7 @@ namespace Snblog.Controllers
         /// <param name="id">视频id</param>
         /// <returns></returns>
         [HttpDelete("AsyDetVideo")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AsyDetVideo(int id)
         {
             return Ok(await _service.AsyDetVideo(id));
@@ -117,6 +118,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsVideo")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<ActionResult<SnVideo>> AsyInsVideo(SnVideo test)
         {
             return Ok(await _service.AsyInsVideo(test));
@@ -128,6 +130,7 @@ namespace Snblog.Controllers
         /// <param name="test"></param>
         /// <returns></returns>
         [HttpPut("AysUpVideo")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AysUpVideo(SnVideo test)
         {
             var data = await _service.AysUpVideo(test);

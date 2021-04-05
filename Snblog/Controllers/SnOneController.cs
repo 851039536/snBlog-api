@@ -10,8 +10,8 @@ using Snblog.Models;
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
     public class SnOneController : Controller
     {
         private readonly snblogContext _coreDbContext;
@@ -107,6 +107,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsOne")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<ActionResult<SnOne>> AsyInsOne(SnOne one)
         {
             return Ok(await _service.AsyInsOne(one));
@@ -117,6 +118,7 @@ namespace Snblog.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("AsyDetOne")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AsyDetOne(int id)
         {
             return Ok(await _service.AsyDetOne(id));
@@ -128,6 +130,7 @@ namespace Snblog.Controllers
         /// <param name="one"></param>
         /// <returns></returns>
         [HttpPut("AysUpOne")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AysUpOne(SnOne one)
         {
             var data = await _service.AysUpOne(one);

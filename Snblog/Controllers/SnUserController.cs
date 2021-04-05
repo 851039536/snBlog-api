@@ -42,6 +42,7 @@ namespace Snblog.Controllers
 
 
         [HttpGet("Login")]
+
         public IActionResult Login(string users, string pwd)
         {
             if (string.IsNullOrEmpty(users) && string.IsNullOrEmpty(pwd))
@@ -57,25 +58,27 @@ namespace Snblog.Controllers
             }
             else
             {
-            var claims = new List<Claim>();
-            claims.AddRange(new[]
-            {
-                new Claim("UserName", "111"),
-                new Claim(JwtRegisteredClaimNames.Sub,"111"),
+
+                var claims = new List<Claim>();
+                claims.AddRange(new[]
+                {
+                new Claim("UserName", users),
+                new Claim(ClaimTypes.Role,users),
+                new Claim(JwtRegisteredClaimNames.Sub,users),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             });
-            DateTime now = DateTime.UtcNow;
-            var jwtSecurityToken = new JwtSecurityToken(
-                issuer: jwtModel.Issuer,
-                audience: jwtModel.Audience,
-                claims: claims,
-                notBefore: now,
-                expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)),
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
-            );
-            string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            return  Ok(token);
+                DateTime now = DateTime.UtcNow;
+                var jwtSecurityToken = new JwtSecurityToken(
+                    issuer: jwtModel.Issuer,
+                    audience: jwtModel.Audience,
+                    claims: claims,
+                    notBefore: now,
+                    expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)),
+                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
+                );
+                string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+                return Ok(token);
             }
 
         }
@@ -83,8 +86,8 @@ namespace Snblog.Controllers
         /// <summary>
         /// 用户查询
         /// </summary>
-        /// <returns></returns>
-        [HttpGet("AsyGestTest")]
+        [HttpGet("AsyGestTest")] 
+        
         public async Task<IActionResult> AsyGetUser()
         {
             return Ok(await _service.AsyGetUser());

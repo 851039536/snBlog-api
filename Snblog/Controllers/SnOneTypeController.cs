@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
     public class SnOneTypeController : Controller
     {
 
@@ -58,6 +58,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("CountAsync")]
+
         public async Task<IActionResult> CountAsync()
         {
             return Ok(await _service.CountAsync());
@@ -69,6 +70,7 @@ namespace Snblog.Controllers
         /// <param name="Entity"></param>
         /// <returns></returns>
         [HttpPost("AddAsync")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AddAsync(SnOneType Entity)
         {
             return Ok(await _service.AddAsync(Entity));
@@ -79,6 +81,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));

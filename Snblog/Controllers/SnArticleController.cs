@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Snblog.IService;
@@ -14,9 +15,9 @@ namespace Snblog.Controllers
 {
 
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
-
+    //  [Authorize]
     public class SnArticleController : ControllerBase
     {
         private readonly snblogContext _coreDbContext;
@@ -28,16 +29,17 @@ namespace Snblog.Controllers
             _coreDbContext = coreDbContext;
         }
 
-
+        [HttpGet("test")]
+        public ActionResult Test()
+        {
+            throw new Exception("手动发生一个异常");
+        }
         /// <summary>
         /// 查询总数
         /// </summary>
-        /// <remarks>
-        /// 例子:
-        /// Get api/Values/1
-        /// </remarks>
-
+        /// <response code="401">未通过认证</response>
         [HttpGet("GetArticleCount")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetArticleCount()
         {
             return Ok(_service.GetArticleCount());
@@ -161,6 +163,7 @@ namespace Snblog.Controllers
         /// 添加数据
         /// </summary>
         /// <returns></returns>
+        //[Authorize(Roles = "kai")] //角色授权
         [HttpPost("AsyInsArticle")]
         public async Task<ActionResult<SnArticle>> AsyInsArticle(SnArticle test)
         {
@@ -171,6 +174,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Authorize(Roles = "kai")] //角色授权
         [HttpDelete("AsyDetArticleId")]
         public async Task<IActionResult> AsyDetArticleId(int id)
         {

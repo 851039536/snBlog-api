@@ -8,8 +8,8 @@ using Snblog.Models;
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
     public class SnLabelsController : ControllerBase
     {
 
@@ -49,16 +49,16 @@ namespace Snblog.Controllers
             return Ok(await _service.AsyGetLabelsId(labelsId));
         }
 
-         /// <summary>
+        /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         [HttpGet("GetfyTest")]
-        public IActionResult GetfyTest( int pageIndex, int pageSize, bool isDesc)
+        public IActionResult GetfyTest(int pageIndex, int pageSize, bool isDesc)
         {
-            return Ok(_service.GetPagingWhere( pageIndex, pageSize, out _, isDesc));
+            return Ok(_service.GetPagingWhere(pageIndex, pageSize, out _, isDesc));
         }
 
         /// <summary>
@@ -77,6 +77,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsLabels")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<ActionResult<SnLabels>> AsyInsLabels(SnLabels test)
         {
             return Ok(await _service.AsyInsLabels(test));
@@ -87,7 +88,9 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id">标签id</param>
         /// <returns></returns>
+        
         [HttpPut("AysUpLabels")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AysUpLabels(SnLabels id)
         {
             var data = await _service.AysUpLabels(id);
@@ -98,7 +101,7 @@ namespace Snblog.Controllers
         /// 删除标签
         /// </summary>
         /// <param name="id">标签id</param>
-        /// <returns></returns>
+        [Authorize(Roles = "kai")] //角色授权
         [HttpDelete("AsyDetLabels")]
         public async Task<IActionResult> AsyDetLabels(int id)
         {

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +24,20 @@ namespace Snblog
 {
     public class Startup
     {
+        /// <summary>
+        /// 版本控制
+        /// </summary>
+        public enum ApiVersion
+        {
+            /// <summary>
+            /// v1版本
+            /// </summary>
+            V1 = 1,
+            /// <summary>
+            /// v2版本
+            /// </summary>
+            V2 = 2
+        }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,7 +45,6 @@ namespace Snblog
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             #region MiniProfiler 性能分析
@@ -42,25 +56,28 @@ namespace Snblog
             services.AddSwaggerGen(c =>
               {
                   // 添加文档信息
-                  c.SwaggerDoc("v1", new OpenApiInfo
+                  //遍历版本信息
+                  typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
                   {
-                      Version = "v1",
-                      Title = "SN博客 API",
-                      Description = "EFCore数据操作 ASP.NET Core Web API",
-                      TermsOfService = new Uri("https://example.com/terms"),
-                      Contact = new OpenApiContact
+                      c.SwaggerDoc(version, new OpenApiInfo
                       {
-                          Name = "Shayne Boyer",
-                          Email = string.Empty,
-                          Url = new Uri("https://twitter.com/spboyer"),
-                      },
-                      License = new OpenApiLicense
-                      {
-                          Name = "Use under LICX",
-                          Url = new Uri("https://example.com/license"),
-                      }
+                          //Version = "v1", //版本号
+                          Title = "SN博客 API", //标题
+                          Description = "EFCore数据操作 ASP.NET Core Web API", //描述
+                          TermsOfService = new Uri("https://example.com/terms"), //服务条款
+                          Contact = new OpenApiContact
+                          {
+                              Name = "Shayne Boyer", //联系人
+                              Email = string.Empty,  //邮箱
+                              Url = new Uri("https://twitter.com/spboyer"),//网站
+                          },
+                          License = new OpenApiLicense
+                          {
+                              Name = "Use under LICX", //协议
+                              Url = new Uri("https://example.com/license"), //协议地址
+                          }
+                      });
                   });
-
 
                   // 使用反射获取xml文件。并构造出文件的路径
                   var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -111,12 +128,14 @@ namespace Snblog
 
               });
             #endregion
-            //注册DbContext
+            #region 注册DbContext
             services.AddDbContext<snblogContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-            //配置jwt
+            #endregion
+            # region 配置jwt
             services.ConfigureJwt(Configuration);
             //注入JWT配置文件
             services.Configure<JwtConfig>(Configuration.GetSection("Authentication:JwtBearer"));
+            #endregion
             #region Cors跨域请求
             services.AddCors(c =>
             {
@@ -154,14 +173,12 @@ namespace Snblog
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-           
             #region Swagger+性能分析（MiniProfiler）+自定义页面
 
             //激活UseMiniProfiler
@@ -173,31 +190,30 @@ namespace Snblog
             //配置SwaggerUI
             app.UseSwaggerUI(c =>
             {
+                typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
+                {
                 c.IndexStream = () => GetType().GetTypeInfo()
-                .Assembly.GetManifestResourceStream("Snblog.index.html");
+                     .Assembly.GetManifestResourceStream("Snblog.index.html");
                 ////设置首页为Swagger
                 c.RoutePrefix = string.Empty;
                 //自定义页面 集成性能分析
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SN博客API");
+                c.SwaggerEndpoint($"/swagger/{version}/swagger.json", version);
                 ////设置为none可折叠所有方法
                 c.DocExpansion(DocExpansion.None);
                 ////设置为-1 可不显示models
                 c.DefaultModelsExpandDepth(-1);
-
+            });
             });
             #endregion
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            //开启Cors跨域请求中间件
+            #region 开启Cors跨域请求中间件
             app.UseCors("AllRequests");
-            //jwt
+            #endregion
+            #region 启用jwt
             app.UseAuthentication();
-
             app.UseAuthorization();
-
+            #endregion
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

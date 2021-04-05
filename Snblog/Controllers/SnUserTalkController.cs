@@ -11,8 +11,8 @@ using Snblog.Models;
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
     public class SnUserTalkController : Controller
     {
 
@@ -99,6 +99,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsUserTalk")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<ActionResult<SnUserTalk>> AsyInsUserTalk(SnUserTalk talk)
         {
             return Ok(await _service.AsyInsUserTalk(talk));
@@ -109,6 +110,7 @@ namespace Snblog.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("AsyDetUserTalk")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AsyDetUserTalk(int id)
         {
             return Ok(await _service.AsyDetUserTalk(id));
@@ -120,6 +122,7 @@ namespace Snblog.Controllers
         /// <param name="talk"></param>
         /// <returns></returns>
         [HttpPut("AysUpArticle")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AysUpUserTalk(SnUserTalk talk)
         {
             var data = await _service.AysUpUserTalk(talk);

@@ -9,8 +9,8 @@ using Snblog.Models;
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
     public class SnNavigationController : ControllerBase
     {
         private readonly snblogContext _coreDbContext;
@@ -104,6 +104,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyIntNavigation")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<ActionResult<SnNavigation>> AsyIntNavigation(SnNavigation test)
         {
             return Ok(await _service.AsyIntNavigation(test));
@@ -115,6 +116,7 @@ namespace Snblog.Controllers
         /// <param name="test"></param>
         /// <returns></returns>
         [HttpPut("AysUpNavigation")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AysUpNavigation(SnNavigation test)
         {
             var data = await _service.AysUpNavigation(test);
@@ -127,6 +129,7 @@ namespace Snblog.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("AsyDelNavigation")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AsyDelNavigation(int id)
         {
             return Ok(await _service.AsyDelNavigation(id));

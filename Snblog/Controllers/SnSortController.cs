@@ -9,8 +9,8 @@ using Snblog.Models;
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    [Authorize]
     public class SnSortController : ControllerBase
     {
         private readonly ISnSortService _service; //IOC依赖注入
@@ -65,6 +65,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsSort")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<ActionResult<SnSort>> AsyInsLabels(SnSort test)
         {
             return Ok(await _service.AsyInsSort(test));
@@ -88,6 +89,7 @@ namespace Snblog.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut("AysUpSort")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AysUpSort(SnSort id)
         {
             var data = await _service.AysUpSort(id);
@@ -100,6 +102,7 @@ namespace Snblog.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("AsyDetSort")]
+        [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> AsyDetSort(int id)
         {
             return Ok(await _service.AsyDetSort(id));
