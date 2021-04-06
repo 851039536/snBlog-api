@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Snblog.Cache;
 using Snblog.IService;
 using Snblog.Models;
 using StackExchange.Profiling;
@@ -23,23 +25,19 @@ namespace Snblog.Controllers
         private readonly snblogContext _coreDbContext;
         private readonly ISnArticleService _service; //IOC依赖注入
 
+      
         public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
         {
             _service = service;
             _coreDbContext = coreDbContext;
         }
-
-        [HttpGet("test")]
-        public ActionResult Test()
-        {
-            throw new Exception("手动发生一个异常");
-        }
         /// <summary>
         /// 查询总数
         /// </summary>
-        /// <response code="401">未通过认证</response>
         [HttpGet("GetArticleCount")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
         public IActionResult GetArticleCount()
         {
             return Ok(_service.GetArticleCount());

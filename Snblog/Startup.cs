@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Snblog.Cache;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.IService.IService;
@@ -47,6 +48,9 @@ namespace Snblog
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+
             #region MiniProfiler 性能分析
             services.AddMiniProfiler(options =>
             options.RouteBasePath = "/profiler"
@@ -168,7 +172,7 @@ namespace Snblog
             services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
-
+            
             #endregion
             services.AddControllers();
         }
@@ -192,17 +196,17 @@ namespace Snblog
             {
                 typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
                 {
-                c.IndexStream = () => GetType().GetTypeInfo()
-                     .Assembly.GetManifestResourceStream("Snblog.index.html");
-                ////设置首页为Swagger
-                c.RoutePrefix = string.Empty;
-                //自定义页面 集成性能分析
-                c.SwaggerEndpoint($"/swagger/{version}/swagger.json", version);
-                ////设置为none可折叠所有方法
-                c.DocExpansion(DocExpansion.None);
-                ////设置为-1 可不显示models
-                c.DefaultModelsExpandDepth(-1);
-            });
+                    c.IndexStream = () => GetType().GetTypeInfo()
+                         .Assembly.GetManifestResourceStream("Snblog.index.html");
+                    ////设置首页为Swagger
+                    c.RoutePrefix = string.Empty;
+                    //自定义页面 集成性能分析
+                    c.SwaggerEndpoint($"/swagger/{version}/swagger.json", version);
+                    ////设置为none可折叠所有方法
+                    c.DocExpansion(DocExpansion.None);
+                    ////设置为-1 可不显示models
+                    c.DefaultModelsExpandDepth(-1);
+                });
             });
             #endregion
             app.UseHttpsRedirection();

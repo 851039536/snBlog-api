@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Snblog.Cache.Cache;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
@@ -12,6 +13,8 @@ namespace Snblog.Service
     public class SnArticleService : BaseService, ISnArticleService
     {
         private readonly snblogContext _coreDbContext;//DB
+                                                      //创建内存缓存对象
+        private static CacheManager _cache = new CacheManager();
         public SnArticleService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext) : base(repositoryFactory, mydbcontext)
         {
             _coreDbContext = coreDbContext;
@@ -42,8 +45,8 @@ namespace Snblog.Service
         /// <returns></returns>
         public List<SnArticle> GetTestWhere(int sortId)
         {
-            var data = CreateService<SnArticle>().Where(s => s.SortId == sortId);
-            return data.ToList();
+            var result = CreateService<SnArticle>().Where(s => s.SortId == sortId);
+            return result.ToList();
         }
 
 
@@ -65,8 +68,8 @@ namespace Snblog.Service
             //{
             //    data = CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
             //}
-            var data = label == 00 ? CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out count, isDesc) : CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
-            return data.ToList();
+            var result = label == 00 ? CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out count, isDesc) : CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
+            return result.ToList();
         }
 
 
@@ -82,10 +85,10 @@ namespace Snblog.Service
 
         public async Task<string> AysUpArticle(SnArticle test)
         {
-            int da = await CreateService<SnArticle>().AysUpdate(test);
+            int result = await CreateService<SnArticle>().AysUpdate(test);
             // string data = da == 1 ? "更新成功" : "更新失败";
             string Func(int data) => data == 1 ? "更新成功" : "更新失败";
-            return Func(da);
+            return Func(result);
         }
 
 
@@ -95,14 +98,28 @@ namespace Snblog.Service
         /// <returns></returns>
         public int GetArticleCount()
         {
-            int data = CreateService<SnArticle>().Count();
-            return data;
+            int result;
+            if (_cache.IsInCache("GetArticleCount")) //是否存在缓存
+            {
+                result = _cache.Get<int>("GetArticleCount");//读缓存值
+                if (result <= 0)
+                {
+                    _cache.Set_AbsoluteExpire("GetArticleCount", CreateService<SnArticle>().Count(), _cache.time);//设置缓存
+                    result = _cache.Get<int>("GetArticleCount");
+                }
+            }
+            else
+            {
+                _cache.Set_AbsoluteExpire("GetArticleCount", CreateService<SnArticle>().Count(), _cache.time); //设置缓存
+                result = _cache.Get<int>("GetArticleCount");
+            }
+            return result;
         }
 
         public List<SnArticle> GetTest()
         {
-            var data = this.CreateService<SnArticle>();
-            return data.GetAll().ToList();
+            var result = this.CreateService<SnArticle>();
+            return result.GetAll().ToList();
         }
 
 
