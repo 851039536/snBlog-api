@@ -103,7 +103,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 添加数据
+        /// 添加数据 （权限）
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsOne")]
@@ -113,7 +113,7 @@ namespace Snblog.Controllers
             return Ok(await _service.AsyInsOne(one));
         }
         /// <summary>
-        /// 删除数据
+        /// 删除数据 （权限）
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -125,7 +125,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 更新数据
+        /// 更新数据 （权限）
         /// </summary>
         /// <param name="one"></param>
         /// <returns></returns>

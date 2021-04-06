@@ -102,7 +102,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 删除视频
+        /// 删除视频 （权限）
         /// </summary>
         /// <param name="id">视频id</param>
         /// <returns></returns>
@@ -114,7 +114,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 添加视频
+        /// 添加视频 （权限）
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsVideo")]
@@ -125,7 +125,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 更新视频
+        /// 更新视频 （权限）
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>

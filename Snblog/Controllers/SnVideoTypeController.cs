@@ -54,7 +54,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 添加数据
+        /// 添加数据 （权限）
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
@@ -66,7 +66,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 删除数据
+        /// 删除数据 （权限）
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
@@ -78,7 +78,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 更新数据
+        /// 更新数据 （权限）
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>

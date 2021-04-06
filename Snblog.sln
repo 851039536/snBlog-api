@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog.IService", "Snblog.I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog.Service", "Snblog.Service\Snblog.Service.csproj", "{74F29408-852A-4CAF-94D4-F2E1B8B1A8F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snblog.Cache", "Snblog.Cache\Snblog.Cache.csproj", "{2998C578-D9D1-47C6-B5B2-9D1D0B1C2CA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog.Cache", "Snblog.Cache\Snblog.Cache.csproj", "{2998C578-D9D1-47C6-B5B2-9D1D0B1C2CA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snblog.Util", "Snblog.Util\Snblog.Util.csproj", "{A39F2550-7EED-40B5-A796-08C6031F6981}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{2998C578-D9D1-47C6-B5B2-9D1D0B1C2CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2998C578-D9D1-47C6-B5B2-9D1D0B1C2CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2998C578-D9D1-47C6-B5B2-9D1D0B1C2CA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A39F2550-7EED-40B5-A796-08C6031F6981}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A39F2550-7EED-40B5-A796-08C6031F6981}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A39F2550-7EED-40B5-A796-08C6031F6981}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A39F2550-7EED-40B5-A796-08C6031F6981}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

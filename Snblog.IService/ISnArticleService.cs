@@ -36,9 +36,9 @@ namespace Snblog.IService
         Task<SnArticle> AsyGetTestName(int id);
 
         /// <summary>
-        /// where条件查询
+        /// ID条件查询
         /// </summary>
-        /// <param name="sortId"></param>
+        /// <param name="sortId">ID</param>
         /// <returns></returns>
         List<SnArticle> GetTestWhere(int sortId);
 

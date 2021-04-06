@@ -39,6 +39,9 @@ namespace Snblog
             /// </summary>
             V2 = 2
         }
+
+
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -49,7 +52,7 @@ namespace Snblog
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+           
 
             #region MiniProfiler ÐÔÄÜ·ÖÎö
             services.AddMiniProfiler(options =>
@@ -172,7 +175,7 @@ namespace Snblog
             services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
-            
+
             #endregion
             services.AddControllers();
         }

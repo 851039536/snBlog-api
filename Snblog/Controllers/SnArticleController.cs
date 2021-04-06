@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Snblog.Cache;
 using Snblog.IService;
@@ -25,14 +26,16 @@ namespace Snblog.Controllers
         private readonly snblogContext _coreDbContext;
         private readonly ISnArticleService _service; //IOC依赖注入
 
-      
+        #region 构造函数
         public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
         {
             _service = service;
             _coreDbContext = coreDbContext;
         }
+        #endregion
+        #region 查询总数
         /// <summary>
-        /// 查询总数
+        /// 查询总数 (缓存)
         /// </summary>
         [HttpGet("GetArticleCount")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -40,36 +43,39 @@ namespace Snblog.Controllers
         [ProducesDefaultResponseType]
         public IActionResult GetArticleCount()
         {
+
             return Ok(_service.GetArticleCount());
         }
-
+        #endregion
+        #region 分类ID查询总数
         /// <summary>
-        /// 条件查询总数
+        /// 分类ID查询总数 (缓存)
         /// </summary>
-        /// <param name="type">标签分类</param>
+        /// <param name="type">分类id</param>
         /// <returns></returns>
         [HttpGet("ConutLabel")]
         public IActionResult ConutLabel(int type)
         {
             return Ok(_service.ConutLabel(type));
         }
-
+        #endregion
+        #region  分类ID查询 (缓存)
         /// <summary>
-        /// 按分类查询文章
+        ///分类ID查询 (缓存)
         /// </summary>
         /// <param name="sortId">分类id</param>
-        /// <returns></returns>
         [HttpGet("GetTestWhere")]
         public IActionResult GetTestWhere(int sortId)
         {
             return Ok(_service.GetTestWhere(sortId));
         }
+        #endregion
+
 
         /// <summary>
         /// 查询所有(Linq)
         /// </summary>
-        /// <returns></returns>
-       // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
+        // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -78,7 +84,6 @@ namespace Snblog.Controllers
         /// <summary>
         /// 查询总数(Linq)
         /// </summary>
-        /// <returns></returns>
         [HttpGet("GetCountAsync")]
         public async Task<IActionResult> GetCountAsync()
         {
@@ -88,7 +93,6 @@ namespace Snblog.Controllers
         /// 读取[字段/阅读/点赞]总数量
         /// </summary>
         /// <param name="type">text:内容字段数-read:阅读数量-give:点赞数量</param>
-        /// <returns></returns>
         [HttpGet("GetSumAsync")]
         public async Task<IActionResult> GetSumAsync(string type)
         {
@@ -135,7 +139,7 @@ namespace Snblog.Controllers
 
 
         /// <summary>
-        /// 按文章id查询
+        /// 按文章id查询 (缓存)
         /// </summary>
         /// <param name="id">文章id</param>
         /// <returns></returns>

@@ -13,7 +13,7 @@ namespace Snblog.Service
     public class SnArticleService : BaseService, ISnArticleService
     {
         private readonly snblogContext _coreDbContext;//DB
-                                                      //创建内存缓存对象
+        //创建内存缓存对象
         private static CacheManager _cache = new CacheManager();
         public SnArticleService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext) : base(repositoryFactory, mydbcontext)
         {
@@ -35,18 +35,38 @@ namespace Snblog.Service
 
         public async Task<SnArticle> AsyGetTestName(int id)
         {
-            return await CreateService<SnArticle>().AysGetById(id);
+            SnArticle result = null;
+            if (_cache.IsInCache("AsyGetTestName" + id)) //是否存在缓存
+            {
+                result = _cache.Get<SnArticle>("AsyGetTestName" + id);//读缓存值
+            }
+            else
+            {
+                _cache.Set_AbsoluteExpire("AsyGetTestName" + id, await CreateService<SnArticle>().AysGetById(id), _cache.time); //设置缓存
+                result = _cache.Get<SnArticle>("AsyGetTestName" + id);
+            }
+            return result;
         }
 
         /// <summary>
-        /// 按分类查询
+        /// 分类ID查询 (缓存)
         /// </summary>
         /// <param name="sortId"></param>
         /// <returns></returns>
         public List<SnArticle> GetTestWhere(int sortId)
         {
-            var result = CreateService<SnArticle>().Where(s => s.SortId == sortId);
-            return result.ToList();
+            List<SnArticle> article = null;
+            if (_cache.IsInCache("GetTestWhere" + sortId))
+            {
+                article = _cache.Get<List<SnArticle>>("GetTestWhere" + sortId);
+            }
+            else
+            {
+                //   var date = CreateService<SnArticle>().Where(s => s.SortId == sortId).ToList();
+                _cache.Set_AbsoluteExpire("GetTestWhere" + sortId, CreateService<SnArticle>().Where(s => s.SortId == sortId).ToList(), _cache.time);
+                article = _cache.Get<List<SnArticle>>("GetTestWhere" + sortId);
+            }
+            return article;
         }
 
 
@@ -130,7 +150,17 @@ namespace Snblog.Service
         /// <returns></returns>
         public int ConutLabel(int type)
         {
-            return CreateService<SnArticle>().Count(c => c.LabelId == type);
+            int id = 0;
+            if (_cache.IsInCache("ConutLabel" + type))
+            {
+                id = _cache.Get<int>("ConutLabel" + type);
+            }
+            else
+            {
+                _cache.Set_AbsoluteExpire<int>("ConutLabel" + type, CreateService<SnArticle>().Count(c => c.LabelId == type), _cache.time);
+                id = _cache.Get<int>("ConutLabel" + type);
+            }
+            return id;
         }
 
         public async Task<int> CountAsync()

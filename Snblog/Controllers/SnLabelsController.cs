@@ -73,7 +73,7 @@ namespace Snblog.Controllers
 
 
         /// <summary>
-        /// 添加标签
+        /// 添加标签 （权限）
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsLabels")]
@@ -84,7 +84,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 更新标签
+        /// 更新标签 （权限）
         /// </summary>
         /// <param name="id">标签id</param>
         /// <returns></returns>
@@ -98,7 +98,7 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 删除标签
+        /// 删除标签 （权限）
         /// </summary>
         /// <param name="id">标签id</param>
         [Authorize(Roles = "kai")] //角色授权
