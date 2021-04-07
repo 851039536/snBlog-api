@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Snblog.IService;
 using Snblog.Models;
 
@@ -22,18 +21,14 @@ namespace Snblog.Controllers
     {
         private readonly snblogContext _coreDbContext;
         private readonly ISnArticleService _service; //IOC依赖注入
-        private readonly ILogger<SnArticleController> _logger; // <-添加此行
+      
         #region 构造函数
-        public SnArticleController(ISnArticleService service, snblogContext coreDbContext, ILogger<SnArticleController> logger)
+        public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
             _coreDbContext = coreDbContext ?? throw new ArgumentNullException(nameof(coreDbContext));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         #endregion
-
-
-
         #region 查询总数 (缓存)
         /// <summary>
         /// 查询总数 (缓存)
@@ -70,10 +65,9 @@ namespace Snblog.Controllers
             return Ok(_service.GetTestWhere(sortId));
         }
         #endregion
-
-
-        /// <summary>
-        /// 查询所有(Linq)
+        # region 查询所有 (缓存)
+         /// <summary>
+        /// 查询所有 (缓存)
         /// </summary>
         // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
         [HttpGet("GetAllAsync")]
@@ -81,14 +75,18 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetAllAsync());
         }
-        /// <summary>
-        /// 查询总数(Linq)
+        #endregion
+        #region 查询总数 (缓存)
+         /// <summary>
+        /// 查询总数 (缓存)
         /// </summary>
         [HttpGet("GetCountAsync")]
         public async Task<IActionResult> GetCountAsync()
         {
             return Ok(await _service.CountAsync());
         }
+        # endregion
+       
         /// <summary>
         /// 读取[字段/阅读/点赞]总数量
         /// </summary>

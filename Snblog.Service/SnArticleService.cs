@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
+using Snblog.Cache;
 using Snblog.Cache.Cache;
+using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
@@ -15,10 +19,14 @@ namespace Snblog.Service
         private readonly snblogContext _coreDbContext;//DB
         //创建内存缓存对象
         private static CacheManager _cache = new CacheManager();
-        public SnArticleService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext) : base(repositoryFactory, mydbcontext)
+        private static CacheUtil _cacheUtil = new CacheUtil();
+        private readonly ILogger<SnArticleService> _logger; // <-添加此行
+        private int result;
+        private List<SnArticle> article = null;
+        public SnArticleService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext, ILogger<SnArticleService> logger) : base(repositoryFactory, mydbcontext)
         {
             _coreDbContext = coreDbContext;
-
+            _logger = logger ?? throw new ArgumentNullException(nameof(Logger));
         }
 
         /// <summary>
@@ -55,16 +63,12 @@ namespace Snblog.Service
         /// <returns></returns>
         public List<SnArticle> GetTestWhere(int sortId)
         {
-            List<SnArticle> article = null;
-            if (_cache.IsInCache("GetTestWhere" + sortId))
+            article = _cacheUtil.CacheString("GetTestWhere" + sortId, article);
+            if (article == null)
             {
-                article = _cache.Get<List<SnArticle>>("GetTestWhere" + sortId);
-            }
-            else
-            {
-                //   var date = CreateService<SnArticle>().Where(s => s.SortId == sortId).ToList();
-                _cache.Set_AbsoluteExpire("GetTestWhere" + sortId, CreateService<SnArticle>().Where(s => s.SortId == sortId).ToList(), _cache.time);
-                article = _cache.Get<List<SnArticle>>("GetTestWhere" + sortId);
+                article = CreateService<SnArticle>().Where(s => s.SortId == sortId).ToList();
+                _cacheUtil.CacheString("GetTestWhere" + sortId, article);
+                _logger.LogInformation("执行缓存: GetTestWhere" + sortId);
             }
             return article;
         }
@@ -118,20 +122,31 @@ namespace Snblog.Service
         /// <returns></returns>
         public int GetArticleCount()
         {
-            int result;
-            if (_cache.IsInCache("GetArticleCount")) //是否存在缓存
+
+            result = _cacheUtil.CacheNumber("GetArticleCount", result);
+            if (result == 0)
             {
-                result = _cache.Get<int>("GetArticleCount");//读缓存值
-                if (result <= 0)
-                {
-                    _cache.Set_AbsoluteExpire("GetArticleCount", CreateService<SnArticle>().Count(), _cache.time);//设置缓存
-                    result = _cache.Get<int>("GetArticleCount");
-                }
+                result = CreateService<SnArticle>().Count(); //获取数据值
+                _cacheUtil.CacheNumber("GetArticleCount", result);
+                _logger.LogInformation("执行缓存 GetArticleCount");
             }
-            else
+            return result;
+        }
+
+        /// <summary>
+        /// 查询标签总数
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public int ConutLabel(int type)
+        {
+            //读取缓存值
+            result = _cacheUtil.CacheNumber("ConutLabel" + type, result);
+            if (result == 0)
             {
-                _cache.Set_AbsoluteExpire("GetArticleCount", CreateService<SnArticle>().Count(), _cache.time); //设置缓存
-                result = _cache.Get<int>("GetArticleCount");
+                result = CreateService<SnArticle>().Count(c => c.LabelId == type);//获取数据值
+                _cacheUtil.CacheNumber("ConutLabel" + type, result);//设置缓存值
+                _logger.LogInformation("执行缓存: ConutLabel" + type);
             }
             return result;
         }
@@ -142,35 +157,26 @@ namespace Snblog.Service
             return result.GetAll().ToList();
         }
 
-
-        /// <summary>
-        /// 查询标签总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public int ConutLabel(int type)
-        {
-            int id = 0;
-            if (_cache.IsInCache("ConutLabel" + type))
-            {
-                id = _cache.Get<int>("ConutLabel" + type);
-            }
-            else
-            {
-                _cache.Set_AbsoluteExpire<int>("ConutLabel" + type, CreateService<SnArticle>().Count(c => c.LabelId == type), _cache.time);
-                id = _cache.Get<int>("ConutLabel" + type);
-            }
-            return id;
-        }
-
         public async Task<int> CountAsync()
         {
-            return await _coreDbContext.SnArticle.CountAsync();
+            result = _cacheUtil.CacheNumber("CountSnArticle", result);
+            if (result == 0)
+            {
+                  result = await _coreDbContext.SnArticle.CountAsync();
+                _cacheUtil.CacheNumber("CountSnArticle", result);
+            }
+            return result;
         }
 
         public async Task<List<SnArticle>> GetAllAsync()
         {
-            return await _coreDbContext.SnArticle.ToListAsync();
+            article = _cacheUtil.CacheString("GetAllSnArticle", article);
+            if (article == null)
+            {
+                article = await _coreDbContext.SnArticle.ToListAsync();
+                _cacheUtil.CacheString("GetAllSnArticle", article);
+            }
+            return article;
         }
 
         public async Task<int> GetSumAsync(string type)
