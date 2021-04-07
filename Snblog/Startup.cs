@@ -25,6 +25,8 @@ namespace Snblog
 {
     public class Startup
     {
+
+        # region 版本控制枚举
         /// <summary>
         /// 版本控制
         /// </summary>
@@ -39,8 +41,7 @@ namespace Snblog
             /// </summary>
             V2 = 2
         }
-
-
+        #endregion
 
         public Startup(IConfiguration configuration)
         {
@@ -49,11 +50,9 @@ namespace Snblog
 
         public IConfiguration Configuration { get; }
 
+        //运行时将调用此方法。 使用此方法将服务添加到容器。
         public void ConfigureServices(IServiceCollection services)
         {
-
-           
-
             #region MiniProfiler 性能分析
             services.AddMiniProfiler(options =>
             options.RouteBasePath = "/profiler"
@@ -138,7 +137,7 @@ namespace Snblog
             #region 注册DbContext
             services.AddDbContext<snblogContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             #endregion
-            # region 配置jwt
+            # region 注册jwt
             services.ConfigureJwt(Configuration);
             //注入JWT配置文件
             services.Configure<JwtConfig>(Configuration.GetSection("Authentication:JwtBearer"));
@@ -179,7 +178,7 @@ namespace Snblog
             #endregion
             services.AddControllers();
         }
-
+        // 运行时将调用此方法。 使用此方法来配置HTTP请求管道。
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

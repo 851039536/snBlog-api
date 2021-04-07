@@ -5,12 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
-using Snblog.Cache;
+using Microsoft.Extensions.Logging;
 using Snblog.IService;
 using Snblog.Models;
-using StackExchange.Profiling;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -25,15 +22,19 @@ namespace Snblog.Controllers
     {
         private readonly snblogContext _coreDbContext;
         private readonly ISnArticleService _service; //IOC依赖注入
-
+        private readonly ILogger<SnArticleController> _logger; // <-添加此行
         #region 构造函数
-        public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
+        public SnArticleController(ISnArticleService service, snblogContext coreDbContext, ILogger<SnArticleController> logger)
         {
-            _service = service;
-            _coreDbContext = coreDbContext;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _coreDbContext = coreDbContext ?? throw new ArgumentNullException(nameof(coreDbContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         #endregion
-        #region 查询总数
+
+
+
+        #region 查询总数 (缓存)
         /// <summary>
         /// 查询总数 (缓存)
         /// </summary>
@@ -43,11 +44,10 @@ namespace Snblog.Controllers
         [ProducesDefaultResponseType]
         public IActionResult GetArticleCount()
         {
-
             return Ok(_service.GetArticleCount());
         }
         #endregion
-        #region 分类ID查询总数
+        #region 分类ID查询总数  (缓存)
         /// <summary>
         /// 分类ID查询总数 (缓存)
         /// </summary>

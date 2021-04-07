@@ -1,0 +1,21 @@
+2021-04-07 10:23:21.003 +08:00 [INF] 启动主机
+2021-04-07 10:23:22.477 +08:00 [INF] User profile is available. Using 'C:\Users\CH190006\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-04-07 10:23:22.982 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-04-07 10:23:22.983 +08:00 [INF] Hosting environment: Development
+2021-04-07 10:23:22.990 +08:00 [INF] Content root path: F:\Test\netCore\Snblog\Snblog
+2021-04-07 10:23:23.048 +08:00 [INF] Request starting HTTP/2.0 GET https://localhost:44367/index.html  
+2021-04-07 10:23:23.221 +08:00 [INF] Request finished in 183.4255ms 200 text/html;charset=utf-8
+2021-04-07 10:23:23.563 +08:00 [INF] Request starting HTTP/2.0 GET https://localhost:44367/swagger/V1/swagger.json  
+2021-04-07 10:23:23.633 +08:00 [INF] Request starting HTTP/2.0 POST https://localhost:44367/profiler/results application/json 45
+2021-04-07 10:23:23.633 +08:00 [INF] Request starting HTTP/2.0 POST https://localhost:44367/profiler/results application/json 853
+2021-04-07 10:23:23.651 +08:00 [INF] Request finished in 20.1759ms 404 text/plain
+2021-04-07 10:23:23.674 +08:00 [INF] Request finished in 43.0007ms 404 text/plain
+2021-04-07 10:23:23.834 +08:00 [INF] Request finished in 271.7629ms 200 application/json;charset=utf-8
+2021-04-07 10:23:23.844 +08:00 [INF] Request starting HTTP/2.0 POST https://localhost:44367/profiler/results application/json 45
+2021-04-07 10:23:23.844 +08:00 [INF] Request starting HTTP/2.0 POST https://localhost:44367/profiler/results application/json 45
+2021-04-07 10:23:24.059 +08:00 [INF] Request finished in 214.5816ms 200 application/json
+2021-04-07 10:23:24.059 +08:00 [INF] Request finished in 214.7946ms 200 application/json
+2021-04-07 10:27:19.788 +08:00 [INF] 启动主机
+����ʱ��: 10:35:53.917 ����Ʒ��:Information ��ϸ��Ϣ:启动主机
+Time: 10:37:04.054 jb:Information Title:启动主机
+2021-04-07 10:38:21.746 +08:00 [INF] 启动主机
