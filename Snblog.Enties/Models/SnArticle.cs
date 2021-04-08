@@ -10,20 +10,20 @@ namespace Snblog.Models
         /// 文章主键
         /// </summary>
 
-        public int ArticleId { get; set; }
-        public int? UserId { get; set; }
+        public int article_id { get; set; }
+        public int? user_id { get; set; }
         [Required(ErrorMessage = "标题不能为空")]
-        public string Title { get; set; }
-        public string TitleText { get; set; }
+        public string title { get; set; }
+        public string title_text { get; set; }
         [Required(ErrorMessage = "内容不能为空")]
-        public string Text { get; set; }
-        public string Time { get; set; }
-        public int? LabelId { get; set; }
-        public int? Read { get; set; }
-        public int? Give { get; set; }
-        public string Comment { get; set; }
-        public int? SortId { get; set; }
-        public string TypeTitle { get; set; }
-        public string UrlImg { get; set; }
+        public string text { get; set; }
+        public string time { get; set; }
+        public int? label_id { get; set; }
+        public int? read { get; set; }
+        public int? give { get; set; }
+        public string comment { get; set; }
+        public int? sort_id { get; set; }
+        public string type_title { get; set; }
+        public string url_img { get; set; }
     }
 }

@@ -53,7 +53,7 @@ namespace Snblog.Service
 
         public async Task<bool> UpdateAsync(SnVideoType Entity)
         {
-            _coreDbContext.SnVideoType.Update(Entity);
+            var date= _coreDbContext.SnVideoType.Update(Entity);
             return await _coreDbContext.SaveChangesAsync()>0;
         }
     }

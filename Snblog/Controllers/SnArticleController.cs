@@ -21,7 +21,7 @@ namespace Snblog.Controllers
     {
         private readonly snblogContext _coreDbContext;
         private readonly ISnArticleService _service; //IOC依赖注入
-      
+
         #region 构造函数
         public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
         {
@@ -42,6 +42,16 @@ namespace Snblog.Controllers
             return Ok(_service.GetArticleCount());
         }
         #endregion
+        #region 查询总数 (缓存)
+        /// <summary>
+        /// 查询总数 (缓存)
+        /// </summary>
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync()
+        {
+            return Ok(await _service.CountAsync());
+        }
+        #endregion
         #region 分类ID查询总数  (缓存)
         /// <summary>
         /// 分类ID查询总数 (缓存)
@@ -52,6 +62,29 @@ namespace Snblog.Controllers
         public IActionResult ConutLabel(int type)
         {
             return Ok(_service.ConutLabel(type));
+        }
+        #endregion
+        #region 查询所有 (缓存)
+        /// <summary>
+        /// 查询所有 (缓存)
+        /// </summary>
+        // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            return Ok(await _service.GetAllAsync());
+        }
+        #endregion
+        #region 主键查询 (缓存)
+        /// <summary>
+        /// 主键查询 (缓存)
+        /// </summary>
+        /// <param name="id">文章id</param>
+        /// <returns></returns>
+        [HttpGet("AsyGetTestID")]
+        public async Task<IActionResult> AsyGetTestId(int id)
+        {
+            return Ok(await _service.AsyGetTestName(id));
         }
         #endregion
         #region  分类ID查询 (缓存)
@@ -65,61 +98,56 @@ namespace Snblog.Controllers
             return Ok(_service.GetTestWhere(sortId));
         }
         #endregion
-        # region 查询所有 (缓存)
-         /// <summary>
-        /// 查询所有 (缓存)
-        /// </summary>
-        // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
-        [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            return Ok(await _service.GetAllAsync());
-        }
-        #endregion
-        #region 查询总数 (缓存)
-         /// <summary>
-        /// 查询总数 (缓存)
-        /// </summary>
-        [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync()
-        {
-            return Ok(await _service.CountAsync());
-        }
-        # endregion
-       
+        #region 读取[字段/阅读/点赞]总数量
         /// <summary>
         /// 读取[字段/阅读/点赞]总数量
         /// </summary>
-        /// <param name="type">text:内容字段数-read:阅读数量-give:点赞数量</param>
+        /// <param name="type">text-内容-read:阅读-give:点赞</param>
         [HttpGet("GetSumAsync")]
         public async Task<IActionResult> GetSumAsync(string type)
         {
             return Ok(await _service.GetSumAsync(type));
         }
 
-
+        #endregion
+        ///// <summary>
+        ///// 查询所有
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpGet("GetTest")]
+        //public IActionResult GetTest()
+        //{
+        //    return Ok(_service.GetTest());
+        //}
+        #region 查询文章(无文章内容 缓存)
         /// <summary>
-        /// 查询所有
+        /// 查询文章(无文章内容 缓存)
         /// </summary>
+        /// <param name="pageIndex">当前页码[1]</param>
+        /// <param name="pageSize">每页记录条数[10]</param>
+        /// <param name="isDesc">是否倒序[true/false]</param>
         /// <returns></returns>
-        [HttpGet("GetTest")]
-        public IActionResult GetTest()
+        [HttpGet("GetFyTitleAsync")]
+        public async Task<IActionResult> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            return Ok(_service.GetTest());
+            return Ok(await _service.GetFyTitleAsync(pageIndex, pageSize, isDesc));
         }
-
+        # endregion
+        #region 条件分页查询
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
-        /// <param name="label">分类 : 00-表示查询所有</param>
+        /// <param name="type">分类 : 00-表示查询所有</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         [HttpGet("GetfyTest")]
-        public IActionResult GetfyTest(int label, int pageIndex, int pageSize, bool isDesc)
+        public IActionResult GetfyTest(int type, int pageIndex, int pageSize, bool isDesc)
         {
-            return Ok(_service.GetPagingWhere(label, pageIndex, pageSize, out _, isDesc));
+            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out _, isDesc));
         }
+        #endregion
+        # region 条件分页查询
         /// <summary>
         /// 条件分页查询
         /// </summary>
@@ -134,18 +162,8 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize, name, isDesc));
         }
+        #endregion
 
-
-        /// <summary>
-        /// 按文章id查询 (缓存)
-        /// </summary>
-        /// <param name="id">文章id</param>
-        /// <returns></returns>
-        [HttpGet("AsyGetTestID")]
-        public async Task<IActionResult> AsyGetTestId(int id)
-        {
-            return Ok(await _service.AsyGetTestName(id));
-        }
         /// <summary>
         /// 标签条件查询
         /// </summary>
@@ -155,8 +173,8 @@ namespace Snblog.Controllers
         public async Task<IActionResult> AsyGetTestString(int labelId)
         {
             var query = from c in _coreDbContext.SnArticle
-                        where c.LabelId == labelId
-                        select new { c.ArticleId, c.TitleText, c.Title, c.Time, c.Read, c.Give };
+                        where c.label_id == labelId
+                        select new { c.article_id, c.type_title, c.title, c.time, c.read, c.give };
             return Ok(await query.ToListAsync());
         }
         /// <summary>
@@ -193,6 +211,18 @@ namespace Snblog.Controllers
             return Ok(data);
         }
 
+        /// <summary>
+        /// 更新部分列[comment give read]
+        /// </summary>
+        /// <param name="result">对象</param>
+        /// <param name="type">更新字段</param>
+        /// <returns></returns>
+        [HttpPut("UpdatePortionAsync")]
+        public async Task<IActionResult> UpdatePortionAsync(SnArticle result, string type)
+        {
+            var data = await _service.UpdatePortionAsync(result, type);
+            return Ok(result);
+        }
 
 
 

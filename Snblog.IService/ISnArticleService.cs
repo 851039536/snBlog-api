@@ -46,23 +46,34 @@ namespace Snblog.IService
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
-        /// <param name="label"></param>
+        /// <param name="type"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        List<SnArticle> GetPagingWhere(int label, int pageIndex, int pageSize, out int count, bool isDesc);
+        List<SnArticle> GetPagingWhere(int type, int pageIndex, int pageSize, out int count, bool isDesc);
 
         /// <summary>
         /// 条件分页查询
         /// </summary>
         /// <param name="type">查询条件</param>
-        /// <param name="pageIndex">每页记录条数</param>
-        /// <param name="pageSize">返回总条数</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <param name="name">排序条件</param>
         /// <returns></returns>
         Task<List<SnArticle>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc);
+
+        /// <summary>
+        /// 查询文章(无文章内容 缓存)
+        /// </summary>
+        /// <param name="pageIndex">当前页码[1]</param>
+        /// <param name="pageSize">每页记录条数[10]</param>
+        /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <returns></returns>
+        Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc);
+
+
         /// <summary>
         /// 查询分类总数
         /// </summary>
@@ -86,6 +97,13 @@ namespace Snblog.IService
 
         Task<string> AysUpArticle(SnArticle test);
 
+      /// <summary>
+      /// 更新部分列[comment give read]
+      /// </summary>
+      /// <param name="snArticle"></param>
+      /// <param name="type">更新的字段</param>
+      /// <returns></returns>
+        Task<bool> UpdatePortionAsync(SnArticle snArticle, string type);
 
 
         /// <summary>

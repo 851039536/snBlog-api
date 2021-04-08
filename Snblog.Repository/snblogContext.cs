@@ -48,50 +48,50 @@ namespace Snblog.Models
         {
             modelBuilder.Entity<SnArticle>(entity =>
             {
-                entity.HasKey(e => e.ArticleId)
+                entity.HasKey(e => e.article_id)
                     .HasName("PRIMARY");
 
                 entity.ToTable("sn_article");
 
-                entity.Property(e => e.ArticleId)
+                entity.Property(e => e.article_id)
                     .HasColumnName("article_id")
                     .HasColumnType("int(11)");
 
-                entity.Property(e => e.Comment)
+                entity.Property(e => e.comment)
                     .HasColumnName("comment")
                     .HasColumnType("varchar(20)")
                     .HasComment("评论")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.Give)
+                entity.Property(e => e.give)
                     .HasColumnName("give")
                     .HasColumnType("int(20)")
                     .HasComment("点赞");
 
-                entity.Property(e => e.LabelId)
+                entity.Property(e => e.label_id)
                     .HasColumnName("label_id")
                     .HasColumnType("int(11)")
                     .HasComment("标签");
 
-                entity.Property(e => e.Read)
+                entity.Property(e => e.read)
                     .HasColumnName("read")
                     .HasColumnType("int(20)")
                     .HasComment("阅读次数");
 
-                entity.Property(e => e.SortId)
+                entity.Property(e => e.sort_id)
                     .HasColumnName("sort_id")
                     .HasColumnType("int(11)")
                     .HasComment("分类");
 
-                entity.Property(e => e.Text)
+                entity.Property(e => e.text)
                     .HasColumnName("text")
                     .HasColumnType("text")
                     .HasComment("博客内容")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.Time)
+                entity.Property(e => e.time)
                     .HasColumnName("time")
                     .HasColumnType("varchar(10)")
                     .HasDefaultValueSql("''")
@@ -99,7 +99,7 @@ namespace Snblog.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.Title)
+                entity.Property(e => e.title)
                     .IsRequired()
                     .HasColumnName("title")
                     .HasColumnType("varchar(100)")
@@ -107,28 +107,28 @@ namespace Snblog.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.TitleText)
+                entity.Property(e => e.title_text)
                     .HasColumnName("title_text")
                     .HasColumnType("text")
                     .HasComment("内容简述")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.TypeTitle)
+                entity.Property(e => e.type_title)
                     .HasColumnName("type_title")
                     .HasColumnType("varchar(20)")
                     .HasComment("分类标题")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.UrlImg)
+                entity.Property(e => e.url_img)
                     .HasColumnName("url_img")
                     .HasColumnType("varchar(50)")
                     .HasComment("图片")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.UserId)
+                entity.Property(e => e.user_id)
                     .HasColumnName("user_id")
                     .HasColumnType("int(11)")
                     .HasComment("发表人id");
