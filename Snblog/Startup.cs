@@ -58,7 +58,7 @@ namespace Snblog
             options.RouteBasePath = "/profiler"
              );
             #endregion
-            #region 注册Swagger服务
+            #region Swagger服务
             services.AddSwaggerGen(c =>
               {
                   // 添加文档信息
@@ -90,9 +90,11 @@ namespace Snblog
                   var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
                   // 启用xml注释. 该方法第二个参数启用控制器的注释，默认为false.
                   c.IncludeXmlComments(xmlpath, true);
+                  //Model 也添加注释说明
+                  var xmlpath1 = Path.Combine("Snblog.Enties.xml");
+                  var xmlpath2 = Path.Combine(AppContext.BaseDirectory, xmlpath1);
+                  c.IncludeXmlComments(xmlpath2, true);
                   c.CustomSchemaIds(type => type.FullName);// 可以解决相同类名会报错的问题
-
-
 
                   #region 配置Authorization
                   //Bearer 的scheme定义
@@ -134,10 +136,10 @@ namespace Snblog
 
               });
             #endregion
-            #region 注册DbContext
+            #region DbContext
             services.AddDbContext<snblogContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             #endregion
-            # region 注册jwt
+            # region jwt
             services.ConfigureJwt(Configuration);
             //注入JWT配置文件
             services.Configure<JwtConfig>(Configuration.GetSection("Authentication:JwtBearer"));
@@ -207,7 +209,7 @@ namespace Snblog
                     ////设置为none可折叠所有方法
                     c.DocExpansion(DocExpansion.None);
                     ////设置为-1 可不显示models
-                    c.DefaultModelsExpandDepth(-1);
+                    // c.DefaultModelsExpandDepth(-1);
                 });
             });
             #endregion

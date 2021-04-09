@@ -1,19 +1,19 @@
 ﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
+  "iisSettings": { //iisSettings是IIS的配置
+    "windowsAuthentication": false, //IIS是否启用 Windows 身份验证
+    "anonymousAuthentication": true, //IIS是否启用匿名身份验证
     "iisExpress": {
-      "applicationUrl": "http://localhost:50550",
-      "sslPort": 44367
+      "applicationUrl": "http://localhost:50550", //指定 IIS 服务器的地址
+      "sslPort": 44367 //指定IIS 服务器的https端口 
     }
   },
   "profiles": {
     "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "index.html",
-      "environmentVariables": {
+      "commandName": "IISExpress", //启动当前应用程序的命令类型，有效的选项包括IIS、IISExpress和Project，前三个选项分别表示采用IIS、IISExpress和指定的可执行文件（.exe）来启动应用程序。如果我们使用dotnet run命令来启动程序，对应Profile的启动命名名称应该设置为Project。
+      "launchBrowser": true, //表示应用程序的时候是否自动启动浏览器
+      "launchUrl": "index.html", //如果launchBrowser被设置为true，浏览器采用的初始化路径通过该属性进行设置。
+      "environmentVariables": { //该属性用来设置环境变量。ASP.NET Core应用中正是利用这样一个环境变量来表示当前的部署环境。多环境的配置可以通过ASPNETCORE_ENVIRONMENT切换。
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -21,7 +21,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "index.html",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "applicationUrl": "https://localhost:5001;http://localhost:5000", //应用程序采用的URL列表，多个URL之间采用分号（“；”）进行分隔。
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -73,6 +73,7 @@ namespace Snblog.IService
         /// <returns></returns>
         Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc);
 
+        Task<List<SnArticle>> GetTagtextAsync(int tag,bool isDesc);
 
         /// <summary>
         /// 查询分类总数

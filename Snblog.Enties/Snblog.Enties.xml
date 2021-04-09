@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Snblog.Enties</name>
+    </assembly>
+    <members>
+        <member name="P:Snblog.Models.SnArticle.article_id">
+            <summary>
+            文章主键
+            </summary>
+        </member>
+        <member name="P:Snblog.Models.SnArticle.title">
+            <summary>
+            标题
+            </summary>
+        </member>
+    </members>
+</doc>

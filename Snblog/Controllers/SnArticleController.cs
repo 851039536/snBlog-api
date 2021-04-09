@@ -110,15 +110,6 @@ namespace Snblog.Controllers
         }
 
         #endregion
-        ///// <summary>
-        ///// 查询所有
-        ///// </summary>
-        ///// <returns></returns>
-        //[HttpGet("GetTest")]
-        //public IActionResult GetTest()
-        //{
-        //    return Ok(_service.GetTest());
-        //}
         #region 查询文章(无文章内容 缓存)
         /// <summary>
         /// 查询文章(无文章内容 缓存)
@@ -163,20 +154,20 @@ namespace Snblog.Controllers
             return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize, name, isDesc));
         }
         #endregion
-
-        /// <summary>
-        /// 标签条件查询
+        # region 按标签查询 (缓存)
+         /// <summary>
+        /// 按标签查询(缓存)
         /// </summary>
         /// <param name="labelId">标签id</param>
+        /// <param name="isDesc"></param>
         /// <returns></returns>
-        [HttpGet("AsyGetTestString")]
-        public async Task<IActionResult> AsyGetTestString(int labelId)
+        [HttpGet("GetTagtextAsync")]
+        public async Task<IActionResult> GetTagtextAsync(int labelId,bool isDesc)
         {
-            var query = from c in _coreDbContext.SnArticle
-                        where c.label_id == labelId
-                        select new { c.article_id, c.type_title, c.title, c.time, c.read, c.give };
-            return Ok(await query.ToListAsync());
+            return Ok(await _service.GetTagtextAsync(labelId,isDesc));
         }
+        #endregion
+        #region 添加数据
         /// <summary>
         /// 添加数据
         /// </summary>
@@ -187,6 +178,8 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.AsyInsArticle(test));
         }
+        #endregion
+        #region 删除数据
         /// <summary>
         /// 删除数据
         /// </summary>
@@ -198,7 +191,8 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.AsyDetArticleId(id));
         }
-
+        #endregion
+        #region 更新数据
         /// <summary>
         /// 更新数据
         /// </summary>
@@ -210,7 +204,8 @@ namespace Snblog.Controllers
             var data = await _service.AysUpArticle(test);
             return Ok(data);
         }
-
+        #endregion
+        # region 更新部分列[comment give read]
         /// <summary>
         /// 更新部分列[comment give read]
         /// </summary>
@@ -223,7 +218,7 @@ namespace Snblog.Controllers
             var data = await _service.UpdatePortionAsync(result, type);
             return Ok(result);
         }
-
+        #endregion
 
 
     }

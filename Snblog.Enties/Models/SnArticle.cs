@@ -12,6 +12,10 @@ namespace Snblog.Models
 
         public int article_id { get; set; }
         public int? user_id { get; set; }
+
+        /// <summary>
+        /// 标题
+        /// </summary>
         [Required(ErrorMessage = "标题不能为空")]
         public string title { get; set; }
         public string title_text { get; set; }

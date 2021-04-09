@@ -1,0 +1,232 @@
+2021-04-09 10:39:50.036 +08:00 [INF] 启动主机
+2021-04-09 10:40:03.729 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:42:25.249 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:43:53.155 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:44:59.221 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:46:16.913 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:47:35.166 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:49:54.691 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:51:00.609 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:52:03.267 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:53:42.687 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:55:18.479 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:57:23.246 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 10:58:57.865 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:07:10.188 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:08:44.038 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:10:02.069 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:11:10.432 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:12:15.015 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:12:15.356 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at Snblog.Service.SnArticleService.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog.Service\SnArticleService.cs:line 189
+   at Snblog.Controllers.SnArticleController.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog\Controllers\SnArticleController.cs:line 109
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 121
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-04-09 11:12:18.627 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at Snblog.Service.SnArticleService.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog.Service\SnArticleService.cs:line 189
+   at Snblog.Controllers.SnArticleController.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog\Controllers\SnArticleController.cs:line 109
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 121
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-04-09 11:12:40.718 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at Snblog.Service.SnArticleService.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog.Service\SnArticleService.cs:line 189
+   at Snblog.Controllers.SnArticleController.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog\Controllers\SnArticleController.cs:line 109
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 121
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-04-09 11:12:46.073 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at Snblog.Service.SnArticleService.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog.Service\SnArticleService.cs:line 189
+   at Snblog.Controllers.SnArticleController.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog\Controllers\SnArticleController.cs:line 109
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 121
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-04-09 11:14:11.737 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:14:58.760 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Nullable object must have a value.
+   at System.Nullable`1.get_Value()
+   at Snblog.Service.SnArticleService.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog.Service\SnArticleService.cs:line 189
+   at Snblog.Controllers.SnArticleController.GetSumAsync(String type) in F:\Test\netCore\Snblog\Snblog\Controllers\SnArticleController.cs:line 109
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 121
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-04-09 11:17:11.164 +08:00 [INF] 启动主机
+2021-04-09 11:17:17.025 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:18:34.624 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:19:44.371 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:22:35.080 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:23:36.402 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:24:45.649 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:25:46.034 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:26:49.334 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:28:46.914 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:29:35.682 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException: Database operation expected to affect 1 row(s) but actually affected 0 row(s). Data may have been modified or deleted since entities were loaded. See http://go.microsoft.com/fwlink/?LinkId=527962 for information on understanding and handling optimistic concurrency exceptions.
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ThrowAggregateUpdateConcurrencyException(Int32 commandIndex, Int32 expectedRowsAffected, Int32 rowsAffected)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetWithoutPropagationAsync(Int32 commandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Snblog.Repository.Repositorys`1.SaveChangesAsync() in F:\Test\netCore\Snblog\Snblog.Repository\Repositorys.cs:line 75
+   at Snblog.Repository.Repositorys`1.AysUpdate(T entity) in F:\Test\netCore\Snblog\Snblog.Repository\Repositorys.cs:line 192
+   at Snblog.Service.SnArticleService.AysUpArticle(SnArticle test) in F:\Test\netCore\Snblog\Snblog.Service\SnArticleService.cs:line 112
+   at Snblog.Controllers.SnArticleController.AysUpArticle(SnArticle test) in F:\Test\netCore\Snblog\Snblog\Controllers\SnArticleController.cs:line 210
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 121
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-04-09 11:30:07.415 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:31:38.187 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:33:26.717 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:34:44.050 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:36:07.460 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:37:35.273 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:38:51.961 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:43:00.303 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:45:15.817 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:46:16.657 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:47:44.604 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:49:10.659 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 11:59:25.178 +08:00 [INF] 启动主机
+2021-04-09 11:59:44.296 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 12:13:59.074 +08:00 [INF] 启动主机
+2021-04-09 12:17:04.975 +08:00 [INF] 启动主机
+2021-04-09 14:29:17.694 +08:00 [INF] 启动主机
+2021-04-09 14:48:04.682 +08:00 [INF] 启动主机
+2021-04-09 14:48:56.767 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 14:51:13.902 +08:00 [INF] 启动主机
+2021-04-09 14:55:53.126 +08:00 [INF] 启动主机
+2021-04-09 15:15:28.448 +08:00 [INF] 启动主机
+2021-04-09 15:20:58.291 +08:00 [INF] 启动主机
+2021-04-09 15:21:15.814 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 15:21:29.595 +08:00 [INF] 启动主机
+2021-04-09 15:29:29.194 +08:00 [INF] 启动主机
+2021-04-09 15:29:43.573 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 15:44:20.493 +08:00 [INF] 启动主机
+2021-04-09 15:50:16.500 +08:00 [INF] 启动主机
+2021-04-09 15:52:09.815 +08:00 [INF] 启动主机
+2021-04-09 15:54:57.928 +08:00 [INF] 启动主机
+2021-04-09 15:55:51.553 +08:00 [INF] 启动主机
+2021-04-09 15:57:10.921 +08:00 [INF] 启动主机
+2021-04-09 16:27:34.587 +08:00 [INF] 启动主机
+2021-04-09 16:27:55.815 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 17:23:09.524 +08:00 [INF] 启动主机
+2021-04-09 17:24:42.555 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 17:28:31.727 +08:00 [INF] 执行缓存: ConutLabel2
+2021-04-09 17:28:32.531 +08:00 [INF] 执行缓存: ConutLabel3
+2021-04-09 17:28:33.166 +08:00 [INF] 执行缓存: ConutLabel20
+2021-04-09 17:28:33.712 +08:00 [INF] 执行缓存: ConutLabel21
+2021-04-09 17:28:43.590 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 17:30:53.559 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 17:34:13.841 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 17:45:35.273 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 17:50:15.154 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 17:56:53.531 +08:00 [INF] 启动主机
+2021-04-09 17:58:38.758 +08:00 [INF] 执行缓存: ConutLabel1
+2021-04-09 17:58:39.997 +08:00 [INF] 执行缓存: ConutLabel2
+2021-04-09 17:58:40.903 +08:00 [INF] 执行缓存: ConutLabel3
+2021-04-09 17:58:41.610 +08:00 [INF] 执行缓存: ConutLabel20
+2021-04-09 17:58:44.879 +08:00 [INF] 执行缓存: ConutLabel21
+2021-04-09 17:58:45.506 +08:00 [INF] 执行缓存: ConutLabel5
+2021-04-09 17:58:46.209 +08:00 [INF] 执行缓存: ConutLabel22
+2021-04-09 17:58:46.666 +08:00 [INF] 执行缓存: ConutLabel23
+2021-04-09 17:58:47.467 +08:00 [INF] 执行缓存: ConutLabel24
+2021-04-09 17:58:47.832 +08:00 [INF] 执行缓存: ConutLabel25
+2021-04-09 18:06:42.616 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 18:15:06.071 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 18:15:28.394 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 18:16:02.404 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 18:16:17.391 +08:00 [INF] 执行缓存: ConutLabel2
+2021-04-09 18:16:18.692 +08:00 [INF] 执行缓存: ConutLabel1
+2021-04-09 18:17:17.034 +08:00 [INF] 执行缓存 GetArticleCount
+2021-04-09 18:17:20.438 +08:00 [INF] 执行缓存: ConutLabel4
+2021-04-09 18:17:21.637 +08:00 [INF] 执行缓存: ConutLabel3
+2021-04-09 18:17:22.380 +08:00 [INF] 执行缓存: ConutLabel20
+2021-04-09 18:17:22.937 +08:00 [INF] 执行缓存: ConutLabel21
+2021-04-09 18:17:23.768 +08:00 [INF] 执行缓存: ConutLabel6
+2021-04-09 18:22:03.930 +08:00 [INF] 执行缓存: ConutLabel4

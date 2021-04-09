@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
-using Snblog.Cache;
 using Snblog.Cache.Cache;
 using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
@@ -353,7 +352,6 @@ namespace Snblog.Service
                 }).OrderBy(c => c.article_id).Skip((pageIndex - 1) * pageSize)
                          .Take(pageSize).ToListAsync();
                 var list = new List<SnArticle>();
-                //解决方案二：foreach遍历
                 foreach (var t in data)
                 {
                     var s = new SnArticle();
@@ -403,6 +401,71 @@ namespace Snblog.Service
                     return false;
             }
             return await _coreDbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<List<SnArticle>> GetTagtextAsync(int tag, bool isDesc)
+        {
+            article = _cacheUtil.CacheString("GetTagtextAsync" + tag + isDesc, article); //设置缓存
+            if (article == null)
+            {
+                article = await GetTagtext(tag, isDesc); //读取数据
+                _cacheUtil.CacheString("GetTagtextAsync" + tag + isDesc, article); //设置缓存
+            }
+            return article;
+        }
+
+        private async Task<List<SnArticle>> GetTagtext(int tag, bool isDesc)
+        {
+            if (isDesc)
+            {
+                var data = await _coreDbContext.SnArticle.Where(s => s.label_id == tag).Select(s => new
+                {
+                    s.article_id,
+                    s.title,
+                    s.title_text,
+                    s.time,
+                    s.give,
+                    s.read
+                }).OrderByDescending(s => s.article_id).ToListAsync();
+                var list = new List<SnArticle>();
+                foreach (var t in data)
+                {
+                    var s = new SnArticle();
+                    s.article_id = t.article_id;
+                    s.title = t.title;
+                    s.title_text = t.title_text;
+                    s.time = t.time;
+                    s.give = t.give;
+                    s.read = t.read;
+                    list.Add(s);
+                }
+                return list;
+            }
+            else
+            {
+                var data = await _coreDbContext.SnArticle.Where(s => s.label_id == tag).Select(s => new
+                {
+                    s.article_id,
+                    s.title,
+                    s.title_text,
+                    s.time,
+                    s.give,
+                    s.read
+                }).OrderBy(s => s.article_id).ToListAsync();
+                var list = new List<SnArticle>();
+                foreach (var t in data)
+                {
+                    var s = new SnArticle();
+                    s.article_id = t.article_id;
+                    s.title = t.title;
+                    s.title_text = t.title_text;
+                    s.time = t.time;
+                    s.give = t.give;
+                    s.read = t.read;
+                    list.Add(s);
+                }
+                return list;
+            }
         }
     }
 }
