@@ -10,14 +10,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Snblog.Cache;
 using Snblog.IRepository;
 using Snblog.IService;
+using Snblog.IService.IReService;
 using Snblog.IService.IService;
 using Snblog.Jwt;
 using Snblog.Models;
 using Snblog.Repository;
 using Snblog.Service;
+using Snblog.Service.ReService;
 using Snblog.Service.Service;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -177,8 +180,15 @@ namespace Snblog
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
 
+
+            services.AddScoped<IReSnArticleService, ReSnArticleService>();
             #endregion
             services.AddControllers();
+
+           //services.AddControllers().AddNewtonsoftJson(option =>
+           //     //忽略循环引用
+           //     option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+           // );
         }
         // 运行时将调用此方法。 使用此方法来配置HTTP请求管道。
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

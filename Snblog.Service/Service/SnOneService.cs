@@ -26,7 +26,7 @@ namespace Snblog.Service
 
         public async Task<SnOne> AsyGetOneId(int id)
         {
-            return await CreateService<SnOne>().AysGetById(id);
+            return await CreateService<SnOne>().GetByIdAsync(id);
         }
 
         public List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc)

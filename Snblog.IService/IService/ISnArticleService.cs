@@ -21,8 +21,6 @@ namespace Snblog.IService
         /// <returns></returns>
         Task<List<SnArticle>> GetAllAsync();
 
-        int GetArticleCount();
-
         /// <summary>
         /// 读取[字段/阅读/点赞]数量
         /// </summary>
@@ -76,7 +74,7 @@ namespace Snblog.IService
         Task<List<SnArticle>> GetTagtextAsync(int tag,bool isDesc);
 
         /// <summary>
-        /// 查询分类总数
+        /// 条件查询总数
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>

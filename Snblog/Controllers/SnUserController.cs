@@ -20,8 +20,6 @@ using Snblog.Models;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-
-
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
@@ -87,7 +85,6 @@ namespace Snblog.Controllers
         /// 用户查询
         /// </summary>
         [HttpGet("AsyGestTest")] 
-        
         public async Task<IActionResult> AsyGetUser()
         {
             return Ok(await _service.AsyGetUser());

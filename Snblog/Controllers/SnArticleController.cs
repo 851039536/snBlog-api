@@ -19,29 +19,15 @@ namespace Snblog.Controllers
     //  [Authorize]
     public class SnArticleController : ControllerBase
     {
-        private readonly snblogContext _coreDbContext;
         private readonly ISnArticleService _service; //IOC依赖注入
 
         #region 构造函数
-        public SnArticleController(ISnArticleService service, snblogContext coreDbContext)
+        public SnArticleController(ISnArticleService service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
-            _coreDbContext = coreDbContext ?? throw new ArgumentNullException(nameof(coreDbContext));
         }
         #endregion
-        #region 查询总数 (缓存)
-        /// <summary>
-        /// 查询总数 (缓存)
-        /// </summary>
-        [HttpGet("GetArticleCount")]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesDefaultResponseType]
-        public IActionResult GetArticleCount()
-        {
-            return Ok(_service.GetArticleCount());
-        }
-        #endregion
+
         #region 查询总数 (缓存)
         /// <summary>
         /// 查询总数 (缓存)
@@ -52,9 +38,9 @@ namespace Snblog.Controllers
             return Ok(await _service.CountAsync());
         }
         #endregion
-        #region 分类ID查询总数  (缓存)
+        #region 条件查询总数  (缓存)
         /// <summary>
-        /// 分类ID查询总数 (缓存)
+        /// 条件查询总数 (缓存)
         /// </summary>
         /// <param name="type">分类id</param>
         /// <returns></returns>
@@ -98,6 +84,8 @@ namespace Snblog.Controllers
             return Ok(_service.GetTestWhere(sortId));
         }
         #endregion
+
+        //----------------------------------------------------------------
         #region 读取[字段/阅读/点赞]总数量
         /// <summary>
         /// 读取[字段/阅读/点赞]总数量
@@ -154,17 +142,17 @@ namespace Snblog.Controllers
             return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize, name, isDesc));
         }
         #endregion
-        # region 按标签查询 (缓存)
-         /// <summary>
+        #region 按标签查询 (缓存)
+        /// <summary>
         /// 按标签查询(缓存)
         /// </summary>
         /// <param name="labelId">标签id</param>
         /// <param name="isDesc"></param>
         /// <returns></returns>
         [HttpGet("GetTagtextAsync")]
-        public async Task<IActionResult> GetTagtextAsync(int labelId,bool isDesc)
+        public async Task<IActionResult> GetTagtextAsync(int labelId, bool isDesc)
         {
-            return Ok(await _service.GetTagtextAsync(labelId,isDesc));
+            return Ok(await _service.GetTagtextAsync(labelId, isDesc));
         }
         #endregion
         #region 添加数据

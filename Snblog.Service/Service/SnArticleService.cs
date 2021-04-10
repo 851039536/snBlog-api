@@ -44,14 +44,11 @@ namespace Snblog.Service
         public async Task<SnArticle> AsyGetTestName(int id)
         {
             SnArticle result = null;
-            if (_cache.IsInCache("AsyGetTestName" + id)) //是否存在缓存
+            result = _cacheUtil.CacheString("AsyGetTestName" + id, result);
+            if (result == null)
             {
-                result = _cache.Get<SnArticle>("AsyGetTestName" + id);//读缓存值
-            }
-            else
-            {
-                _cache.Set_AbsoluteExpire("AsyGetTestName" + id, await CreateService<SnArticle>().AysGetById(id), _cache.time); //设置缓存
-                result = _cache.Get<SnArticle>("AsyGetTestName" + id);
+                result = await _coreDbContext.SnArticle.FindAsync(id);
+                _cacheUtil.CacheString("AsyGetTestName" + id, result);
             }
             return result;
         }
@@ -66,9 +63,8 @@ namespace Snblog.Service
             article = _cacheUtil.CacheString("GetTestWhere" + sortId, article);
             if (article == null)
             {
-                article = CreateService<SnArticle>().Where(s => s.sort_id == sortId).ToList();
+             article  = _coreDbContext.SnArticle.Where(s=>s.label_id==sortId).ToList();
                 _cacheUtil.CacheString("GetTestWhere" + sortId, article);
-                _logger.LogInformation("执行缓存: GetTestWhere" + sortId);
             }
             return article;
         }
@@ -115,24 +111,6 @@ namespace Snblog.Service
             return Func(result);
         }
 
-
-        /// <summary>
-        /// 返回总条数
-        /// </summary>
-        /// <returns></returns>
-        public int GetArticleCount()
-        {
-
-            result = _cacheUtil.CacheNumber("GetArticleCount", result);
-            if (result == 0)
-            {
-                result = CreateService<SnArticle>().Count(); //获取数据值
-                _cacheUtil.CacheNumber("GetArticleCount", result);
-                _logger.LogInformation("执行缓存 GetArticleCount");
-            }
-            return result;
-        }
-
         /// <summary>
         /// 查询标签总数
         /// </summary>
@@ -144,18 +122,12 @@ namespace Snblog.Service
             result = _cacheUtil.CacheNumber("ConutLabel" + type, result);
             if (result == 0)
             {
-                result = CreateService<SnArticle>().Count(c => c.label_id == type);//获取数据值
+                result = _coreDbContext.SnArticle.Where(c => c.label_id == type).Count();
                 _cacheUtil.CacheNumber("ConutLabel" + type, result);//设置缓存值
-                _logger.LogInformation("执行缓存: ConutLabel" + type);
             }
             return result;
         }
 
-        public List<SnArticle> GetTest()
-        {
-            var result = this.CreateService<SnArticle>();
-            return result.GetAll().ToList();
-        }
 
         public async Task<int> CountAsync()
         {
@@ -466,6 +438,11 @@ namespace Snblog.Service
                 }
                 return list;
             }
+        }
+
+        public List<SnArticle> GetTest()
+        {
+            throw new NotImplementedException();
         }
     }
 }

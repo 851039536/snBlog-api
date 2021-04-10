@@ -310,9 +310,9 @@ namespace Snblog.Repository
             }
         }
 
-        public IQueryable<T> GetAll()
+        public  IQueryable<T> GetAll()
         {
-            return this._dbSet.AsNoTracking();
+            return  _dbSet.AsNoTracking();
         }
 
         public IQueryable<T> GetAll<TOrder>(Expression<Func<T, TOrder>> order, bool isDesc = false)
@@ -331,7 +331,7 @@ namespace Snblog.Repository
         {
             return this._dbSet.Find(id);
         }
-        public async Task<T> AysGetById<TType>(TType id)
+        public async Task<T> GetByIdAsync<TType>(TType id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -644,6 +644,21 @@ namespace Snblog.Repository
         public IQueryable<T> Where1<TOrder>(Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, int pageIndex, int pageSize, out int count, bool isDesc = false)
         {
             throw new NotImplementedException();
+        }
+
+        IQueryable<T> IRepositorys<T>.GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<T>> GetAllAsync()
+        {
+           return  await _dbSet.AsNoTracking().ToListAsync();
+        }
+
+        public async  Task< IQueryable<T>> WhereAsync(Expression<Func<T, bool>> where)
+        {
+            return  _dbSet.Where(@where);
         }
 
 

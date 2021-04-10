@@ -180,6 +180,13 @@ namespace Snblog.IRepository
         IQueryable<T> Where(Expression<Func<T, bool>> @where);
 
         /// <summary>
+        /// 条件查询
+        /// </summary>
+        /// <param name="where">过滤条件</param>
+        /// <returns></returns>
+        Task< IQueryable<T>> WhereAsync(Expression<Func<T,bool>>@where);
+
+        /// <summary>
         /// 条件查询 - 支持排序
         /// </summary>
         /// <typeparam name="TOrder">排序约束</typeparam>
@@ -235,6 +242,11 @@ namespace Snblog.IRepository
         /// <returns></returns>
         IQueryable<T> GetAll();
 
+        /// <summary>
+        /// 查询所有-List<T>-异步
+        /// </summary>
+        /// <returns></returns>
+        Task<List<T>> GetAllAsync();
 
         /// <summary>
         /// 获取所有数据 - 支持排序
@@ -253,7 +265,13 @@ namespace Snblog.IRepository
         /// <returns></returns>
         T GetById<TType>(TType id);
 
-        Task<T> AysGetById<TType>(TType id);
+        /// <summary>
+        /// 根据ID查询
+        /// </summary>
+        /// <typeparam name="TType">字段类型</typeparam>
+        /// <param name="id">主键</param>
+        /// <returns></returns>
+        Task<T> GetByIdAsync<TType>(TType id);
         /// <summary>
         /// 获取最大值
         /// </summary>
