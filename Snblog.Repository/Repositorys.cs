@@ -603,7 +603,9 @@ namespace Snblog.Repository
         #endregion
 
         #region SQL语句
+#pragma warning disable CS0693 // 类型参数“T”与外部类型“Repositorys<T>”中的类型参数同名
         public virtual void BulkInsert<T>(List<T> entities)
+#pragma warning restore CS0693 // 类型参数“T”与外部类型“Repositorys<T>”中的类型参数同名
         { }
 
         [Obsolete]
@@ -656,9 +658,11 @@ namespace Snblog.Repository
            return  await _dbSet.AsNoTracking().ToListAsync();
         }
 
+#pragma warning disable CS1998 // 此异步方法缺少 "await" 运算符，将以同步方式运行。请考虑使用 "await" 运算符等待非阻止的 API 调用，或者使用 "await Task.Run(...)" 在后台线程上执行占用大量 CPU 的工作。
         public async  Task< IQueryable<T>> WhereAsync(Expression<Func<T, bool>> where)
+#pragma warning restore CS1998 // 此异步方法缺少 "await" 运算符，将以同步方式运行。请考虑使用 "await" 运算符等待非阻止的 API 调用，或者使用 "await Task.Run(...)" 在后台线程上执行占用大量 CPU 的工作。
         {
-            return  _dbSet.Where(@where);
+            return   _dbSet.Where(@where);
         }
 
 

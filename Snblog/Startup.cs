@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -160,7 +161,10 @@ namespace Snblog
             });
             #endregion
             #region DI依赖注入配置。
-            //在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
+
+
+
+           // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
             services.AddScoped<IconcardContext, snblogContext>();//db
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
@@ -186,8 +190,10 @@ namespace Snblog
 
             #endregion
             services.AddControllers();
-           
+
         }
+
+
         // 运行时将调用此方法。 使用此方法来配置HTTP请求管道。
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

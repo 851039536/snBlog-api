@@ -66,7 +66,7 @@ namespace Snblog.Controllers
         }
         #endregion
         #region  分类查询 (缓存)
-       /// <summary>
+        /// <summary>
         /// 分类查询 (缓存)
         /// </summary>
         /// <param name="id">分类id(label_id)</param>
@@ -76,6 +76,18 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetLabelAllAsync(id));
         }
+        #endregion
+        #region 读取[字段/阅读/点赞]总数量
+        /// <summary>
+        /// 读取[字段/阅读/点赞]总数量-缓存
+        /// </summary>
+        /// <param name="type">text-内容-read:阅读-give:点赞</param>
+        [HttpGet("GetSumAsync")]
+        public async Task<IActionResult> GetSumAsync(string type)
+        {
+            return Ok(await _service.GetSumAsync(type));
+        }
+
         #endregion
     }
 }

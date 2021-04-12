@@ -36,6 +36,12 @@ namespace Snblog.IService.IReService
         /// </summary>
         /// <param name="id">分类id(label_id)</param>
         /// <returns></returns>
-        Task<List<SnArticle>>GetLabelAllAsync(int id);
+        Task<List<SnArticle>> GetLabelAllAsync(int id);
+
+        /// <summary>
+        /// 读取[字段/阅读/点赞]数量
+        /// </summary>
+        /// <returns></returns>
+        Task<int> GetSumAsync(string type);
     }
 }

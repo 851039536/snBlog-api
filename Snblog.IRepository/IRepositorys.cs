@@ -319,7 +319,9 @@ namespace Snblog.IRepository
 
 
         #region 执行Sql语句
+#pragma warning disable CS0693 // 类型参数“T”与外部类型“IRepositorys<T>”中的类型参数同名
         void BulkInsert<T>(List<T> entities);
+#pragma warning restore CS0693 // 类型参数“T”与外部类型“IRepositorys<T>”中的类型参数同名
         int ExecuteSql(string sql);
         Task<int> ExecuteSqlAsync(string sql);
         int ExecuteSql(string sql, List<DbParameter> spList);

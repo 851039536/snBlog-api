@@ -13,13 +13,13 @@ namespace Snblog.Service.ReService
 {
     public class ReSnArticleService : BaseService, IReSnArticleService
     {
-            private readonly CacheUtil _cacheUtil;
+        private readonly CacheUtil _cacheUtil;
         private int result;
         private List<SnArticle> article = null;
-        private IQueryable<SnArticle> IQarticle = null;
-        public ReSnArticleService(ICacheUtil cacheUtil,IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+
+        public ReSnArticleService(ICacheUtil cacheUtil, IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
-               _cacheUtil= (CacheUtil)cacheUtil;
+            _cacheUtil = (CacheUtil)cacheUtil;
         }
 
         public async Task<int> CountAsync()
@@ -73,10 +73,60 @@ namespace Snblog.Service.ReService
             article = _cacheUtil.CacheString("GetLabelAllAsync" + id, article);
             if (article == null)
             {
-                article= await CreateService<SnArticle>().Where(s => s.label_id == id).ToListAsync();
+                article = await CreateService<SnArticle>().Where(s => s.label_id == id).ToListAsync();
                 _cacheUtil.CacheString("GetLabelAllAsync" + id, article);
             }
             return article;
+        }
+
+        public async Task<int> GetSumAsync(string type)
+        {
+            result = _cacheUtil.CacheNumber("ReGetSumAsync" + type, result);
+            if (result == 0)
+            {
+                result = await GetSum(type);
+                _cacheUtil.CacheNumber("ReGetSumAsync" + type, result);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 读取总字数
+        /// </summary>
+        /// <param name="type">阅读/点赞/评论</param>
+        /// <returns></returns>
+        private async Task<int> GetSum(string type)
+        {
+            int num = 0;
+            switch (type) //按类型查询
+            {
+                case "read":
+
+                    var read = await CreateService<SnArticle>().Where(s => true).Select(c => c.read).ToListAsync();
+                    foreach (int item in read)
+                    {
+                        num += item;
+                    }
+                    break;
+                case "text":
+                    var text = await CreateService<SnArticle>().Where(s => true).Select(c => c.text).ToListAsync();
+                    for (int i = 0; i < text.Count; i++)
+                    {
+                        num += text[i].Length;
+                    }
+                    break;
+                case "give":
+                    var give = await CreateService<SnArticle>().Where(s => true).Select(c => c.give).ToListAsync();
+                    foreach (int item in give)
+                    {
+                        num += item;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return num;
         }
     }
 }

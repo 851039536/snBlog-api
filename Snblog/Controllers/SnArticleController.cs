@@ -84,11 +84,9 @@ namespace Snblog.Controllers
             return Ok(_service.GetTestWhere(sortId));
         }
         #endregion
-
-        //----------------------------------------------------------------
         #region 读取[字段/阅读/点赞]总数量
         /// <summary>
-        /// 读取[字段/阅读/点赞]总数量
+        /// 读取[字段/阅读/点赞]总数量-缓存
         /// </summary>
         /// <param name="type">text-内容-read:阅读-give:点赞</param>
         [HttpGet("GetSumAsync")]
@@ -98,6 +96,8 @@ namespace Snblog.Controllers
         }
 
         #endregion
+        //----------------------------------------------------------------
+
         #region 查询文章(无文章内容 缓存)
         /// <summary>
         /// 查询文章(无文章内容 缓存)
@@ -207,7 +207,6 @@ namespace Snblog.Controllers
             return Ok(result);
         }
         #endregion
-
 
     }
 }

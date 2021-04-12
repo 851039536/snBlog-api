@@ -22,10 +22,10 @@ namespace Snblog.Service
         private readonly ILogger<SnArticleService> _logger; // <-添加此行
         private int result;
         private List<SnArticle> article = null;
-        public SnArticleService(ICacheUtil cacheUtil,IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext, ILogger<SnArticleService> logger) : base(repositoryFactory, mydbcontext)
+        public SnArticleService(ICacheUtil cacheUtil, IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext, ILogger<SnArticleService> logger) : base(repositoryFactory, mydbcontext)
         {
             _coreDbContext = coreDbContext;
-            _cacheUtil= (CacheUtil)cacheUtil;
+            _cacheUtil = (CacheUtil)cacheUtil;
             _logger = logger ?? throw new ArgumentNullException(nameof(Logger));
         }
 
@@ -63,7 +63,7 @@ namespace Snblog.Service
             article = _cacheUtil.CacheString("GetTestWhere" + sortId, article);
             if (article == null)
             {
-             article  = _coreDbContext.SnArticle.Where(s=>s.label_id==sortId).ToList();
+                article = _coreDbContext.SnArticle.Where(s => s.label_id == sortId).ToList();
                 _cacheUtil.CacheString("GetTestWhere" + sortId, article);
             }
             return article;
@@ -153,6 +153,22 @@ namespace Snblog.Service
 
         public async Task<int> GetSumAsync(string type)
         {
+            result = _cacheUtil.CacheNumber("GetSumAsync" + type, result);
+            if (result == 0)
+            {
+                result = await GetSum(type);
+                _cacheUtil.CacheNumber("GetSumAsync" + type, result);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 读取总字数
+        /// </summary>
+        /// <param name="type">阅读/点赞/评论</param>
+        /// <returns></returns>
+        private async Task<int> GetSum(string type)
+        {
             int num = 0;
             switch (type) //按类型查询
             {
@@ -180,6 +196,7 @@ namespace Snblog.Service
                 default:
                     break;
             }
+
             return num;
         }
 
