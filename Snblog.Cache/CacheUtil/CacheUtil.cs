@@ -5,7 +5,14 @@ namespace Snblog.Cache.CacheUtil
     public class CacheUtil:ICacheUtil
     {
         //创建内存缓存对象
-        private static CacheManager _cache = new CacheManager();
+        private CacheManager _cache;
+
+        public CacheUtil(ICacheManager cache)
+        {
+            _cache = (CacheManager)cache;
+        }
+
+        //  private static CacheManager _cache = new CacheManager();
         /// <summary>
         /// 设置并返回缓存值(值类型)
         /// </summary>

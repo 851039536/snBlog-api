@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
-using Snblog.Cache;
 using Snblog.Cache.Cache;
 using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
@@ -73,12 +70,12 @@ namespace Snblog
                       c.SwaggerDoc(version, new OpenApiInfo
                       {
                           //Version = "v1", //版本号
-                          Title = "SN博客 API", //标题
+                          Title = "SN blog API", //标题
                           Description = "EFCore数据操作 ASP.NET Core Web API", //描述
                           TermsOfService = new Uri("https://example.com/terms"), //服务条款
                           Contact = new OpenApiContact
                           {
-                              Name = "Shayne Boyer", //联系人
+                              Name = "kai ouyang", //联系人
                               Email = string.Empty,  //邮箱
                               Url = new Uri("https://twitter.com/spboyer"),//网站
                           },
@@ -163,6 +160,7 @@ namespace Snblog
             });
             #endregion
             #region DI依赖注入配置。
+            //在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
             services.AddScoped<IconcardContext, snblogContext>();//db
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
@@ -182,15 +180,13 @@ namespace Snblog
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
 
-            services.AddScoped<ICacheUtil,CacheUtil>();
+            services.AddScoped<ICacheUtil, CacheUtil>();
+            services.AddSingleton<ICacheManager, CacheManager>(); //缓存-整个应用程序生命周期以内只创建一个实例 
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
+
             #endregion
             services.AddControllers();
-
-           //services.AddControllers().AddNewtonsoftJson(option =>
-           //     //忽略循环引用
-           //     option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-           // );
+           
         }
         // 运行时将调用此方法。 使用此方法来配置HTTP请求管道。
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

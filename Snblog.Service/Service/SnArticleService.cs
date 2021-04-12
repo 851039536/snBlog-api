@@ -19,7 +19,6 @@ namespace Snblog.Service
         private readonly snblogContext _coreDbContext;//DB
         private readonly CacheUtil _cacheUtil;
         //创建内存缓存对象
-        private static CacheManager _cache = new CacheManager();
         private readonly ILogger<SnArticleService> _logger; // <-添加此行
         private int result;
         private List<SnArticle> article = null;
