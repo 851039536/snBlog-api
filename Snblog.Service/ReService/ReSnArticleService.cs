@@ -13,12 +13,13 @@ namespace Snblog.Service.ReService
 {
     public class ReSnArticleService : BaseService, IReSnArticleService
     {
-        private static CacheUtil _cacheUtil = new CacheUtil();
+            private readonly CacheUtil _cacheUtil;
         private int result;
         private List<SnArticle> article = null;
         private IQueryable<SnArticle> IQarticle = null;
-        public ReSnArticleService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        public ReSnArticleService(ICacheUtil cacheUtil,IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
+               _cacheUtil= (CacheUtil)cacheUtil;
         }
 
         public async Task<int> CountAsync()

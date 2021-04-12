@@ -12,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Snblog.Cache;
+using Snblog.Cache.Cache;
+using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.IService.IReService;
@@ -180,7 +182,7 @@ namespace Snblog
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
 
-
+            services.AddScoped<ICacheUtil,CacheUtil>();
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
             #endregion
             services.AddControllers();

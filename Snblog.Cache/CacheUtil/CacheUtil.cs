@@ -1,13 +1,9 @@
 ﻿using Snblog.Cache.Cache;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Snblog.Cache.CacheUtil
 {
-    public class CacheUtil
+    public class CacheUtil:ICacheUtil
     {
-
         //创建内存缓存对象
         private static CacheManager _cache = new CacheManager();
         /// <summary>

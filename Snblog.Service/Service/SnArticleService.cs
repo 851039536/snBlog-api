@@ -17,15 +17,16 @@ namespace Snblog.Service
     public class SnArticleService : BaseService, ISnArticleService
     {
         private readonly snblogContext _coreDbContext;//DB
+        private readonly CacheUtil _cacheUtil;
         //创建内存缓存对象
         private static CacheManager _cache = new CacheManager();
-        private static CacheUtil _cacheUtil = new CacheUtil();
         private readonly ILogger<SnArticleService> _logger; // <-添加此行
         private int result;
         private List<SnArticle> article = null;
-        public SnArticleService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext, ILogger<SnArticleService> logger) : base(repositoryFactory, mydbcontext)
+        public SnArticleService(ICacheUtil cacheUtil,IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext coreDbContext, ILogger<SnArticleService> logger) : base(repositoryFactory, mydbcontext)
         {
             _coreDbContext = coreDbContext;
+            _cacheUtil= (CacheUtil)cacheUtil;
             _logger = logger ?? throw new ArgumentNullException(nameof(Logger));
         }
 
