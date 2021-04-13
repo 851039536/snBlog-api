@@ -68,6 +68,54 @@ namespace Snblog.Service.ReService
             return result;
         }
 
+        public async Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc)
+        {
+            article = _cacheUtil.CacheString("ReGetFyTitleAsync" + pageIndex + pageSize + isDesc, article); //设置缓存
+            if (article == null)
+            {
+                article = await GetFyTitle(pageIndex, pageSize, isDesc); //读取数据
+                _cacheUtil.CacheString("ReGetFyTitleAsync" + pageIndex + pageSize + isDesc, article); //设置缓存
+            }
+            return article;
+        }
+
+        /// <summary>
+        /// 读取分页数据
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        private async Task<List<SnArticle>> GetFyTitle(int pageIndex, int pageSize, bool isDesc)
+        {
+            var data = await Task.Run(() => CreateService<SnArticle>().Wherepage(s => true, c => c.article_id, pageIndex, pageSize, out int count, isDesc).Select(s => new
+            {
+                s.article_id,
+                s.title,
+                s.comment,
+                s.give,
+                s.read,
+                s.time,
+                s.title_text,
+                s.user_id
+            }).ToList());
+            //解决方案二：foreach遍历
+            var list = new List<SnArticle>();
+            foreach (var t in data)
+            {
+                var s = new SnArticle();
+                s.article_id = t.article_id;
+                s.title = t.title;
+                s.comment = t.comment;
+                s.give = t.give;
+                s.read = t.read;
+                s.time = t.time;
+                s.title_text = t.title_text;
+                s.user_id = t.user_id;
+                list.Add(s);
+            }
+            return list;
+        }
+
         public async Task<List<SnArticle>> GetLabelAllAsync(int id)
         {
             article = _cacheUtil.CacheString("GetLabelAllAsync" + id, article);
@@ -127,6 +175,32 @@ namespace Snblog.Service.ReService
             }
 
             return num;
+        }
+
+        public async Task< List<SnArticle>> GetTypeFyTextAsync(int type, int pageIndex, int pageSize, bool isDesc)
+        {
+            article = _cacheUtil.CacheString("ReGetTypeFyTextAsync" + type + pageIndex + isDesc, article);
+            if (article == null)
+            {
+                article = await GetTypeFy(type, pageIndex, pageSize, isDesc);
+                _cacheUtil.CacheString("ReGetTypeFyTextAsync" + type + pageIndex + isDesc, article);
+            }
+            return article;
+
+        }
+
+        private async Task<List<SnArticle>> GetTypeFy(int type, int pageIndex, int pageSize, bool isDesc)
+        {
+            if (type == 00)
+            {
+                var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.article_id, pageIndex, pageSize, isDesc);
+                return data.ToList();
+            }
+            else
+            {
+                var data = await CreateService<SnArticle>().WherepageAsync(s => s.label_id == type, c => c.article_id, pageIndex, pageSize, isDesc);
+                return data.ToList();
+            }
         }
     }
 }

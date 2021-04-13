@@ -69,27 +69,54 @@ namespace Snblog.Service
             return article;
         }
 
-
         /// <summary>
-        /// 条件分页查询 - 支持排序
+        /// 条件分页查询 
         /// </summary>
         /// <param name="label"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        public List<SnArticle> GetPagingWhere(int label, int pageIndex, int pageSize, out int count, bool isDesc)
+        public async Task<List<SnArticle>> GetPagingWhereAsync(int label, int pageIndex, int pageSize, bool isDesc)
         {
-            // if (label == 00)
-            //{
-            //    data = CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
-            //}
-            //else
-            //{
-            //    data = CreateService<SnArticle>().Wherepage(s => s.LabelId == label, c => c.ArticleId, pageIndex, pageSize, out count, isDesc);
-            //}
-            var result = label == 00 ? CreateService<SnArticle>().Wherepage(s => true, c => c.article_id, pageIndex, pageSize, out count, isDesc) : CreateService<SnArticle>().Wherepage(s => s.label_id == label, c => c.article_id, pageIndex, pageSize, out count, isDesc);
-            return result.ToList();
+            article = _cacheUtil.CacheString("GetPagingWhereAsync" + label + pageIndex + pageSize + isDesc, article);
+            if (article == null)
+            {
+                article = await GetfyTest(label, pageIndex, pageSize, isDesc);
+                _cacheUtil.CacheString("GetPagingWhereAsync" + label + pageIndex + pageSize + isDesc, article);
+            }
+            return article;
+        }
+
+        private async Task<List<SnArticle>> GetfyTest(int label, int pageIndex, int pageSize, bool isDesc)
+        {
+            if (label == 00)
+            {
+                if (isDesc)
+                {
+                    article = await _coreDbContext.SnArticle.OrderByDescending(c => c.article_id).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                }
+                else
+                {
+                    article = await _coreDbContext.SnArticle.OrderBy(c => c.article_id).Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize).ToListAsync();
+                }
+            }
+            else
+            {
+                if (isDesc)
+                {
+                    article = await _coreDbContext.SnArticle.Where(s => s.label_id == label).OrderByDescending(c => c.article_id).Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize).ToListAsync();
+                }
+                else
+                {
+                    article = await _coreDbContext.SnArticle.Where(s => s.label_id == label).OrderBy(c => c.article_id).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                }
+            }
+            return article;
         }
 
 

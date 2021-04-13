@@ -43,5 +43,22 @@ namespace Snblog.IService.IReService
         /// </summary>
         /// <returns></returns>
         Task<int> GetSumAsync(string type);
+
+        /// <summary>
+        /// 查询文章(无文章内容 缓存)
+        /// </summary>
+        /// <param name="pageIndex">当前页码[1]</param>
+        /// <param name="pageSize">每页记录条数[10]</param>
+        /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <returns></returns>
+        Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc);
+        /// <summary>
+        /// 分页查询 (条件)
+        /// </summary>
+        /// <param name="type">分类 : 00-表示查询所有</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+      Task< List<SnArticle>> GetTypeFyTextAsync(int type, int pageIndex, int pageSize, bool isDesc);
     }
 }

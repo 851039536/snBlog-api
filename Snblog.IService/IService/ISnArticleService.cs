@@ -42,14 +42,14 @@ namespace Snblog.IService
 
 
         /// <summary>
-        /// 条件分页查询 - 支持排序
+        /// 条件分页查询
         /// </summary>
         /// <param name="type"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        List<SnArticle> GetPagingWhere(int type, int pageIndex, int pageSize, out int count, bool isDesc);
+       Task< List<SnArticle>> GetPagingWhereAsync(int type, int pageIndex, int pageSize, bool isDesc);
 
         /// <summary>
         /// 条件分页查询

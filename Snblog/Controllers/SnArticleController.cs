@@ -96,8 +96,6 @@ namespace Snblog.Controllers
         }
 
         #endregion
-        //----------------------------------------------------------------
-
         #region 查询文章(无文章内容 缓存)
         /// <summary>
         /// 查询文章(无文章内容 缓存)
@@ -111,22 +109,25 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetFyTitleAsync(pageIndex, pageSize, isDesc));
         }
-        # endregion
-        #region 条件分页查询
+        #endregion
+        #region  条件分页查询 (缓存)
         /// <summary>
-        /// 条件分页查询 - 支持排序
+        /// 条件分页查询 (缓存)
         /// </summary>
         /// <param name="type">分类 : 00-表示查询所有</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-        [HttpGet("GetfyTest")]
-        public IActionResult GetfyTest(int type, int pageIndex, int pageSize, bool isDesc)
+        [HttpGet("GetfyTestAsync")]
+        public async Task<IActionResult> GetfyTestAsync(int type, int pageIndex, int pageSize, bool isDesc)
         {
-            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out _, isDesc));
+            return Ok(await _service.GetPagingWhereAsync(type, pageIndex, pageSize, isDesc));
         }
         #endregion
-        # region 条件分页查询
+        //----------------------------------------------------------------
+
+
+        #region 条件分页查询
         /// <summary>
         /// 条件分页查询
         /// </summary>

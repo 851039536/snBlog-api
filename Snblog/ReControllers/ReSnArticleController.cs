@@ -16,11 +16,12 @@ namespace Snblog.Controllers
     {
         private readonly IReSnArticleService _service; //IOC依赖注入
 
+        #region 构造函数
         public ReSnArticleController(IReSnArticleService service)
         {
             _service = service;
         }
-
+        #endregion
         #region 查询总数 (缓存)
         /// <summary>
         /// 查询总数 (缓存)
@@ -88,6 +89,34 @@ namespace Snblog.Controllers
             return Ok(await _service.GetSumAsync(type));
         }
 
+        #endregion
+        #region 查询文章(无文章内容 缓存)
+        /// <summary>
+        /// 查询文章(无文章内容 缓存)
+        /// </summary>
+        /// <param name="pageIndex">当前页码[1]</param>
+        /// <param name="pageSize">每页记录条数[10]</param>
+        /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <returns></returns>
+        [HttpGet("GetFyTitleAsync")]
+        public async Task<IActionResult> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc)
+        {
+            return Ok(await _service.GetFyTitleAsync(pageIndex, pageSize, isDesc));
+        }
+        #endregion
+        #region 分页查询 (条件 缓存)
+        /// <summary>
+        /// 分页查询 (条件 缓存)
+        /// </summary>
+        /// <param name="type">分类 : 00-表示查询所有</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        [HttpGet("GetTypeFyTextAsync")]
+        public async Task<IActionResult> GetTypeFyTextAsync(int type, int pageIndex, int pageSize, bool isDesc)
+        {
+            return Ok(await _service.GetTypeFyTextAsync(type, pageIndex, pageSize, isDesc));
+        }
         #endregion
     }
 }

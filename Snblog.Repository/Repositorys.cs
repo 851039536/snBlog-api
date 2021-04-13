@@ -276,11 +276,22 @@ namespace Snblog.Repository
             count = Count();
             if (isDesc)
             {
-                return this._dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+                
+                return  _dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
             else
             {
                 return this._dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            }
+        } public async Task<IEnumerable<T>> WherepageAsync<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, bool isDesc)
+        {
+            if (isDesc)
+            {
+                return await Task.Run(()=> _dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize));
+            }
+            else
+            {
+                return await Task.Run(()=>_dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize));
             }
         }
 
