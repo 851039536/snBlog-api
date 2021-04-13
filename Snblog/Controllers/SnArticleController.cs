@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Snblog.IService;
 using Snblog.Models;
 
@@ -124,14 +120,11 @@ namespace Snblog.Controllers
             return Ok(await _service.GetPagingWhereAsync(type, pageIndex, pageSize, isDesc));
         }
         #endregion
-        //----------------------------------------------------------------
-
-
-        #region 条件分页查询
+        #region 分页查询(条件排序 缓存)
         /// <summary>
-        /// 条件分页查询
+        /// 分页查询(条件排序 缓存)
         /// </summary>
-        /// <param name="type">查询条件[999查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
+        /// <param name="type">查询条件[00查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
         /// <param name="pageIndex">当前页码[1]</param>
         /// <param name="pageSize">每页记录条数[10]</param>
         /// <param name="isDesc">是否倒序[true/false]</param>
@@ -143,9 +136,9 @@ namespace Snblog.Controllers
             return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize, name, isDesc));
         }
         #endregion
-        #region 按标签查询 (缓存)
+        #region 标签ID查询 (缓存)
         /// <summary>
-        /// 按标签查询(缓存)
+        /// 标签ID查询 (缓存)
         /// </summary>
         /// <param name="labelId">标签id</param>
         /// <param name="isDesc"></param>
@@ -160,12 +153,25 @@ namespace Snblog.Controllers
         /// <summary>
         /// 添加数据
         /// </summary>
+        /// <param name="Entity"></param>
         /// <returns></returns>
         //[Authorize(Roles = "kai")] //角色授权
         [HttpPost("AsyInsArticle")]
-        public async Task<ActionResult<SnArticle>> AsyInsArticle(SnArticle test)
+        public async Task<ActionResult<SnArticle>> AddAsync(SnArticle Entity)
         {
-            return Ok(await _service.AsyInsArticle(test));
+            return Ok(await _service.AddAsync(Entity));
+        }
+        #endregion
+        #region 更新数据
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="Entity"></param>
+        /// <returns></returns>
+        [HttpPut("UpdateAsync")]
+        public async Task<IActionResult> UpdateAsync(SnArticle Entity)
+        {
+            return Ok(await _service.UpdateAsync(Entity));
         }
         #endregion
         #region 删除数据
@@ -174,38 +180,24 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Authorize(Roles = "kai")] //角色授权
-        [HttpDelete("AsyDetArticleId")]
-        public async Task<IActionResult> AsyDetArticleId(int id)
+        //  [Authorize(Roles = "kai")] //角色授权
+        [HttpDelete("DeleteAsync")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.AsyDetArticleId(id));
+            return Ok(await _service.DeleteAsync(id));
         }
         #endregion
-        #region 更新数据
-        /// <summary>
-        /// 更新数据
-        /// </summary>
-        /// <param name="test"></param>
-        /// <returns></returns>
-        [HttpPut("AysUpArticle")]
-        public async Task<IActionResult> AysUpArticle(SnArticle test)
-        {
-            var data = await _service.AysUpArticle(test);
-            return Ok(data);
-        }
-        #endregion
-        # region 更新部分列[comment give read]
+        #region 更新部分列[comment give read]
         /// <summary>
         /// 更新部分列[comment give read]
         /// </summary>
-        /// <param name="result">对象</param>
+        /// <param name="Entity">对象</param>
         /// <param name="type">更新字段</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
-        public async Task<IActionResult> UpdatePortionAsync(SnArticle result, string type)
+        public async Task<IActionResult> UpdatePortionAsync(SnArticle Entity, string type)
         {
-            var data = await _service.UpdatePortionAsync(result, type);
-            return Ok(result);
+            return Ok(  await _service.UpdatePortionAsync(Entity, type));
         }
         #endregion
 

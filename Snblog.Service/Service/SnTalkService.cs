@@ -37,6 +37,7 @@ namespace Snblog.Service
         public async Task<bool> DeleteAsync(int id)
         {
             var todoItem = await _coreDbContext.SnTalk.FindAsync(id);
+            if (todoItem == null) return false;
             _coreDbContext.SnTalk.Remove(todoItem);
             return await _coreDbContext.SaveChangesAsync() > 0;
         }

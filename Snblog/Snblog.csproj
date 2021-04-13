@@ -46,6 +46,10 @@
     <ProjectReference Include="..\Snblog.Util\Snblog.Util.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="LogFiles\" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>Preserve</TypeScriptJSXEmit>

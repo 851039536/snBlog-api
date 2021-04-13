@@ -27,19 +27,19 @@ namespace Snblog.Service.ReService
             result = _cacheUtil.CacheNumber("CountAsync", result);
             if (result == 0)
             {
-                result = CreateService<SnArticle>().Count();
+                result = await CreateService<SnArticle>().CountAsync();
                 _cacheUtil.CacheNumber("CountAsync", result);
             }
             return result;
         }
 
-        public int CountAsync(int type)
+        public async Task<int> CountAsync(int type)
         {
             //读取缓存值
             result = _cacheUtil.CacheNumber("CountAsync" + type, result);
             if (result == 0)
             {
-                result = CreateService<SnArticle>().Count(c => c.label_id == type);//获取数据值
+                result = await CreateService<SnArticle>().CountAsync(c => c.label_id == type);//获取数据值
                 _cacheUtil.CacheNumber("CountAsync" + type, result);//设置缓存值
             }
             return result;
@@ -177,7 +177,7 @@ namespace Snblog.Service.ReService
             return num;
         }
 
-        public async Task< List<SnArticle>> GetTypeFyTextAsync(int type, int pageIndex, int pageSize, bool isDesc)
+        public async Task<List<SnArticle>> GetTypeFyTextAsync(int type, int pageIndex, int pageSize, bool isDesc)
         {
             article = _cacheUtil.CacheString("ReGetTypeFyTextAsync" + type + pageIndex + isDesc, article);
             if (article == null)
@@ -201,6 +201,112 @@ namespace Snblog.Service.ReService
                 var data = await CreateService<SnArticle>().WherepageAsync(s => s.label_id == type, c => c.article_id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
+        }
+
+        public async Task<List<SnArticle>> GetFyTypeorderAsync(int type, int pageIndex, int pageSize, string order, bool isDesc)
+        {
+            article = _cacheUtil.CacheString("ReGetFyTypeorderAsync" + type + pageIndex + pageSize + order + isDesc, article);
+            if (article == null)
+            {
+                article = await GetFyTypeorder(type, pageIndex, pageSize, order, isDesc);
+                _cacheUtil.CacheString("ReGetFyTypeorderAsync" + type + pageIndex + pageSize + order + isDesc, article);
+            }
+            return article;
+
+        }
+
+        private async Task<List<SnArticle>> GetFyTypeorder(int type, int pageIndex, int pageSize, string order, bool isDesc)
+        {
+            if (type == 00)//表示查所有
+            {
+                switch (order)
+                {
+                    case "read":
+                        var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.read, pageIndex, pageSize, isDesc);
+                        return data.ToList();
+                    case "data":
+                        var data1 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.time, pageIndex, pageSize, isDesc);
+                        return data1.ToList();
+                    case "give":
+                        var data2 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.give, pageIndex, pageSize, isDesc);
+                        return data2.ToList();
+                    case "comment":
+                        var data4 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.comment, pageIndex, pageSize, isDesc);
+                        return data4.ToList();
+                    default:
+                        var data5 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.article_id, pageIndex, pageSize, isDesc);
+                        return data5.ToList();
+                }
+            }
+            else
+            {
+                var data = await CreateService<SnArticle>().WherepageAsync(s => s.sort_id == type, c => c.article_id, pageIndex, pageSize, isDesc);
+                return data.ToList();
+            }
+        }
+
+        public async Task<List<SnArticle>> GetTagtextAsync(int tag, bool isDesc)
+        {
+            article = _cacheUtil.CacheString("ReGetTagtextAsync" + tag + isDesc, article); //设置缓存
+            if (article == null)
+            {
+                article = await GetTagtext(tag, isDesc); //读取数据
+                _cacheUtil.CacheString("ReGetTagtextAsync" + tag + isDesc, article); //设置缓存
+            }
+            return article;
+        }
+
+        private async Task<List<SnArticle>> GetTagtext(int tag, bool isDesc)
+        {
+            var data = await CreateService<SnArticle>().Where(s => s.label_id == tag, c => c.article_id, isDesc).Select(s => new
+            {
+                s.article_id,
+                s.title,
+                s.title_text,
+                s.time,
+                s.give,
+                s.read
+            }).ToListAsync();
+            var list = new List<SnArticle>();
+            foreach (var t in data)
+            {
+                var s = new SnArticle();
+                s.article_id = t.article_id;
+                s.title = t.title;
+                s.title_text = t.title_text;
+                s.time = t.time;
+                s.give = t.give;
+                s.read = t.read;
+                list.Add(s);
+            }
+            return list;
+
+        }
+
+        public async Task<SnArticle> AddAsync(SnArticle Entity)
+        {
+            return await CreateService<SnArticle>().AddAsync(Entity);
+        }
+
+        public async Task<string> UpdateAsync(SnArticle Entity)
+        {
+            int result = await CreateService<SnArticle>().UpdateAsync(Entity);
+            string Func(int data) => data == 1 ? "更新成功" : "更新失败";
+            return Func(result);
+        }
+
+        public async Task<string> DeleteAsync(int id)
+        {
+            int resultID = await Task.Run(() => CreateService<SnArticle>().DeleteAsync(id));
+            string result = resultID == 1 ? "删除成功" : "删除失败";
+            return result;
+        }
+
+        public async Task<bool> UpdatePortionAsync(SnArticle snArticle, string name)
+        {
+            var date = await CreateService<SnArticle>().UpdateAsync1(snArticle, true, name);
+
+            return date;
         }
     }
 }

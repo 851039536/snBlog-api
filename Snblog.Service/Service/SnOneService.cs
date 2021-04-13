@@ -44,7 +44,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetOne(int id)
         {
-            int da = await CreateService<SnOne>().AsyDelete(id);
+            int da = await CreateService<SnOne>().DeleteAsync(id);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -55,12 +55,12 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnOne> AsyInsOne(SnOne one)
         {
-            return await CreateService<SnOne>().AysAdd(one);
+            return await CreateService<SnOne>().AddAsync(one);
         }
 
         public async Task<string> AysUpOne(SnOne one)
         {
-            int da = await CreateService<SnOne>().AysUpdate(one);
+            int da = await CreateService<SnOne>().UpdateAsync(one);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }

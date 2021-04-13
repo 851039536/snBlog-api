@@ -10,40 +10,58 @@ namespace Snblog.IRepository
 {
     public interface IRepositorys<T> : IDisposable where T : class
     {
+        # region 显式开启数据上下文事务
         /// <summary>
         /// 显式开启数据上下文事务
         /// </summary>
         /// <param name="isolationLevel">指定连接的事务锁定行为</param>
         void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.Unspecified);
+        # endregion
 
+        # region 提交事务的更改
         /// <summary>
         /// 提交事务的更改
         /// </summary>
         void Commit();
+        # endregion
 
+        # region 显式回滚事务，仅在显式开启事务后有用
         /// <summary>
         /// 显式回滚事务，仅在显式开启事务后有用
         /// </summary>
         void Rollback();
+        #endregion
 
+        #region 提交当前单元操作的更改
         /// <summary>
         /// 提交当前单元操作的更改
         /// </summary>
         int SaveChanges();
-        Task<int> SaveChangesAsync();
+        #endregion
 
+        #region 提交当前单元操作的更改
+        /// <summary>
+        /// 提交当前单元操作的更改
+        /// </summary>
+        /// <returns></returns>
+        Task<int> SaveChangesAsync();
+        #endregion
+
+        #region 获取 当前实体类型的查询数据集，数据将使用不跟踪变化的方式来查询，当数据用于展现时，推荐使用此数据集，如果用于新增，更新，删除时，请使用<see cref="TrackEntities"/>数据集
         /// <summary>
         /// 获取 当前实体类型的查询数据集，数据将使用不跟踪变化的方式来查询，当数据用于展现时，推荐使用此数据集，如果用于新增，更新，删除时，请使用<see cref="TrackEntities"/>数据集
         /// </summary>
         IQueryable<T> Entities { get; }
+        #endregion
 
+        #region 获取 当前实体类型的查询数据集，当数据用于新增，更新，删除时，使用此数据集，如果数据用于展现，推荐使用<see cref="Entities"/>数据集
         /// <summary>
         /// 获取 当前实体类型的查询数据集，当数据用于新增，更新，删除时，使用此数据集，如果数据用于展现，推荐使用<see cref="Entities"/>数据集
         /// </summary>
         IQueryable<T> TrackEntities { get; }
+        #endregion
 
-
-        #region 插入数据
+        #region 插入 - 通过实体对象添加
         /// <summary>
         /// 插入 - 通过实体对象添加
         /// </summary>
@@ -51,14 +69,13 @@ namespace Snblog.IRepository
         /// <param name="isSave">是否执行</param>
         /// /// <returns></returns>
         T Add(T entity, bool isSave = true);
-        Task<T> AysAdd(T entity, bool isSave = true);
+        Task<T> AddAsync(T entity, bool isSave = true);
         /// <summary>
         /// 批量插入 - 通过实体对象集合添加
         /// </summary>
         /// <param name="entitys">实体对象集合</param>
         /// <param name="isSave">是否执行</param>
         void AddRange(IEnumerable<T> entitys, bool isSave = true);
-
         bool Insert(T entity, bool isSaveChange);
         Task<bool> InsertAsync(T entity, bool isSaveChange);
         bool Insert(List<T> entitys, bool isSaveChange = true);
@@ -66,13 +83,11 @@ namespace Snblog.IRepository
 
         #endregion
 
-
         #region 删除(删除之前需要查询)
+
         bool Delete(List<T> entitys, bool isSaveChange);
         Task<bool> DeleteAsync(T entity, bool isSaveChange);
         Task<bool> DeleteAsync(List<T> entitys, bool isSaveChange = true);
-        #endregion
-
         /// <summary>
         /// 删除 - 通过实体对象删除
         /// </summary>
@@ -91,7 +106,7 @@ namespace Snblog.IRepository
         /// 删除 - 通过主键ID删除
         /// </summary>
         /// <param name="id">主键ID</param>
-        Task<int> AsyDelete(object id);
+        Task<int> DeleteAsync(object id);
         int Delete(object id);
         /// <summary>
         /// 批量删除 - 通过条件删除
@@ -99,28 +114,36 @@ namespace Snblog.IRepository
         /// <param name="where">过滤条件</param>
         /// <param name="isSave">是否执行</param>
         void Delete(Expression<Func<T, bool>> @where, bool isSave = true);
-
+        #endregion
 
         #region 修改数据
         bool Update(T entity, bool isSaveChange, List<string> updatePropertyList);
         Task<bool> UpdateAsync(T entity, bool isSaveChange, List<string> updatePropertyList);
+        /// <summary>
+        /// 更新单个字段
+        /// </summary>
+        /// <param name="entity">实体类</param>
+        /// <param name="isSaveChange">是否更新</param>
+        /// <param name="updatePropert">更新的字段</param>
+        /// <returns></returns>
+        Task<bool> UpdateAsync1(T entity, bool isSaveChange, string updatePropert);
         bool Update(List<T> entitys, bool isSaveChange);
         Task<bool> UpdateAsync(List<T> entitys, bool isSaveChange);
-        #endregion
-
 
         /// <summary>
         /// 修改 - 通过实体对象修改
         /// </summary>
         /// <param name="entity">实体对象</param>
-        Task<int> AysUpdate(T entity);
-
+        Task<int> UpdateAsync(T entity);
         int Update(T entity);
         /// <summary>
         /// 批量修改 - 通过实体对象集合修改
         /// </summary>
         /// <param name="entitys">实体对象集合</param>
         void Update(params T[] entitys);
+        #endregion
+
+        #region 查找数据
 
         /// <summary>
         /// 是否满足条件
@@ -134,7 +157,7 @@ namespace Snblog.IRepository
         /// </summary>
         /// <returns></returns>
         int Count();
-
+        Task<int> CountAsync();
         /// <summary>
         /// 返回总条数 - 通过条件过滤
         /// </summary>
@@ -143,12 +166,17 @@ namespace Snblog.IRepository
         int Count(Expression<Func<T, bool>> @where);
 
         /// <summary>
+        /// 返回总条数 - 通过条件过滤
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        Task<int> CountAsync(Expression<Func<T, bool>> @where);
+        /// <summary>
         /// 返回第一条记录
         /// </summary>
         /// <param name="where">过滤条件</param>
         /// <returns></returns>
         T FirstOrDefault(Expression<Func<T, bool>> @where);
-
         /// <summary>
         /// 返回第一条记录 - 通过条件过滤
         /// </summary>
@@ -158,11 +186,6 @@ namespace Snblog.IRepository
         /// <param name="isDesc">排序方式</param>
         /// <returns></returns>
         T FirstOrDefault<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false);
-
-        #region 查找数据
-
-
-
 
         /// <summary>
         /// 去重查询
@@ -184,7 +207,7 @@ namespace Snblog.IRepository
         /// </summary>
         /// <param name="where">过滤条件</param>
         /// <returns></returns>
-        Task< IQueryable<T>> WhereAsync(Expression<Func<T,bool>>@where);
+        Task<IQueryable<T>> WhereAsync(Expression<Func<T, bool>> @where);
 
         /// <summary>
         /// 条件查询 - 支持排序
@@ -195,7 +218,6 @@ namespace Snblog.IRepository
         /// <param name="isDesc">排序方式</param>
         /// <returns></returns>
         IQueryable<T> Where<TOrder>(Expression<Func<T, bool>> @where, Expression<Func<T, TOrder>> order, bool isDesc = false);
-
 
 
         /// <summary>
@@ -320,11 +342,8 @@ namespace Snblog.IRepository
 
         #endregion
 
-
         #region 执行Sql语句
-#pragma warning disable CS0693 // 类型参数“T”与外部类型“IRepositorys<T>”中的类型参数同名
         void BulkInsert<T>(List<T> entities);
-#pragma warning restore CS0693 // 类型参数“T”与外部类型“IRepositorys<T>”中的类型参数同名
         int ExecuteSql(string sql);
         Task<int> ExecuteSqlAsync(string sql);
         int ExecuteSql(string sql, List<DbParameter> spList);

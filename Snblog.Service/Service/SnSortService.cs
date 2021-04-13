@@ -21,7 +21,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetSort(int id)
         {
-            int da = await Task.Run(() => CreateService<SnSort>().AsyDelete(id));
+            int da = await Task.Run(() => CreateService<SnSort>().DeleteAsync(id));
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -45,12 +45,12 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnSort> AsyInsSort(SnSort test)
         {
-            return await CreateService<SnSort>().AysAdd(test);
+            return await CreateService<SnSort>().AddAsync(test);
         }
 
         public async Task<string> AysUpSort(SnSort test)
         {
-            int da = await CreateService<SnSort>().AysUpdate(test);
+            int da = await CreateService<SnSort>().UpdateAsync(test);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }

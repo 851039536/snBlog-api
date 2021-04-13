@@ -38,7 +38,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDelNavigation(int id)
         {
-            int da = await CreateService<SnNavigation>().AsyDelete(id);
+            int da = await CreateService<SnNavigation>().DeleteAsync(id);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -59,12 +59,12 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnNavigation> AsyIntNavigation(SnNavigation test)
         {
-            return await  CreateService<SnNavigation>().AysAdd(test);
+            return await  CreateService<SnNavigation>().AddAsync(test);
         }
 
         public async Task<string> AysUpNavigation(SnNavigation test)
         {
-            int da = await CreateService<SnNavigation>().AysUpdate(test);
+            int da = await CreateService<SnNavigation>().UpdateAsync(test);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }

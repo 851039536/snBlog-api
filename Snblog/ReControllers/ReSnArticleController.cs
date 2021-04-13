@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
+﻿using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IReService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Snblog.Models;
 using System.Threading.Tasks;
 
 namespace Snblog.Controllers
@@ -22,6 +18,7 @@ namespace Snblog.Controllers
             _service = service;
         }
         #endregion
+
         #region 查询总数 (缓存)
         /// <summary>
         /// 查询总数 (缓存)
@@ -118,5 +115,86 @@ namespace Snblog.Controllers
             return Ok(await _service.GetTypeFyTextAsync(type, pageIndex, pageSize, isDesc));
         }
         #endregion
+        #region 分页查询(条件排序)
+        /// <summary>
+        /// 分页查询(条件排序 缓存)
+        /// </summary>
+        /// <param name="type">查询条件[00查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
+        /// <param name="pageIndex">当前页码[1]</param>
+        /// <param name="pageSize">每页记录条数[10]</param>
+        /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <param name="order">排序条件[data:时间,read:阅读,give:点赞,comment:评论]默认按id排序</param>
+        /// <returns></returns>
+        [HttpGet("GetFyTypeorderAsync")]
+        public async Task<IActionResult> GetFyTypeorderAsync(int type, int pageIndex, int pageSize, string order, bool isDesc)
+        {
+            return Ok(await _service.GetFyTypeorderAsync(type, pageIndex, pageSize, order, isDesc));
+        }
+        #endregion
+        #region 标签ID查询 (缓存)
+        /// <summary>
+        /// 标签ID查询 (缓存)
+        /// </summary>
+        /// <param name="labelId">标签id</param>
+        /// <param name="isDesc"></param>
+        /// <returns></returns>
+        [HttpGet("GetTagtextAsync")]
+        public async Task<IActionResult> GetTagtextAsync(int labelId, bool isDesc)
+        {
+            return Ok(await _service.GetTagtextAsync(labelId, isDesc));
+        }
+        #endregion
+        #region 添加数据
+        /// <summary>
+        /// 添加数据
+        /// </summary>
+        /// <returns></returns>
+        //[Authorize(Roles = "kai")] //角色授权
+        [HttpPost("AddAsync")]
+        public async Task<ActionResult<SnArticle>> AddAsync(SnArticle Entity)
+        {
+            return Ok(await _service.AddAsync(Entity));
+        }
+        #endregion
+        #region 更新数据
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="Entity"></param>
+        /// <returns></returns>
+        [HttpPut("UpdateAsync")]
+        public async Task<IActionResult> UpdateAsync(SnArticle Entity)
+        {
+            var data = await _service.UpdateAsync(Entity);
+            return Ok(data);
+        }
+        #endregion
+        #region 更新部分列[comment give read]
+        /// <summary>
+        /// 更新部分列[comment give read]
+        /// </summary>
+        /// <param name="Entity">对象</param>
+        /// <param name="type">更新字段</param>
+        /// <returns></returns>
+        [HttpPut("UpdatePortionAsync")]
+        public async Task<IActionResult> UpdatePortionAsync(SnArticle Entity, string type)
+        {
+            return Ok(await _service.UpdatePortionAsync(Entity, type));
+        }
+        #endregion
+        #region 删除数据
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+       //  [Authorize(Roles = "kai")] //角色授权
+        [HttpDelete("DeleteAsync")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            return Ok(await _service.DeleteAsync(id));
+        }
+        #endregion
+
     }
 }

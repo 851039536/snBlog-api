@@ -16,7 +16,7 @@ namespace Snblog.Service
 
         public async Task<string> AsyDetUserId(int userId)
         {
-            int da = await  CreateService<SnUser>().AsyDelete(userId);
+            int da = await  CreateService<SnUser>().DeleteAsync(userId);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -35,12 +35,12 @@ namespace Snblog.Service
 
         public async Task<SnUser> AsyInsUser(SnUser test)
         {
-            return await CreateService<SnUser>().AysAdd(test);
+            return await CreateService<SnUser>().AddAsync(test);
         }
 
         public async Task<string> AysUpUser(SnUser user)
         {
-           int da = await CreateService<SnUser>().AysUpdate(user);
+           int da = await CreateService<SnUser>().UpdateAsync(user);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }

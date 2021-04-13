@@ -9,11 +9,6 @@ namespace Snblog.IService
     /// </summary>
     public interface ISnArticleService
     {
-        /// <summary>
-        /// 查询所有
-        /// </summary>
-        /// <returns></returns>
-        List<SnArticle> GetTest();
 
         /// <summary>
         /// 查询所有
@@ -71,6 +66,12 @@ namespace Snblog.IService
         /// <returns></returns>
         Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc);
 
+        /// <summary>
+        /// 按标签id查询
+        /// </summary>
+        /// <param name="tag">标签id</param>
+        /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <returns></returns>
         Task<List<SnArticle>> GetTagtextAsync(int tag,bool isDesc);
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Snblog.IService
         /// <summary>
         /// 按id删除
         /// </summary>
-        Task<string> AsyDetArticleId(int id);
+        Task<bool> DeleteAsync(int id);
 
 
 
@@ -90,11 +91,15 @@ namespace Snblog.IService
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnArticle> AsyInsArticle(SnArticle test);
+        Task<bool> AddAsync(SnArticle Entity);
 
 
-
-        Task<string> AysUpArticle(SnArticle test);
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="Entity"></param>
+        /// <returns></returns>
+        Task<bool> UpdateAsync(SnArticle Entity);
 
       /// <summary>
       /// 更新部分列[comment give read]

@@ -97,7 +97,7 @@ namespace Snblog.Repository
             return entity;
         }
 
-        public async Task<T> AysAdd(T entity, bool isSave = true)
+        public async Task<T> AddAsync(T entity, bool isSave = true)
         {
             await _dbSet.AddAsync(entity);
             if (isSave)
@@ -134,7 +134,7 @@ namespace Snblog.Repository
             }
         }
 
-        public async Task<int> AsyDelete(object id)
+        public async Task<int> DeleteAsync(object id)
         {
             int data = 0;
             //执行查询
@@ -182,7 +182,7 @@ namespace Snblog.Repository
             }
         }
 
-        public async Task<int> AysUpdate(T entity)
+        public async Task<int> UpdateAsync(T entity)
         {
             var entry = _dbContext.Entry(entity);
             if (entry.State == EntityState.Detached)
@@ -276,22 +276,23 @@ namespace Snblog.Repository
             count = Count();
             if (isDesc)
             {
-                
-                return  _dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+
+                return _dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
             else
             {
                 return this._dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
-        } public async Task<IEnumerable<T>> WherepageAsync<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, bool isDesc)
+        }
+        public async Task<IEnumerable<T>> WherepageAsync<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, bool isDesc)
         {
             if (isDesc)
             {
-                return await Task.Run(()=> _dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize));
+                return await Task.Run(() => _dbSet.Where(@where).OrderByDescending(order).Skip((pageIndex - 1) * pageSize).Take(pageSize));
             }
             else
             {
-                return await Task.Run(()=>_dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize));
+                return await Task.Run(() => _dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize));
             }
         }
 
@@ -321,9 +322,9 @@ namespace Snblog.Repository
             }
         }
 
-        public  IQueryable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return  _dbSet.AsNoTracking();
+            return _dbSet.AsNoTracking();
         }
 
         public IQueryable<T> GetAll<TOrder>(Expression<Func<T, TOrder>> order, bool isDesc = false)
@@ -566,7 +567,7 @@ namespace Snblog.Repository
             }
             return false;
         }
-        public async Task<bool> UpdateAsync(T entity, bool isSaveChange = true, List<string> updatePropertyList = null)
+        public async Task<bool> UpdateAsync(T entity, bool isSaveChange, List<string> updatePropertyList)
         {
             if (entity == null)
             {
@@ -666,17 +667,48 @@ namespace Snblog.Repository
 
         public async Task<List<T>> GetAllAsync()
         {
-           return  await _dbSet.AsNoTracking().ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
 #pragma warning disable CS1998 // 此异步方法缺少 "await" 运算符，将以同步方式运行。请考虑使用 "await" 运算符等待非阻止的 API 调用，或者使用 "await Task.Run(...)" 在后台线程上执行占用大量 CPU 的工作。
-        public async  Task< IQueryable<T>> WhereAsync(Expression<Func<T, bool>> where)
+        public async Task<IQueryable<T>> WhereAsync(Expression<Func<T, bool>> where)
 #pragma warning restore CS1998 // 此异步方法缺少 "await" 运算符，将以同步方式运行。请考虑使用 "await" 运算符等待非阻止的 API 调用，或者使用 "await Task.Run(...)" 在后台线程上执行占用大量 CPU 的工作。
         {
-            return   _dbSet.Where(@where);
+            return _dbSet.Where(@where);
         }
 
+        public async Task<bool> UpdateAsync1(T entity, bool isSaveChange, string updatePropert)
+        {
+            if (entity == null)
+            {
+                return false;
+            }
+            _dbSet.Attach(entity);
+            var entry = _dbContext.Entry<T>(entity);
+            if (updatePropert == null)
+            {
+                entry.State = EntityState.Modified;//全字段更新
+            }
+            else
+            {
+                entry.Property(updatePropert).IsModified = true; //部分字段更新的写法
+            }
+            if (isSaveChange)
+            {
+                return await SaveChangesAsync() > 0;
+            }
+            return false;
+        }
 
+        public async Task<int> CountAsync()
+        {
+            return await _dbSet.AsNoTracking().CountAsync();
+        }
+
+        public async Task<int> CountAsync(Expression<Func<T, bool>> where)
+        {
+            return await _dbSet.AsNoTracking().CountAsync(@where);
+        }
         #endregion
 
 

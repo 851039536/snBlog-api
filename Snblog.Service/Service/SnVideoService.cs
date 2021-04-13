@@ -17,7 +17,7 @@ namespace Snblog.Service
 
         public async Task<string> AsyDetVideo(int id)
         {
-            int da = await  CreateService<SnVideo>().AsyDelete(id);
+            int da = await  CreateService<SnVideo>().DeleteAsync(id);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -36,14 +36,14 @@ namespace Snblog.Service
 
         public async Task<SnVideo> AsyInsVideo(SnVideo test)
         {
-            return await CreateService<SnVideo>().AysAdd(test);
+            return await CreateService<SnVideo>().AddAsync(test);
         }
 
         public async Task<string> AysUpVideo(SnVideo test)
         {
             try
             {
-                int da = await CreateService<SnVideo>().AysUpdate(test);
+                int da = await CreateService<SnVideo>().UpdateAsync(test);
                 string data = da == 1 ? "更新成功" : "更新失败";
                 return data;
             }
