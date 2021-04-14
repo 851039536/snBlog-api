@@ -1,26 +1,23 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
+using Snblog.IService.IReService;
 using Snblog.Models;
-//默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
-namespace Snblog.Controllers
+using System.Threading.Tasks;
+
+namespace Snblog.ReControllers
 {
     [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    [ApiExplorerSettings(GroupName = "V2")] //版本控制
     [ApiController]
-    public class SnLabelsController : ControllerBase
+    public class ReSnLabelsController : ControllerBase
     {
+        private readonly IReSnLabelsService _service; //IOC依赖注入
 
-        private readonly ISnLabelsService _service; //IOC依赖注入
-
-        public SnLabelsController(ISnLabelsService service)
+        public ReSnLabelsController(IReSnLabelsService service)
         {
             _service = service;
         }
-
-        # region 查询所有
+        # region 查询所有 (缓存)
         /// <summary>
         /// 查询所有 (缓存)
         /// </summary>
@@ -42,8 +39,8 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetByIdAsync(id));
         }
-        #endregion
-        #region 分页查询 (缓存)
+        # endregion
+        # region 分页查询 (缓存)
         /// <summary>
         /// 分页查询 (缓存)
         /// </summary>
@@ -67,9 +64,9 @@ namespace Snblog.Controllers
             return Ok(await _service.GetCountAsync());
         }
         #endregion
-        #region 添加标签 (权限)
+        # region  添加数据 (权限)
         /// <summary>
-        /// 添加标签 (权限)
+        /// 添加数据 （权限）
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
@@ -80,9 +77,9 @@ namespace Snblog.Controllers
             return Ok(await _service.AddAsync(Entity));
         }
         #endregion
-        #region 更新标签 (权限)
+        #region 更新数据 (权限)
         /// <summary>
-        /// 更新标签 (权限)
+        /// 更新数据 (权限)
         /// </summary>
         /// <param name="Entity">标签id</param>
         /// <returns></returns>
@@ -93,7 +90,7 @@ namespace Snblog.Controllers
             var data = await _service.UpdateAsync(Entity);
             return Ok(data);
         }
-        #endregion
+        # endregion
         # region 删除数据 (权限)
         /// <summary>
         /// 删除数据 (权限)

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Snblog.IRepository;
+using Snblog.Cache.CacheUtil;
 using Snblog.IService;
 using Snblog.Models;
 using System.Collections.Generic;
@@ -8,79 +8,116 @@ using System.Threading.Tasks;
 
 namespace Snblog.Service
 {
-    public class SnLabelsService : BaseService, ISnLabelsService
+    public class SnLabelsService : ISnLabelsService
     {
-        public SnLabelsService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        private readonly snblogContext _service;//DB
+        private readonly CacheUtil _cacheUtil;
+        private int result_Int;
+        private List<SnLabels> result_List = null;
+        public SnLabelsService(ICacheUtil cacheUtil, snblogContext coreDbContext) 
         {
+            _service = coreDbContext;
+            _cacheUtil = (CacheUtil)cacheUtil;
         }
-
 
         /// <summary>
         /// 删除
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<string> AsyDetLabels(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            int da = await CreateService<SnLabels>().DeleteAsync(id);
-            string data = da == 1 ? "删除成功" : "删除失败";
-            return data;
+             var todoItem = await _service.SnLabels.FindAsync(id);
+            if (todoItem == null) return false;
+            _service.SnLabels.Remove(todoItem);
+            return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<SnLabels>> AsyGetLabels()
+        public async Task<SnLabels> GetByIdAsync(int id)
         {
-            var data = CreateService<SnLabels>();
-            return await data.GetAll().ToListAsync();
-        }
-
-        public async Task<List<SnLabels>> AsyGetLabelsId(int id)
-        {
-            var data = CreateService<SnLabels>().Where(s => s.LabelId == id);
-            return await data.ToListAsync();
+            SnLabels labels = null;
+            labels = _cacheUtil.CacheString("GetByIdAsync" + id, labels);
+            if (labels == null)
+            {
+                labels = await _service.SnLabels.FindAsync(id);
+                _cacheUtil.CacheString("GetByIdAsync" + id, labels);
+            }
+            return labels;
         }
 
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="Entity"></param>
         /// <returns></returns>
-        public async Task<SnLabels> AsyInsLabels(SnLabels test)
+        public async Task<bool> AddAsync(SnLabels Entity)
         {
-            return await CreateService<SnLabels>().AddAsync(test);
+            await _service.SnLabels.AddAsync(Entity);
+            return await _service.SaveChangesAsync() > 0;
         }
 
         /// <summary>
-        /// 更新
+        /// 更新数据
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="Entity"></param>
         /// <returns></returns>
-        public async Task<string> AysUpLabels(SnLabels test)
+        public async Task<bool> UpdateAsync(SnLabels Entity)
         {
-            int da = await CreateService<SnLabels>().UpdateAsync(test);
-            string data = da == 1 ? "更新成功" : "更新失败";
-            return data;
+            _service.SnLabels.Update(Entity);
+             return await _service.SaveChangesAsync()>0;
+            
         }
 
         /// <summary>
-        /// 查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
-        public List<SnLabels> GetLabels()
+        public async Task<List<SnLabels>> GetAllAsync()
         {
-            var data = this.CreateService<SnLabels>();
-            return data.GetAll().ToList();
+            result_List = _cacheUtil.CacheString("GetAllAsync", result_List);
+            if (result_List == null)
+            {
+                result_List = await _service.SnLabels.ToListAsync();
+                _cacheUtil.CacheString("GetAllAsync", result_List);
+            }
+            return result_List;
         }
 
-        public int GetLabelsCount()
+        public async Task<int> GetCountAsync()
         {
-            int data = CreateService<SnLabels>().Count();
-            return data;
+            result_Int = _cacheUtil.CacheNumber("GetCountAsync", result_Int);
+            if (result_Int == 0)
+            {
+                result_Int = await _service.SnLabels.CountAsync();
+                _cacheUtil.CacheNumber("GetCountAsync", result_Int);
+            }
+            return result_Int;
         }
 
-        public List<SnLabels> GetPagingWhere( int pageIndex, int pageSize, out int count, bool isDesc)
+        public async Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-             var data = CreateService<SnLabels>().Wherepage(s => true, c => c.LabelId, pageIndex, pageSize, out count, isDesc);
-            return data.ToList();
+
+            result_List = _cacheUtil.CacheString("GetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
+            if (result_List == null)
+            {
+                await GetfyAll(pageIndex, pageSize, isDesc);
+                _cacheUtil.CacheString("GetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
+            }
+            return result_List;
+
+        }
+        private async Task GetfyAll(int pageIndex, int pageSize, bool isDesc)
+        {
+            if (isDesc)
+            {
+                result_List = await _service.SnLabels.OrderByDescending(c => c.LabelId).Skip((pageIndex - 1) * pageSize)
+                       .Take(pageSize).ToListAsync();
+            }
+            else
+            {
+                result_List = await _service.SnLabels.OrderBy(c => c.LabelId).Skip((pageIndex - 1) * pageSize)
+                         .Take(pageSize).ToListAsync();
+            }
         }
     }
 }

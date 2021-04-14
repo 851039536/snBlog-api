@@ -187,6 +187,7 @@ namespace Snblog
             services.AddScoped<ICacheUtil, CacheUtil>();
             services.AddSingleton<ICacheManager, CacheManager>(); //缓存-整个应用程序生命周期以内只创建一个实例 
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
+            services.AddScoped<IReSnLabelsService, ReSnLabelsService>();
 
             #endregion
             services.AddControllers();

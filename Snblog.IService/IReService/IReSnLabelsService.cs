@@ -1,24 +1,24 @@
 ﻿using Snblog.Models;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Snblog.IService
+namespace Snblog.IService.IReService
 {
-    public interface ISnLabelsService
+    public interface IReSnLabelsService
     {
         /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
         Task<List<SnLabels>> GetAllAsync();
-
         /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<SnLabels> GetByIdAsync(int id);
-
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
@@ -32,23 +32,22 @@ namespace Snblog.IService
         /// </summary>
         /// <returns></returns>
         Task<int> GetCountAsync();
-
         /// <summary>
         /// 添加数据
         /// </summary>
         /// <returns></returns>
-        Task<bool> AddAsync(SnLabels Entity);
+        Task<SnLabels> AddAsync(SnLabels Entity);
 
         /// <summary>
         /// 更新数据
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnLabels Entity);
+        Task<string> UpdateAsync(SnLabels Entity);
 
         /// <summary>
-        /// 异步按id删除
+        /// 按id删除
         /// </summary>
-        Task<bool> DeleteAsync(int id);
+        Task<string> DeleteAsync(int id);
     }
 }
