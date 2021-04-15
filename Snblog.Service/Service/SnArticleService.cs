@@ -1,16 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Snblog.Cache.CacheUtil;
 using Snblog.IService;
 using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Snblog.Service
+namespace Snblog.Service.Service
 {
     public class SnArticleService : ISnArticleService
     {
@@ -74,7 +73,6 @@ namespace Snblog.Service
         /// <param name="label"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
         public async Task<List<SnArticle>> GetPagingWhereAsync(int label, int pageIndex, int pageSize, bool isDesc)
         {
@@ -119,20 +117,20 @@ namespace Snblog.Service
         }
 
 
-        /// <summary>
-        /// 添加数据
-        /// </summary>
-        /// <param name="test"></param>
-        /// <returns></returns>
-        public async Task<bool> AddAsync(SnArticle Entity)
+       /// <summary>
+       /// 添加数据
+       /// </summary>
+       /// <param name="entity"></param>
+       /// <returns></returns>
+        public async Task<bool> AddAsync(SnArticle entity)
         {
-            await _service.SnArticle.AddAsync(Entity);
+            await _service.SnArticle.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UpdateAsync(SnArticle Entity)
+        public async Task<bool> UpdateAsync(SnArticle entity)
         {
-            _service.SnArticle.Update(Entity);
+            _service.SnArticle.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -217,8 +215,6 @@ namespace Snblog.Service
                     {
                         num += item;
                     }
-                    break;
-                default:
                     break;
             }
 
@@ -328,6 +324,7 @@ namespace Snblog.Service
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
+        /// <param name="isDesc"></param>
         /// <returns></returns>
         private async Task<List<SnArticle>> GetFyTitle(int pageIndex, int pageSize, bool isDesc)
         {

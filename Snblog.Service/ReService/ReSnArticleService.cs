@@ -3,10 +3,8 @@ using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
 using Snblog.IService.IReService;
 using Snblog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.Service.ReService
@@ -84,10 +82,11 @@ namespace Snblog.Service.ReService
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
+        /// <param name="isDesc"></param>
         /// <returns></returns>
         private async Task<List<SnArticle>> GetFyTitle(int pageIndex, int pageSize, bool isDesc)
         {
-            var data = await Task.Run(() => CreateService<SnArticle>().Wherepage(s => true, c => c.article_id, pageIndex, pageSize, out int count, isDesc).Select(s => new
+            var data = await Task.Run(() => CreateService<SnArticle>().Wherepage(s => true, c => c.article_id, pageIndex, pageSize, out _, isDesc).Select(s => new
             {
                 s.article_id,
                 s.title,
@@ -169,8 +168,6 @@ namespace Snblog.Service.ReService
                     {
                         num += item;
                     }
-                    break;
-                default:
                     break;
             }
 
@@ -283,22 +280,22 @@ namespace Snblog.Service.ReService
 
         }
 
-        public async Task<SnArticle> AddAsync(SnArticle Entity)
+        public async Task<SnArticle> AddAsync(SnArticle entity)
         {
-            return await CreateService<SnArticle>().AddAsync(Entity);
+            return await CreateService<SnArticle>().AddAsync(entity);
         }
 
-        public async Task<string> UpdateAsync(SnArticle Entity)
+        public async Task<string> UpdateAsync(SnArticle entity)
         {
-            int result = await CreateService<SnArticle>().UpdateAsync(Entity);
+            int result = await CreateService<SnArticle>().UpdateAsync(entity);
             string Func(int data) => data == 1 ? "更新成功" : "更新失败";
             return Func(result);
         }
 
         public async Task<string> DeleteAsync(int id)
         {
-            int resultID = await Task.Run(() => CreateService<SnArticle>().DeleteAsync(id));
-            string result = resultID == 1 ? "删除成功" : "删除失败";
+            int resultId = await Task.Run(() => CreateService<SnArticle>().DeleteAsync(id));
+            string result = resultId == 1 ? "删除成功" : "删除失败";
             return result;
         }
 

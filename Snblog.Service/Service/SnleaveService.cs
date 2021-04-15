@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Snblog.IService.IService;
 using Snblog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
@@ -18,9 +16,9 @@ namespace Snblog.Service.Service
             _coreDbContext = coreDbContext;
         }
 
-        public async Task<bool> AddAsync(SnLeave Entity)
+        public async Task<bool> AddAsync(SnLeave entity)
         {
-            await _coreDbContext.SnLeave.AddAsync(Entity);
+            await _coreDbContext.SnLeave.AddAsync(entity);
             return await _coreDbContext.SaveChangesAsync() > 0;
         }
 
@@ -62,9 +60,9 @@ namespace Snblog.Service.Service
             }
         }
 
-        public async Task<bool> UpdateAsync(SnLeave Entity)
+        public async Task<bool> UpdateAsync(SnLeave entity)
         {
-            _coreDbContext.SnLeave.Update(Entity);
+            _coreDbContext.SnLeave.Update(entity);
             return await _coreDbContext.SaveChangesAsync() > 0;
         }
     }

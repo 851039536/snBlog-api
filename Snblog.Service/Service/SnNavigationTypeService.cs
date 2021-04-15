@@ -16,9 +16,9 @@ namespace Snblog.Service.Service
             _coreDbContext = coreDbContext;
         }
 
-        public async Task<bool> AddAsync(SnNavigationType Entity)
+        public async Task<bool> AddAsync(SnNavigationType entity)
         {
-            await _coreDbContext.SnNavigationType.AddAsync(Entity);
+            await _coreDbContext.SnNavigationType.AddAsync(entity);
             return await _coreDbContext.SaveChangesAsync() > 0;
         }
 
@@ -80,9 +80,9 @@ namespace Snblog.Service.Service
             }
         }
 
-        public async Task<bool> UpdateAsync(SnNavigationType Entity)
+        public async Task<bool> UpdateAsync(SnNavigationType entity)
         {
-            _coreDbContext.SnNavigationType.Update(Entity);
+            _coreDbContext.SnNavigationType.Update(entity);
             return await _coreDbContext.SaveChangesAsync() > 0;
         }
     }

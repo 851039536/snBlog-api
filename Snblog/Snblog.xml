@@ -85,7 +85,7 @@
             <summary>
             更新数据
             </summary>
-            <param name="test"></param>
+            <param name="Entity"></param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnLabelsController.GetLabels">
@@ -148,42 +148,42 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.GetNavigationId(System.Int32)">
+        <member name="M:Snblog.Controllers.SnNavigationController.GetByIdAsync(System.Int32)">
              <summary>
             根据id查询
              </summary>
              <param name="id">Navigation id</param>
              <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.GetNavigationCount">
+        <member name="M:Snblog.Controllers.SnNavigationController.GetCountAsync">
             <summary>
             Navigation表总数
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.GetNavigationCountType(System.String)">
+        <member name="M:Snblog.Controllers.SnNavigationController.CountTypeAsync(System.String)">
             <summary>
             条件查询Navigation总数
             </summary>
             <param name="type">分类</param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.GetDistTest(System.String)">
+        <member name="M:Snblog.Controllers.SnNavigationController.GetDistinct(System.String)">
             <summary>
             去重查询
             </summary>
             <param name="type">查询条件</param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.AsyGetWhereTest(System.String,System.Boolean)">
+        <member name="M:Snblog.Controllers.SnNavigationController.GetTypeOrderAsync(System.String,System.Boolean)">
             <summary>
             条件-排序-查询
             </summary>
             <param name="type">分类条件</param>
-            <param name="fag">排序</param>
+            <param name="Order">排序</param>
             <returns>List</returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.GetfyNavigation(System.String,System.Int32,System.Int32,System.Boolean)">
+        <member name="M:Snblog.Controllers.SnNavigationController.GetfyAllAsync(System.String,System.Int32,System.Int32,System.Boolean)">
             <summary>
             条件分页查询 - 支持排序
             </summary>
@@ -192,20 +192,20 @@
             <param name="pageSize">每页记录条数</param>
             <param name="isDesc">是否倒序</param>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.AsyIntNavigation(Snblog.Models.SnNavigation)">
+        <member name="M:Snblog.Controllers.SnNavigationController.AddAsync(Snblog.Models.SnNavigation)">
             <summary>
             添加数据
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.AysUpNavigation(Snblog.Models.SnNavigation)">
+        <member name="M:Snblog.Controllers.SnNavigationController.UpdateAsync(Snblog.Models.SnNavigation)">
             <summary>
             更新数据
             </summary>
-            <param name="test"></param>
+            <param name="Entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnNavigationController.AsyDelNavigation(System.Int32)">
+        <member name="M:Snblog.Controllers.SnNavigationController.DeleteAsync(System.Int32)">
             <summary>
             删除数据
             </summary>
@@ -640,7 +640,7 @@
             <summary>
             更新视频
             </summary>
-            <param name="test"></param>
+            <param name="Entity"></param>
             <returns></returns>
         </member>
         <member name="M:Snblog.Controllers.SnVideoTypeController.AsyGestTest">

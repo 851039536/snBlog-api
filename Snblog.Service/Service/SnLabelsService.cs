@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
 using Snblog.IService;
 using Snblog.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Snblog.Service
+namespace Snblog.Service.Service
 {
     public class SnLabelsService : ISnLabelsService
     {
@@ -48,22 +48,22 @@ namespace Snblog.Service
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<bool> AddAsync(SnLabels Entity)
+        public async Task<bool> AddAsync(SnLabels entity)
         {
-            await _service.SnLabels.AddAsync(Entity);
+            await _service.SnLabels.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateAsync(SnLabels Entity)
+        public async Task<bool> UpdateAsync(SnLabels entity)
         {
-            _service.SnLabels.Update(Entity);
+            _service.SnLabels.Update(entity);
              return await _service.SaveChangesAsync()>0;
             
         }

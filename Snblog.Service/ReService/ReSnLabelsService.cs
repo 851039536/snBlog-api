@@ -1,13 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.Cache.CacheUtil;
+﻿using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
-using Snblog.IService;
 using Snblog.IService.IReService;
 using Snblog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Snblog.Service.ReService
@@ -73,21 +69,21 @@ namespace Snblog.Service.ReService
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<SnLabels> AddAsync(SnLabels Entity)
+        public async Task<SnLabels> AddAsync(SnLabels entity)
         {
-            return await CreateService<SnLabels>().AddAsync(Entity);
+            return await CreateService<SnLabels>().AddAsync(entity);
         }
 
-         /// <summary>
+        /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<string> UpdateAsync(SnLabels Entity)
+        public async Task<string> UpdateAsync(SnLabels entity)
         {
-            int da = await CreateService<SnLabels>().UpdateAsync(Entity);
+            int da = await CreateService<SnLabels>().UpdateAsync(entity);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }

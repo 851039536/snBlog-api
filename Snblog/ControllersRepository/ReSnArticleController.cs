@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IReService;
 using Snblog.Models;
-using System.Threading.Tasks;
 
-namespace Snblog.Controllers
+namespace Snblog.ControllersRepository
 {
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V2")] //版本控制

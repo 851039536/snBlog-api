@@ -28,7 +28,7 @@ namespace Snblog
 {
     public class Startup
     {
-
+         
         # region 版本控制枚举
         /// <summary>
         /// 版本控制
@@ -183,17 +183,16 @@ namespace Snblog
             services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
-
             services.AddScoped<ICacheUtil, CacheUtil>();
             services.AddSingleton<ICacheManager, CacheManager>(); //缓存-整个应用程序生命周期以内只创建一个实例 
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
             services.AddScoped<IReSnLabelsService, ReSnLabelsService>();
+            services.AddScoped<IReSnNavigationService, ReSnNavigationService>();
 
             #endregion
             services.AddControllers();
 
         }
-
 
         // 运行时将调用此方法。 使用此方法来配置HTTP请求管道。
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IReService;
 using Snblog.Models;
-using System.Threading.Tasks;
 
-namespace Snblog.ReControllers
+namespace Snblog.ControllersRepository
 {
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V2")] //版本控制

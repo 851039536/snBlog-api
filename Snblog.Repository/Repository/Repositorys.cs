@@ -662,7 +662,7 @@ namespace Snblog.Repository
 
         IQueryable<T> IRepositorys<T>.GetAll()
         {
-            throw new NotImplementedException();
+            return  _dbSet.AsNoTracking();
         }
 
         public async Task<List<T>> GetAllAsync()

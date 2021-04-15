@@ -1,21 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
-using Snblog.IService.IService;
+using Snblog.IService.IReService;
 using Snblog.Models;
 
-//默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
-namespace Snblog.Controllers
+namespace Snblog.ControllersRepository
 {
     [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    [ApiExplorerSettings(GroupName = "V2")] //版本控制
     [ApiController]
-    public class SnNavigationController : ControllerBase
+    public class ReSnNavigationController : ControllerBase
     {
-        private readonly ISnNavigationService _service; //IOC依赖注入
-        public SnNavigationController(ISnNavigationService service)
+        private readonly IReSnNavigationService _service; //IOC依赖注入
+
+        public ReSnNavigationController(IReSnNavigationService service)
         {
             _service = service;
         }
@@ -64,10 +62,8 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.CountTypeAsync(type));
         }
-
         #endregion
         #region 去重查询 (缓存)
-
         /// <summary>
         /// 去重查询 (缓存)
         /// </summary>
@@ -78,7 +74,6 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetDistinct(type));
         }
-
         #endregion
         #region 条件查询 (缓存 排序)
         /// <summary>
@@ -133,7 +128,7 @@ namespace Snblog.Controllers
         }
         #endregion
         #region 删除数据 (权限)
-         /// <summary>
+        /// <summary>
         /// 删除数据 (权限)
         /// </summary>
         /// <param name="id">主键</param>
@@ -145,7 +140,5 @@ namespace Snblog.Controllers
             return Ok(await _service.DeleteAsync(id));
         }
         #endregion
-       
-
     }
 }

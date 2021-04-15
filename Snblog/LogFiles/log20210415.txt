@@ -1,10 +1,37 @@
-2021-04-14 09:42:43.488 +08:00 [INF] 启动主机
-2021-04-14 09:46:22.848 +08:00 [INF] 启动主机
-2021-04-14 09:53:43.219 +08:00 [INF] 启动主机
-2021-04-14 09:56:40.348 +08:00 [INF] 启动主机
-2021-04-14 10:03:38.535 +08:00 [INF] 启动主机
-2021-04-14 10:11:22.309 +08:00 [INF] 启动主机
-2021-04-14 10:13:44.567 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+2021-04-15 09:18:26.131 +08:00 [INF] 启动主机
+2021-04-15 09:53:06.822 +08:00 [INF] 启动主机
+2021-04-15 09:53:07.626 +08:00 [FTL] 主机意外终止
+System.AggregateException: Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: Snblog.IService.IReService.IReSnNavigationService Lifetime: Scoped ImplementationType: Snblog.Service.ReService.ReSnNavigationService': Unable to resolve service for type 'Snblog.Cache.CacheUtil.CacheUtil' while attempting to activate 'Snblog.Service.ReService.ReSnNavigationService'.)
+ ---> System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IReService.IReSnNavigationService Lifetime: Scoped ImplementationType: Snblog.Service.ReService.ReSnNavigationService': Unable to resolve service for type 'Snblog.Cache.CacheUtil.CacheUtil' while attempting to activate 'Snblog.Service.ReService.ReSnNavigationService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Cache.CacheUtil.CacheUtil' while attempting to activate 'Snblog.Service.ReService.ReSnNavigationService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, ServiceProviderOptions options)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.DefaultServiceProviderFactory.CreateServiceProvider(IServiceCollection containerBuilder)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at Snblog.Program.Main(String[] args) in F:\Test\netCore\Snblog\Snblog\Program.cs:line 29
+2021-04-15 09:54:36.031 +08:00 [INF] 启动主机
+2021-04-15 10:06:46.202 +08:00 [INF] 启动主机
+2021-04-15 10:14:32.713 +08:00 [INF] 启动主机
+2021-04-15 10:27:39.127 +08:00 [INF] 启动主机
+2021-04-15 10:40:30.670 +08:00 [INF] 启动主机
+2021-04-15 10:43:03.243 +08:00 [INF] 启动主机
+2021-04-15 10:46:09.542 +08:00 [INF] 启动主机
+2021-04-15 10:52:51.642 +08:00 [INF] 启动主机
+2021-04-15 10:53:50.416 +08:00 [INF] 启动主机
+2021-04-15 10:58:44.257 +08:00 [INF] 启动主机
+2021-04-15 11:31:28.821 +08:00 [INF] 启动主机
+2021-04-15 11:31:47.474 +08:00 [ERR] An unhandled exception has occurred while executing the request.
 System.Text.Json.JsonException: A possible object cycle was detected which is not supported. This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32.
    at System.Text.Json.ThrowHelper.ThrowInvalidOperationException_SerializerCycleDetected(Int32 maxDepth)
    at System.Text.Json.JsonSerializer.Write(Utf8JsonWriter writer, Int32 originalWriterDepth, Int32 flushThreshold, JsonSerializerOptions options, WriteStack& state)
@@ -26,10 +53,11 @@ System.Text.Json.JsonException: A possible object cycle was detected which is no
    at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
    at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 105
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
-2021-04-14 10:13:44.836 +08:00 [ERR] Failed executing DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+2021-04-15 11:31:47.802 +08:00 [ERR] Failed executing DbCommand (81ms) [Parameters=[@__type_0='?' (Size = 20)], CommandType='"Text"', CommandTimeout='30']
 SELECT COUNT(*)
-FROM `sn_labels` AS `s`
-2021-04-14 10:13:44.869 +08:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Snblog.Models.snblogContext'.
+FROM `sn_navigation` AS `s`
+WHERE `s`.`nav_type` = @__type_0
+2021-04-15 11:31:48.135 +08:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Snblog.Models.snblogContext'.
 System.ObjectDisposedException: Cannot access a disposed object.
 Object name: 'MySqlConnection'.
    at MySql.Data.MySqlClient.MySqlConnection.VerifyNotDisposed() in C:\projects\mysqlconnector\src\MySqlConnector\MySql.Data.MySqlClient\MySqlConnection.cs:line 707
@@ -56,31 +84,32 @@ Object name: 'MySqlConnection'.
    at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
    at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
-2021-04-14 10:14:22.408 +08:00 [INF] 启动主机
-2021-04-14 10:15:15.786 +08:00 [INF] 启动主机
-2021-04-14 10:34:19.158 +08:00 [INF] 启动主机
-2021-04-14 10:51:56.160 +08:00 [INF] 雄翋儂
-2021-04-14 10:53:37.816 +08:00 [INF] 雄翋儂
-2021-04-14 11:22:50.144 +08:00 [INF] 雄翋儂
-2021-04-14 11:28:15.786 +08:00 [INF] 雄翋儂
-2021-04-14 11:28:58.287 +08:00 [INF] 雄翋儂
-2021-04-14 11:31:14.198 +08:00 [INF] 雄翋儂
-2021-04-14 11:37:00.339 +08:00 [INF] 雄翋儂
-2021-04-14 11:37:45.800 +08:00 [INF] 雄翋儂
-2021-04-14 11:40:21.634 +08:00 [INF] 雄翋儂
-2021-04-14 11:41:03.226 +08:00 [INF] 雄翋儂
-2021-04-14 11:49:47.590 +08:00 [INF] 雄翋儂
-2021-04-14 11:54:13.504 +08:00 [INF] 雄翋儂
-2021-04-14 12:01:01.123 +08:00 [INF] 雄翋儂
-2021-04-14 15:48:39.668 +08:00 [INF] 雄翋儂
-2021-04-14 15:51:35.392 +08:00 [ERR] An unhandled exception has occurred while executing the request.
-System.NotImplementedException: The method or operation is not implemented.
-   at Snblog.Repository.Repositorys`1.Snblog.IRepository.IRepositorys<T>.GetAll() in F:\Test\netCore\Snblog\Snblog.Repository\Repositorys.cs:line 665
-   at Snblog.Service.SnSortService.GetSort() in F:\Test\netCore\Snblog\Snblog.Service\Service\SnSortService.cs:line 71
-   at Snblog.Controllers.SnSortController.GetSort() in F:\Test\netCore\Snblog\Snblog\Controllers\SnSortController.cs:line 30
-   at lambda_method(Closure , Object , Object[] )
-   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+2021-04-15 11:32:49.751 +08:00 [INF] 启动主机
+2021-04-15 11:36:01.557 +08:00 [INF] 启动主机
+2021-04-15 11:42:01.565 +08:00 [INF] 启动主机
+2021-04-15 11:43:28.939 +08:00 [INF] 启动主机
+2021-04-15 11:44:45.341 +08:00 [INF] 启动主机
+2021-04-15 11:48:13.087 +08:00 [INF] 启动主机
+2021-04-15 11:51:48.958 +08:00 [INF] 启动主机
+2021-04-15 12:00:19.512 +08:00 [INF] 启动主机
+2021-04-15 12:02:49.815 +08:00 [INF] 启动主机
+2021-04-15 12:05:27.197 +08:00 [INF] 启动主机
+2021-04-15 12:07:37.483 +08:00 [INF] 启动主机
+2021-04-15 12:10:03.572 +08:00 [INF] 启动主机
+2021-04-15 12:12:35.640 +08:00 [INF] 启动主机
+2021-04-15 12:15:59.074 +08:00 [INF] 启动主机
+2021-04-15 12:26:12.291 +08:00 [INF] 启动主机
+2021-04-15 12:31:12.547 +08:00 [INF] 启动主机
+2021-04-15 12:40:13.257 +08:00 [INF] 启动主机
+2021-04-15 12:44:07.457 +08:00 [INF] 启动主机
+2021-04-15 14:06:27.545 +08:00 [INF] 启动主机
+2021-04-15 14:08:14.957 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Snblog.Service.ReService.ReSnNavigationService.GetFyAllAsync(String type, Int32 pageIndex, Int32 pageSize, Boolean isDesc) in F:\Test\netCore\Snblog\Snblog.Service\ReService\ReSnNavigationService.cs:line 126
+   at Snblog.ControllersRepository.ReSnNavigationController.GetFyAllAsync(String type, Int32 pageIndex, Int32 pageSize, Boolean isDesc) in F:\Test\netCore\Snblog\Snblog\ControllersRepository\ReSnNavigationController.cs:line 100
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
@@ -92,22 +121,20 @@ System.NotImplementedException: The method or operation is not implemented.
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
    at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
    at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
    at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 105
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
-2021-04-14 15:53:53.650 +08:00 [INF] 雄翋儂
-2021-04-14 16:33:04.964 +08:00 [INF] 雄翋儂
-2021-04-14 16:34:28.644 +08:00 [INF] 雄翋儂
-2021-04-14 16:36:28.708 +08:00 [INF] 雄翋儂
-2021-04-14 16:45:30.109 +08:00 [INF] 雄翋儂
-2021-04-14 16:46:24.089 +08:00 [ERR] An unhandled exception has occurred while executing the request.
-System.InvalidOperationException: Unable to resolve service for type 'Snblog.IService.IReService.IReSnNavigationService' while attempting to activate 'Snblog.ReControllers.ReSnNavigationController'.
-   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
-   at lambda_method(Closure , IServiceProvider , Object[] )
-   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass4_0.<CreateActivator>b__0(ControllerContext controllerContext)
-   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass5_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+2021-04-15 14:08:21.071 +08:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Snblog.Service.ReService.ReSnNavigationService.GetFyAllAsync(String type, Int32 pageIndex, Int32 pageSize, Boolean isDesc) in F:\Test\netCore\Snblog\Snblog.Service\ReService\ReSnNavigationService.cs:line 126
+   at Snblog.ControllersRepository.ReSnNavigationController.GetFyAllAsync(String type, Int32 pageIndex, Int32 pageSize, Boolean isDesc) in F:\Test\netCore\Snblog\Snblog\ControllersRepository\ReSnNavigationController.cs:line 100
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
 --- End of stack trace from previous location where exception was thrown ---
@@ -120,4 +147,14 @@ System.InvalidOperationException: Unable to resolve service for type 'Snblog.ISe
    at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
    at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 105
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
-2021-04-14 16:46:58.469 +08:00 [INF] 雄翋儂
+2021-04-15 14:14:10.540 +08:00 [INF] 启动主机
+2021-04-15 14:18:36.395 +08:00 [INF] 启动主机
+2021-04-15 14:22:59.153 +08:00 [INF] 启动主机
+2021-04-15 14:33:17.378 +08:00 [INF] 启动主机
+2021-04-15 14:39:08.971 +08:00 [INF] 启动主机
+2021-04-15 14:45:59.243 +08:00 [INF] 启动主机
+2021-04-15 14:55:37.295 +08:00 [INF] 启动主机
+2021-04-15 15:01:07.477 +08:00 [INF] 启动主机
+2021-04-15 15:04:14.405 +08:00 [INF] 启动主机
+2021-04-15 15:21:49.180 +08:00 [INF] 启动主机
+2021-04-15 15:30:55.187 +08:00 [INF] 启动主机
