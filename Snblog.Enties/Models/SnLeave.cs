@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Snblog.Models
+namespace Snblog.Enties.Models
 {
     public partial class SnLeave
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IService;
-using Snblog.Models;
 using System.Threading.Tasks;
+using Snblog.Enties.Models;
 
 namespace Snblog.Controllers
 {
@@ -18,8 +18,10 @@ namespace Snblog.Controllers
         {
             _service = service;
         }
+
+        #region 查询所有（缓存）
         /// <summary>
-        /// 查询
+        /// 查询所有（缓存）
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
@@ -28,21 +30,24 @@ namespace Snblog.Controllers
             return Ok(await _service.GetAllAsync());
         }
 
+        #endregion
+        #region 主键查询（缓存）
         /// <summary>
-        /// 主键查询
+        /// 主键查询（缓存）
         /// </summary>
         /// <param name="id">id</param>
         /// <returns></returns>
-        [HttpGet("GetAllAsyncID")]
-        public async Task<IActionResult> GetAllAsync(int id)
+        [HttpGet("GetByIdAsync")]
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
-            return Ok(await _service.GetAllAsync(id));
+            return Ok(await _service.GetByIdAsync(id));
         }
-
+        #endregion
+        #region 分页查询 （分页 缓存）
         /// <summary>
-        /// 分页查询 - 支持排序
+        /// 分页查询 （分页 缓存）
         /// </summary>
-        /// <param name="type">类型[999查所有]</param>
+        /// <param name="type">类型[all查所有]</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
@@ -51,9 +56,10 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetFyTypeAllAsync(type, pageIndex, pageSize, isDesc));
         }
-
+        #endregion
+        #region 查询总数（缓存）
         /// <summary>
-        /// 查询总数
+        /// 查询总数（缓存）
         /// </summary>
         /// <returns></returns>
         [HttpGet("CountAsync")]
@@ -61,16 +67,20 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.CountAsync());
         }
+        #endregion
+        #region 添加数据 （权限）
         /// <summary>
         /// 添加数据 （权限）
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AddAsync(SnNavigationType Entity)
+        public async Task<IActionResult> AddAsync(SnNavigationType entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
+        #endregion
+        #region 删除数据 （权限）
         /// <summary>
         /// 删除数据 （权限）
         /// </summary>
@@ -81,16 +91,20 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.DeleteAsync(id));
         }
+        #endregion
+        #region 更新数据 （权限）
         /// <summary>
         /// 更新数据 （权限）
         /// </summary>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> UpdateAsync(SnNavigationType Entity)
+        public async Task<IActionResult> UpdateAsync(SnNavigationType entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
+        #endregion
+
 
     }
 }

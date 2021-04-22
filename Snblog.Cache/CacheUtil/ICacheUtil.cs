@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Snblog.Cache.CacheUtil
+﻿namespace Snblog.Cache.CacheUtil
 {
     public interface ICacheUtil
     {

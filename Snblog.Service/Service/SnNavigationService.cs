@@ -3,20 +3,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
 using Snblog.IRepository;
 using Snblog.IService.IService;
 using Snblog.Models;
+using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {
-    public class SnNavigationService : BaseService, ISnNavigationService
+    public class SnNavigationService : ISnNavigationService
     {
         private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnNavigation> result_List = null;
         private SnNavigation result_Model = null;
-        public SnNavigationService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext service, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
+        public SnNavigationService( snblogContext service, ICacheUtil cacheutil) 
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -38,10 +40,6 @@ namespace Snblog.Service.Service
                 _cacheutil.CacheString("GetFyAllAsync" + type + pageIndex + pageSize + isDesc, result_List);
             }
             return result_List;
-
-            // var data = type == "all" ? CreateService<SnNavigation>().Wherepage(s => s.NavType != null, c => c.NavId, pageIndex, pageSize, out count, isDesc) : CreateService<SnNavigation>().Wherepage(s => s.NavType == type, c => c.NavId, pageIndex, pageSize, out count, isDesc);
-            //
-            // return data.ToList();
         }
 
         private async Task GetFyAll(string type, int pageIndex, int pageSize, bool isDesc)
@@ -103,9 +101,6 @@ namespace Snblog.Service.Service
                 _cacheutil.CacheString("GetTypeOrderAsync" + type + order, result_List);
             }
             return result_List;
-
-            //var data = CreateService<SnNavigation>().Where(c => c.NavType == type, s => s.NavId, order);
-            //return await data.ToListAsync();
         }
 
         /// <summary>
@@ -117,7 +112,6 @@ namespace Snblog.Service.Service
         {
             await _service.SnNavigation.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
-            //return await CreateService<SnNavigation>().AddAsync(entity);
         }
 
         public async Task<bool> UpdateAsync(SnNavigation entity)
@@ -151,7 +145,6 @@ namespace Snblog.Service.Service
                 _cacheutil.CacheNumber("CountTypeAsync", result_Int);
             }
             return result_Int;
-            // return CreateService<SnNavigation>().Count(c => c.NavType == type);
         }
 
 
@@ -164,7 +157,6 @@ namespace Snblog.Service.Service
                 result_List = await _service.SnNavigation.ToListAsync();
                 _cacheutil.CacheString("GetAllAsync", result_List);
             }
-
             return result_List;
         }
 
@@ -177,9 +169,7 @@ namespace Snblog.Service.Service
                 _cacheutil.CacheString("GetDistinct" + type, result_List);
             }
             return result_List;
-            // var data = CreateService<SnNavigation>().Distinct(s => s.NavType == type);
-            //
-            // return data.ToList();
+           
         }
 
         public async Task<SnNavigation> GetByIdAsync(int id)

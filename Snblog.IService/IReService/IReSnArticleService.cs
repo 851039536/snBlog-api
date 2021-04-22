@@ -1,8 +1,6 @@
-﻿using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Snblog.Enties.Models;
 
 namespace Snblog.IService.IReService
 {
@@ -89,9 +87,9 @@ namespace Snblog.IService.IReService
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<string> UpdateAsync(SnArticle Entity);
+        Task<string> UpdateAsync(SnArticle entity);
         /// <summary>
         /// 更新部分列[comment give read]
         /// </summary>

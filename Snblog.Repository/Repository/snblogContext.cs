@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using Snblog.Enties.Models;
 using Snblog.IRepository;
+using Snblog.Models;
 
-namespace Snblog.Models
+namespace Snblog.Repository.Repository
 {
     public partial class snblogContext : DbContext, IconcardContext
     {

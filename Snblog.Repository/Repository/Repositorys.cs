@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.IRepository;
-using Snblog.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Snblog.IRepository;
+using Snblog.IRepository.IRepository;
+using Snblog.Models;
 
-namespace Snblog.Repository
+namespace Snblog.Repository.Repository
 {
     // Repository.cs仓储类，它是一个泛型类，并且拥有一个带有参数的构造方法，通过构造方法获得当前DbContext上下文对象，
     //泛型类为指定Model类型，通过DbContext.Set<T>()方法最终得到相应的DbSet<T>对象来操作工作单元。
@@ -602,7 +602,7 @@ namespace Snblog.Repository
             entitys.ForEach(c =>
             {
                 _dbSet.Attach(c);
-                _dbContext.Entry<T>(c).State = EntityState.Modified;
+                _dbContext.Entry(c).State = EntityState.Modified;
             });
             if (isSaveChange)
             {
@@ -684,7 +684,7 @@ namespace Snblog.Repository
                 return false;
             }
             _dbSet.Attach(entity);
-            var entry = _dbContext.Entry<T>(entity);
+            var entry = _dbContext.Entry(entity);
             if (updatePropert == null)
             {
                 entry.State = EntityState.Modified;//全字段更新

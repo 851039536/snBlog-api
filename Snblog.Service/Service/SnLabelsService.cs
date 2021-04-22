@@ -3,8 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
-using Snblog.IService;
+using Snblog.IService.IService;
 using Snblog.Models;
+using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {

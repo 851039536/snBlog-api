@@ -6,19 +6,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Snblog.Cache.CacheUtil;
-using Snblog.IService;
-using Snblog.Models;
+using Snblog.Enties.Models;
+using Snblog.IService.IService;
+using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {
     public class SnArticleService : ISnArticleService
     {
-        private readonly snblogContext _service;//DB
+        private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
-        //创建内存缓存对象
         private readonly ILogger<SnArticleService> _logger;
         private int result_Int;
-        private List<SnArticle> result_List = null;
+        private List<SnArticle> result_List = default;
         public SnArticleService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnArticleService> logger)
         {
             _service = coreDbContext;
@@ -117,11 +117,11 @@ namespace Snblog.Service.Service
         }
 
 
-       /// <summary>
-       /// 添加数据
-       /// </summary>
-       /// <param name="entity"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// 添加数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public async Task<bool> AddAsync(SnArticle entity)
         {
             await _service.SnArticle.AddAsync(entity);
@@ -145,7 +145,7 @@ namespace Snblog.Service.Service
             result_Int = _cacheutil.CacheNumber("ConutLabel" + type, result_Int);
             if (result_Int == 0)
             {
-                result_Int = _service.SnArticle.Where(c => c.label_id == type).Count();
+                result_Int = _service.SnArticle.Count(c => c.label_id == type);
                 _cacheutil.CacheNumber("ConutLabel" + type, result_Int);//设置缓存值
             }
             return result_Int;
@@ -197,9 +197,13 @@ namespace Snblog.Service.Service
             {
                 case "read":
                     var read = await _service.SnArticle.Select(c => c.read).ToListAsync();
-                    foreach (int item in read)
+                    foreach (var i in read)
                     {
-                        num += item;
+                        if (i != null)
+                        {
+                            var item = (int) i;
+                            num += item;
+                        }
                     }
                     break;
                 case "text":
@@ -211,9 +215,13 @@ namespace Snblog.Service.Service
                     break;
                 case "give":
                     var give = await _service.SnArticle.Select(c => c.give).ToListAsync();
-                    foreach (int item in give)
+                    foreach (var i in give)
                     {
-                        num += item;
+                        if (i != null)
+                        {
+                            var item = (int) i;
+                            num += item;
+                        }
                     }
                     break;
             }

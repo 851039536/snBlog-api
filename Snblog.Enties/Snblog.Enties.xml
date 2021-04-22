@@ -4,14 +4,69 @@
         <name>Snblog.Enties</name>
     </assembly>
     <members>
-        <member name="P:Snblog.Models.SnArticle.article_id">
+        <member name="P:Snblog.Enties.Models.SnArticle.article_id">
             <summary>
             文章主键
             </summary>
         </member>
-        <member name="P:Snblog.Models.SnArticle.title">
+        <member name="P:Snblog.Enties.Models.SnArticle.user_id">
+            <summary>
+            发表人id
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.title">
             <summary>
             标题
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.title_text">
+            <summary>
+            内容简述
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.text">
+            <summary>
+            博客内容
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.time">
+            <summary>
+            发表时间
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.label_id">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.read">
+            <summary>
+            阅读次数
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.give">
+            <summary>
+            点赞
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.comment">
+            <summary>
+            评论
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.sort_id">
+            <summary>
+            分类
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.type_title">
+            <summary>
+            分类标题
+            </summary>
+        </member>
+        <member name="P:Snblog.Enties.Models.SnArticle.url_img">
+            <summary>
+            图片
             </summary>
         </member>
     </members>

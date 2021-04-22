@@ -1,8 +1,8 @@
-﻿using Snblog.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Snblog.Models;
 
-namespace Snblog.IService
+namespace Snblog.IService.IService
 {
     public interface ISnLabelsService
     {
@@ -24,7 +24,6 @@ namespace Snblog.IService
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
         Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc);
         /// <summary>
@@ -37,14 +36,14 @@ namespace Snblog.IService
         /// 添加数据
         /// </summary>
         /// <returns></returns>
-        Task<bool> AddAsync(SnLabels Entity);
+        Task<bool> AddAsync(SnLabels entity);
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnLabels Entity);
+        Task<bool> UpdateAsync(SnLabels entity);
 
         /// <summary>
         /// 异步按id删除

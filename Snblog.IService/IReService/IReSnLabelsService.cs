@@ -17,12 +17,12 @@ namespace Snblog.IService.IReService
         /// <param name="id"></param>
         /// <returns></returns>
         Task<SnLabels> GetByIdAsync(int id);
+
         /// <summary>
         /// 条件分页查询 - 支持排序
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
         Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc);
         /// <summary>
@@ -34,14 +34,14 @@ namespace Snblog.IService.IReService
         /// 添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnLabels> AddAsync(SnLabels Entity);
+        Task<SnLabels> AddAsync(SnLabels entity);
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<string> UpdateAsync(SnLabels Entity);
+        Task<string> UpdateAsync(SnLabels entity);
 
         /// <summary>
         /// 按id删除

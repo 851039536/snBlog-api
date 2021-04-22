@@ -1,8 +1,8 @@
-﻿using Snblog.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Snblog.Enties.Models;
 
-namespace Snblog.IService
+namespace Snblog.IService.IService
 {
     public interface ISnOneService
     {
@@ -11,7 +11,7 @@ namespace Snblog.IService
         /// 异步查询
         /// </summary>
         /// <returns></returns>
-        Task<List<SnOne>> AsyGetOne();
+        Task<List<SnOne>> GetAllAsync();
 
         /// <summary>
         /// 查询总数
@@ -27,11 +27,11 @@ namespace Snblog.IService
         Task<int> CountTypeAsync(int type);
 
         /// <summary>
-        /// 条件查询
+        /// 主键查询
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">主键</param>
         /// <returns></returns>
-        Task<SnOne> AsyGetOneId(int id);
+        Task<SnOne> GetByIdAsync(int id);
 
 
         /// <summary>
@@ -40,14 +40,14 @@ namespace Snblog.IService
         /// <param name="type"></param>
         /// <returns></returns>
         Task<int> GetSumAsync(string type);
+
         /// <summary>
         /// 分页查询
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        List<SnOne> GetPagingOne(int pageIndex, int pageSize, out int count, bool isDesc);
+        Task<List<SnOne>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc);
 
 
         /// <summary>
@@ -63,20 +63,20 @@ namespace Snblog.IService
         /// <summary>
         /// 按id删除
         /// </summary>
-        Task<string> AsyDetOne(int id);
+        Task<bool> DeleteAsync(int id);
 
         /// <summary>
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnOne> AsyInsOne(SnOne one);
+        Task<bool> AddAsync(SnOne one);
 
         /// <summary>
         /// 更新数据
         /// </summary>
         /// <param name="one"></param>
         /// <returns></returns>
-        Task<string> AysUpOne(SnOne one);
+        Task<bool> UpdateAsync(SnOne one);
 
 
 

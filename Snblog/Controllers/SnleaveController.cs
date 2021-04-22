@@ -1,28 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IService;
-using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Snblog.Enties.Models;
+using System;
 
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    public class SnleaveController : Controller
+    public class SnleaveController : ControllerBase
     {
         private readonly ISnleaveService _service; //IOC依赖注入
 
         public SnleaveController(ISnleaveService service)
         {
-            _service = service;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
+        #region 查询所有（缓存）
         /// <summary>
-        /// 查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
@@ -30,21 +29,34 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetAllAsync());
         }
-
+        #endregion
+        #region 主键查询 （缓存）
         /// <summary>
-        /// 主键查询
+        ///主键查询 （缓存）
         /// </summary>
-        /// <param name="id">id</param>
+        /// <param name="id">主键</param>
         /// <returns></returns>
-        [HttpGet("GetAllAsyncID")]
-        public async Task<IActionResult> GetAllAsync(int id)
+        [HttpGet("GetByIdAsync")]
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
-            return Ok(await _service.GetAllAsync(id));
+            return Ok(await _service.GetByIdAsync(id));
         }
 
-
+        #endregion
+        #region 查询总数（缓存）
         /// <summary>
-        /// 分页查询
+        /// 查询总数（缓存）
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("CountAsync")]
+        public async Task<IActionResult> CountAsync()
+        {
+            return Ok(await _service.CountAsync());
+        }
+        #endregion
+        #region 分页查询（缓存）
+        /// <summary>
+        /// 分页查询（缓存）
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
@@ -54,30 +66,20 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetFyAllAsync(pageIndex, pageSize, isDesc));
         }
-
-
-
-        /// <summary>
-        /// 查询总数
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("CountAsync")]
-        public async Task<IActionResult> CountAsync()
-        {
-            return Ok(await _service.CountAsync());
-        }
-
+        #endregion
+        #region 添加数据 （权限）
         /// <summary>
         /// 添加数据 （权限）
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AddAsync(SnLeave Entity)
+        public async Task<IActionResult> AddAsync(SnLeave entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
-
+        #endregion
+        #region 删除数据 （权限）
         /// <summary>
         /// 删除数据 （权限）
         /// </summary>
@@ -88,15 +90,18 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.DeleteAsync(id));
         }
+        #endregion
+        #region 更新数据 （权限）
         /// <summary>
         /// 更新数据 （权限）
         /// </summary>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> UpdateAsync(SnLeave Entity)
+        public async Task<IActionResult> UpdateAsync(SnLeave entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
+        #endregion
     }
 }

@@ -32,7 +32,7 @@ namespace Snblog.Cache.CacheUtil
             {
                 if (!value.Equals(0))
                 {
-                _cache.Set_AbsoluteExpire<T>(key, value, _cache.time);
+                    _cache.Set_AbsoluteExpire(key, value, _cache.Time);
                 }
             }
             return result;
@@ -55,7 +55,7 @@ namespace Snblog.Cache.CacheUtil
             {
                 if (value != null)
                 {
-                    _cache.Set_AbsoluteExpire<T>(key, value, _cache.time);
+                    _cache.Set_AbsoluteExpire(key, value, _cache.Time);
                 }
             }
             return result;

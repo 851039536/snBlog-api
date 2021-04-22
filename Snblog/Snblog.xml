@@ -218,7 +218,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.GetOneIdAsync(System.Int32)">
+        <member name="M:Snblog.Controllers.SnOneController.GetByIdAsync(System.Int32)">
             <summary>
             按文章id查询
             </summary>
@@ -238,7 +238,7 @@
             <param name="type">分类</param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.GetPagingOne(System.Int32,System.Int32,System.Boolean)">
+        <member name="M:Snblog.Controllers.SnOneController.GetFyAllAsync(System.Int32,System.Int32,System.Boolean)">
             <summary>
             条件分页查询 - 支持排序
             </summary>
@@ -246,40 +246,40 @@
             <param name="pageSize">每页记录条数</param>
             <param name="isDesc">是否倒序</param>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.AsyInsOne(Snblog.Models.SnOne)">
+        <member name="M:Snblog.Controllers.SnOneController.AddAsync(Snblog.Models.SnOne)">
             <summary>
             添加数据
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.AsyDetOne(System.Int32)">
+        <member name="M:Snblog.Controllers.SnOneController.DeleteAsync(System.Int32)">
             <summary>
             删除数据
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneController.AysUpOne(Snblog.Models.SnOne)">
+        <member name="M:Snblog.Controllers.SnOneController.UpdateAsync(Snblog.Models.SnOne)">
             <summary>
             更新数据
             </summary>
-            <param name="one"></param>
+            <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneTypeController.GetAll">
+        <member name="M:Snblog.Controllers.SnOneTypeController.GetAllAsync">
             <summary>
             查询所有
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneTypeController.GetFirst(System.Int32)">
+        <member name="M:Snblog.Controllers.SnOneTypeController.GetByIdAsync(System.Int32)">
             <summary>
             主键查询
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnOneTypeController.GetTypeFirst(System.Int32)">
+        <member name="M:Snblog.Controllers.SnOneTypeController.GetTypeAsync(System.Int32)">
             <summary>
             类别查询
             </summary>

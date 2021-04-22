@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Snblog.IRepository
+namespace Snblog.IRepository.IRepository
 {
     public interface IRepositorys<T> : IDisposable where T : class
     {
@@ -268,7 +268,7 @@ namespace Snblog.IRepository
         IQueryable<T> GetAll();
 
         /// <summary>
-        /// 查询所有-List<T>-异步
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
         Task<List<T>> GetAllAsync();
@@ -343,7 +343,9 @@ namespace Snblog.IRepository
         #endregion
 
         #region 执行Sql语句
+#pragma warning disable CS0693 // 类型参数与外部类型中的类型参数同名
         void BulkInsert<T>(List<T> entities);
+#pragma warning restore CS0693 // 类型参数与外部类型中的类型参数同名
         int ExecuteSql(string sql);
         Task<int> ExecuteSqlAsync(string sql);
         int ExecuteSql(string sql, List<DbParameter> spList);

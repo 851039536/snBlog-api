@@ -1,4 +1,5 @@
 ﻿using Snblog.IRepository;
+using Snblog.IRepository.IRepository;
 
 namespace Snblog.IService
 {

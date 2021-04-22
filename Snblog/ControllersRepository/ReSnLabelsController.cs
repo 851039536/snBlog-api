@@ -68,26 +68,26 @@ namespace Snblog.ControllersRepository
         /// <summary>
         /// 添加数据 （权限）
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<ActionResult<SnLabels>> AddAsync(SnLabels Entity)
+        public async Task<ActionResult<SnLabels>> AddAsync(SnLabels entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
         #endregion
         #region 更新数据 (权限)
         /// <summary>
         /// 更新数据 (权限)
         /// </summary>
-        /// <param name="Entity">标签id</param>
+        /// <param name="entity">标签id</param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> UpdateAsync(SnLabels Entity)
+        public async Task<IActionResult> UpdateAsync(SnLabels entity)
         {
-            var data = await _service.UpdateAsync(Entity);
+            var data = await _service.UpdateAsync(entity);
             return Ok(data);
         }
         # endregion

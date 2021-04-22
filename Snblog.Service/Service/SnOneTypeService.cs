@@ -1,60 +1,94 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.IService;
-using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
+using Snblog.IService.IService;
+using Snblog.Repository.Repository;
 
-namespace Snblog.Service
+namespace Snblog.Service.Service
 {
     public class SnOneTypeService : ISnOneTypeService
     {
-        private readonly snblogContext _coreDbContext;//DB
-        public SnOneTypeService(snblogContext coreDbContext)
+        private readonly snblogContext _service;
+        private readonly CacheUtil _cacheutil;
+        private int result_Int;
+        private List<SnOneType> result_List = null;
+        public SnOneTypeService(snblogContext service, ICacheUtil cacheutil)
         {
-            _coreDbContext = coreDbContext;
+            _service = service;
+            _cacheutil = (CacheUtil)cacheutil;
         }
 
-        public async Task<bool> AddAsync(SnOneType Entity)
+        public async Task<bool> AddAsync(SnOneType entity)
         {
-           await _coreDbContext.SnOneType.AddAsync(Entity);
-            return await _coreDbContext.SaveChangesAsync()>0;
+            await _service.SnOneType.AddAsync(entity);
+            return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<int> CountAsync()
         {
-            return await _coreDbContext.SnOneType.CountAsync();
+            result_Int = _cacheutil.CacheNumber("SnOneType_CountAsync", result_Int);
+            if (result_Int != 0)
+            {
+                return result_Int;
+            }
+            result_Int = await _service.SnOneType.CountAsync();
+            _cacheutil.CacheNumber("SnOneType_CountAsync", result_Int);
+            return result_Int;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-           //_coreDbContext.SnOneType.Remove(Entity);
-           // return await _coreDbContext.SaveChangesAsync()>0;
-             var todoItem = await _coreDbContext.SnOneType.FindAsync(id);
-              _coreDbContext.SnOneType.Remove(todoItem);
-            return  await _coreDbContext.SaveChangesAsync()>0;
+            //_service.SnOneType.Remove(Entity);
+            // return await _service.SaveChangesAsync()>0;
+            var result = await _service.SnOneType.FindAsync(id);
+            _service.SnOneType.Remove(result);
+            return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<SnOneType>> GetAll()
+        public async Task<List<SnOneType>> GetAllAsync()
         {
-            return await _coreDbContext.SnOneType.ToListAsync();
+            result_List = _cacheutil.CacheString("SnOneType_GetAllAsync", result_List);
+            if (result_List != null)
+            {
+                return result_List;
+            }
+            result_List = await _service.SnOneType.ToListAsync();
+            _cacheutil.CacheString("SnOneType_GetAllAsync", result_List);
+            return result_List;
         }
 
-        public async Task<SnOneType> GetFirst(int id)
+        public async Task<SnOneType> GetByIdAsync(int id)
         {
-            return await _coreDbContext.SnOneType.Where(s => s.Id == id).FirstAsync();
+            SnOneType result = default;
+            result = _cacheutil.CacheString("SnOneType_GetByIdAsync"+id, result);
+            if (result != null)
+            {
+                return result;
+            }
+            result = await _service.SnOneType.FindAsync(id);
+            _cacheutil.CacheString("SnOneType_GetByIdAsync"+id, result);
+            return result;
         }
 
-        public async Task<SnOneType> GetTypeFirst(int type)
+        public async Task<SnOneType> GetTypeAsync(int type)
         {
-          return await _coreDbContext.SnOneType.Where(s=>s.SoTypeId == type).FirstAsync();
+            SnOneType result = default;
+            result = _cacheutil.CacheString("SnOneType_GetTypeAsync"+type, result);
+            if (result != null)
+            {
+                return result;
+            }
+            result = await _service.SnOneType.FirstAsync(s => s.SoTypeId == type);
+            _cacheutil.CacheString("SnOneType_GetTypeAsync"+type, result);
+            return result;
         }
 
-        public Task<bool> UpdateAsync(SnOneType Entity)
+        public async Task<bool> UpdateAsync(SnOneType entity)
         {
-            throw new NotImplementedException();
+            _service.SnOneType.Update(entity);
+            return await _service.SaveChangesAsync() > 0;
         }
     }
 }

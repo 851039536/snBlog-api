@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Snblog.Enties.Models;
 using Snblog.IService;
-using Snblog.Models;
+using Snblog.IService.IService;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -153,25 +154,25 @@ namespace Snblog.Controllers
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         //[Authorize(Roles = "kai")] //角色授权
         [HttpPost("AsyInsArticle")]
-        public async Task<ActionResult<SnArticle>> AddAsync(SnArticle Entity)
+        public async Task<ActionResult<SnArticle>> AddAsync(SnArticle entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
         #endregion
         #region 更新数据
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        public async Task<IActionResult> UpdateAsync(SnArticle Entity)
+        public async Task<IActionResult> UpdateAsync(SnArticle entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
         #endregion
         #region 删除数据
@@ -191,13 +192,13 @@ namespace Snblog.Controllers
         /// <summary>
         /// 更新部分列[comment give read]
         /// </summary>
-        /// <param name="Entity">对象</param>
+        /// <param name="entity">对象</param>
         /// <param name="type">更新字段</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
-        public async Task<IActionResult> UpdatePortionAsync(SnArticle Entity, string type)
+        public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type)
         {
-            return Ok(  await _service.UpdatePortionAsync(Entity, type));
+            return Ok(  await _service.UpdatePortionAsync(entity, type));
         }
         #endregion
 

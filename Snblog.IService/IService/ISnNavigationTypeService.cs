@@ -1,8 +1,6 @@
-﻿using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Snblog.Enties.Models;
 
 namespace Snblog.IService.IService
 {
@@ -19,7 +17,7 @@ namespace Snblog.IService.IService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<List<SnNavigationType>> GetAllAsync(int id);
+        Task<SnNavigationType>GetByIdAsync(int id);
 
         /// <summary>
         /// 条件分页查询
@@ -40,21 +38,21 @@ namespace Snblog.IService.IService
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> AddAsync(SnNavigationType Entity);
+        Task<bool> AddAsync(SnNavigationType entity);
+
         /// <summary>
         /// 删除数据
         /// </summary>
-        /// <param name="Entity"></param>
         /// <returns></returns>
         Task<bool> DeleteAsync(int id);
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnNavigationType Entity);
+        Task<bool> UpdateAsync(SnNavigationType entity);
     }
 }

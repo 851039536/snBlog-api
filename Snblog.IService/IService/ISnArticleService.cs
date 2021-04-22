@@ -1,8 +1,8 @@
-﻿using Snblog.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Snblog.Enties.Models;
 
-namespace Snblog.IService
+namespace Snblog.IService.IService
 {
     /// <summary>
     /// 业务类接口
@@ -42,9 +42,8 @@ namespace Snblog.IService
         /// <param name="type"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-       Task< List<SnArticle>> GetPagingWhereAsync(int type, int pageIndex, int pageSize, bool isDesc);
+        Task< List<SnArticle>> GetPagingWhereAsync(int type, int pageIndex, int pageSize, bool isDesc);
 
         /// <summary>
         /// 条件分页查询
@@ -91,15 +90,15 @@ namespace Snblog.IService
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<bool> AddAsync(SnArticle Entity);
+        Task<bool> AddAsync(SnArticle entity);
 
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnArticle Entity);
+        Task<bool> UpdateAsync(SnArticle entity);
 
       /// <summary>
       /// 更新部分列[comment give read]

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
+using Snblog.IService.IService;
 using Snblog.Models;
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -71,26 +72,26 @@ namespace Snblog.Controllers
         /// <summary>
         /// 添加标签 (权限)
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<ActionResult<SnLabels>> AddAsync(SnLabels Entity)
+        public async Task<ActionResult<SnLabels>> AddAsync(SnLabels entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
         #endregion
         #region 更新标签 (权限)
         /// <summary>
         /// 更新标签 (权限)
         /// </summary>
-        /// <param name="Entity">标签id</param>
+        /// <param name="entity">标签id</param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> UpdateAsync(SnLabels Entity)
+        public async Task<IActionResult> UpdateAsync(SnLabels entity)
         {
-            var data = await _service.UpdateAsync(Entity);
+            var data = await _service.UpdateAsync(entity);
             return Ok(data);
         }
         #endregion

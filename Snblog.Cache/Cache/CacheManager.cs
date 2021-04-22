@@ -3,14 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace Snblog.Cache.Cache
 {
  public class CacheManager:ICacheManager
     {
-        public  TimeSpan time = new TimeSpan(00, 00, 00, 20); //缓存过期时间
-        public TimeSpan time1  = TimeSpan.FromSeconds(3);  // 滑动缓存时间
+        public  TimeSpan Time = new TimeSpan(00, 00, 00, 20); //缓存过期时间
+        public TimeSpan Time1  = TimeSpan.FromSeconds(3);  // 滑动缓存时间
         private IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace Snblog.Cache.Cache
         public List<string> GetAllKeys()
         {
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
-            var entries = _cache.GetType().GetField("_entries", flags).GetValue(_cache);
+            var entries = _cache.GetType().GetField("_entries", flags)?.GetValue(_cache);
             var cacheItems = entries as IDictionary;
             var keys = new List<string>();
             if (cacheItems == null) return keys;
@@ -57,7 +56,7 @@ namespace Snblog.Cache.Cache
             cacheKeys.ForEach(i =>
             {
                 T t;
-                if (_cache.TryGetValue<T>(i, out t))
+                if (_cache.TryGetValue(i, out t))
                 {
                     vals.Add(t);
                 }
@@ -75,7 +74,7 @@ namespace Snblog.Cache.Cache
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));
             T value;
-            _cache.TryGetValue<T>(key, out value);
+            _cache.TryGetValue(key, out value);
             return value;
         }
 

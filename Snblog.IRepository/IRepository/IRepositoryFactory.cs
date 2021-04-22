@@ -1,4 +1,6 @@
-﻿namespace Snblog.IRepository
+﻿using Snblog.IRepository.IRepository;
+
+namespace Snblog.IRepository
 {
     public interface IRepositoryFactory
     {

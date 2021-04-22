@@ -2,10 +2,10 @@
 using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
 using Snblog.IService.IReService;
-using Snblog.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Snblog.Enties.Models;
 
 namespace Snblog.Service.ReService
 {
@@ -150,9 +150,13 @@ namespace Snblog.Service.ReService
                 case "read":
 
                     var read = await CreateService<SnArticle>().Where(s => true).Select(c => c.read).ToListAsync();
-                    foreach (int item in read)
+                    foreach (var i in read)
                     {
-                        num += item;
+                        if (i != null)
+                        {
+                            var item = (int) i;
+                            num += item;
+                        }
                     }
                     break;
                 case "text":
@@ -164,9 +168,13 @@ namespace Snblog.Service.ReService
                     break;
                 case "give":
                     var give = await CreateService<SnArticle>().Where(s => true).Select(c => c.give).ToListAsync();
-                    foreach (int item in give)
+                    foreach (var i in give)
                     {
-                        num += item;
+                        if (i != null)
+                        {
+                            var item = (int) i;
+                            num += item;
+                        }
                     }
                     break;
             }

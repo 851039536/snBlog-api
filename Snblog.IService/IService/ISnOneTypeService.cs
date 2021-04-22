@@ -1,10 +1,8 @@
-﻿using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Snblog.Enties.Models;
 
-namespace Snblog.IService
+namespace Snblog.IService.IService
 {
     public interface ISnOneTypeService
     {
@@ -12,20 +10,20 @@ namespace Snblog.IService
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-        Task<List<SnOneType>> GetAll();
+        Task<List<SnOneType>> GetAllAsync();
 
         /// <summary>
         /// 主键查询
         /// </summary>
         /// <returns></returns>
-        Task<SnOneType> GetFirst(int id);
+        Task<SnOneType> GetByIdAsync(int id);
 
         /// <summary>
         /// 类别查询
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        Task<SnOneType> GetTypeFirst(int type);
+        Task<SnOneType> GetTypeAsync(int type);
 
 
         /// <summary>
@@ -37,23 +35,23 @@ namespace Snblog.IService
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> AddAsync(SnOneType Entity);
+        Task<bool> AddAsync(SnOneType entity);
 
         /// <summary>
         /// 删除数据
         /// </summary>
-        /// <param name="Entity"></param>
         /// <returns></returns>
         Task<bool> DeleteAsync(int id);
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool>UpdateAsync(SnOneType Entity);
+        Task<bool>UpdateAsync(SnOneType entity);
+
 
     }
 }

@@ -1,10 +1,8 @@
-﻿using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Snblog.Models;
 
-namespace Snblog.IService
+namespace Snblog.IService.IService
 {
     public interface ISnPictureTypeService
     {
@@ -12,14 +10,14 @@ namespace Snblog.IService
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-        Task<List<SnPictureType>> GetAllAsync();
+         Task<List<SnPictureType>> GetAllAsync();
 
         /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<List<SnPictureType>> GetAllAsync(int id);
+        Task<SnPictureType> GetByIdAsync(int id);
 
         Task<List<SnPictureType>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc);
         /// <summary>
@@ -43,21 +41,21 @@ namespace Snblog.IService
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> AddAsync(SnPictureType Entity);
+        Task<bool> AddAsync(SnPictureType entity);
+
         /// <summary>
         /// 删除数据
         /// </summary>
-        /// <param name="Entity"></param>
         /// <returns></returns>
         Task<bool> DeleteAsync(int id);
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnPictureType Entity);
+        Task<bool> UpdateAsync(SnPictureType entity);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Snblog.Cache.Cache
 {
@@ -41,12 +40,15 @@ namespace Snblog.Cache.Cache
         /// </summary>
         /// <param name="key">关键字</param>
         /// <param name="value">缓存值</param>
+        /// <param name="span"></param>
         public void Set_SlidingExpire<T>(string key, T value, TimeSpan span);
+
         /// <summary>
         /// 设置缓存(绝对时间过期:从缓存开始持续指定的时间段后就过期,无论有没有持续的访问)
         /// </summary>
         /// <param name="key">关键字</param>
         /// <param name="value">缓存值</param>
+        /// <param name="span"></param>
         public void Set_AbsoluteExpire<T>(string key, T value, TimeSpan span);
         /// <summary>
         /// 设置缓存(绝对时间过期+滑动过期:比如滑动过期设置半小时,绝对过期时间设置2个小时，那么缓存开始后只要半小时内没有访问就会立马过期,如果半小时内有访问就会向后顺延半小时，但最多只能缓存2个小时)

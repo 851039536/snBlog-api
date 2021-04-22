@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Snblog.Enties.Models;
 using Snblog.IService;
-using Snblog.Models;
+using Snblog.IService.IService;
 
 
 //默认的约定集将应用于程序集中的所有操作：
@@ -12,40 +13,40 @@ namespace Snblog.Controllers
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    public class SnOneController : Controller
+    public class SnOneController : ControllerBase
     {
-        private readonly snblogContext _coreDbContext;
         private readonly ISnOneService _service; //IOC依赖注入
-        public SnOneController(ISnOneService service, snblogContext coreDbContext)
+        public SnOneController(ISnOneService service)
         {
             _service = service;
-            _coreDbContext = coreDbContext;
         }
 
+        #region 查询所有（缓存）
         /// <summary>
-        /// 查询
+        /// 查询所有（缓存）
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(await _service.AsyGetOne());
+            return Ok(await _service.GetAllAsync());
         }
-
+        #endregion
+        #region 主键查询（缓存）
         /// <summary>
-        /// 按id查询
+        /// 主键查询（缓存）
         /// </summary>
-        /// <param name="id">文章id</param>
+        /// <param name="id">主键</param>
         /// <returns></returns>
-        [HttpGet("GetOneIdAsync")]
-        public async Task<IActionResult> GetOneIdAsync(int id)
+        [HttpGet("GetByIdAsync")]
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
-            return Ok(await _service.AsyGetOneId(id));
+            return Ok(await _service.GetByIdAsync(id));
         }
-
-
+        #endregion
+        #region 查询总数（缓存）
         /// <summary>
-        /// 查询总数
+        /// 查询总数（缓存）
         /// </summary>
         /// <returns></returns>
         [HttpGet("CountAsync")]
@@ -53,9 +54,10 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.CountAsync());
         }
-
+        #endregion
+        #region 条件查总数（缓存）
         /// <summary>
-        /// 条件查总数
+        /// 条件查总数（缓存）
         /// </summary>
         /// <param name="type">分类</param>
         /// <returns></returns>
@@ -64,8 +66,11 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.CountTypeAsync(type));
         }
+        #endregion
+        #region  读取[字段/阅读/点赞]总数量/缓存
+
         /// <summary>
-        /// 读取[字段/阅读/点赞]总数量
+        /// 读取[字段/阅读/点赞]总数量/缓存
         /// </summary>
         /// <param name="type">text:内容字段数-read:阅读数量-give:点赞数量</param>
         /// <returns></returns>
@@ -74,21 +79,23 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetSumAsync(type));
         }
-
+        #endregion
+        #region 分页查询 （缓存）
         /// <summary>
-        /// 分页查询 
+        /// 分页查询 （缓存）
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-        [HttpGet("GetPagingOne")]
-        public IActionResult GetPagingOne(int pageIndex, int pageSize, bool isDesc)
+        [HttpGet("GetFyAllAsync")]
+        public async Task<IActionResult> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            return Ok(_service.GetPagingOne(pageIndex, pageSize, out _, isDesc));
+            return Ok(await _service.GetFyAllAsync(pageIndex, pageSize, isDesc));
         }
-
+        #endregion
+        #region 条件分页查询（缓存）
         /// <summary>
-        /// 条件分页查询
+        /// 条件分页查询（缓存）
         /// </summary>
         /// <param name="type">查询条件[999查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
         /// <param name="pageIndex">当前页码[1]</param>
@@ -101,41 +108,45 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize, name, isDesc));
         }
-
+        #endregion
+        #region 添加数据 （权限）
         /// <summary>
         /// 添加数据 （权限）
         /// </summary>
         /// <returns></returns>
-        [HttpPost("AsyInsOne")]
+        [HttpPost("AddAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<ActionResult<SnOne>> AsyInsOne(SnOne one)
+        public async Task<ActionResult<SnOne>> AddAsync(SnOne entity)
         {
-            return Ok(await _service.AsyInsOne(one));
+            return Ok(await _service.AddAsync(entity));
         }
+        #endregion
+        #region 删除数据 （权限）
         /// <summary>
         /// 删除数据 （权限）
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("AsyDetOne")]
+        [HttpDelete("DeleteAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AsyDetOne(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.AsyDetOne(id));
+            return Ok(await _service.DeleteAsync(id));
         }
-
+        #endregion
+        #region 更新数据 （权限）
         /// <summary>
         /// 更新数据 （权限）
         /// </summary>
-        /// <param name="one"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        [HttpPut("AysUpOne")]
+        [HttpPut("UpdateAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AysUpOne(SnOne one)
+        public async Task<IActionResult> UpdateAsync(SnOne entity)
         {
-            var data = await _service.AysUpOne(one);
-            return Ok(data);
+            return Ok(await _service.UpdateAsync(entity));
         }
+        #endregion
 
     }
 }
