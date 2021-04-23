@@ -412,7 +412,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnSortController.GetSort">
+        <member name="M:Snblog.Controllers.SnSortController.GetAllAsync">
             <summary>
             查询分类
             </summary>
@@ -424,14 +424,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnSortController.AsyGetSortId(System.Int32)">
+        <member name="M:Snblog.Controllers.SnSortController.GetByIdAsync(System.Int32)">
             <summary>
             主键查询
             </summary>
             <param name="sortId">主键</param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnSortController.GetSortCount">
+        <member name="M:Snblog.Controllers.SnSortController.GetCountAsync">
             <summary>
             分类总数
             </summary>
@@ -452,14 +452,14 @@
             <param name="pageSize">每页记录条数</param>
             <param name="isDesc">是否倒序</param>
         </member>
-        <member name="M:Snblog.Controllers.SnSortController.AysUpSort(Snblog.Models.SnSort)">
+        <member name="M:Snblog.Controllers.SnSortController.UpdateAsync(Snblog.Models.SnSort)">
             <summary>
             更新数据
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnSortController.AsyDetSort(System.Int32)">
+        <member name="M:Snblog.Controllers.SnSortController.DeleteAsync(System.Int32)">
             <summary>
             删除数据
             </summary>

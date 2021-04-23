@@ -11,7 +11,7 @@ namespace Snblog.IService
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-        List<SnSort> GetSort();
+        Task<List<SnSort>> GetAllAsync();
 
         /// <summary>
         /// 异步查询
@@ -24,7 +24,7 @@ namespace Snblog.IService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<List<SnSort>> AsyGetSortId(int id);
+        Task <SnSort> GetByIdAsync(int id);
 
 
           /// <summary>
@@ -35,31 +35,31 @@ namespace Snblog.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        List<SnSort> GetPagingWhere( int pageIndex, int pageSize, out int count, bool isDesc);
+       Task< List<SnSort>> GetFyAllAsync( int pageIndex, int pageSize, bool isDesc);
 
         /// <summary>
         /// 查询用户总数
         /// </summary>
         /// <returns></returns>
-        int GetSortCount();
+        Task<int> GetCountAsync();
 
 
         /// <summary>
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnSort> AsyInsSort(SnSort test);
+        Task<bool> AddAsync(SnSort entity);
 
         /// <summary>
         /// 异步更新数据
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>
-        Task<string> AysUpSort(SnSort test);
+        Task<bool> UpdateAsync(SnSort test);
 
         /// <summary>
         /// 异步按id删除
         /// </summary>
-        Task<string> AsyDetSort(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

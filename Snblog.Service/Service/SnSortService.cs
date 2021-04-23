@@ -1,17 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Snblog.Repository.Repository;
 
-namespace Snblog.Service
+namespace Snblog.Service.Service
 {
     public class SnSortService : BaseService, ISnSortService
     {
-        public SnSortService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+
+        private readonly snblogContext _service;
+        private readonly CacheUtil _cacheutil;
+        private int result_Int;
+        private List<SnSort> result_List = default;
+        public SnSortService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext service, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
         {
+            _service = service;
+            _cacheutil = (CacheUtil)cacheutil;
         }
 
         /// <summary>
@@ -19,62 +28,105 @@ namespace Snblog.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<string> AsyDetSort(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            int da = await Task.Run(() => CreateService<SnSort>().DeleteAsync(id));
-            string data = da == 1 ? "删除成功" : "删除失败";
-            return data;
+            var result=  await  _service.SnSort.FindAsync(id);
+              if (result == null) return false;
+            _service.SnSort.Remove(result);
+             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<List<SnSort>> AsyGetSort()
         {
-             var data = CreateService<SnSort>();
+            var data = CreateService<SnSort>();
             return await data.GetAll().ToListAsync();
         }
 
-        public async Task<List<SnSort>> AsyGetSortId(int id)
+        public async Task<SnSort> GetByIdAsync(int id)
         {
-            var data = CreateService<SnSort>().Where(s => s.SortId == id);
-            return await data.ToListAsync();
+            SnSort result = default;
+            result = _cacheutil.CacheString("SnSort_GetByIdAsync" + id, result);
+            if (result != null)
+            {
+                return result;
+            }
+            result = await _service.SnSort.FindAsync(id);
+            _cacheutil.CacheString("SnSort_GetByIdAsync" + id, result);
+            return result;
         }
 
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<SnSort> AsyInsSort(SnSort test)
+        public async Task<bool> AddAsync(SnSort entity)
         {
-            return await CreateService<SnSort>().AddAsync(test);
+            await  _service.SnSort.AddAsync(entity);
+            return await _service.SaveChangesAsync()>0;
+           
         }
 
-        public async Task<string> AysUpSort(SnSort test)
+        public async Task<bool> UpdateAsync(SnSort entity)
         {
-            int da = await CreateService<SnSort>().UpdateAsync(test);
-            string data = da == 1 ? "更新成功" : "更新失败";
-            return data;
+            _service.SnSort.Update(entity);
+            return await  _service.SaveChangesAsync()>0;
         }
 
-        public List<SnSort> GetPagingWhere( int pageIndex, int pageSize, out int count, bool isDesc)
+        public async Task<List<SnSort>> GetFyAllAsync(int pageIndex, int pageSize,  bool isDesc)
         {
-           var data = CreateService<SnSort>().Wherepage(s => true, c => c.SortId, pageIndex, pageSize, out count, isDesc);
-            return data.ToList();
+            result_List = _cacheutil.CacheString("SnSort_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+            if (result_List != null)
+            {
+                return result_List;
+            }
+            result_List = await GetFyAll(pageIndex, pageSize, isDesc);
+           _cacheutil.CacheString("SnSort_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+            return result_List;
+        }
+
+        private async Task<List<SnSort>> GetFyAll(int pageIndex, int pageSize, bool isDesc)
+        {
+            if (isDesc)
+            {
+                result_List = await _service.SnSort.OrderByDescending(c => c.SortId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+            else
+            {
+                result_List = await _service.SnSort.OrderBy(c => c.SortId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+
+            return result_List;
         }
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <returns></returns>
-        public List<SnSort> GetSort()
+        public async Task<List<SnSort>> GetAllAsync()
         {
-            var data = this.CreateService<SnSort>();
-            return data.GetAll().ToList();
+            result_List = _cacheutil.CacheString("SnSort_GetAllAsync", result_List);
+            if (result_List != null)
+            {
+                return result_List;
+            }
+            result_List = await _service.SnSort.ToListAsync();
+            _cacheutil.CacheString("SnSort_GetAllAsync", result_List);
+
+            return result_List;
         }
 
-        public int GetSortCount()
+        public async Task<int> GetCountAsync()
         {
-            int data = CreateService<SnSort>().Count();
-            return data;
+            result_Int = _cacheutil.CacheNumber("SnSort_GetCountAsync", result_Int);
+            if (result_Int != 0)
+            {
+                return result_Int;
+            }
+            result_Int = await _service.SnSort.CountAsync();
+           _cacheutil.CacheNumber("SnSort_GetCountAsync", result_Int);
+
+            return result_Int;
         }
     }
 }

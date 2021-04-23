@@ -9,7 +9,7 @@ namespace Snblog.Controllers
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    public class SnPictureTypeController : Controller
+    public class SnPictureTypeController : ControllerBase
     {
         private readonly ISnPictureTypeService _service; //IOC依赖注入
         public SnPictureTypeController(ISnPictureTypeService service)

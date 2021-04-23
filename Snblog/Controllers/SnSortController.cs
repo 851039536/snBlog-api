@@ -20,93 +20,95 @@ namespace Snblog.Controllers
             _service = service;
         }
 
+        #region 查询分类（缓存）
         /// <summary>
-        /// 查询分类
+        /// 查询分类（缓存）
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetSort")]
-        public IActionResult GetSort()
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(_service.GetSort());
+            return Ok(await _service.GetAllAsync());
         }
 
+        #endregion
+        #region 主键查询（缓存）
         /// <summary>
-        /// 查询分类
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("AsyGetSort")]
-        public async Task<IActionResult> AsyGetSort()
-        {
-            return Ok(await _service.AsyGetSort());
-        }
-
-        /// <summary>
-        /// 主键查询
+        /// 主键查询（缓存）
         /// </summary>
         /// <param name="sortId">主键</param>
         /// <returns></returns>
-        [HttpGet("AsyGetSortId")]
-        public async Task<IActionResult> AsyGetSortId(int sortId)
+        [HttpGet("GetByIdAsync")]
+        public async Task<IActionResult> GetByIdAsync(int sortId)
         {
-            return Ok(await _service.AsyGetSortId(sortId));
+            return Ok(await _service.GetByIdAsync(sortId));
         }
+        #endregion
+        #region 查询总数（缓存）
         /// <summary>
-        /// 分类总数
+        /// 查询总数（缓存）
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetSortCount")]
-        public IActionResult GetSortCount()
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync()
         {
-            return Ok(_service.GetSortCount());
+            return Ok(await _service.GetCountAsync());
         }
-
+        #endregion
+        #region 添加数据 （权限）
         /// <summary>
         /// 添加数据 （权限）
         /// </summary>
         /// <returns></returns>
-        [HttpPost("AsyInsSort")]
+        [HttpPost("AddAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<ActionResult<SnSort>> AsyInsLabels(SnSort test)
+        public async Task<ActionResult<SnSort>> AddAsync(SnSort test)
         {
-            return Ok(await _service.AsyInsSort(test));
+            return Ok(await _service.AddAsync(test));
         }
-
-          /// <summary>
-        /// 条件分页查询 - 支持排序
+        #endregion
+        #region 分页查询 （缓存）
+        /// <summary>
+        /// 分页查询 （缓存）
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-        [HttpGet("GetfyTest")]
-        public IActionResult GetfyTest( int pageIndex, int pageSize, bool isDesc)
+        [HttpGet("GetFyAllAsync")]
+        public async Task<IActionResult> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            return Ok(_service.GetPagingWhere( pageIndex, pageSize, out _, isDesc));
+            return Ok(await _service.GetFyAllAsync(pageIndex, pageSize, isDesc));
         }
+        
 
-        /// <summary>
+        #endregion
+        #region 更新数据 （权限）
+         /// <summary>
         /// 更新数据 （权限）
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        [HttpPut("AysUpSort")]
+        [HttpPut("UpdateAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AysUpSort(SnSort id)
+        public async Task<IActionResult> UpdateAsync(SnSort entity)
         {
-            var data = await _service.AysUpSort(id);
-            return Ok(data);
+            return Ok(  await _service.UpdateAsync(entity));
         }
-
+        #endregion
+        #region 删除数据 （权限）
         /// <summary>
         /// 删除数据 （权限）
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("AsyDetSort")]
+        [HttpDelete("DeleteAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AsyDetSort(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.AsyDetSort(id));
+            return Ok(await _service.DeleteAsync(id));
         }
+        #endregion
+        
 
     }
 }
