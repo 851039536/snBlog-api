@@ -19,7 +19,6 @@ namespace Snblog.Controllers
         {
             _service = service;
         }
-
         #region 查询分类（缓存）
         /// <summary>
         /// 查询分类（缓存）
@@ -108,7 +107,5 @@ namespace Snblog.Controllers
             return Ok(await _service.DeleteAsync(id));
         }
         #endregion
-        
-
     }
 }

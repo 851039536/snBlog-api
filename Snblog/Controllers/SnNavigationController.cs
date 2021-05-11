@@ -112,7 +112,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        //[Authorize(Roles = "kai")] //角色授权
         public async Task<ActionResult<SnNavigation>> AddAsync(SnNavigation entity)
         {
             return Ok(await _service.AddAsync(entity));
@@ -125,7 +125,7 @@ namespace Snblog.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+       // [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> UpdateAsync(SnNavigation entity)
         {
             return Ok(await _service.UpdateAsync(entity));
@@ -138,7 +138,7 @@ namespace Snblog.Controllers
         /// <param name="id">主键</param>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+     //   [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));

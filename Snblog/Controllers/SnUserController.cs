@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -56,7 +55,7 @@ namespace Snblog.Controllers
             }
             else
             {
-
+          
                 var claims = new List<Claim>();
                 claims.AddRange(new[]
                 {
@@ -76,7 +75,7 @@ namespace Snblog.Controllers
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
                 );
                 string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-                return Ok(token);
+                return Ok(data.Count()+","+token);
             }
 
         }

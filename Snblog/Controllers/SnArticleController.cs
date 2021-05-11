@@ -24,7 +24,7 @@ namespace Snblog.Controllers
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         #endregion
-
+    
         #region 查询总数 (缓存)
         /// <summary>
         /// 查询总数 (缓存)
@@ -157,7 +157,7 @@ namespace Snblog.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         //[Authorize(Roles = "kai")] //角色授权
-        [HttpPost("AsyInsArticle")]
+        [HttpPost("AddAsync")]
         public async Task<ActionResult<SnArticle>> AddAsync(SnArticle entity)
         {
             return Ok(await _service.AddAsync(entity));
