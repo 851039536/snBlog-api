@@ -42,11 +42,11 @@ namespace Snblog.Service.Service
         public async Task<SnArticle> AsyGetTestName(int id)
         {
             SnArticle result = null;
-            result = _cacheutil.CacheString("AsyGetTestName" + id, result);
+            result = _cacheutil.CacheString1("AsyGetTestName" + id, result);
             if (result == null)
             {
                 result = await _service.SnArticle.FindAsync(id);
-                _cacheutil.CacheString("AsyGetTestName" + id, result);
+                _cacheutil.CacheString1("AsyGetTestName" + id, result);
             }
             return result;
         }
@@ -58,11 +58,11 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public List<SnArticle> GetTestWhere(int sortId)
         {
-            result_List = _cacheutil.CacheString("GetTestWhere" + sortId, result_List);
+            result_List = _cacheutil.CacheString1("GetTestWhere" + sortId, result_List);
             if (result_List == null)
             {
                 result_List = _service.SnArticle.Where(s => s.label_id == sortId).ToList();
-                _cacheutil.CacheString("GetTestWhere" + sortId, result_List);
+                _cacheutil.CacheString1("GetTestWhere" + sortId, result_List);
             }
             return result_List;
         }
@@ -76,11 +76,11 @@ namespace Snblog.Service.Service
         /// <param name="isDesc">是否倒序</param>
         public async Task<List<SnArticle>> GetPagingWhereAsync(int label, int pageIndex, int pageSize, bool isDesc)
         {
-            result_List = _cacheutil.CacheString("GetPagingWhereAsync" + label + pageIndex + pageSize + isDesc, result_List);
+            result_List = _cacheutil.CacheString1("GetPagingWhereAsync" + label + pageIndex + pageSize + isDesc, result_List);
             if (result_List == null)
             {
                 result_List = await GetfyTest(label, pageIndex, pageSize, isDesc);
-                _cacheutil.CacheString("GetPagingWhereAsync" + label + pageIndex + pageSize + isDesc, result_List);
+                _cacheutil.CacheString1("GetPagingWhereAsync" + label + pageIndex + pageSize + isDesc, result_List);
             }
             return result_List;
         }
@@ -142,45 +142,45 @@ namespace Snblog.Service.Service
         public int ConutLabel(int type)
         {
             //读取缓存值
-            result_Int = _cacheutil.CacheNumber("ConutLabel" + type, result_Int);
+            result_Int = _cacheutil.CacheNumber1("ConutLabel" + type, result_Int);
             if (result_Int == 0)
             {
                 result_Int = _service.SnArticle.Count(c => c.label_id == type);
-                _cacheutil.CacheNumber("ConutLabel" + type, result_Int);//设置缓存值
+                _cacheutil.CacheNumber1("ConutLabel" + type, result_Int);//设置缓存值
             }
             return result_Int;
         }
 
 
-        public async Task<int> CountAsync()
+        public async Task<int> CountAsync(bool cache)
         {
-            result_Int = _cacheutil.CacheNumber("CountSnArticle", result_Int);
+            result_Int = _cacheutil.CacheNumber("Count_SnArticle", result_Int,cache);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnArticle.CountAsync();
-                _cacheutil.CacheNumber("CountSnArticle", result_Int);
+                _cacheutil.CacheNumber("Count_SnArticle", result_Int,cache);
             }
             return result_Int;
         }
 
         public async Task<List<SnArticle>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString("GetAllSnArticle", result_List);
+            result_List = _cacheutil.CacheString1("GetAllSnArticle", result_List);
             if (result_List == null)
             {
                 result_List = await _service.SnArticle.ToListAsync();
-                _cacheutil.CacheString("GetAllSnArticle", result_List);
+                _cacheutil.CacheString1("GetAllSnArticle", result_List);
             }
             return result_List;
         }
 
         public async Task<int> GetSumAsync(string type)
         {
-            result_Int = _cacheutil.CacheNumber("GetSumAsync" + type, result_Int);
+            result_Int = _cacheutil.CacheNumber1("GetSumAsync" + type, result_Int);
             if (result_Int == 0)
             {
                 result_Int = await GetSum(type);
-                _cacheutil.CacheNumber("GetSumAsync" + type, result_Int);
+                _cacheutil.CacheNumber1("GetSumAsync" + type, result_Int);
             }
             return result_Int;
         }
@@ -231,11 +231,11 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticle>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc)
         {
-            result_List = _cacheutil.CacheString("GetFyTypeAsync" + type + pageIndex + pageSize + name + isDesc, result_List); //设置缓存
+            result_List = _cacheutil.CacheString1("GetFyTypeAsync" + type + pageIndex + pageSize + name + isDesc, result_List); //设置缓存
             if (result_List == null)
             {
                 result_List = await GetFyType(type, pageIndex, pageSize, name, isDesc);
-                _cacheutil.CacheString("GetFyTypeAsync" + type + pageIndex + pageSize + name + isDesc, result_List);
+                _cacheutil.CacheString1("GetFyTypeAsync" + type + pageIndex + pageSize + name + isDesc, result_List);
             }
             return result_List;
         }
@@ -318,11 +318,11 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            result_List = _cacheutil.CacheString("GetFyTitleAsync" + pageIndex + pageSize + isDesc, result_List); //设置缓存
+            result_List = _cacheutil.CacheString1("GetFyTitleAsync" + pageIndex + pageSize + isDesc, result_List); //设置缓存
             if (result_List == null)
             {
                 result_List = await GetFyTitle(pageIndex, pageSize, isDesc); //读取数据
-                _cacheutil.CacheString("GetFyTitleAsync" + pageIndex + pageSize + isDesc, result_List); //设置缓存
+                _cacheutil.CacheString1("GetFyTitleAsync" + pageIndex + pageSize + isDesc, result_List); //设置缓存
             }
             return result_List;
         }
@@ -436,11 +436,11 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticle>> GetTagtextAsync(int tag, bool isDesc)
         {
-            result_List = _cacheutil.CacheString("GetTagtextAsync" + tag + isDesc, result_List); //设置缓存
+            result_List = _cacheutil.CacheString1("GetTagtextAsync" + tag + isDesc, result_List); //设置缓存
             if (result_List == null)
             {
                 result_List = await GetTagtext(tag, isDesc); //读取数据
-                _cacheutil.CacheString("GetTagtextAsync" + tag + isDesc, result_List); //设置缓存
+                _cacheutil.CacheString1("GetTagtextAsync" + tag + isDesc, result_List); //设置缓存
             }
             return result_List;
         }

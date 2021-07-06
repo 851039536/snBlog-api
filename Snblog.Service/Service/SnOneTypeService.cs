@@ -28,13 +28,13 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync()
         {
-            result_Int = _cacheutil.CacheNumber("SnOneType_CountAsync", result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnOneType_CountAsync", result_Int);
             if (result_Int != 0)
             {
                 return result_Int;
             }
             result_Int = await _service.SnOneType.CountAsync();
-            _cacheutil.CacheNumber("SnOneType_CountAsync", result_Int);
+            _cacheutil.CacheNumber1("SnOneType_CountAsync", result_Int);
             return result_Int;
         }
 
@@ -49,39 +49,39 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnOneType>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString("SnOneType_GetAllAsync", result_List);
+            result_List = _cacheutil.CacheString1("SnOneType_GetAllAsync", result_List);
             if (result_List != null)
             {
                 return result_List;
             }
             result_List = await _service.SnOneType.ToListAsync();
-            _cacheutil.CacheString("SnOneType_GetAllAsync", result_List);
+            _cacheutil.CacheString1("SnOneType_GetAllAsync", result_List);
             return result_List;
         }
 
         public async Task<SnOneType> GetByIdAsync(int id)
         {
             SnOneType result = default;
-            result = _cacheutil.CacheString("SnOneType_GetByIdAsync"+id, result);
+            result = _cacheutil.CacheString1("SnOneType_GetByIdAsync"+id, result);
             if (result != null)
             {
                 return result;
             }
             result = await _service.SnOneType.FindAsync(id);
-            _cacheutil.CacheString("SnOneType_GetByIdAsync"+id, result);
+            _cacheutil.CacheString1("SnOneType_GetByIdAsync"+id, result);
             return result;
         }
 
         public async Task<SnOneType> GetTypeAsync(int type)
         {
             SnOneType result = default;
-            result = _cacheutil.CacheString("SnOneType_GetTypeAsync"+type, result);
+            result = _cacheutil.CacheString1("SnOneType_GetTypeAsync"+type, result);
             if (result != null)
             {
                 return result;
             }
             result = await _service.SnOneType.FirstAsync(s => s.SoTypeId == type);
-            _cacheutil.CacheString("SnOneType_GetTypeAsync"+type, result);
+            _cacheutil.CacheString1("SnOneType_GetTypeAsync"+type, result);
             return result;
         }
 

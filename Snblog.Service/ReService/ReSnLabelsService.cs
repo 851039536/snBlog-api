@@ -20,11 +20,11 @@ namespace Snblog.Service.ReService
 
         public async Task<List<SnLabels>> GetAllAsync()
         {
-            result_List = _cacheUtil.CacheString("ReGetAllAsync", result_List);
+            result_List = _cacheUtil.CacheString1("ReGetAllAsync", result_List);
             if (result_List == null)
             {
                 result_List = await CreateService<SnLabels>().GetAllAsync();
-                _cacheUtil.CacheString("ReGetAllAsync", result_List);
+                _cacheUtil.CacheString1("ReGetAllAsync", result_List);
             }
             return result_List;
         }
@@ -32,22 +32,22 @@ namespace Snblog.Service.ReService
         public async Task<SnLabels> GetByIdAsync(int id)
         {
             SnLabels labels = null;
-            labels = _cacheUtil.CacheString("ReGetByIdAsync" + id, labels);
+            labels = _cacheUtil.CacheString1("ReGetByIdAsync" + id, labels);
             if (labels == null)
             {
                 labels = await CreateService<SnLabels>().GetByIdAsync(id);
-                _cacheUtil.CacheString("ReGetByIdAsync" + id, labels);
+                _cacheUtil.CacheString1("ReGetByIdAsync" + id, labels);
             }
             return labels;
         }
 
         public async Task<int> GetCountAsync()
         {
-            result_Int = _cacheUtil.CacheNumber("ReGetCountAsync", result_Int);
+            result_Int = _cacheUtil.CacheNumber1("ReGetCountAsync", result_Int);
             if (result_Int == 0)
             {
                 result_Int = await CreateService<SnLabels>().CountAsync();
-                _cacheUtil.CacheNumber("ReGetCountAsync", result_Int);
+                _cacheUtil.CacheNumber1("ReGetCountAsync", result_Int);
             }
             return result_Int;
         }
@@ -55,12 +55,12 @@ namespace Snblog.Service.ReService
         public async Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
 
-            result_List = _cacheUtil.CacheString("ReGetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
+            result_List = _cacheUtil.CacheString1("ReGetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
             if (result_List == null)
             {
                 var data = await CreateService<SnLabels>().WherepageAsync(s => true, c => c.LabelId, pageIndex, pageSize, isDesc);
                 result_List = data.ToList();
-                _cacheUtil.CacheString("ReGetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
+                _cacheUtil.CacheString1("ReGetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
             }
             return result_List;
 

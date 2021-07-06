@@ -1,69 +1,72 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Snblog.Cache.CacheUtil;
 using Snblog.IService;
 using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Snblog.Repository.Repository;
 
-namespace Snblog.Service
+namespace Snblog.Service.Service
 {
     public class SnTalkService : ISnTalkService
     {
-        private readonly snblogContext _coreDbContext;//DB
+        private readonly snblogContext _service;//DB
+        private readonly CacheUtil _cacheutil;
+        private int result_Int;
+        private List<SnTalk> result_List = default;
 
-        public SnTalkService(snblogContext coreDbContext)
+        public SnTalkService(snblogContext service, ICacheUtil cacheutil)
         {
-            _coreDbContext = coreDbContext;
+            _service = service;
+            _cacheutil = (CacheUtil) cacheutil;
         }
 
-        public async Task<bool> AddAsync(SnTalk Entity)
+        public async Task<bool> AddAsync(SnTalk entity)
         {
-            await _coreDbContext.SnTalk.AddAsync(Entity);
-            return await _coreDbContext.SaveChangesAsync() > 0;
+            await _service.SnTalk.AddAsync(entity);
+            return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<int> CountAsync()
         {
-            return await _coreDbContext.SnTalk.CountAsync();
+            return await _service.SnTalk.CountAsync();
         }
 
         public async Task<int> CountAsync(int type)
         {
-            return await _coreDbContext.SnTalk.Where(s => s.TalkTypeId == type).CountAsync();
+            return await _service.SnTalk.Where(s => s.TalkTypeId == type).CountAsync();
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var todoItem = await _coreDbContext.SnTalk.FindAsync(id);
+            var todoItem = await _service.SnTalk.FindAsync(id);
             if (todoItem == null) return false;
-            _coreDbContext.SnTalk.Remove(todoItem);
-            return await _coreDbContext.SaveChangesAsync() > 0;
+            _service.SnTalk.Remove(todoItem);
+            return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<List<SnTalk>> GetAllAsync()
         {
-            return await _coreDbContext.SnTalk.ToListAsync();
+            return await _service.SnTalk.ToListAsync();
         }
 
         public async Task<List<SnTalk>> GetAllAsync(int id)
         {
-            return await _coreDbContext.SnTalk.Where(s => s.Id == id).ToListAsync();
+            return await _service.SnTalk.Where(s => s.Id == id).ToListAsync();
         }
 
         public async Task<List<SnTalk>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
             if (isDesc)
             {
-                return await _coreDbContext.SnTalk.Where(s => true)
+                return await _service.SnTalk.Where(s => true)
               .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
               .Take(pageSize).ToListAsync();
             }
             else
             {
-                return await _coreDbContext.SnTalk.Where(s => true)
+                return await _service.SnTalk.Where(s => true)
              .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
              .Take(pageSize).ToListAsync();
             }
@@ -73,13 +76,13 @@ namespace Snblog.Service
         {
             if (isDesc)
             {
-                return await _coreDbContext.SnTalk.Where(s => s.TalkTypeId == type)
+                return await _service.SnTalk.Where(s => s.TalkTypeId == type)
               .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
               .Take(pageSize).ToListAsync();
             }
             else
             {
-                return await _coreDbContext.SnTalk.Where(s => s.TalkTypeId == type)
+                return await _service.SnTalk.Where(s => s.TalkTypeId == type)
              .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
              .Take(pageSize).ToListAsync();
             }
@@ -87,8 +90,8 @@ namespace Snblog.Service
 
         public async Task<bool> UpdateAsync(SnTalk Entity)
         {
-            _coreDbContext.SnTalk.Update(Entity);
-            return await _coreDbContext.SaveChangesAsync() > 0;
+            _service.SnTalk.Update(Entity);
+            return await _service.SaveChangesAsync() > 0;
         }
     }
 }

@@ -23,11 +23,11 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnOne>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString("SnOne_GetAllAsync", result_List);
+            result_List = _cacheutil.CacheString1("SnOne_GetAllAsync", result_List);
             if (result_List == null)
             {
                 result_List = await _service.SnOne.ToListAsync();
-                _cacheutil.CacheString("SnOne_GetAllAsync", result_List);
+                _cacheutil.CacheString1("SnOne_GetAllAsync", result_List);
             }
             return result_List;
         }
@@ -36,22 +36,22 @@ namespace Snblog.Service.Service
         public async Task<SnOne> GetByIdAsync(int id)
         {
             SnOne result = default;
-            result = _cacheutil.CacheString("SnOne_GetByIdAsync" + id, result);
+            result = _cacheutil.CacheString1("SnOne_GetByIdAsync" + id, result);
             if (result == null)
             {
                 result = await _service.SnOne.FindAsync(id);
-                _cacheutil.CacheString("SnOne_GetByIdAsync" + id, result);
+                _cacheutil.CacheString1("SnOne_GetByIdAsync" + id, result);
             }
             return result;
         }
 
         public async Task<List<SnOne>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            result_List = _cacheutil.CacheString("SnOne_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+            result_List = _cacheutil.CacheString1("SnOne_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
             if (result_List == null)
             {
                 result_List = await _service.SnOne.OrderByDescending(c => c.OneRead).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-                _cacheutil.CacheString("SnOne_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+                _cacheutil.CacheString1("SnOne_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
             }
             return result_List;
         }
@@ -88,22 +88,22 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync()
         {
-            result_Int = _cacheutil.CacheNumber("SnOne_CountAsync", result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnOne_CountAsync", result_Int);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnOne.CountAsync();
-                _cacheutil.CacheNumber("SnOne_CountAsync", result_Int);
+                _cacheutil.CacheNumber1("SnOne_CountAsync", result_Int);
             }
             return result_Int;
         }
 
         public async Task<int> CountTypeAsync(int type)
         {
-            result_Int = _cacheutil.CacheNumber("SnOne_CountTypeAsync"+type, result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnOne_CountTypeAsync"+type, result_Int);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnOne.CountAsync(s => s.OneTypeId == type);
-               _cacheutil.CacheNumber("SnOne_CountTypeAsync"+type, result_Int);
+               _cacheutil.CacheNumber1("SnOne_CountTypeAsync"+type, result_Int);
             }
             return result_Int;
 
@@ -111,11 +111,11 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnOne>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc)
         {
-            result_List = _cacheutil.CacheString("SnOne_GetFyTypeAsync"+type+pageIndex+pageSize+name+isDesc, result_List);
+            result_List = _cacheutil.CacheString1("SnOne_GetFyTypeAsync"+type+pageIndex+pageSize+name+isDesc, result_List);
             if (result_List == null)
             {
                 result_List = await GetListFyAsync(type, pageIndex, pageSize, name, isDesc);
-             _cacheutil.CacheString("SnOne_GetFyTypeAsync"+type+pageIndex+pageSize+name+isDesc, result_List);
+             _cacheutil.CacheString1("SnOne_GetFyTypeAsync"+type+pageIndex+pageSize+name+isDesc, result_List);
             }
             return result_List;
         }
@@ -172,13 +172,13 @@ namespace Snblog.Service.Service
 
         public async Task<int> GetSumAsync(string type)
         {
-            result_Int = _cacheutil.CacheNumber("SnOne_GetSumAsync"+type, result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnOne_GetSumAsync"+type, result_Int);
             if (result_Int != 0)
             {
                 return result_Int;
             }
             result_Int = await GetSum(type);
-           _cacheutil.CacheNumber("SnOne_GetSumAsync"+type, result_Int);
+           _cacheutil.CacheNumber1("SnOne_GetSumAsync"+type, result_Int);
             return result_Int;
         }
 

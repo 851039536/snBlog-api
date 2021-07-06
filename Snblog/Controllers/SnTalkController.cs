@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+//默认的约定集将应用于程序集中的所有操作：
+[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
@@ -21,8 +22,9 @@ namespace Snblog.Controllers
             _service = service;
         }
 
+        #region 查询所有
        /// <summary>
-        /// 查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
@@ -30,6 +32,7 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetAllAsync());
         }
+       #endregion
 
         /// <summary>
         /// 主键查询

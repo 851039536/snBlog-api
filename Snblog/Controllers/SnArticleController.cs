@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.Enties.Models;
-using Snblog.IService;
 using Snblog.IService.IService;
 
 //默认的约定集将应用于程序集中的所有操作：
@@ -27,12 +26,14 @@ namespace Snblog.Controllers
     
         #region 查询总数 (缓存)
         /// <summary>
-        /// 查询总数 (缓存)
+        /// 查询总数 
         /// </summary>
+        /// <param name="cache">缓存</param>
+        /// <returns></returns>
         [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync()
+        public async Task<IActionResult> GetCountAsync(bool cache)
         {
-            return Ok(await _service.CountAsync());
+            return Ok(await _service.CountAsync(cache));
         }
         #endregion
         #region 条件查询总数  (缓存)

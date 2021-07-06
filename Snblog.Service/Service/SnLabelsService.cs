@@ -37,11 +37,11 @@ namespace Snblog.Service.Service
         public async Task<SnLabels> GetByIdAsync(int id)
         {
             SnLabels labels = null;
-            labels = _cacheUtil.CacheString("GetByIdAsync" + id, labels);
+            labels = _cacheUtil.CacheString1("GetByIdAsync" + id, labels);
             if (labels == null)
             {
                 labels = await _service.SnLabels.FindAsync(id);
-                _cacheUtil.CacheString("GetByIdAsync" + id, labels);
+                _cacheUtil.CacheString1("GetByIdAsync" + id, labels);
             }
             return labels;
         }
@@ -75,22 +75,22 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<List<SnLabels>> GetAllAsync()
         {
-            result_List = _cacheUtil.CacheString("GetAllAsync", result_List);
+            result_List = _cacheUtil.CacheString1("GetAllAsync", result_List);
             if (result_List == null)
             {
                 result_List = await _service.SnLabels.ToListAsync();
-                _cacheUtil.CacheString("GetAllAsync", result_List);
+                _cacheUtil.CacheString1("GetAllAsync", result_List);
             }
             return result_List;
         }
 
         public async Task<int> GetCountAsync()
         {
-            result_Int = _cacheUtil.CacheNumber("GetCountAsync", result_Int);
+            result_Int = _cacheUtil.CacheNumber1("GetCountAsync", result_Int);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnLabels.CountAsync();
-                _cacheUtil.CacheNumber("GetCountAsync", result_Int);
+                _cacheUtil.CacheNumber1("GetCountAsync", result_Int);
             }
             return result_Int;
         }
@@ -98,11 +98,11 @@ namespace Snblog.Service.Service
         public async Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
 
-            result_List = _cacheUtil.CacheString("GetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
+            result_List = _cacheUtil.CacheString1("GetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
             if (result_List == null)
             {
                 await GetfyAll(pageIndex, pageSize, isDesc);
-                _cacheUtil.CacheString("GetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
+                _cacheUtil.CacheString1("GetfyAllAsync" + pageIndex + pageSize + isDesc, result_List);
             }
             return result_List;
 

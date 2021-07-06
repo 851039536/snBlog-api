@@ -10,6 +10,7 @@ namespace Snblog.IService.IService
     public interface ISnArticleService
     {
 
+
         /// <summary>
         /// 查询所有
         /// </summary>
@@ -112,7 +113,8 @@ namespace Snblog.IService.IService
         /// <summary>
         /// 查询总条数
         /// </summary>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<int> CountAsync();
+        Task<int> CountAsync(bool cache);
     }
 }

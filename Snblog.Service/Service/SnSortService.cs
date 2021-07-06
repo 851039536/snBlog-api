@@ -45,13 +45,13 @@ namespace Snblog.Service.Service
         public async Task<SnSort> GetByIdAsync(int id)
         {
             SnSort result = default;
-            result = _cacheutil.CacheString("SnSort_GetByIdAsync" + id, result);
+            result = _cacheutil.CacheString1("SnSort_GetByIdAsync" + id, result);
             if (result != null)
             {
                 return result;
             }
             result = await _service.SnSort.FindAsync(id);
-            _cacheutil.CacheString("SnSort_GetByIdAsync" + id, result);
+            _cacheutil.CacheString1("SnSort_GetByIdAsync" + id, result);
             return result;
         }
 
@@ -75,13 +75,13 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnSort>> GetFyAllAsync(int pageIndex, int pageSize,  bool isDesc)
         {
-            result_List = _cacheutil.CacheString("SnSort_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+            result_List = _cacheutil.CacheString1("SnSort_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
             if (result_List != null)
             {
                 return result_List;
             }
             result_List = await GetFyAll(pageIndex, pageSize, isDesc);
-           _cacheutil.CacheString("SnSort_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+           _cacheutil.CacheString1("SnSort_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
             return result_List;
         }
 
@@ -105,26 +105,26 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<List<SnSort>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString("SnSort_GetAllAsync", result_List);
+            result_List = _cacheutil.CacheString1("SnSort_GetAllAsync", result_List);
             if (result_List != null)
             {
                 return result_List;
             }
             result_List = await _service.SnSort.ToListAsync();
-            _cacheutil.CacheString("SnSort_GetAllAsync", result_List);
+            _cacheutil.CacheString1("SnSort_GetAllAsync", result_List);
 
             return result_List;
         }
 
         public async Task<int> GetCountAsync()
         {
-            result_Int = _cacheutil.CacheNumber("SnSort_GetCountAsync", result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnSort_GetCountAsync", result_Int);
             if (result_Int != 0)
             {
                 return result_Int;
             }
             result_Int = await _service.SnSort.CountAsync();
-           _cacheutil.CacheNumber("SnSort_GetCountAsync", result_Int);
+           _cacheutil.CacheNumber1("SnSort_GetCountAsync", result_Int);
 
             return result_Int;
         }

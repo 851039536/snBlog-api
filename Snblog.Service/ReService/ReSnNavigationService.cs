@@ -22,11 +22,11 @@ namespace Snblog.Service.ReService
 
         public async Task<List<SnNavigation>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString("ReGetAllAsync", result_List);
+            result_List = _cacheutil.CacheString1("ReGetAllAsync", result_List);
             if (result_List == null)
             {
                 result_List = await CreateService<SnNavigation>().GetAllAsync();
-                _cacheutil.CacheString("ReGetAllAsync", result_List);
+                _cacheutil.CacheString1("ReGetAllAsync", result_List);
             }
             return result_List;
         }
@@ -38,11 +38,11 @@ namespace Snblog.Service.ReService
         /// <returns></returns>
         public async Task<SnNavigation> GetByIdAsync(int id)
         {
-            result_Model = _cacheutil.CacheString("ReGetByIdAsync" + id, result_Model);
+            result_Model = _cacheutil.CacheString1("ReGetByIdAsync" + id, result_Model);
             if (result_Model == null)
             {
                 result_Model = await CreateService<SnNavigation>().GetByIdAsync(id);
-                _cacheutil.CacheString("ReGetByIdAsync" + id, result_Model);
+                _cacheutil.CacheString1("ReGetByIdAsync" + id, result_Model);
             }
             return result_Model;
         }
@@ -53,11 +53,11 @@ namespace Snblog.Service.ReService
         /// <returns></returns>
         public async Task<int> GetCountAsync()
         {
-            result_Int = _cacheutil.CacheNumber("ReGetCountAsync", result_Int);
+            result_Int = _cacheutil.CacheNumber1("ReGetCountAsync", result_Int);
             if (result_Int == 0)
             {
                 result_Int = await CreateService<SnNavigation>().CountAsync();
-                _cacheutil.CacheNumber("ReGetCountAsync", result_Int);
+                _cacheutil.CacheNumber1("ReGetCountAsync", result_Int);
             }
             return result_Int;
         }
@@ -69,11 +69,11 @@ namespace Snblog.Service.ReService
         /// <returns></returns>
         public async Task<int> CountTypeAsync(string type)
         {
-            result_Int = _cacheutil.CacheNumber("ReCountTypeAsync", result_Int);
+            result_Int = _cacheutil.CacheNumber1("ReCountTypeAsync", result_Int);
             if (result_Int == 0)
             {
                 result_Int = await CreateService<SnNavigation>().CountAsync(c => c.NavType == type);
-                _cacheutil.CacheNumber("ReCountTypeAsync", result_Int);
+                _cacheutil.CacheNumber1("ReCountTypeAsync", result_Int);
             }
             return result_Int;
         }
@@ -85,11 +85,11 @@ namespace Snblog.Service.ReService
         /// <returns></returns>
         public async Task<List<SnNavigation>> GetDistinct(string type)
         {
-            result_List = _cacheutil.CacheString("ReGetDistinct" + type, result_List);
+            result_List = _cacheutil.CacheString1("ReGetDistinct" + type, result_List);
             if (result_List == null)
             {
                 result_List = await CreateService<SnNavigation>().Distinct(s => s.NavType == type).ToListAsync();
-                _cacheutil.CacheString("ReGetDistinct" + type, result_List);
+                _cacheutil.CacheString1("ReGetDistinct" + type, result_List);
             }
             return result_List;
 
@@ -103,11 +103,11 @@ namespace Snblog.Service.ReService
         /// <returns>List</returns>
         public async Task<List<SnNavigation>> GetTypeOrderAsync(string type, bool order)
         {
-             result_List = _cacheutil.CacheString("ReGetTypeOrderAsync" + type + order, result_List);
+             result_List = _cacheutil.CacheString1("ReGetTypeOrderAsync" + type + order, result_List);
             if (result_List == null)
             {
                 result_List = await CreateService<SnNavigation>().Where(c => c.NavType == type, s => s.NavId, order).ToListAsync();
-                _cacheutil.CacheString("ReGetTypeOrderAsync" + type + order, result_List);
+                _cacheutil.CacheString1("ReGetTypeOrderAsync" + type + order, result_List);
             }
             return result_List;
            
@@ -122,11 +122,11 @@ namespace Snblog.Service.ReService
         /// <param name="isDesc">是否倒序</param>
         public async Task<List<SnNavigation>> GetFyAllAsync(string type, int pageIndex, int pageSize, bool isDesc)
         {
-           result_List = _cacheutil.CacheString("ReGetFyAllAsync" + type + pageIndex + pageSize + isDesc, result_List);
+           result_List = _cacheutil.CacheString1("ReGetFyAllAsync" + type + pageIndex + pageSize + isDesc, result_List);
             if (result_List == null)
             {
                  result_List= await FyAll(type, pageIndex, pageSize, isDesc);
-                _cacheutil.CacheString("ReGetFyAllAsync" + type + pageIndex + pageSize + isDesc ,result_List);
+                _cacheutil.CacheString1("ReGetFyAllAsync" + type + pageIndex + pageSize + isDesc ,result_List);
             }
             return result_List;
         }

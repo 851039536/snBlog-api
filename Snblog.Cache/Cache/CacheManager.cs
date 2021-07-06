@@ -8,7 +8,7 @@ namespace Snblog.Cache.Cache
 {
  public class CacheManager:ICacheManager
     {
-        public  TimeSpan Time = new TimeSpan(00, 00, 00, 20); //缓存过期时间
+        public  TimeSpan Time = new TimeSpan(00, 00, 00, 60); //缓存过期时间
         public TimeSpan Time1  = TimeSpan.FromSeconds(3);  // 滑动缓存时间
         private IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
 

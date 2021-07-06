@@ -30,11 +30,11 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync()
         {
-            result_Int = _cacheutil.CacheNumber("SnNavigationType_CountAsync", result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnNavigationType_CountAsync", result_Int);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnNavigationType.CountAsync();
-                _cacheutil.CacheNumber("SnNavigationType_CountAsync", result_Int);
+                _cacheutil.CacheNumber1("SnNavigationType_CountAsync", result_Int);
             }
             return result_Int;
         }
@@ -48,11 +48,11 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnNavigationType>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString("SnNavigationTypeGetAllAsync", result_List);
+            result_List = _cacheutil.CacheString1("SnNavigationTypeGetAllAsync", result_List);
             if (result_List == null)
             {
                 result_List = await _service.SnNavigationType.ToListAsync();
-                _cacheutil.CacheString("SnNavigationTypeGetAllAsync", result_List);
+                _cacheutil.CacheString1("SnNavigationTypeGetAllAsync", result_List);
             }
             return result_List;
         }
@@ -60,11 +60,11 @@ namespace Snblog.Service.Service
         public async Task<SnNavigationType> GetByIdAsync(int id)
         {
             SnNavigationType result = default;
-            result = _cacheutil.CacheString("SnNavigationTypeGetByIdAsync"+id, result);
+            result = _cacheutil.CacheString1("SnNavigationTypeGetByIdAsync"+id, result);
             if (result == null)
             {
                 result = await _service.SnNavigationType.FindAsync(id);
-                _cacheutil.CacheString("SnNavigationTypeGetByIdAsync"+id, result);
+                _cacheutil.CacheString1("SnNavigationTypeGetByIdAsync"+id, result);
             }
             return result;
         }
@@ -72,11 +72,11 @@ namespace Snblog.Service.Service
         public async Task<List<SnNavigationType>> GetFyTypeAllAsync(string type, int pageIndex, int pageSize, bool isDesc)
         {
 
-            result_List = _cacheutil.CacheString("SnNavigationTypeGetFyTypeAllAsync"+type+pageIndex+pageSize+isDesc, result_List);
+            result_List = _cacheutil.CacheString1("SnNavigationTypeGetFyTypeAllAsync"+type+pageIndex+pageSize+isDesc, result_List);
             if (result_List == null)
             {
                 result_List = await GetFyTypeAll(type, pageIndex, pageSize, isDesc);
-               _cacheutil.CacheString("SnNavigationTypeGetFyTypeAllAsync"+type+pageIndex+pageSize+isDesc, result_List);
+               _cacheutil.CacheString1("SnNavigationTypeGetFyTypeAllAsync"+type+pageIndex+pageSize+isDesc, result_List);
             }
             return result_List;
         }
