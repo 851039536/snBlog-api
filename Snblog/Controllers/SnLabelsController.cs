@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
 using Snblog.IService.IService;
 using Snblog.Models;
 //默认的约定集将应用于程序集中的所有操作：

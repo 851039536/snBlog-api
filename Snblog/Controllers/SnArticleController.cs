@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.Enties.Models;
 using Snblog.IService.IService;
+using Snblog.Service.AngleSharp;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -23,7 +24,7 @@ namespace Snblog.Controllers
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         #endregion
-    
+
         #region 查询总数 (缓存)
         /// <summary>
         /// 查询总数 
@@ -31,10 +32,7 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns></returns>
         [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(bool cache)
-        {
-            return Ok(await _service.CountAsync(cache));
-        }
+        public async Task<IActionResult> GetCountAsync(bool cache) => Ok(await _service.CountAsync(cache));
         #endregion
         #region 条件查询总数  (缓存)
         /// <summary>
@@ -43,10 +41,7 @@ namespace Snblog.Controllers
         /// <param name="type">分类id</param>
         /// <returns></returns>
         [HttpGet("ConutLabel")]
-        public IActionResult ConutLabel(int type)
-        {
-            return Ok(_service.ConutLabel(type));
-        }
+        public IActionResult ConutLabel(int type) => Ok(_service.ConutLabel(type));
         #endregion
         #region 查询所有 (缓存)
         /// <summary>
@@ -54,10 +49,7 @@ namespace Snblog.Controllers
         /// </summary>
         // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
         [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            return Ok(await _service.GetAllAsync());
-        }
+        public async Task<IActionResult> GetAllAsync() => Ok(await _service.GetAllAsync());
         #endregion
         #region 主键查询 (缓存)
         /// <summary>
@@ -66,10 +58,7 @@ namespace Snblog.Controllers
         /// <param name="id">文章id</param>
         /// <returns></returns>
         [HttpGet("AsyGetTestID")]
-        public async Task<IActionResult> AsyGetTestId(int id)
-        {
-            return Ok(await _service.AsyGetTestName(id));
-        }
+        public async Task<IActionResult> AsyGetTestId(int id) => Ok(await _service.AsyGetTestName(id));
         #endregion
         #region  分类ID查询 (缓存)
         /// <summary>
@@ -199,7 +188,7 @@ namespace Snblog.Controllers
         [HttpPut("UpdatePortionAsync")]
         public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type)
         {
-            return Ok(  await _service.UpdatePortionAsync(entity, type));
+            return Ok(await _service.UpdatePortionAsync(entity, type));
         }
         #endregion
 

@@ -5,6 +5,9 @@ namespace Snblog.Models
 {
     public partial class SnUser
     {
+        /// <summary>
+        /// 用户主键
+        /// </summary>
         public int UserId { get; set; }
         public string UserIp { get; set; }
         public string UserName { get; set; }
@@ -14,5 +17,6 @@ namespace Snblog.Models
         public string UserTime { get; set; }
         public string UserNickname { get; set; }
         public string UserBrief { get; set; }
+
     }
 }

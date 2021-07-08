@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Snblog.IService.IService;
+
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
@@ -97,9 +96,9 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AddAsync(SnTalk Entity)
+        public async Task<IActionResult> AddAsync(SnTalk entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
 
         /// <summary>
@@ -118,9 +117,9 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> UpdateAsync(SnTalk Entity)
+        public async Task<IActionResult> UpdateAsync(SnTalk entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
     }
 }

@@ -69,5 +69,15 @@
             图片
             </summary>
         </member>
+        <member name="P:Snblog.Models.SnLabels.LabelId">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="P:Snblog.Models.SnUser.UserId">
+            <summary>
+            用户主键
+            </summary>
+        </member>
     </members>
 </doc>

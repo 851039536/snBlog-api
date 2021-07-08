@@ -16,10 +16,9 @@ using Snblog.IService;
 using Snblog.IService.IReService;
 using Snblog.IService.IService;
 using Snblog.Jwt;
-using Snblog.Models;
-using Snblog.Repository;
 using Snblog.Repository.Repository;
 using Snblog.Service;
+using Snblog.Service.AngleSharp;
 using Snblog.Service.ReService;
 using Snblog.Service.Service;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -28,8 +27,8 @@ namespace Snblog
 {
     public class Startup
     {
-         
-        # region 版本控制枚举
+
+        #region 版本控制枚举
         /// <summary>
         /// 版本控制
         /// </summary>
@@ -42,7 +41,11 @@ namespace Snblog
             /// <summary>
             /// v2版本
             /// </summary>
-            V2 = 2
+            V2 = 2,
+             /// <summary>
+            /// AngleSharp
+            /// </summary>
+            AngleSharp = 3
         }
         #endregion
 
@@ -70,7 +73,6 @@ namespace Snblog
                   {
                       c.SwaggerDoc(version, new OpenApiInfo
                       {
-                          //Version = "v1", //版本号
                           Title = "SN blog API", //标题
                           Description = "EFCore数据操作 ASP.NET Core Web API", //描述
                           TermsOfService = new Uri("https://example.com/terms"), //服务条款
@@ -164,7 +166,7 @@ namespace Snblog
 
 
 
-           // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
+            // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
             services.AddScoped<IconcardContext, snblogContext>();//db
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
@@ -184,10 +186,13 @@ namespace Snblog
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
             services.AddScoped<ICacheUtil, CacheUtil>();
-            services.AddSingleton<ICacheManager, CacheManager>(); //缓存-整个应用程序生命周期以内只创建一个实例 
+            //缓存-整个应用程序生命周期以内只创建一个实例 
+            services.AddSingleton<ICacheManager, CacheManager>();
+
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
             services.AddScoped<IReSnLabelsService, ReSnLabelsService>();
             services.AddScoped<IReSnNavigationService, ReSnNavigationService>();
+            services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
 
             #endregion
             services.AddControllers();

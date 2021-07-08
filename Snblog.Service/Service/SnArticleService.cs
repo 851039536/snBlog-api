@@ -154,11 +154,11 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync(bool cache)
         {
-            result_Int = _cacheutil.CacheNumber("Count_SnArticle", result_Int,cache);
+            result_Int = _cacheutil.CacheNumber("Count_SnArticle", result_Int, cache);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnArticle.CountAsync();
-                _cacheutil.CacheNumber("Count_SnArticle", result_Int,cache);
+                _cacheutil.CacheNumber("Count_SnArticle", result_Int, cache);
             }
             return result_Int;
         }
@@ -201,7 +201,7 @@ namespace Snblog.Service.Service
                     {
                         if (i != null)
                         {
-                            var item = (int) i;
+                            var item = (int)i;
                             num += item;
                         }
                     }
@@ -219,7 +219,7 @@ namespace Snblog.Service.Service
                     {
                         if (i != null)
                         {
-                            var item = (int) i;
+                            var item = (int)i;
                             num += item;
                         }
                     }

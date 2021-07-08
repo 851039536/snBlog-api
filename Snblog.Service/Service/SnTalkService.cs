@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
-using Snblog.IService;
+using Snblog.IService.IService;
 using Snblog.Models;
 using Snblog.Repository.Repository;
 
@@ -88,9 +88,9 @@ namespace Snblog.Service.Service
             }
         }
 
-        public async Task<bool> UpdateAsync(SnTalk Entity)
+        public async Task<bool> UpdateAsync(SnTalk entity)
         {
-            _service.SnTalk.Update(Entity);
+            _service.SnTalk.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
     }
