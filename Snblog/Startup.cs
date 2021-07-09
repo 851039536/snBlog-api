@@ -204,6 +204,7 @@ namespace Snblog
         {
             if (env.IsDevelopment())
             {
+                //对于开发模式，一旦报错就跳转到错误堆栈页面
                 app.UseDeveloperExceptionPage();
             }
             #region Swagger+性能分析（MiniProfiler）+自定义页面

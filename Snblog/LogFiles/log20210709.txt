@@ -1,0 +1,94 @@
+2021-07-09 08:53:52.511 +08:00 [INF] 启动主机
+2021-07-09 08:54:46.813 +08:00 [INF] 默认赋值https://www.cnblogs.com/
+2021-07-09 08:54:47.537 +08:00 [INF] [非专业翻译] Mapster - 自定义映射逻辑,https://www.cnblogs.com/staneee/p/14913783.html
+2021-07-09 08:54:47.539 +08:00 [INF] hive学习笔记之十：用户自定义聚合函数(UDAF),https://www.cnblogs.com/bolingcavalry/p/14988931.html
+2021-07-09 08:54:47.540 +08:00 [INF] webpack（1）安装环境与解决环境问题,https://www.cnblogs.com/jiakecong/p/14985984.html
+2021-07-09 08:54:47.541 +08:00 [INF] Netty 框架学习 —— UDP 广播,https://www.cnblogs.com/Yee-Q/p/14988692.html
+2021-07-09 08:54:47.543 +08:00 [INF] Linux云计算-04_Linux用户及权限管理,https://www.cnblogs.com/shuchaoyang/p/14988636.html
+2021-07-09 08:54:47.543 +08:00 [INF] gRPC（3）：拦截器,https://www.cnblogs.com/Hui4401/p/14988610.html
+2021-07-09 08:54:47.544 +08:00 [INF] 十二张图，踹开消息队列的大门,https://www.cnblogs.com/three-fighter/p/14988469.html
+2021-07-09 08:54:47.545 +08:00 [INF] 多线程的这些锁知道吗？手写一个自旋锁？,https://www.cnblogs.com/yuxueyyz/p/14988383.html
+2021-07-09 08:54:47.545 +08:00 [INF] FlowNet：simple / correlation 与 相关联操作,https://www.cnblogs.com/maomaozi/p/14988172.html
+2021-07-09 08:54:47.546 +08:00 [INF] 关于PHP导出数据超时的优化,https://www.cnblogs.com/ycold/p/14984368.html
+2021-07-09 08:54:47.552 +08:00 [INF] Java并发之ReentrantReadWriteLock源码解析（二）,https://www.cnblogs.com/beiluowuzheng/p/14980423.html
+2021-07-09 08:54:47.553 +08:00 [INF] Activiti7 入门篇,https://www.cnblogs.com/cjsblog/p/14983092.html
+2021-07-09 08:54:47.553 +08:00 [INF] 浅析富文本编辑器框架Slate.js,https://www.cnblogs.com/geek1116/p/14987973.html
+2021-07-09 08:54:47.555 +08:00 [INF] 【Azure 应用程序见解】Application Insights Java Agent 3.1.0的使用实验，通过修改单个URL的采样率来减少请求及依赖项的数据采集,https://www.cnblogs.com/lulight/p/14986996.html
+2021-07-09 08:54:47.556 +08:00 [INF] 使用gitlab自带的ci/cd实现.net core应用程序的部署,https://www.cnblogs.com/yupingyong/p/14987472.html
+2021-07-09 08:54:47.556 +08:00 [INF] Java核心反射机制,https://www.cnblogs.com/xbhog/p/14987005.html
+2021-07-09 08:54:47.557 +08:00 [INF] 『动善时』JMeter基础 — 53、JMeter集合点功能的使用,https://www.cnblogs.com/liuyuelinfighting/p/14986660.html
+2021-07-09 08:54:47.558 +08:00 [INF] 精尽Spring Boot源码分析 - 日志系统,https://www.cnblogs.com/lifullmoon/p/14957824.html
+2021-07-09 08:54:47.559 +08:00 [INF] Redis 实战篇：GEO助我邂逅附近女神,https://www.cnblogs.com/uniqueDong/p/14986577.html
+2021-07-09 08:54:47.563 +08:00 [INF] 登录华科校园网，我用Socket,https://www.cnblogs.com/huxiaoan/p/14986211.html
+2021-07-09 08:56:28.107 +08:00 [INF] 启动主机
+2021-07-09 08:56:43.452 +08:00 [INF] Cnblogs 默认赋值
+2021-07-09 10:05:42.536 +08:00 [INF] 启动主机
+2021-07-09 10:07:29.684 +08:00 [INF] Cnblogs 默认赋值
+2021-07-09 11:33:43.108 +08:00 [INF] 启动主机
+2021-07-09 11:34:00.355 +08:00 [INF] wpf-After,/kaiouyang-sn/wpf-After
+2021-07-09 11:34:00.360 +08:00 [INF] sn-blogs-vue,/kaiouyang-sn/sn-blogs-vue
+2021-07-09 11:34:00.362 +08:00 [INF] Snblog,/kaiouyang-sn/Snblog
+2021-07-09 11:34:07.262 +08:00 [INF] Cnblogs 默认赋值
+2021-07-09 11:36:12.899 +08:00 [INF] 
+        <div class="post">
+            <h1 class="postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/liuyz1996/p/14983943.html">
+    <span>进制详解：二进制、八进制和十六进制</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<p><span style="font-size: 18pt"><strong>一、进制与常见的十进制</strong></span></p>
+<p><span style="font-size: 16px">我们平时使用的数字都是由 0~9 共十个数字组成的，例如 1、9、10、297、952 等，一个数字最多能表示九，如果要表示十、十一、二十九、一百等，就需要多个数字组合起来。</span></p>
+<p><span style="font-size: 16px">表示 5+8 的结果，一个数字不够，只能”进位“，用 13 来表示；这时”进一位“相当于十，”。进两位“相当于二十。</span></p>
+<p><span style="font-size: 16px">因为逢十进一（满十进一），也因为只有 0~9 共十个数字，所以叫做十进制（Decimalism）。</span></p>
+<p><span style="font-size: 16px">进制也就是进位制。进行加法运算时逢X进一（满X进一），进行减法运算时借一当X，这就是X进制，这种进制也就包含X个数字，基数为X。十进制有 0~9 共10个数字，基数为10，在加减法运算中，逢十进一，借一当十。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18pt"><strong>二、二进制</strong></span></p>
+<p><span style="font-size: 16px">用0、1两个数字来表示数值，这就是二进制（Binary）。例如，数字&nbsp;0、1、10、111、100、1000001 都是有效的二进制。在计算机内部，数据都是以二进制的形式存储的。</span></p>
+<p><span style="font-size: 16px">二进制加减法和十进制加减法的思想是类似的：</span></p>
+<ul>
+<li>对于十进制，进行加法运算时逢十进一，进行减法运算时借一当十；</li>
+<li>对于二进制，进行加法运算时逢二进一，进行减法运算时借一当二。</li>
+</ul>
+<p><img src="https://img2020.cnblogs.com/blog/2178423/202107/2178423-20210707221132203-545162283.png" alt="" width="724" height="425" loading="lazy"></p>
+<h2><span style="font-size: 18pt">三、八进制</span></h2>
+<p><span style="font-size: 16px">八进制有 0~7 共8个数字，基数为8，加法运算时逢八进一，减法运算时借一当八。例如，数字 0、1、5、7、14、733、67001、25430 都是有效的八进制。</span></p>
+<p><span style="font-size: 16px"><img src="https://img2020.cnblogs.com/blog/2178423/202107/2178423-20210707221844523-1162618354.png" alt="" width="718" height="456" loading="lazy"></span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2><span style="font-size: 18pt">四、十六进制</span></h2>
+<p><span style="font-size: 16px">除了二进制和八进制，十六进制也经常使用，甚至比八进制还要频繁。<br><br>十六进制中，用<span style="color: rgba(255, 0, 0, 1)">A</span>来表示10，<span style="color: rgba(255, 0, 0, 1)">B</span>表示11，<span style="color: rgba(255, 0, 0, 1)">C</span>表示12，<span style="color: rgba(255, 0, 0, 1)">D</span>表示13，<span style="color: rgba(255, 0, 0, 1)">E</span>表示14，<span style="color: rgba(255, 0, 0, 1)">F</span>表示15，因此有 0~F 共16个数字，基数为16，加法运算时逢16进1，减法运算时借1当16。例如，数字 0、1、6、9、A、D、F、419、EA32、80A3、BC00 都是有效的十六进制。</span></p>
+<blockquote>注意，十六进制中的字母不区分大小写，ABCDEF 也可以写作 abcdef。</blockquote>
+<p>&nbsp;</p>
+<p><img src="https://img2020.cnblogs.com/blog/2178423/202107/2178423-20210707222744566-1783688893.png" alt="" width="854" height="549" loading="lazy"></p>
+<p>&nbsp;</p>
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-07-07 22:28</span>&nbsp;
+<a href="https://www.cnblogs.com/liuyz1996/">沐风半岛</a>&nbsp;
+阅读(<span id="post_view_count">154</span>)&nbsp;
+评论(<span id="post_comment_count">1</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14983943" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14983943);return false;">收藏</a>&nbsp;
+<a href="javascript:void(0)" onclick="reportManager.report({ currentUserId: '', targetType: 'blogPost', targetId: '14983943', targetLink: 'https://www.cnblogs.com/liuyz1996/p/14983943.html', title: '进制详解：二进制、八进制和十六进制' })">举报</a></div>
+        </div>
+	    
+	    
+    ,
+2021-07-09 13:54:27.224 +08:00 [INF] 启动主机

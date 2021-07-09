@@ -160,10 +160,7 @@ namespace Snblog.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        public async Task<IActionResult> UpdateAsync(SnArticle entity)
-        {
-            return Ok(await _service.UpdateAsync(entity));
-        }
+        public async Task<IActionResult> UpdateAsync(SnArticle entity) => Ok(await _service.UpdateAsync(entity));
         #endregion
         #region 删除数据
         /// <summary>
@@ -173,10 +170,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         //  [Authorize(Roles = "kai")] //角色授权
         [HttpDelete("DeleteAsync")]
-        public async Task<IActionResult> DeleteAsync(int id)
-        {
-            return Ok(await _service.DeleteAsync(id));
-        }
+        public async Task<IActionResult> DeleteAsync(int id) => Ok(await _service.DeleteAsync(id));
         #endregion
         #region 更新部分列[comment give read]
         /// <summary>
@@ -186,10 +180,7 @@ namespace Snblog.Controllers
         /// <param name="type">更新字段</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
-        public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type)
-        {
-            return Ok(await _service.UpdatePortionAsync(entity, type));
-        }
+        public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type) => Ok(await _service.UpdatePortionAsync(entity, type));
         #endregion
 
     }

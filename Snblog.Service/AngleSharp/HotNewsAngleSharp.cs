@@ -20,6 +20,8 @@ namespace Snblog.Service.AngleSharp
                 url = "https://www.cnblogs.com/";
                 selector = "#post_list";
                 selectorall = "div.post-item-text > a";
+                _logger.LogInformation("Cnblogs 默认赋值");
+
             }
             List<string> resultData = await reptile(url, selector, selectorall);
             return resultData;
@@ -62,7 +64,7 @@ namespace Snblog.Service.AngleSharp
                 var matches = container.QuerySelectorAll(selectorall);
                 foreach (var item in matches)
                 {
-                    _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
+                    //_logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
                     resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
                 }
             }
