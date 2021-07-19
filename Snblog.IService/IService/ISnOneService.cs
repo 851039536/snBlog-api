@@ -59,7 +59,7 @@ namespace Snblog.IService.IService
         /// <param name="isDesc">是否倒序</param>
         /// <param name="name">排序条件</param>
         /// <returns></returns>
-        Task<List<SnOne>> GetFyTypeAsync(int type, int pageIndex, int pageSize,string name, bool isDesc);
+        Task<List<SnOne>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc);
         /// <summary>
         /// 按id删除
         /// </summary>
@@ -78,7 +78,13 @@ namespace Snblog.IService.IService
         /// <returns></returns>
         Task<bool> UpdateAsync(SnOne one);
 
-
+        /// <summary>
+        /// 更新点赞[ give ]
+        /// </summary>
+        /// <param name="snOne"></param>
+        /// <param name="type">更新的字段</param>
+        /// <returns></returns>
+        Task<bool> UpdatePortionAsync(SnOne snOne, string type);
 
 
     }

@@ -42,6 +42,14 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpGet("ConutLabel")]
         public IActionResult ConutLabel(int type) => Ok(_service.ConutLabel(type));
+
+        /// <summary>
+        /// 查询分类总数 (缓存)
+        /// </summary>
+        /// <param name="type">分类id</param>
+        /// <returns></returns>
+        [HttpGet("ConutSort")]
+        public IActionResult ConutSort(int type) => Ok(_service.ConutSort(type));
         #endregion
         #region 查询所有 (缓存)
         /// <summary>
@@ -99,7 +107,7 @@ namespace Snblog.Controllers
         #endregion
         #region  条件分页查询 (缓存)
         /// <summary>
-        /// 条件分页查询 (缓存)
+        /// 按标签分页查询  (缓存)
         /// </summary>
         /// <param name="type">分类 : 00-表示查询所有</param>
         /// <param name="pageIndex">当前页码</param>
@@ -109,6 +117,21 @@ namespace Snblog.Controllers
         public async Task<IActionResult> GetfyTestAsync(int type, int pageIndex, int pageSize, bool isDesc)
         {
             return Ok(await _service.GetPagingWhereAsync(type, pageIndex, pageSize, isDesc));
+        }
+        #endregion
+
+         #region  条件分页查询 (缓存)
+        /// <summary>
+        /// 按分类分页查询  (缓存)
+        /// </summary>
+        /// <param name="type">分类 : 00-表示查询所有</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        [HttpGet("GetfySortTestAsync")]
+        public async Task<IActionResult> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc)
+        {
+            return Ok(await _service.GetPagingSortWhereAsync(type, pageIndex, pageSize, isDesc));
         }
         #endregion
         #region 分页查询(条件排序 缓存)

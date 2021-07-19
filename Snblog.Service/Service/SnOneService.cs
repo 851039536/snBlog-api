@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
 using Snblog.Enties.Models;
 using Snblog.IService.IService;
@@ -15,10 +16,13 @@ namespace Snblog.Service.Service
         private int result_Int;
         private List<SnOne> result_List = null;
         private readonly snblogContext _service;//DB
-        public SnOneService(snblogContext service, ICacheUtil cacheutil)
+
+           private readonly ILogger<SnArticleService> _logger;
+        public SnOneService(snblogContext service, ICacheUtil cacheutil, ILogger<SnArticleService> logger)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
+            _logger = logger;
         }
 
         public async Task<List<SnOne>> GetAllAsync()
@@ -222,6 +226,34 @@ namespace Snblog.Service.Service
             }
 
             return num;
+        }
+
+        public async Task<bool> UpdatePortionAsync(SnOne snOne, string type)
+        {
+             _logger.LogInformation("更新点赞");
+            var date =   _service.SnOne.Update(snOne);
+
+            //默认不更新
+            date.Property("OneId").IsModified = false;
+            date.Property("OneTitle").IsModified = false;
+            date.Property("OneText").IsModified = false;
+            date.Property("OneImg").IsModified = false;
+            date.Property("OneTypeId").IsModified = false;
+            date.Property("OneAuthor").IsModified = false;
+            date.Property("OneData").IsModified = false;
+            date.Property("OneRead").IsModified = false;
+            date.Property("OneGive").IsModified = false;
+            date.Property("OneComment").IsModified = false;
+    
+            switch (type)
+            {    //指定字段进行更新操作
+           
+                case "give":
+                    date.Property("OneGive").IsModified = true;
+                    break;
+            
+            }
+            return await _service.SaveChangesAsync() > 0;
         }
     }
 }

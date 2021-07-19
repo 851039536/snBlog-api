@@ -38,7 +38,7 @@ namespace Snblog.IService.IService
 
 
         /// <summary>
-        /// 条件分页查询
+        /// 按标签分页查询 
         /// </summary>
         /// <param name="type"></param>
         /// <param name="pageIndex">当前页码</param>
@@ -46,6 +46,15 @@ namespace Snblog.IService.IService
         /// <param name="isDesc">是否倒序</param>
         Task< List<SnArticle>> GetPagingWhereAsync(int type, int pageIndex, int pageSize, bool isDesc);
 
+
+           /// <summary>
+        /// 按标签分页查询 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        Task< List<SnArticle>> GetPagingSortWhereAsync(int type, int pageIndex, int pageSize, bool isDesc);
         /// <summary>
         /// 条件分页查询
         /// </summary>
@@ -75,6 +84,13 @@ namespace Snblog.IService.IService
         Task<List<SnArticle>> GetTagtextAsync(int tag,bool isDesc);
 
         /// <summary>
+        /// 查询分类总数
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        int ConutSort(int type);
+
+         /// <summary>
         /// 条件查询总数
         /// </summary>
         /// <param name="type"></param>

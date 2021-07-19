@@ -148,5 +148,16 @@ namespace Snblog.Controllers
         }
         #endregion
 
+         #region 更新部分列[comment give read]
+        /// <summary>
+        /// 更新点赞[ give ]
+        /// </summary>
+        /// <param name="entity">对象</param>
+        /// <param name="type">更新字段</param>
+        /// <returns></returns>
+        [HttpPut("UpdatePortionAsync")]
+        public async Task<IActionResult> UpdatePortionAsync(SnOne entity, string type) => Ok(await _service.UpdatePortionAsync(entity, type));
+        #endregion
+
     }
 }
