@@ -54,7 +54,15 @@ namespace Snblog.Service.Service
             result_List = _cacheutil.CacheString1("SnOne_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
             if (result_List == null)
             {
-                result_List = await _service.SnOne.OrderByDescending(c => c.OneRead).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                if (isDesc)
+                {
+                     result_List = await _service.SnOne.OrderByDescending(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                }
+                else
+                {
+                      result_List = await _service.SnOne.OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                }
+               
                 _cacheutil.CacheString1("SnOne_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
             }
             return result_List;

@@ -225,7 +225,7 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync(bool cache)
         {
-                    _logger.LogInformation("查询总数 :"+cache);
+             _logger.LogInformation("查询总数 :"+cache);
             result_Int = _cacheutil.CacheNumber("Count_SnArticle", result_Int, cache);
             if (result_Int == 0)
             {
