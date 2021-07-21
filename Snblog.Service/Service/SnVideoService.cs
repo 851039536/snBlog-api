@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
+using Snblog.Repository.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,112 +12,191 @@ using System.Threading.Tasks;
 
 namespace Snblog.Service
 {
-    public class SnVideoService : BaseService, ISnVideoService
+    public class SnVideoService : ISnVideoService
     {
-        public SnVideoService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        private readonly snblogContext _service;
+        private readonly CacheUtil _cacheutil;
+        private readonly ILogger<SnVideoService> _logger;
+        private int result_Int;
+        private List<SnVideo> result_List = default;
+        public SnVideoService(ILogger<SnVideoService> logger, snblogContext service, ICacheUtil cacheutil)
         {
+            _logger = logger;
+            _service = service;
+            _cacheutil = (CacheUtil)cacheutil;
         }
 
-        public async Task<string> AsyDetVideo(int id)
-        {
-            int da = await  CreateService<SnVideo>().DeleteAsync(id);
-            string data = da == 1 ? "删除成功" : "删除失败";
-            return data;
-        }
 
-        public async Task<List<SnVideo>> AsyGetTest()
-        {
-            var data = CreateService<SnVideo>();
-            return await data.GetAll().ToListAsync();
-        }
 
-        public async Task<List<SnVideo>> AsyGetTestId(int id)
+        public async Task<SnVideo> GetByIdAsync(int id, bool cache)
         {
-            var data = CreateService<SnVideo>().Where(s => s.VId == id);
-            return await data.ToListAsync();
-        }
-
-        public async Task<SnVideo> AsyInsVideo(SnVideo test)
-        {
-            return await CreateService<SnVideo>().AddAsync(test);
-        }
-
-        public async Task<string> AysUpVideo(SnVideo test)
-        {
-            try
+            _logger.LogInformation("主键查询_SnVideo:" + id + cache);
+            SnVideo result = null;
+            result = _cacheutil.CacheString("GetByIdAsync_SnVideo" + id + cache, result, cache);
+            if (result == null)
             {
-                int da = await CreateService<SnVideo>().UpdateAsync(test);
-                string data = da == 1 ? "更新成功" : "更新失败";
-                return data;
+                result = await _service.SnVideo.FindAsync(id);
+                _cacheutil.CacheString("GetByIdAsync_SnVideo" + id + cache, result, cache);
             }
-            catch (Exception e)
+            return result;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public async Task<List<SnVideo>> GetAllAsync(bool cache)
+        {
+            _logger.LogInformation("查询所有-SnVideo");
+            result_List = _cacheutil.CacheString1("GetAllAsync_SnVideo", result_List);
+            if (result_List == null)
             {
-                return "异常:" + e.Message;
+                result_List = await _service.SnVideo.ToListAsync();
+                _cacheutil.CacheString("GetAllAsync_SnVideo", result_List, cache);
             }
+            return result_List;
         }
 
-        public int ConutType(int type)
+        public async Task<List<SnVideo>> GetFyAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            var data = CreateService<SnVideo>().Where(s => s.VTypeid == type);
-            return data.Count();
-        }
-
-        public string DetTestId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetVideoCount()
-        {
-            int data = CreateService<SnVideo>().Count();
-            return data;
-        }
-        /// <summary>
-        /// 查询视频总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public int GetVideoCount(int type)
-        {
-            return CreateService<SnVideo>().Count(c => c.VTypeid == type);
-        }
-        /// <summary>
-        /// 条件分页查询 - 支持排序
-        /// </summary>
-        /// <typeparam name="TOrder">排序约束</typeparam>
-        /// <param name="where">过滤条件</param>
-        /// <param name="order">排序条件</param>
-        /// <param name="pageIndex">当前页码</param>
-        /// <param name="pageSize">每页记录条数</param>
-        /// <param name="count">返回总条数</param>
-        /// <param name="isDesc">是否倒序</param>
-        public List<SnVideo> GetPagingWhere(int type, int pageIndex, int pageSize, out int count, bool isDesc)
-        {
-            IEnumerable<SnVideo> data;
-            if (type == 99999)
+            _logger.LogInformation("分页查询 _SnVideo:" + type + pageIndex + pageSize + isDesc + cache);
+            result_List = _cacheutil.CacheString("GetFyAsync" + type + pageIndex + pageSize + isDesc + cache, result_List, cache);
+            if (result_List == null)
             {
-                data = CreateService<SnVideo>().Wherepage(s => s.VTypeid != null, c => c.VId, pageIndex, pageSize, out count, isDesc);
+                result_List = await GetFyAsyncs(type, pageIndex, pageSize, isDesc);
+                _cacheutil.CacheString("GetFyAsync" + type + pageIndex + pageSize + isDesc + cache, result_List, cache);
+            }
+            return result_List;
+        }
+
+        private async Task<List<SnVideo>> GetFyAsyncs(int type, int pageIndex, int pageSize, bool isDesc)
+        {
+            if (type == 9999)
+            {
+                if (isDesc)
+                {
+                    result_List = await _service.SnVideo.OrderByDescending(c => c.VId).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                }
+                else
+                {
+                    result_List = await _service.SnVideo.OrderBy(c => c.VId).Skip((pageIndex - 1) * pageSize)
+                             .Take(pageSize).ToListAsync();
+                }
             }
             else
             {
-                data = CreateService<SnVideo>().Wherepage(s => s.VTypeid == type, c => c.VId, pageIndex, pageSize, out count, isDesc);
+                if (isDesc)
+                {
+                    result_List = await _service.SnVideo.Where(s => s.VTypeid == type).OrderByDescending(c => c.VId).Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize).ToListAsync();
+                }
+                else
+                {
+                    result_List = await _service.SnVideo.Where(s => s.VTypeid == type).OrderBy(c => c.VId).Skip((pageIndex - 1) * pageSize)
+                           .Take(pageSize).ToListAsync();
+                }
             }
-
-            return data.ToList();
+            return result_List;
         }
 
-        public List<SnVideo> GetTest()
+        public async Task<int> GetCountAsync(bool cache)
         {
-            var data = CreateService<SnVideo>();
-            return data.GetAll().ToList();
+            _logger.LogInformation("查询总数_SnVideo:" + cache);
+            result_Int = _cacheutil.CacheNumber("Count_SnVideo", result_Int, cache);
+            if (result_Int == 0)
+            {
+                result_Int = await _service.SnVideo.CountAsync();
+                _cacheutil.CacheNumber("Count_SnVideo", result_Int, cache);
+            }
+            return result_Int;
         }
 
-        public List<SnVideo> GetTestWhere(int type)
+        public async Task<int> GetTypeCount(int type, bool cache)
         {
-            var data = CreateService<SnVideo>().Where(s => s.VTypeid == type);
-            return data.ToList();
+            _logger.LogInformation("条件查总数 :" + type);
+            //读取缓存值
+            result_Int = _cacheutil.CacheNumber("GetTypeCount_SnVideo" + type + cache, result_Int, cache);
+            if (result_Int == 0)
+            {
+                result_Int = await _service.SnVideo.CountAsync(c => c.VTypeid == type);
+                _cacheutil.CacheNumber("GetTypeCount_SnVideo" + type + cache, result_Int, cache);
+            }
+            return result_Int;
         }
 
-      
+        public async Task<List<SnVideo>> GetTypeAllAsync(int type, bool cache)
+        {
+            _logger.LogInformation("分类查询:_SnVideo" + type + cache);
+            result_List = _cacheutil.CacheString("GetTypeAllAsync_SnVideo" + type + cache, result_List, cache);
+            if (result_List == null)
+            {
+                result_List = await _service.SnVideo.Where(s => s.VTypeid == type).ToListAsync();
+                _cacheutil.CacheString("GetTypeAllAsync_SnVideo" + type + cache, result_List, cache);
+            }
+            return result_List;
+        }
+
+        public async Task<bool> AddAsync(SnVideo entity)
+        {
+            _logger.LogInformation("添加数据_SnVideo :" + entity);
+            await _service.SnVideo.AddAsync(entity);
+            return await _service.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> UpdateAsync(SnVideo entity)
+        {
+            _logger.LogInformation("删除数据_SnVideo :" + entity);
+            _service.SnVideo.Update(entity);
+            return await _service.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            _logger.LogInformation("删除数据_SnVideo:" + id);
+            var todoItem = await _service.SnVideo.FindAsync(id);
+            if (todoItem == null) return false;
+            _service.SnVideo.Remove(todoItem);
+            return await _service.SaveChangesAsync() > 0;
+        }
+
+        public async Task<int> GetSumAsync(bool cache)
+        {
+            _logger.LogInformation("统计标题数量_SnVideo：" + cache);
+            result_Int = _cacheutil.CacheNumber("GetSumAsync_SnVideo"+cache, result_Int, cache);
+            if (result_Int == 0)
+            {
+                result_Int = await GetSum();
+                _cacheutil.CacheNumber("GetSumAsync_SnVideo"+cache, result_Int, cache);
+            }
+            return result_Int;
+        }
+
+        /// <summary>
+        /// 统计字段数
+        /// </summary>
+        /// <returns></returns>
+        private async Task<int> GetSum()
+        {
+            int num = 0;
+            var text = await _service.SnVideo.Select(c => c.VTitle).ToListAsync();
+            for (int i = 0; i < text.Count; i++)
+            {
+                num += text[i].Length;
+            }
+            return num;
+        }
+
+
     }
 }
+

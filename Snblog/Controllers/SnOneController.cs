@@ -80,22 +80,22 @@ namespace Snblog.Controllers
             return Ok(await _service.GetSumAsync(type));
         }
         #endregion
-        #region 分页查询 （缓存）
+        #region 分页查询 
         /// <summary>
-        /// 分页查询 （缓存）
+        /// 分页查询 
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序</param>
+        /// <param name="isDesc">是否倒序-主键排序</param>
         [HttpGet("GetFyAllAsync")]
         public async Task<IActionResult> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
             return Ok(await _service.GetFyAllAsync(pageIndex, pageSize, isDesc));
         }
         #endregion
-        #region 条件分页查询（缓存）
+        #region 条件分页查询
         /// <summary>
-        /// 条件分页查询（缓存）
+        /// 条件分页查询
         /// </summary>
         /// <param name="type">查询条件[999查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
         /// <param name="pageIndex">当前页码[1]</param>

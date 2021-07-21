@@ -235,7 +235,7 @@ namespace Snblog.Service.Service
             return result_Int;
         }
 
-        public async Task<List<SnArticle>> GetAllAsync()
+        public async Task<List<SnArticle>>  GetAllAsync()
         {
                   _logger.LogInformation("查询所有");
             result_List = _cacheutil.CacheString1("GetAllSnArticle", result_List);
