@@ -126,12 +126,12 @@ namespace Snblog.Service.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnArticle.Where(s => s.sort_id == sort).OrderByDescending(c => c.article_id).Skip((pageIndex - 1) * pageSize)
+                    result_List = await _service.SnArticle.Where(s => s.sort_id == sort).OrderByDescending(c => c.read).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnArticle.Where(s => s.sort_id == sort).OrderBy(c => c.article_id).Skip((pageIndex - 1) * pageSize)
+                    result_List = await _service.SnArticle.Where(s => s.sort_id == sort).OrderBy(c => c.read).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).ToListAsync();
                 }
             }

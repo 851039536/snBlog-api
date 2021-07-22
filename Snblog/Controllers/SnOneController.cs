@@ -21,9 +21,9 @@ namespace Snblog.Controllers
             _service = service;
         }
 
-        #region 查询所有（缓存）
+        #region 查询所有
         /// <summary>
-        /// 查询所有（缓存）
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
@@ -32,9 +32,9 @@ namespace Snblog.Controllers
             return Ok(await _service.GetAllAsync());
         }
         #endregion
-        #region 主键查询（缓存）
+        #region 主键查询
         /// <summary>
-        /// 主键查询（缓存）
+        /// 主键查询
         /// </summary>
         /// <param name="id">主键</param>
         /// <returns></returns>
@@ -44,7 +44,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetByIdAsync(id));
         }
         #endregion
-        #region 查询总数（缓存）
+        #region 查询总数
         /// <summary>
         /// 查询总数（缓存）
         /// </summary>
@@ -55,7 +55,7 @@ namespace Snblog.Controllers
             return Ok(await _service.CountAsync());
         }
         #endregion
-        #region 条件查总数（缓存）
+        #region 条件查总数
         /// <summary>
         /// 条件查总数（缓存）
         /// </summary>
@@ -67,10 +67,10 @@ namespace Snblog.Controllers
             return Ok(await _service.CountTypeAsync(type));
         }
         #endregion
-        #region  读取[字段/阅读/点赞]总数量/缓存
+        #region 统计[字段/阅读/点赞]总数量
 
         /// <summary>
-        /// 读取[字段/阅读/点赞]总数量/缓存
+        /// 统计[字段/阅读/点赞]总数量
         /// </summary>
         /// <param name="type">text:内容字段数-read:阅读数量-give:点赞数量</param>
         /// <returns></returns>
@@ -148,9 +148,9 @@ namespace Snblog.Controllers
         }
         #endregion
 
-         #region 更新部分列[comment give read]
+         #region 更新部分列[give read]
         /// <summary>
-        /// 更新点赞[ give ]
+        /// 更新部分列[give read]
         /// </summary>
         /// <param name="entity">对象</param>
         /// <param name="type">更新字段</param>

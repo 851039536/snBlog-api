@@ -17,7 +17,7 @@ namespace Snblog.Service.Service
         private List<SnOne> result_List = null;
         private readonly snblogContext _service;//DB
 
-           private readonly ILogger<SnArticleService> _logger;
+        private readonly ILogger<SnArticleService> _logger;
         public SnOneService(snblogContext service, ICacheUtil cacheutil, ILogger<SnArticleService> logger)
         {
             _service = service;
@@ -51,19 +51,19 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnOne>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            result_List = _cacheutil.CacheString1("SnOne_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+            result_List = _cacheutil.CacheString1("SnOne_GetFyAllAsync" + pageIndex + pageSize + isDesc, result_List);
             if (result_List == null)
             {
                 if (isDesc)
                 {
-                     result_List = await _service.SnOne.OrderByDescending(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnOne.OrderByDescending(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
                 else
                 {
-                      result_List = await _service.SnOne.OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnOne.OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
-               
-                _cacheutil.CacheString1("SnOne_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+
+                _cacheutil.CacheString1("SnOne_GetFyAllAsync" + pageIndex + pageSize + isDesc, result_List);
             }
             return result_List;
         }
@@ -111,11 +111,11 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountTypeAsync(int type)
         {
-            result_Int = _cacheutil.CacheNumber1("SnOne_CountTypeAsync"+type, result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnOne_CountTypeAsync" + type, result_Int);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnOne.CountAsync(s => s.OneTypeId == type);
-               _cacheutil.CacheNumber1("SnOne_CountTypeAsync"+type, result_Int);
+                _cacheutil.CacheNumber1("SnOne_CountTypeAsync" + type, result_Int);
             }
             return result_Int;
 
@@ -123,11 +123,11 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnOne>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc)
         {
-            result_List = _cacheutil.CacheString1("SnOne_GetFyTypeAsync"+type+pageIndex+pageSize+name+isDesc, result_List);
+            result_List = _cacheutil.CacheString1("SnOne_GetFyTypeAsync" + type + pageIndex + pageSize + name + isDesc, result_List);
             if (result_List == null)
             {
                 result_List = await GetListFyAsync(type, pageIndex, pageSize, name, isDesc);
-             _cacheutil.CacheString1("SnOne_GetFyTypeAsync"+type+pageIndex+pageSize+name+isDesc, result_List);
+                _cacheutil.CacheString1("SnOne_GetFyTypeAsync" + type + pageIndex + pageSize + name + isDesc, result_List);
             }
             return result_List;
         }
@@ -184,13 +184,13 @@ namespace Snblog.Service.Service
 
         public async Task<int> GetSumAsync(string type)
         {
-            result_Int = _cacheutil.CacheNumber1("SnOne_GetSumAsync"+type, result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnOne_GetSumAsync" + type, result_Int);
             if (result_Int != 0)
             {
                 return result_Int;
             }
             result_Int = await GetSum(type);
-           _cacheutil.CacheNumber1("SnOne_GetSumAsync"+type, result_Int);
+            _cacheutil.CacheNumber1("SnOne_GetSumAsync" + type, result_Int);
             return result_Int;
         }
 
@@ -238,8 +238,8 @@ namespace Snblog.Service.Service
 
         public async Task<bool> UpdatePortionAsync(SnOne snOne, string type)
         {
-             _logger.LogInformation("更新点赞");
-            var date =   _service.SnOne.Update(snOne);
+            _logger.LogInformation("更新点赞");
+            var date = _service.SnOne.Update(snOne);
 
             //默认不更新
             date.Property("OneId").IsModified = false;
@@ -252,14 +252,15 @@ namespace Snblog.Service.Service
             date.Property("OneRead").IsModified = false;
             date.Property("OneGive").IsModified = false;
             date.Property("OneComment").IsModified = false;
-    
+
             switch (type)
             {    //指定字段进行更新操作
-           
                 case "give":
                     date.Property("OneGive").IsModified = true;
                     break;
-            
+                case "read":
+                    date.Property("OneRead").IsModified = true;
+                    break;
             }
             return await _service.SaveChangesAsync() > 0;
         }
