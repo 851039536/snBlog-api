@@ -9,15 +9,17 @@ namespace Snblog.IService.IService
         /// <summary>
         /// 查询所有
         /// </summary>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnLabels>> GetAllAsync();
+        Task<List<SnLabels>> GetAllAsync(bool cache);
 
         /// <summary>
         /// 主键查询
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">主键</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnLabels> GetByIdAsync(int id);
+        Task<SnLabels> GetByIdAsync(int id,bool cache);
 
         /// <summary>
         /// 条件分页查询 - 支持排序
@@ -25,12 +27,14 @@ namespace Snblog.IService.IService
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-        Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc);
+        ///   /// <param name="cache">是否开启缓存</param>
+        Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc,bool cache);
         /// <summary>
-        /// 查询总数
+        ///  查询总数
         /// </summary>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<int> GetCountAsync();
+        Task<int> GetCountAsync(bool cache);
 
         /// <summary>
         /// 添加数据

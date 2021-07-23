@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
 using Snblog.Enties.Models;
 using Snblog.IRepository;
@@ -18,26 +19,24 @@ namespace Snblog.Service.Service
         private int result_Int;
         private List<SnNavigation> result_List = null;
         private SnNavigation result_Model = null;
-        public SnNavigationService( snblogContext service, ICacheUtil cacheutil) 
+        private readonly ILogger<SnNavigationService> _logger;
+        public SnNavigationService(snblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
+            _logger = logger;
         }
 
-        /// <summary>
-        /// 条件分页查询 - 支持排序
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="pageIndex">当前页码</param>
-        /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序</param>
-        public async Task<List<SnNavigation>> GetFyAllAsync(string type, int pageIndex, int pageSize, bool isDesc)
+
+        public async Task<List<SnNavigation>> GetFyAllAsync(string type, int pageIndex, int pageSize, bool isDesc, bool cahe)
         {
-            result_List = _cacheutil.CacheString1("GetFyAllAsync" + type + pageIndex + pageSize + isDesc, result_List);
+
+            _logger.LogInformation("分页查询_SnNavigation" + type + pageIndex + pageSize + isDesc + cahe);
+            result_List = _cacheutil.CacheString("GetFyAllAsync_SnNavigation" + type + pageIndex + pageSize + isDesc + cahe, result_List, cahe);
             if (result_List == null)
             {
                 await GetFyAll(type, pageIndex, pageSize, isDesc);
-                _cacheutil.CacheString1("GetFyAllAsync" + type + pageIndex + pageSize + isDesc, result_List);
+                _cacheutil.CacheString("GetFyAllAsync_SnNavigation" + type + pageIndex + pageSize + isDesc + cahe, result_List, cahe);
             }
             return result_List;
         }
@@ -75,19 +74,21 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<bool> DeleteAsync(int id)
         {
+            _logger.LogInformation("删除数据_SnNavigation" + id);
             var todoItem = await _service.SnNavigation.FindAsync(id);
             if (todoItem == null) return false;
             _service.SnNavigation.Remove(todoItem);
             return await _service.SaveChangesAsync() > 0;
-         
+
         }
 
 
 
 
-        public async Task<List<SnNavigation>> GetTypeOrderAsync(string type, bool order)
+        public async Task<List<SnNavigation>> GetTypeOrderAsync(string type, bool order, bool cache)
         {
-            result_List = _cacheutil.CacheString1("GetTypeOrderAsync" + type + order, result_List);
+            _logger.LogInformation("条件查询_SnNavigation" + type + order + cache);
+            result_List = _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + order + cache, result_List, cache);
             if (result_List == null)
             {
                 if (order)
@@ -98,7 +99,7 @@ namespace Snblog.Service.Service
                 {
                     result_List = await _service.SnNavigation.Where(c => c.NavType == type).OrderBy(c => c.NavId).ToListAsync();
                 }
-                _cacheutil.CacheString1("GetTypeOrderAsync" + type + order, result_List);
+                _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + order + cache, result_List, cache);
             }
             return result_List;
         }
@@ -110,52 +111,52 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<bool> AddAsync(SnNavigation entity)
         {
+            _logger.LogInformation("添加数据_SnNavigation" + entity);
             await _service.SnNavigation.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateAsync(SnNavigation entity)
         {
+            _logger.LogInformation("修改数据_SnNavigation" + entity);
             _service.SnNavigation.Update(entity);
             return await _service.SaveChangesAsync() > 0;
 
         }
 
-        public async Task<int> GetCountAsync()
+        public async Task<int> GetCountAsync(bool cache)
         {
-            result_Int = _cacheutil.CacheNumber1("GetCountAsync", result_Int);
+            _logger.LogInformation("查询总数_SnNavigation" + cache);
+            result_Int = _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + cache, result_Int, cache);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnNavigation.CountAsync();
-                _cacheutil.CacheNumber1("GetCountAsync", result_Int);
+                _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + cache, result_Int, cache);
             }
             return result_Int;
         }
-        /// <summary>
-        /// 查询总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public async Task<int> CountTypeAsync(string type)
+
+        public async Task<int> CountTypeAsync(string type, bool cache)
         {
-            result_Int = _cacheutil.CacheNumber1("CountTypeAsync", result_Int);
+            _logger.LogInformation("条件查询总数_SnNavigation" + type + cache);
+            result_Int = _cacheutil.CacheNumber("CountTypeAsync_SnNavigation" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnNavigation.CountAsync(c => c.NavType == type);
-                _cacheutil.CacheNumber1("CountTypeAsync", result_Int);
+                _cacheutil.CacheNumber("CountTypeAsync_SnNavigation" + type + cache, result_Int, cache);
             }
             return result_Int;
         }
 
 
-        public async Task<List<SnNavigation>> GetAllAsync()
+        public async Task<List<SnNavigation>> GetAllAsync(bool cache)
         {
-
-            result_List = _cacheutil.CacheString1("GetAllAsync", result_List);
+            _logger.LogInformation("查询所有_SnNavigation" + cache);
+            result_List = _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, result_List, cache);
             if (result_List == null)
             {
                 result_List = await _service.SnNavigation.ToListAsync();
-                _cacheutil.CacheString1("GetAllAsync", result_List);
+                _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, result_List, cache);
             }
             return result_List;
         }
@@ -169,16 +170,17 @@ namespace Snblog.Service.Service
                 _cacheutil.CacheString1("GetDistinct" + type, result_List);
             }
             return result_List;
-           
+
         }
 
-        public async Task<SnNavigation> GetByIdAsync(int id)
+        public async Task<SnNavigation> GetByIdAsync(int id, bool cache)
         {
-            result_Model = _cacheutil.CacheString1("GetByIdAsync" + id, result_Model);
+            _logger.LogInformation("主键查询_SnNavigation" + id + cache);
+            result_Model = _cacheutil.CacheString("GetByIdAsync_SnNavigation" + id + cache, result_Model, cache);
             if (result_Model == null)
             {
                 result_Model = await _service.SnNavigation.FindAsync(id);
-                _cacheutil.CacheString1("GetByIdAsync" + id, result_Model);
+                _cacheutil.CacheString("GetByIdAsync_SnNavigation" + id + cache, result_Model, cache);
             }
 
             return result_Model;

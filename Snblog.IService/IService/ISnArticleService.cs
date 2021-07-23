@@ -14,27 +14,32 @@ namespace Snblog.IService.IService
         /// <summary>
         /// 查询所有
         /// </summary>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnArticle>> GetAllAsync();
+        Task<List<SnArticle>> GetAllAsync(bool cache);
 
         /// <summary>
         /// 读取[字段/阅读/点赞]数量
         /// </summary>
+        /// <param name="type">条件</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<int> GetSumAsync(string type);
+        Task<int> GetSumAsync(string type, bool cache);
         /// <summary>
-        /// 条件查询
+        /// 主键查询
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnArticle> AsyGetTestName(int id);
+        Task<SnArticle> GetByIdAsync(int id,bool cache);
 
         /// <summary>
-        /// ID条件查询
+        /// 按分类条件查询
         /// </summary>
-        /// <param name="sortId">ID</param>
+        /// <param name="sortId"></param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        List<SnArticle> GetTestWhere(int sortId);
+        Task<List<SnArticle>> GetTypeIdAsync(int sortId,bool cache);
 
 
         /// <summary>
@@ -44,17 +49,19 @@ namespace Snblog.IService.IService
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-        Task< List<SnArticle>> GetPagingWhereAsync(int type, int pageIndex, int pageSize, bool isDesc);
+        ///  /// <param name="cache">是否开启缓存</param>
+        Task< List<SnArticle>> GetfyTestAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache);
 
 
-           /// <summary>
+        /// <summary>
         /// 按标签分页查询 
         /// </summary>
         /// <param name="type"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-        Task< List<SnArticle>> GetPagingSortWhereAsync(int type, int pageIndex, int pageSize, bool isDesc);
+        /// /// <param name="cache">是否开启缓存</param>
+        Task< List<SnArticle>> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache);
         /// <summary>
         /// 条件分页查询
         /// </summary>
@@ -63,8 +70,9 @@ namespace Snblog.IService.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <param name="name">排序条件</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnArticle>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc);
+        Task<List<SnArticle>> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc,bool cache);
 
         /// <summary>
         /// 查询文章(无文章内容 缓存)
@@ -72,30 +80,34 @@ namespace Snblog.IService.IService
         /// <param name="pageIndex">当前页码[1]</param>
         /// <param name="pageSize">每页记录条数[10]</param>
         /// <param name="isDesc">是否倒序[true/false]</param>
+        /// /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc);
+        Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc,bool cache);
 
         /// <summary>
         /// 按标签id查询
         /// </summary>
         /// <param name="tag">标签id</param>
         /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnArticle>> GetTagtextAsync(int tag,bool isDesc);
+        Task<List<SnArticle>> GetTagAsync(int tag,bool isDesc,bool cache);
 
         /// <summary>
         /// 查询分类总数
         /// </summary>
         /// <param name="type"></param>
+        /// /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        int ConutSort(int type);
+        Task<int> GetConutSortAsync(int type,bool cache);
 
-         /// <summary>
+        /// <summary>
         /// 条件查询总数
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        int ConutLabel(int type);
+        int GetTypeCountAsync(int type,bool cache);
         /// <summary>
         /// 按id删除
         /// </summary>
