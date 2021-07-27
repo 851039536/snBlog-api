@@ -16,6 +16,7 @@ using Snblog.IService;
 using Snblog.IService.IReService;
 using Snblog.IService.IService;
 using Snblog.Jwt;
+using Snblog.Models;
 using Snblog.Repository.Repository;
 using Snblog.Service;
 using Snblog.Service.AngleSharp;

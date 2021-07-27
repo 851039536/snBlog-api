@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Snblog.Models
 {
     public partial class SnUser
     {
-        /// <summary>
-        /// 用户主键
-        /// </summary>
+        //public SnUser()
+        //{
+        //    //SnArticle = new HashSet<SnArticle>();
+        //    //SnTalk = new HashSet<SnTalk>();
+        //    //SnUserTalk = new HashSet<SnUserTalk>();
+        //}
+
         public int UserId { get; set; }
         public string UserIp { get; set; }
         public string UserName { get; set; }
@@ -18,5 +23,8 @@ namespace Snblog.Models
         public string UserNickname { get; set; }
         public string UserBrief { get; set; }
 
+        //public virtual ICollection<SnArticle> SnArticle { get; set; }
+        //public virtual ICollection<SnTalk> SnTalk { get; set; }
+        //public virtual ICollection<SnUserTalk> SnUserTalk { get; set; }
     }
 }

@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
-using Snblog.Enties.Models;
 using Snblog.IService.IService;
-using Snblog.Repository.Repository;
+using Snblog.Models;
 
 namespace Snblog.Service.Service
 {
@@ -17,41 +16,44 @@ namespace Snblog.Service.Service
         private List<SnOne> result_List = null;
         private readonly snblogContext _service;//DB
 
-        private readonly ILogger<SnArticleService> _logger;
-        public SnOneService(snblogContext service, ICacheUtil cacheutil, ILogger<SnArticleService> logger)
+        private readonly ILogger<SnOneService> _logger;
+        public SnOneService(snblogContext service, ICacheUtil cacheutil, ILogger<SnOneService> logger)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
             _logger = logger;
         }
 
-        public async Task<List<SnOne>> GetAllAsync()
+        public async Task<List<SnOne>> GetAllAsync(bool cache)
         {
-            result_List = _cacheutil.CacheString1("SnOne_GetAllAsync", result_List);
+            _logger.LogInformation("查询所有" + cache);
+            result_List = _cacheutil.CacheString("GetAllAsync_SnOne" + cache, result_List, cache);
             if (result_List == null)
             {
                 result_List = await _service.SnOne.ToListAsync();
-                _cacheutil.CacheString1("SnOne_GetAllAsync", result_List);
+                _cacheutil.CacheString("GetAllAsync_SnOne" + cache, result_List, cache);
             }
             return result_List;
         }
 
 
-        public async Task<SnOne> GetByIdAsync(int id)
+        public async Task<SnOne> GetByIdAsync(int id, bool cache)
         {
+            _logger.LogInformation("主键查询_SnOne" + id, cache);
             SnOne result = default;
-            result = _cacheutil.CacheString1("SnOne_GetByIdAsync" + id, result);
+            result = _cacheutil.CacheString("GetByIdAsync_SnOne" + id + cache, result, cache);
             if (result == null)
             {
                 result = await _service.SnOne.FindAsync(id);
-                _cacheutil.CacheString1("SnOne_GetByIdAsync" + id, result);
+                _cacheutil.CacheString("GetByIdAsync_SnOne" + id + cache, result, cache);
             }
             return result;
         }
 
-        public async Task<List<SnOne>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
+        public async Task<List<SnOne>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            result_List = _cacheutil.CacheString1("SnOne_GetFyAllAsync" + pageIndex + pageSize + isDesc, result_List);
+            _logger.LogInformation("分页查询_SnOne" + pageIndex + pageSize + isDesc + cache);
+            result_List = _cacheutil.CacheString("GetFyAllAsync_SnOne" + pageIndex + pageSize + isDesc + cache, result_List, cache);
             if (result_List == null)
             {
                 if (isDesc)
@@ -63,7 +65,7 @@ namespace Snblog.Service.Service
                     result_List = await _service.SnOne.OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
 
-                _cacheutil.CacheString1("SnOne_GetFyAllAsync" + pageIndex + pageSize + isDesc, result_List);
+                _cacheutil.CacheString("GetFyAllAsync_SnOne" + pageIndex + pageSize + isDesc + cache, result_List, cache);
             }
             return result_List;
         }
@@ -74,6 +76,7 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<bool> DeleteAsync(int id)
         {
+            _logger.LogInformation("删除数据_SnOne" + id);
             var result = await _service.SnOne.FindAsync(id);
             if (result == null) return false;
             _service.SnOne.Remove(result);
@@ -87,6 +90,7 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<bool> AddAsync(SnOne entity)
         {
+            _logger.LogInformation("添加数据_SnOne" + entity);
             await _service.SnOne.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
             // return await CreateService<SnOne>().AddAsync(entity);
@@ -94,40 +98,45 @@ namespace Snblog.Service.Service
 
         public async Task<bool> UpdateAsync(SnOne entity)
         {
+            _logger.LogInformation("更新数据_SnOne" + entity);
             _service.SnOne.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<int> CountAsync()
+        public async Task<int> CountAsync(bool cache)
         {
-            result_Int = _cacheutil.CacheNumber1("SnOne_CountAsync", result_Int);
+            _logger.LogInformation("查询总数_SnOne" + cache);
+            result_Int = _cacheutil.CacheNumber("CountAsync_SnOne" + cache, result_Int, cache);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnOne.CountAsync();
-                _cacheutil.CacheNumber1("SnOne_CountAsync", result_Int);
+                _cacheutil.CacheNumber("CountAsync_SnOne" + cache, result_Int, cache);
             }
             return result_Int;
         }
 
-        public async Task<int> CountTypeAsync(int type)
+        public async Task<int> CountTypeAsync(int type, bool cache)
         {
-            result_Int = _cacheutil.CacheNumber1("SnOne_CountTypeAsync" + type, result_Int);
+
+            _logger.LogInformation("条件查询总数_SnOne" + type + cache);
+            result_Int = _cacheutil.CacheNumber("CountTypeAsync_SnOne" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnOne.CountAsync(s => s.OneTypeId == type);
-                _cacheutil.CacheNumber1("SnOne_CountTypeAsync" + type, result_Int);
+                _cacheutil.CacheNumber("CountTypeAsync_SnOne" + type + cache, result_Int, cache);
             }
             return result_Int;
 
         }
 
-        public async Task<List<SnOne>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc)
+        public async Task<List<SnOne>> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc, bool cache)
         {
-            result_List = _cacheutil.CacheString1("SnOne_GetFyTypeAsync" + type + pageIndex + pageSize + name + isDesc, result_List);
+            _logger.LogInformation("条件分页查询总数_SnOne" + type + pageIndex + pageSize + name + isDesc + cache);
+            result_List = _cacheutil.CacheString("GetFyTypeAsync_SnOne" + type + pageIndex + pageSize + name + isDesc + cache, result_List, cache);
             if (result_List == null)
             {
                 result_List = await GetListFyAsync(type, pageIndex, pageSize, name, isDesc);
-                _cacheutil.CacheString1("SnOne_GetFyTypeAsync" + type + pageIndex + pageSize + name + isDesc, result_List);
+                _cacheutil.CacheString("GetFyTypeAsync_SnOne" + type + pageIndex + pageSize + name + isDesc + cache, result_List, cache);
             }
             return result_List;
         }
@@ -182,15 +191,17 @@ namespace Snblog.Service.Service
             }
         }
 
-        public async Task<int> GetSumAsync(string type)
+        public async Task<int> GetSumAsync(string type, bool cache)
         {
-            result_Int = _cacheutil.CacheNumber1("SnOne_GetSumAsync" + type, result_Int);
+
+            _logger.LogInformation("统计[字段/阅读/点赞]总数量_SnOne" + type + cache);
+            result_Int = _cacheutil.CacheNumber("GetSumAsync_SnOne" + type + cache, result_Int, cache);
             if (result_Int != 0)
             {
                 return result_Int;
             }
             result_Int = await GetSum(type);
-            _cacheutil.CacheNumber1("SnOne_GetSumAsync" + type, result_Int);
+            _cacheutil.CacheNumber("GetSumAsync_SnOne" + type + cache, result_Int, cache);
             return result_Int;
         }
 
@@ -203,11 +214,8 @@ namespace Snblog.Service.Service
                     var read = await _service.SnOne.Select(c => c.OneRead).ToListAsync();
                     foreach (var i in read)
                     {
-                        if (i != null)
-                        {
-                            var item = (int)i;
-                            num += item;
-                        }
+                        var item = i;
+                        num += item;
                     }
 
                     break;
@@ -223,11 +231,8 @@ namespace Snblog.Service.Service
                     var give = await _service.SnOne.Select(c => c.OneGive).ToListAsync();
                     foreach (var i in give)
                     {
-                        if (i != null)
-                        {
-                            var item = (int)i;
+                            var item = i;
                             num += item;
-                        }
                     }
 
                     break;
@@ -238,7 +243,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> UpdatePortionAsync(SnOne snOne, string type)
         {
-            _logger.LogInformation("更新点赞");
+            _logger.LogInformation("新部分列_snOne" + snOne + type);
             var date = _service.SnOne.Update(snOne);
 
             //默认不更新

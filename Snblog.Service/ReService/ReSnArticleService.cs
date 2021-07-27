@@ -2,10 +2,10 @@
 using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
 using Snblog.IService.IReService;
+using Snblog.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Snblog.Enties.Models;
 
 namespace Snblog.Service.ReService
 {
@@ -37,7 +37,7 @@ namespace Snblog.Service.ReService
             result_Int = _cacheutil.CacheNumber1("CountAsync" + type, result_Int);
             if (result_Int == 0)
             {
-                result_Int = await CreateService<SnArticle>().CountAsync(c => c.label_id == type);//获取数据值
+                result_Int = await CreateService<SnArticle>().CountAsync(c => c.LabelId == type);//获取数据值
                 _cacheutil.CacheNumber1("CountAsync" + type, result_Int);//设置缓存值
             }
             return result_Int;
@@ -86,30 +86,30 @@ namespace Snblog.Service.ReService
         /// <returns></returns>
         private async Task<List<SnArticle>> GetFyTitle(int pageIndex, int pageSize, bool isDesc)
         {
-            var data = await Task.Run(() => CreateService<SnArticle>().Wherepage(s => true, c => c.article_id, pageIndex, pageSize, out _, isDesc).Select(s => new
+            var data = await Task.Run(() => CreateService<SnArticle>().Wherepage(s => true, c => c.ArticleId, pageIndex, pageSize, out _, isDesc).Select(s => new
             {
-                s.article_id,
-                s.title,
-                s.comment,
-                s.give,
-                s.read,
-                s.time,
-                s.title_text,
-                s.user_id
+                s.ArticleId,
+                s.Title,
+                s.Comment,
+                s.Give,
+                s.Read,
+                s.Time,
+                s.TitleText,
+                s.UserId
             }).ToList());
             //解决方案二：foreach遍历
             var list = new List<SnArticle>();
             foreach (var t in data)
             {
                 var s = new SnArticle();
-                s.article_id = t.article_id;
-                s.title = t.title;
-                s.comment = t.comment;
-                s.give = t.give;
-                s.read = t.read;
-                s.time = t.time;
-                s.title_text = t.title_text;
-                s.user_id = t.user_id;
+                s.ArticleId = t.ArticleId;
+                s.Title = t.Title;
+                s.Comment = t.Comment;
+                s.Give = t.Give;
+                s.Read = t.Read;
+                s.Time = t.Time;
+                s.TitleText = t.TitleText;
+                s.UserId = t.UserId;
                 list.Add(s);
             }
             return list;
@@ -120,7 +120,7 @@ namespace Snblog.Service.ReService
             result_List = _cacheutil.CacheString1("GetLabelAllAsync" + id, result_List);
             if (result_List == null)
             {
-                result_List = await CreateService<SnArticle>().Where(s => s.label_id == id).ToListAsync();
+                result_List = await CreateService<SnArticle>().Where(s => s.LabelId == id).ToListAsync();
                 _cacheutil.CacheString1("GetLabelAllAsync" + id, result_List);
             }
             return result_List;
@@ -149,32 +149,26 @@ namespace Snblog.Service.ReService
             {
                 case "read":
 
-                    var read = await CreateService<SnArticle>().Where(s => true).Select(c => c.read).ToListAsync();
+                    var read = await CreateService<SnArticle>().Where(s => true).Select(c => c.Read).ToListAsync();
                     foreach (var i in read)
                     {
-                        if (i != null)
-                        {
-                            var item = (int) i;
+                            var item = i;
                             num += item;
-                        }
                     }
                     break;
                 case "text":
-                    var text = await CreateService<SnArticle>().Where(s => true).Select(c => c.text).ToListAsync();
+                    var text = await CreateService<SnArticle>().Where(s => true).Select(c => c.Text).ToListAsync();
                     for (int i = 0; i < text.Count; i++)
                     {
                         num += text[i].Length;
                     }
                     break;
                 case "give":
-                    var give = await CreateService<SnArticle>().Where(s => true).Select(c => c.give).ToListAsync();
+                    var give = await CreateService<SnArticle>().Where(s => true).Select(c => c.Give).ToListAsync();
                     foreach (var i in give)
                     {
-                        if (i != null)
-                        {
-                            var item = (int) i;
+                            var item = i;
                             num += item;
-                        }
                     }
                     break;
             }
@@ -198,12 +192,12 @@ namespace Snblog.Service.ReService
         {
             if (type == 00)
             {
-                var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.article_id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.ArticleId, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
             else
             {
-                var data = await CreateService<SnArticle>().WherepageAsync(s => s.label_id == type, c => c.article_id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnArticle>().WherepageAsync(s => s.LabelId == type, c => c.ArticleId, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
         }
@@ -227,25 +221,25 @@ namespace Snblog.Service.ReService
                 switch (order)
                 {
                     case "read":
-                        var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.read, pageIndex, pageSize, isDesc);
+                        var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Read, pageIndex, pageSize, isDesc);
                         return data.ToList();
                     case "data":
-                        var data1 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.time, pageIndex, pageSize, isDesc);
+                        var data1 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Time, pageIndex, pageSize, isDesc);
                         return data1.ToList();
                     case "give":
-                        var data2 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.give, pageIndex, pageSize, isDesc);
+                        var data2 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Give, pageIndex, pageSize, isDesc);
                         return data2.ToList();
                     case "comment":
-                        var data4 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.comment, pageIndex, pageSize, isDesc);
+                        var data4 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Comment, pageIndex, pageSize, isDesc);
                         return data4.ToList();
                     default:
-                        var data5 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.article_id, pageIndex, pageSize, isDesc);
+                        var data5 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.ArticleId, pageIndex, pageSize, isDesc);
                         return data5.ToList();
                 }
             }
             else
             {
-                var data = await CreateService<SnArticle>().WherepageAsync(s => s.sort_id == type, c => c.article_id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnArticle>().WherepageAsync(s => s.SortId == type, c => c.ArticleId, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
         }
@@ -263,25 +257,25 @@ namespace Snblog.Service.ReService
 
         private async Task<List<SnArticle>> GetTagtext(int tag, bool isDesc)
         {
-            var data = await CreateService<SnArticle>().Where(s => s.label_id == tag, c => c.article_id, isDesc).Select(s => new
+            var data = await CreateService<SnArticle>().Where(s => s.LabelId == tag, c => c.ArticleId, isDesc).Select(s => new
             {
-                s.article_id,
-                s.title,
-                s.title_text,
-                s.time,
-                s.give,
-                s.read
+                s.ArticleId,
+                s.Title,
+                s.TitleText,
+                s.Time,
+                s.Give,
+                s.Read
             }).ToListAsync();
             var list = new List<SnArticle>();
             foreach (var t in data)
             {
                 var s = new SnArticle();
-                s.article_id = t.article_id;
-                s.title = t.title;
-                s.title_text = t.title_text;
-                s.time = t.time;
-                s.give = t.give;
-                s.read = t.read;
+                s.ArticleId = t.ArticleId;
+                s.Title = t.Title;
+                s.TitleText = t.TitleText;
+                s.Time = t.Time;
+                s.Give = t.Give;
+                s.Read = t.Read;
                 list.Add(s);
             }
             return list;

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IService;
 using System.Threading.Tasks;
-using Snblog.Enties.Models;
 using System;
+using Snblog.Models;
 
 namespace Snblog.Controllers
 {

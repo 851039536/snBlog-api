@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
 using Snblog.IService.IService;
 using Snblog.Models;
-using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {

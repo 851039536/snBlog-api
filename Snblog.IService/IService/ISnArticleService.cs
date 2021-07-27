@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Snblog.Enties.Models;
+using Snblog.Models;
 
 namespace Snblog.IService.IService
 {
@@ -18,6 +18,13 @@ namespace Snblog.IService.IService
         /// <returns></returns>
         Task<List<SnArticle>> GetAllAsync(bool cache);
 
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否缓存</param>
+        /// <returns></returns>
+        Task<List<SnArticle>> GetContainsAsync(string name, bool cache);
         /// <summary>
         /// 读取[字段/阅读/点赞]数量
         /// </summary>

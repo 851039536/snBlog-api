@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.Enties.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IService;
-using Snblog.Service.AngleSharp;
+using Snblog.Models;
+using System;
+using System.Threading.Tasks;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -25,14 +24,17 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 查询总数 (缓存)
+        #region 查询总数
         /// <summary>
         /// 查询总数 
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(bool cache) => Ok(await _service.CountAsync(cache));
+        public async Task<IActionResult> GetCountAsync(bool cache)
+        {
+            return Ok(await _service.CountAsync(cache));
+        }
         #endregion
         #region 条件查询总数
         /// <summary>
@@ -42,7 +44,10 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetTypeCountAsync")]
-        public IActionResult GetTypeCountAsync(int type, bool cache) => Ok(_service.GetTypeCountAsync(type, cache));
+        public IActionResult GetTypeCountAsync(int type, bool cache)
+        {
+            return Ok(_service.GetTypeCountAsync(type, cache));
+        }
 
         /// <summary>
         /// 查询分类总数 
@@ -51,7 +56,10 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetConutSortAsync")]
-        public async Task<IActionResult> GetConutSortAsync(int type, bool cache) => Ok(await _service.GetConutSortAsync(type, cache));
+        public async Task<IActionResult> GetConutSortAsync(int type, bool cache)
+        {
+            return Ok(await _service.GetConutSortAsync(type, cache));
+        }
         #endregion
         #region 查询所有
         /// <summary>
@@ -66,6 +74,20 @@ namespace Snblog.Controllers
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
+
+        #region 模糊查询 Contains
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetContainsAsync")]
+        public async Task<IActionResult> GetContainsAsync(string name, bool cache)
+        {
+            return Ok(await _service.GetContainsAsync(name,cache));
+        }
+        #endregion
         #region 主键查询 
         /// <summary>
         /// 主键查询 
@@ -74,7 +96,10 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache) => Ok(await _service.GetByIdAsync(id, cache));
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache)
+        {
+            return Ok(await _service.GetByIdAsync(id, cache));
+        }
         #endregion
         #region  分类ID查询 
         /// <summary>
@@ -126,9 +151,9 @@ namespace Snblog.Controllers
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetfyTestAsync")]
-        public async Task<IActionResult> GetfyTestAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache)
+        public async Task<IActionResult> GetfyTestAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            return Ok(await _service.GetfyTestAsync(type, pageIndex, pageSize, isDesc,cache));
+            return Ok(await _service.GetfyTestAsync(type, pageIndex, pageSize, isDesc, cache));
         }
         #endregion
         #region   按分类分页查询
@@ -141,9 +166,9 @@ namespace Snblog.Controllers
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetfySortTestAsync")]
-        public async Task<IActionResult> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache)
+        public async Task<IActionResult> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            return Ok(await _service.GetfySortTestAsync(type, pageIndex, pageSize, isDesc,cache));
+            return Ok(await _service.GetfySortTestAsync(type, pageIndex, pageSize, isDesc, cache));
         }
         #endregion
         #region 分页查询(条件排序)
@@ -154,10 +179,11 @@ namespace Snblog.Controllers
         /// <param name="pageIndex">当前页码[1]</param>
         /// <param name="pageSize">每页记录条数[10]</param>
         /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <param name="name">排序条件[data:时间,read:阅读,give:点赞,comment:评论]默认按id排序</param>
         /// <returns></returns>
         [HttpGet("GetFyAsync")]
-        public async Task<IActionResult> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc,bool cache)
+        public async Task<IActionResult> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc, bool cache)
         {
             return Ok(await _service.GetFyAsync(type, pageIndex, pageSize, name, isDesc, cache));
         }
@@ -171,9 +197,9 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetTagAsync")]
-        public async Task<IActionResult> GetTagAsync(int labelId, bool isDesc,bool cache)
+        public async Task<IActionResult> GetTagAsync(int labelId, bool isDesc, bool cache)
         {
-            return Ok(await _service.GetTagAsync(labelId, isDesc,cache));
+            return Ok(await _service.GetTagAsync(labelId, isDesc, cache));
         }
         #endregion
         #region 添加数据

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Snblog.Models
 {
@@ -12,5 +13,7 @@ namespace Snblog.Models
         public int? TalkRead { get; set; }
         public int? TalkGive { get; set; }
         public int? CommentId { get; set; }
+
+        //public virtual SnUser User { get; set; }
     }
 }

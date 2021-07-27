@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
-using Snblog.Enties.Models;
 using Snblog.IRepository;
 using Snblog.IService.IService;
 using Snblog.Models;
