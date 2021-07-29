@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IService;
 using Snblog.Models;
 using System;
@@ -208,7 +209,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        //[Authorize(Roles = "kai")] //角色授权
+       [Authorize(Roles = "kai")] //角色授权
         [HttpPost("AddAsync")]
         public async Task<ActionResult<SnArticle>> AddAsync(SnArticle entity)
         {
@@ -221,6 +222,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
+        [Authorize(Roles = "kai")] //角色授权
         [HttpPut("UpdateAsync")]
         public async Task<IActionResult> UpdateAsync(SnArticle entity) => Ok(await _service.UpdateAsync(entity));
         #endregion
@@ -230,7 +232,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        //  [Authorize(Roles = "kai")] //角色授权
+         [Authorize(Roles = "kai")] //角色授权
         [HttpDelete("DeleteAsync")]
         public async Task<IActionResult> DeleteAsync(int id) => Ok(await _service.DeleteAsync(id));
         #endregion

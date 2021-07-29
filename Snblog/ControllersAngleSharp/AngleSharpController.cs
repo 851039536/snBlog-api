@@ -35,7 +35,11 @@ namespace Snblog.ControllersAngleSharp
         /// <param name="selectorall">selectorall：div.post-item-text > a</param>
         /// <returns></returns>
         [HttpGet("Cnblogs")]
-        public async Task<IActionResult> Cnblogs(string url, string selector, string selectorall) => Ok(await _angle.Cnblogs(url, selector, selectorall));
+        public async Task<IActionResult> Cnblogs(string url, string selector, string selectorall)
+        {
+            return Ok(await _angle.Cnblogs(url, selector, selectorall));
+        }
+
         /// <summary>
         /// 读取项目名称
         /// </summary>

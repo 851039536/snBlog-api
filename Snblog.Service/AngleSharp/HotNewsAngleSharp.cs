@@ -50,6 +50,7 @@ namespace Snblog.Service.AngleSharp
 
         private async Task<List<string>> reptile(string url, string selector, string selectorall)
         {
+            int num = 1;
             List<string> resultData = new List<string>();
             // 设置配置以支持文档加载
             var config = Configuration.Default.WithDefaultLoader();
@@ -62,10 +63,16 @@ namespace Snblog.Service.AngleSharp
                 // 根据css选择器获取html元素
                 var container = document.QuerySelector(selector);
                 var matches = container.QuerySelectorAll(selectorall);
+
                 foreach (var item in matches)
                 {
-                    //_logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
-                    resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
+                   
+                    if (num<=10)
+                    {
+                        num++;
+                        resultData.Add(item.InnerHtml + "-" + item.GetAttribute("href"));
+                    }
+                    
                 }
             }
             else
@@ -73,8 +80,14 @@ namespace Snblog.Service.AngleSharp
                 var matches = document.QuerySelectorAll(selectorall);
                 foreach (var item in matches)
                 {
-                    _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
-                    resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
+                    
+                    if (num <= 10)
+                    {
+                        num++;
+                        _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
+                        resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
+                    }
+            
                 }
             }
 
