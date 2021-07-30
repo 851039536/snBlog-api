@@ -29,8 +29,7 @@ namespace Snblog.Service
 
         public async Task<List<SnUserDto>> AsyGetUser()
         {
-            var user = await  _service.SnUser.ToListAsync();
-            return _mapper.Map<List<SnUserDto>>(user); 
+            return _mapper.Map<List<SnUserDto>>(await _service.SnUser.ToListAsync()); 
         }
 
         public async Task<SnUser> AsyGetUserId(int userId)
