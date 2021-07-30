@@ -5,6 +5,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -29,12 +31,16 @@ namespace Snblog.Controllers
         private readonly ISnUserService _service; //IOC依赖注入
         private readonly DbSet<SnUser> user;
         private readonly JwtConfig jwtModel = null;
+
+        //// 创建一个字段来存储mapper对象
+        //private readonly IMapper _mapper;
         public SnUserController(ISnUserService service, snblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;
             user = coreDbContext.SnUser;
             jwtModel = _jwtModel.Value;
+            //_mapper = mapper;
         }
 
 
@@ -83,7 +89,7 @@ namespace Snblog.Controllers
         /// <summary>
         /// 用户查询
         /// </summary>
-        [HttpGet("AsyGestTest")] 
+        [HttpGet("AsyGestTest")]
         public async Task<IActionResult> AsyGetUser()
         {
             return Ok(await _service.AsyGetUser());
@@ -97,6 +103,7 @@ namespace Snblog.Controllers
         [HttpGet("AsyGetUserId")]
         public async Task<IActionResult> AsyGetUserId(int userId)
         {
+  
             return Ok(await _service.AsyGetUserId(userId));
         }
 
@@ -149,8 +156,9 @@ namespace Snblog.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPut("AysUpUser")]
-        public async Task<IActionResult> AysUpUser(SnUser user)
+        public async Task<IActionResult> AysUpUser(SnUserDto user)
         {
+            
             var data = await _service.AysUpUser(user);
             return Ok(data);
         }

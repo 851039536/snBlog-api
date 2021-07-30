@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
@@ -10,8 +11,13 @@ namespace Snblog.Service
 {
     public class SnUserService : BaseService, ISnUserService
     {
-        public SnUserService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        private readonly snblogContext _service;
+        // 创建一个字段来存储mapper对象
+        private readonly IMapper _mapper;
+        public SnUserService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext service, IMapper mapper) : base(repositoryFactory, mydbcontext)
         {
+            _service = service;
+            _mapper = mapper;
         }
 
         public async Task<string> AsyDetUserId(int userId)
@@ -21,16 +27,15 @@ namespace Snblog.Service
             return data;
         }
 
-        public async Task<List<SnUser>> AsyGetUser()
+        public async Task<List<SnUserDto>> AsyGetUser()
         {
-            var data = CreateService<SnUser>();
-            return await data.GetAll().ToListAsync();
+            var user = await  _service.SnUser.ToListAsync();
+            return _mapper.Map<List<SnUserDto>>(user); 
         }
 
-        public async Task<List<SnUser>> AsyGetUserId(int userId)
+        public async Task<SnUser> AsyGetUserId(int userId)
         {
-            var data = CreateService<SnUser>().Where(s => s.UserId == userId);
-            return await data.ToListAsync();
+            return await _service.SnUser.FindAsync(userId);
         }
 
         public async Task<SnUser> AsyInsUser(SnUser test)
@@ -38,9 +43,11 @@ namespace Snblog.Service
             return await CreateService<SnUser>().AddAsync(test);
         }
 
-        public async Task<string> AysUpUser(SnUser user)
+        public async Task<string> AysUpUser(SnUserDto user)
         {
-           int da = await CreateService<SnUser>().UpdateAsync(user);
+            //转换成SnUser
+            var model = _mapper.Map<SnUser>(user);
+            int da = await CreateService<SnUser>().UpdateAsync(model);
             string data = da == 1 ? "更新成功" : "更新失败";
             return data;
         }

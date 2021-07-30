@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Snblog.Cache.Cache;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.AutoMapper;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.IService.IReService;
@@ -196,6 +198,20 @@ namespace Snblog
             services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
 
             #endregion
+
+
+            #region 实体映射
+
+            //services.AddAutoMapper(typeof(MappingProfile));
+
+            //自动化注册
+            services.AddAutoMapper(
+               Assembly.Load("Snblog.Enties").GetTypes()
+                   .Where(t => t.FullName.EndsWith("Mapper"))
+                   .ToArray()
+           );
+            #endregion
+
             services.AddControllers();
 
         }

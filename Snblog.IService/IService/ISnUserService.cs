@@ -10,14 +10,14 @@ namespace Snblog.IService
         /// 异步查询
         /// </summary>
         /// <returns></returns>
-        Task<List<SnUser>> AsyGetUser();
+        Task<List<SnUserDto>> AsyGetUser();
 
         /// <summary>
         /// 主键id查询
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<List<SnUser>> AsyGetUserId(int userId);
+        Task<SnUser> AsyGetUserId(int userId);
 
         /// <summary>
         /// 查询用户总数
@@ -52,6 +52,6 @@ namespace Snblog.IService
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<string> AysUpUser(SnUser user);
+        Task<string> AysUpUser(SnUserDto user);
     }
 }
