@@ -7,7 +7,9 @@ namespace Snblog.Models
 {
     public partial class SnArticle
     {
-
+        /// <summary>
+        /// 主键
+        /// </summary>
         public int ArticleId { get; set; }
         public string Title { get; set; }
         public string TitleText { get; set; }
