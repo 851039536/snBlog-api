@@ -53,8 +53,8 @@ namespace Snblog.Controllers
                 return Ok("用户密码不能为空");
             }
             var data = from u in user
-                       where u.UserName == users && u.UserPwd == pwd
-                       select u.UserName;
+                       where u.Name == users && u.Pwd == pwd
+                       select u.Name;
             if (data.Count() == 0)
             {
                 return Ok("用户或密码错误");
@@ -158,10 +158,9 @@ namespace Snblog.Controllers
         [HttpPut("AysUpUser")]
         public async Task<IActionResult> AysUpUser(SnUserDto user)
         {
-            
             var data = await _service.AysUpUser(user);
             return Ok(data);
         }
-
+        
     }
 }

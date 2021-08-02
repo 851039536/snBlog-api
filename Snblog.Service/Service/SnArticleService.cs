@@ -312,7 +312,7 @@ namespace Snblog.Service.Service
                            .Take(pageSize).ToListAsync();
                         case "data":
                             return await _service.SnArticle.Where(s => true)
-                           .OrderByDescending(c => c.Time).Skip((pageIndex - 1) * pageSize)
+                           .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).ToListAsync();
                         case "give":
                             return await _service.SnArticle.Where(s => true)
@@ -348,7 +348,7 @@ namespace Snblog.Service.Service
                           .Take(pageSize).ToListAsync();
                         case "data":
                             return await _service.SnArticle.Where(s => true)
-                          .OrderBy(c => c.Time).Skip((pageIndex - 1) * pageSize)
+                          .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                           .Take(pageSize).ToListAsync();
                         case "give":
                             return await _service.SnArticle.Where(s => true)
@@ -405,7 +405,7 @@ namespace Snblog.Service.Service
                     s.Comment,
                     s.Give,
                     s.Read,
-                    s.Time,
+                    s.TimeCreate,
                     s.TitleText,
                     s.UserId
                 }).OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
@@ -421,7 +421,7 @@ namespace Snblog.Service.Service
                     s.Comment = t.Comment;
                     s.Give = t.Give;
                     s.Read = t.Read;
-                    s.Time = t.Time;
+                    s.TimeCreate = t.TimeCreate;
                     s.TitleText = t.TitleText;
                     s.UserId = t.UserId;
                     list.Add(s);
@@ -437,7 +437,7 @@ namespace Snblog.Service.Service
                     s.Comment,
                     s.Give,
                     s.Read,
-                    s.Time,
+                    s.TimeCreate,
                     s.TitleText,
                     s.UserId
                 }).OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
@@ -451,7 +451,7 @@ namespace Snblog.Service.Service
                     s.Comment = t.Comment;
                     s.Give = t.Give;
                     s.Read = t.Read;
-                    s.Time = t.Time;
+                    s.TimeCreate = t.TimeCreate;
                     s.TitleText = t.TitleText;
                     s.UserId = t.UserId;
                     list.Add(s);
@@ -503,7 +503,7 @@ namespace Snblog.Service.Service
                     s.ArticleId,
                     s.Title,
                     s.TitleText,
-                    s.Time,
+                    s.TimeCreate,
                     s.Give,
                     s.Read
                 }).OrderByDescending(s => s.ArticleId).ToListAsync();
@@ -514,7 +514,7 @@ namespace Snblog.Service.Service
                     s.ArticleId = t.ArticleId;
                     s.Title = t.Title;
                     s.TitleText = t.TitleText;
-                    s.Time = t.Time;
+                    s.TimeCreate = t.TimeCreate;
                     s.Give = t.Give;
                     s.Read = t.Read;
                     list.Add(s);
@@ -528,7 +528,7 @@ namespace Snblog.Service.Service
                     s.ArticleId,
                     s.Title,
                     s.TitleText,
-                    s.Time,
+                    s.TimeCreate,
                     s.Give,
                     s.Read
                 }).OrderBy(s => s.ArticleId).ToListAsync();
@@ -539,7 +539,7 @@ namespace Snblog.Service.Service
                     s.ArticleId = t.ArticleId;
                     s.Title = t.Title;
                     s.TitleText = t.TitleText;
-                    s.Time = t.Time;
+                    s.TimeCreate = t.TimeCreate;
                     s.Give = t.Give;
                     s.Read = t.Read;
                     list.Add(s);

@@ -69,12 +69,12 @@ namespace Snblog.Models
 
                 entity.Property(e => e.Comment)
                     .HasColumnName("comment")
-                    .HasColumnType("tinyint(5)")
+                    .HasColumnType("smallint(8)")
                     .HasComment("评论");
 
                 entity.Property(e => e.Give)
                     .HasColumnName("give")
-                    .HasColumnType("int(20)")
+                    .HasColumnType("smallint(8)")
                     .HasComment("点赞");
 
                 entity.Property(e => e.LabelId)
@@ -84,7 +84,7 @@ namespace Snblog.Models
 
                 entity.Property(e => e.Read)
                     .HasColumnName("read")
-                    .HasColumnType("int(20)")
+                    .HasColumnType("smallint(8)")
                     .HasComment("阅读次数");
 
                 entity.Property(e => e.SortId)
@@ -93,21 +93,25 @@ namespace Snblog.Models
                     .HasComment("分类外键");
 
                 entity.Property(e => e.Text)
+                    .IsRequired()
                     .HasColumnName("text")
                     .HasColumnType("text")
                     .HasComment("博客内容")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.Time)
-                    .HasColumnName("time")
-                    .HasColumnType("varchar(20)")
-                    .HasDefaultValueSql("''")
-                    .HasComment("发表时间")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                entity.Property(e => e.TimeCreate)
+                    .HasColumnName("time_create")
+                    .HasColumnType("date")
+                    .HasComment("发表时间");
+
+                entity.Property(e => e.TimeModified)
+                    .HasColumnName("time_modified")
+                    .HasColumnType("date")
+                    .HasComment("修改时间");
 
                 entity.Property(e => e.Title)
+                    .IsRequired()
                     .HasColumnName("title")
                     .HasColumnType("varchar(100)")
                     .HasComment("标题 ")
@@ -115,6 +119,7 @@ namespace Snblog.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.TitleText)
+                    .IsRequired()
                     .HasColumnName("title_text")
                     .HasColumnType("text")
                     .HasComment("内容简述")
@@ -122,6 +127,7 @@ namespace Snblog.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.TypeTitle)
+                    .IsRequired()
                     .HasColumnName("type_title")
                     .HasColumnType("varchar(20)")
                     .HasComment("分类标题")
@@ -129,6 +135,7 @@ namespace Snblog.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.UrlImg)
+                    .IsRequired()
                     .HasColumnName("url_img")
                     .HasColumnType("varchar(50)")
                     .HasComment("图片")
@@ -143,16 +150,19 @@ namespace Snblog.Models
                 //entity.HasOne(d => d.Label)
                 //    .WithMany(p => p.SnArticle)
                 //    .HasForeignKey(d => d.LabelId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
                 //    .HasConstraintName("article_labelsId");
 
                 //entity.HasOne(d => d.Sort)
                 //    .WithMany(p => p.SnArticle)
                 //    .HasForeignKey(d => d.SortId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
                 //    .HasConstraintName("article_sortId");
 
                 //entity.HasOne(d => d.User)
                 //    .WithMany(p => p.SnArticle)
                 //    .HasForeignKey(d => d.UserId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
                 //    .HasConstraintName("article_userId");
             });
 
@@ -690,70 +700,73 @@ namespace Snblog.Models
                     .HasColumnType("int(11)")
                     .HasComment("主键");
 
-                entity.Property(e => e.UserBrief)
+                entity.Property(e => e.Brief)
                     .IsRequired()
-                    .HasColumnName("user_brief")
+                    .HasColumnName("brief")
                     .HasColumnType("varchar(100)")
                     .HasComment("简介")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.UserEmail)
+                entity.Property(e => e.Email)
                     .IsRequired()
-                    .HasColumnName("user_email")
+                    .HasColumnName("email")
                     .HasColumnType("varchar(30)")
                     .HasComment("邮箱")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.UserIp)
+                entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasColumnName("user_ip")
-                    .HasColumnType("varchar(20)")
-                    .HasComment("ip地址")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.UserName)
-                    .IsRequired()
-                    .HasColumnName("user_name")
+                    .HasColumnName("name")
                     .HasColumnType("varchar(20)")
                     .HasComment("用户名称")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.UserNickname)
+                entity.Property(e => e.Nickname)
                     .IsRequired()
-                    .HasColumnName("user_nickname")
+                    .HasColumnName("nickname")
                     .HasColumnType("varchar(20)")
                     .HasComment("称呼")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.UserPhoto)
+                entity.Property(e => e.Photo)
                     .IsRequired()
-                    .HasColumnName("user_photo")
+                    .HasColumnName("photo")
                     .HasColumnType("varchar(255)")
                     .HasComment("头像")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.UserPwd)
+                entity.Property(e => e.Pwd)
                     .IsRequired()
-                    .HasColumnName("user_pwd")
+                    .HasColumnName("pwd")
                     .HasColumnType("varchar(20)")
                     .HasComment("密码")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.UserTime)
+                entity.Property(e => e.TimeCreate)
+                    .HasColumnName("time_create")
+                    .HasColumnType("date")
+                    .HasComment("注册时间");
+
+                entity.Property(e => e.TimeModified)
+                    .HasColumnName("time_modified")
+                    .HasColumnType("date")
+                    .HasComment("更新时间");
+
+                entity.Property(e => e.UserIp)
                     .IsRequired()
-                    .HasColumnName("user_time")
-                    .HasColumnType("varchar(20)")
-                    .HasComment("注册时间")
+                    .HasColumnName("user_ip")
+                    .HasColumnType("varchar(50)")
+                    .HasComment("ip地址")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
+
 
             modelBuilder.Entity<SnUserFriends>(entity =>
             {

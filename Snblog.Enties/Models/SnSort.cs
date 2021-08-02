@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace Snblog.Models
+﻿namespace Snblog.Models
 {
     public partial class SnSort
     {

@@ -9,18 +9,19 @@ namespace Snblog.Models
     {
 
         public int ArticleId { get; set; }
-        public int UserId { get; set; }
         public string Title { get; set; }
         public string TitleText { get; set; }
         public string Text { get; set; }
-        public string Time { get; set; }
-        public int LabelId { get; set; }
-        public int Read { get; set; }
-        public int Give { get; set; }
-        public sbyte Comment { get; set; }
-        public int SortId { get; set; }
+        public DateTime TimeCreate { get; set; }
+        public DateTime? TimeModified { get; set; }
+        public short Read { get; set; }
+        public short Give { get; set; }
+        public short Comment { get; set; }
         public string TypeTitle { get; set; }
         public string UrlImg { get; set; }
+        public int LabelId { get; set; }
+        public int SortId { get; set; }
+        public int UserId { get; set; }
 
         //public virtual SnLabels Label { get; set; }
         //public virtual SnSort Sort { get; set; }

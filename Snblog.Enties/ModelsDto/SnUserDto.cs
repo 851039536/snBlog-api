@@ -15,13 +15,14 @@ namespace Snblog.Models
 
         public int UserId { get; set; }
         public string UserIp { get; set; }
-        public string UserName { get; set; }
-        public string UserEmail { get; set; }
-        public string UserPwd { get; set; }
-        public string UserPhoto { get; set; }
-        public string UserTime { get; set; }
-        public string UserNickname { get; set; }
-        public string UserBrief { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Pwd { get; set; }
+        public string Photo { get; set; }
+        public DateTime TimeCreate { get; set; }
+        public string Nickname { get; set; }
+        public string Brief { get; set; }
+        public DateTime? TimeModified { get; set; }
 
         //public virtual ICollection<SnArticle> SnArticle { get; set; }
         //public virtual ICollection<SnTalk> SnTalk { get; set; }

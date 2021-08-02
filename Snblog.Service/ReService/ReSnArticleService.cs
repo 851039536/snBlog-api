@@ -93,7 +93,7 @@ namespace Snblog.Service.ReService
                 s.Comment,
                 s.Give,
                 s.Read,
-                s.Time,
+                s.TimeCreate,
                 s.TitleText,
                 s.UserId
             }).ToList());
@@ -107,7 +107,7 @@ namespace Snblog.Service.ReService
                 s.Comment = t.Comment;
                 s.Give = t.Give;
                 s.Read = t.Read;
-                s.Time = t.Time;
+                s.TimeCreate = t.TimeCreate;
                 s.TitleText = t.TitleText;
                 s.UserId = t.UserId;
                 list.Add(s);
@@ -224,7 +224,7 @@ namespace Snblog.Service.ReService
                         var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Read, pageIndex, pageSize, isDesc);
                         return data.ToList();
                     case "data":
-                        var data1 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Time, pageIndex, pageSize, isDesc);
+                        var data1 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.TimeCreate, pageIndex, pageSize, isDesc);
                         return data1.ToList();
                     case "give":
                         var data2 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Give, pageIndex, pageSize, isDesc);
@@ -262,7 +262,7 @@ namespace Snblog.Service.ReService
                 s.ArticleId,
                 s.Title,
                 s.TitleText,
-                s.Time,
+                s.TimeCreate,
                 s.Give,
                 s.Read
             }).ToListAsync();
@@ -273,7 +273,7 @@ namespace Snblog.Service.ReService
                 s.ArticleId = t.ArticleId;
                 s.Title = t.Title;
                 s.TitleText = t.TitleText;
-                s.Time = t.Time;
+                s.TimeCreate = t.TimeCreate;
                 s.Give = t.Give;
                 s.Read = t.Read;
                 list.Add(s);
