@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
@@ -18,11 +19,16 @@ namespace Snblog.Service.Service
         private readonly ILogger<SnArticleService> _logger;
         private int result_Int;
         private List<SnArticle> result_List = default;
-        public SnArticleService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnArticleService> logger)
+        private SnArticleDto resultDto = default;
+        private List<SnArticleDto> result_ListDto = default;
+        // 创建一个字段来存储mapper对象
+        private readonly IMapper _mapper;
+        public SnArticleService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnArticleService> logger, IMapper mapper)
         {
             _service = coreDbContext;
             _cacheutil = (CacheUtil)cacheUtil;
             _logger = logger ?? throw new ArgumentNullException(nameof(Logger));
+            _mapper = mapper;
         }
 
 
@@ -42,17 +48,18 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<SnArticle> GetByIdAsync(int id, bool cache)
+        public async Task<SnArticleDto> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation("主键查询_SnArticle:" + id + cache);
+            _logger.LogInformation("主键查询_SnArticleDto" + id + cache);
             SnArticle result = null;
-            result = _cacheutil.CacheString("GetByIdAsync_SnArticle" + id + cache, result, cache);
-            if (result == null)
+            resultDto = _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
+            if (resultDto == null)
             {
                 result = await _service.SnArticle.FindAsync(id);
-                _cacheutil.CacheString("GetByIdAsync_SnArticle" + id + cache, result, cache);
+                resultDto = _mapper.Map<SnArticleDto>(result);
+                _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             }
-            return result;
+            return resultDto;
         }
 
 
@@ -225,16 +232,16 @@ namespace Snblog.Service.Service
             return result_Int;
         }
 
-        public async Task<List<SnArticle>> GetAllAsync(bool cache)
+        public async Task<List<SnArticleDto>> GetAllAsync(bool cache)
         {
-            _logger.LogInformation("查询所有_SnArticle" + cache);
-            result_List = _cacheutil.CacheString("GetAllAsync_SnArticle" + cache, result_List, cache);
-            if (result_List == null)
+            _logger.LogInformation("查询所有_SnArticleDto" + cache);
+            result_ListDto = _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, result_ListDto, cache);
+            if (result_ListDto == null)
             {
-                result_List = await _service.SnArticle.ToListAsync();
-                _cacheutil.CacheString("GetAllAsync_SnArticle" + cache, result_List, cache);
+                result_ListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticle.ToListAsync());
+                _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, result_ListDto, cache);
             }
-            return result_List;
+            return result_ListDto;
         }
 
         public async Task<int> GetSumAsync(string type, bool cache)
@@ -264,7 +271,7 @@ namespace Snblog.Service.Service
                     var read = await _service.SnArticle.Select(c => c.Read).ToListAsync();
                     foreach (var i in read)
                     {
-                            num += i;
+                        num += i;
                     }
                     break;
                 case "text":
@@ -278,7 +285,7 @@ namespace Snblog.Service.Service
                     var give = await _service.SnArticle.Select(c => c.Give).ToListAsync();
                     foreach (var i in give)
                     {
-                            num += i;
+                        num += i;
                     }
                     break;
             }
@@ -548,18 +555,20 @@ namespace Snblog.Service.Service
             }
         }
 
-        public async Task<List<SnArticle>> GetContainsAsync(string name, bool cache)
+        public async Task<List<SnArticleDto>> GetContainsAsync(string name, bool cache)
         {
-            _logger.LogInformation("模糊查询_SnArticle" + name + cache);
-            result_List = _cacheutil.CacheString("GetContainsAsync_SnArticle" + name + cache, result_List, cache); //设置缓存
-            if (result_List == null)
+            _logger.LogInformation("模糊查询_SnArticleDto" + name + cache);
+            result_ListDto = _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + name + cache, result_ListDto, cache); //设置缓存
+            if (result_ListDto == null)
             {
-                result_List = await _service.SnArticle
-           .Where(l => l.Title.Contains(name))//查询条件
-           .ToListAsync();
-                _cacheutil.CacheString("GetContainsAsync_SnArticle" + name + cache, result_List, cache); //设置缓存
+                result_ListDto = _mapper.Map<List<SnArticleDto>>(
+                    result_List = await _service.SnArticle
+                   .Where(l => l.Title.Contains(name))//查询条件
+                   .ToListAsync());
+
+                _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + name + cache, result_ListDto, cache); //设置缓存
             }
-            return result_List;
+            return result_ListDto;
         }
     }
 }
