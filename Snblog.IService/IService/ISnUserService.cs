@@ -7,23 +7,26 @@ namespace Snblog.IService
     public interface ISnUserService
     {
         /// <summary>
-        /// 异步查询
+        /// 查询所有
         /// </summary>
+        /// <param name="cache">缓存</param>
         /// <returns></returns>
-        Task<List<SnUserDto>> AsyGetUser();
+        Task<List<SnUserDto>> GetAllAsync(bool cache);
 
         /// <summary>
-        /// 主键id查询
+        /// 主键查询
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="id">主键</param>
+        /// <param name="cache">缓存</param>
         /// <returns></returns>
-        Task<SnUser> AsyGetUserId(int userId);
+        Task<SnUserDto> GetByIdAsync(int id, bool cache);
 
         /// <summary>
-        /// 查询用户总数
+        /// 查询总数
         /// </summary>
+        /// <param name="cache">缓存</param>
         /// <returns></returns>
-        int GetUserCount();
+       Task<int> GetCountAsync(bool cache);
 
         /// <summary>
         /// 条件分页查询 - 支持排序
@@ -40,7 +43,7 @@ namespace Snblog.IService
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<SnUser> AsyInsUser(SnUser test);
+        Task<bool> AsyInsUser(SnUser test);
 
         /// <summary>
         /// 按id删除

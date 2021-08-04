@@ -35,16 +35,12 @@ namespace Snblog.Service.Service
         public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("删除数据_SnArticle" + id);
-            //var todoItem = await _service.SnArticle.FindAsync(id);
-            //if (todoItem == null) return false;
-
             //先查询出来，因为只能删除被追踪的数据
             var todoItem = await _service.SnArticle.FindAsync(id);
             if (todoItem == null) return false;
             //1、单独删除方法
             _service.SnArticle.Remove(todoItem);//删除单个Leagues
             _service.Remove(todoItem);//直接在context上Remove()方法传入model，它会判断类型
-
             return await _service.SaveChangesAsync() > 0;
         }
 

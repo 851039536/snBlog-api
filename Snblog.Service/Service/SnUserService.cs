@@ -1,8 +1,12 @@
-﻿using AutoMapper;
+﻿using AngleSharp.Dom;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Snblog.Cache.CacheUtil;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Models;
+using Snblog.Service.Service;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,35 +15,59 @@ namespace Snblog.Service
 {
     public class SnUserService : BaseService, ISnUserService
     {
+        private readonly CacheUtil _cacheutil;
         private readonly snblogContext _service;
+        private readonly ILogger<SnUserService> _logger;
+        private int result_Int;
+        private SnUserDto resultDto = default;
+        private List<SnUserDto> result_ListDto = default;
         // 创建一个字段来存储mapper对象
         private readonly IMapper _mapper;
-        public SnUserService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext service, IMapper mapper) : base(repositoryFactory, mydbcontext)
+        public SnUserService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext service, IMapper mapper, ILogger<SnUserService> logger, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
         {
             _service = service;
             _mapper = mapper;
+            _logger = logger;
+            _cacheutil = (CacheUtil)cacheutil;
         }
 
         public async Task<string> AsyDetUserId(int userId)
         {
-            int da = await  CreateService<SnUser>().DeleteAsync(userId);
+            int da = await CreateService<SnUser>().DeleteAsync(userId);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
 
-        public async Task<List<SnUserDto>> AsyGetUser()
+        public async Task<List<SnUserDto>> GetAllAsync(bool cache)
         {
-            return _mapper.Map<List<SnUserDto>>(await _service.SnUser.ToListAsync()); 
+            _logger.LogInformation("查询所有_SnUserDto" + cache);
+            result_ListDto = _cacheutil.CacheString("GetAllAsync_SnUserDto" + cache, result_ListDto, cache);
+            if (result_ListDto == null)
+            {
+                result_ListDto = _mapper.Map<List<SnUserDto>>(await _service.SnUser.ToListAsync());
+                _cacheutil.CacheString("GetAllAsync_SnUserDto" + cache, result_ListDto, cache);
+            }
+            return result_ListDto;
+
+
         }
 
-        public async Task<SnUser> AsyGetUserId(int userId)
+        public async Task<SnUserDto> GetByIdAsync(int id, bool cache)
         {
-            return await _service.SnUser.FindAsync(userId);
+            _logger.LogInformation("主键查询_SnUserDto" + id + cache);
+            resultDto = _cacheutil.CacheString("GetByIdAsync_SnUserDto" + id + cache, resultDto, cache);
+            if (resultDto == null)
+            {
+                resultDto = _mapper.Map<SnUserDto>(await _service.SnUser.FindAsync(id));
+                _cacheutil.CacheString("GetByIdAsync_SnUserDto" + id + cache, resultDto, cache);
+            }
+            return resultDto;
         }
 
-        public async Task<SnUser> AsyInsUser(SnUser test)
+        public async Task<bool> AsyInsUser(SnUser test)
         {
-            return await CreateService<SnUser>().AddAsync(test);
+            await _service.SnUser.AddAsync(test);
+            return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<string> AysUpUser(SnUserDto user)
@@ -66,10 +94,16 @@ namespace Snblog.Service
             return data.ToList();
         }
 
-        public int GetUserCount()
+        public async Task<int> GetCountAsync(bool cache)
         {
-            int data = CreateService<SnUser>().Count();
-            return data;
+            _logger.LogInformation("查询总数_SnUserDto" + cache);
+            result_Int = _cacheutil.CacheString("GetCountAsync_SnUserDto" + cache, result_Int, cache);
+            if (result_Int == 0)
+            {
+                result_Int = await _service.SnUser.CountAsync();
+                _cacheutil.CacheString("GetCountAsync_SnUserDto" + cache, result_Int, cache);
+            }
+            return result_Int;
         }
     }
 }

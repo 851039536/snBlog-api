@@ -5,8 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -14,7 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 using Snblog.IService;
 using Snblog.Jwt;
 using Snblog.Models;
-using Snblog.Repository.Repository;
 
 
 //默认的约定集将应用于程序集中的所有操作：
@@ -32,15 +29,13 @@ namespace Snblog.Controllers
         private readonly DbSet<SnUser> user;
         private readonly JwtConfig jwtModel = null;
 
-        //// 创建一个字段来存储mapper对象
-        //private readonly IMapper _mapper;
+     
         public SnUserController(ISnUserService service, snblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;
             user = coreDbContext.SnUser;
             jwtModel = _jwtModel.Value;
-            //_mapper = mapper;
         }
 
 
@@ -87,34 +82,37 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 用户查询
+        /// 查询所有
         /// </summary>
-        [HttpGet("AsyGestTest")]
-        public async Task<IActionResult> AsyGetUser()
+        /// <param name="cache">缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync(bool cache)
         {
-            return Ok(await _service.AsyGetUser());
+            return Ok(await _service.GetAllAsync(cache));
         }
 
         /// <summary>
-        /// 主键id查询
+        /// 主键查询
         /// </summary>
-        /// <param name="userId">主键id</param>
+        /// <param name="id">主键</param>
+        /// <param name="cache">缓存</param>
         /// <returns></returns>
-        [HttpGet("AsyGetUserId")]
-        public async Task<IActionResult> AsyGetUserId(int userId)
+        [HttpGet("GetByIdAsync")]
+        public async Task<IActionResult> GetByIdAsync(int id ,bool cache)
         {
-  
-            return Ok(await _service.AsyGetUserId(userId));
+            return Ok(await _service.GetByIdAsync(id,cache));
         }
 
         /// <summary>
-        /// 用户总数
+        /// 查询总数
         /// </summary>
+        /// <param name="cache">缓存</param>
         /// <returns></returns>
-        [HttpGet("GetUserCount")]
-        public IActionResult GetUserCount()
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync(bool cache)
         {
-            return Ok(_service.GetUserCount());
+            return Ok(await _service.GetCountAsync(cache));
         }
 
         /// <summary>

@@ -16,6 +16,8 @@ namespace Snblog.Models
 
         public virtual DbSet<SnArticle> SnArticle { get; set; }
         public virtual DbSet<SnComments> SnComments { get; set; }
+        public virtual DbSet<SnInterface> SnInterface { get; set; }
+        public virtual DbSet<SnInterfaceType> SnInterfaceType { get; set; }
         public virtual DbSet<SnLabels> SnLabels { get; set; }
         public virtual DbSet<SnLeave> SnLeave { get; set; }
         public virtual DbSet<SnNavigation> SnNavigation { get; set; }
@@ -213,6 +215,78 @@ namespace Snblog.Models
                     .HasColumnName("user_id")
                     .HasColumnType("int(11)")
                     .HasComment("用户id");
+            });
+
+            modelBuilder.Entity<SnInterface>(entity =>
+            {
+                entity.ToTable("sn_interface");
+
+                entity.HasIndex(e => e.TypeId)
+                    .HasName("type_id");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("user_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Identity)
+                    .HasColumnName("identity")
+                    .HasComment("显示隐藏");
+
+                entity.Property(e => e.Path)
+                    .IsRequired()
+                    .HasColumnName("path")
+                    .HasColumnType("varchar(80)")
+                    .HasComment("路径")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasColumnName("title")
+                    .HasColumnType("varchar(50)")
+                    .HasComment("标题")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.TypeId)
+                    .HasColumnName("type_id")
+                    .HasColumnType("int(5)")
+                    .HasComment("类别");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("user_id")
+                    .HasColumnType("int(5)")
+                    .HasComment("用户");
+
+                //entity.HasOne(d => d.Type)
+                //    .WithMany(p => p.SnInterface)
+                //    .HasForeignKey(d => d.TypeId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("sn_interface_ibfk_1");
+
+                //entity.HasOne(d => d.User)
+                //    .WithMany(p => p.SnInterface)
+                //    .HasForeignKey(d => d.UserId)
+                //    .HasConstraintName("sn_interface_ibfk_2");
+            });
+
+            modelBuilder.Entity<SnInterfaceType>(entity =>
+            {
+                entity.ToTable("sn_interface_type");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
             });
 
             modelBuilder.Entity<SnLabels>(entity =>
