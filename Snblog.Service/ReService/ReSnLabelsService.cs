@@ -13,7 +13,7 @@ namespace Snblog.Service.ReService
         private readonly CacheUtil _cacheUtil;
         private int result_Int;
         private List<SnLabels> result_List = null;
-        public ReSnLabelsService(ICacheUtil cacheUtil, IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        public ReSnLabelsService(ICacheUtil cacheUtil, IRepositoryFactory repositoryFactory, IConcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
             _cacheUtil = (CacheUtil)cacheUtil;
         }

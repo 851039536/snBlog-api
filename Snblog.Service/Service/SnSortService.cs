@@ -13,11 +13,11 @@ namespace Snblog.Service.Service
     public class SnSortService : BaseService, ISnSortService
     {
 
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnSort> result_List = default;
-        public SnSortService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext service, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
+        public SnSortService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, SnblogContext service, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;

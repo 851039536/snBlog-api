@@ -26,13 +26,13 @@ namespace Snblog.Controllers
     public class SnUserController : Controller
     {
 
-        private readonly snblogContext _coreDbContext;
+        private readonly SnblogContext _coreDbContext;
         private readonly ISnUserService _service; //IOC依赖注入
         private readonly DbSet<SnUser> user;
         private readonly JwtConfig jwtModel = null;
 
      
-        public SnUserController(ISnUserService service, snblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
+        public SnUserController(ISnUserService service, SnblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;

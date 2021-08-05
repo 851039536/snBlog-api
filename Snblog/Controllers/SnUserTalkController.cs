@@ -17,12 +17,12 @@ namespace Snblog.Controllers
     public class SnUserTalkController : Controller
     {
 
-        private readonly snblogContext _coreDbContext;
+        private readonly SnblogContext _coreDbContext;
         private readonly ISnUserTalkService _service; //IOC依赖注入
 
 
 
-        public SnUserTalkController(ISnUserTalkService service, snblogContext coreDbContext)
+        public SnUserTalkController(ISnUserTalkService service, SnblogContext coreDbContext)
         {
             _service = service;
             _coreDbContext = coreDbContext;

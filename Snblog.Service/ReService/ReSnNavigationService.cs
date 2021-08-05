@@ -15,7 +15,7 @@ namespace Snblog.Service.ReService
         private int result_Int;
         private List<SnNavigation> result_List = null;
         private SnNavigation result_Model = null;
-        public ReSnNavigationService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
+        public ReSnNavigationService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
         {
             _cacheutil = (CacheUtil)cacheutil;
         }

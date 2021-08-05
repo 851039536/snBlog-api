@@ -1,2 +1,214 @@
 2021-08-05 10:59:13.181 +08:00 [INF] 启动主机
 2021-08-05 10:59:27.097 +08:00 [INF] 查询所有_SnLabelsTrue
+2021-08-05 11:01:37.163 +08:00 [INF] 启动主机
+2021-08-05 11:01:46.667 +08:00 [INF] 查询总数_SnArticleTrue
+2021-08-05 11:33:16.023 +08:00 [INF] 启动主机
+2021-08-05 11:33:17.272 +08:00 [FTL] 主机意外终止
+System.AggregateException: Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnArticleService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnArticleService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnArticleService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnNavigationService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnNavigationService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnLabelsService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnLabelsService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnLabelsService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnSortService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnSortService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnSortService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnOneService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnOneService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnOneService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnVideoService Lifetime: Scoped ImplementationType: Snblog.Service.SnVideoService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnVideoService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnVideoTypeService Lifetime: Scoped ImplementationType: Snblog.Service.SnVideoTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnVideoTypeService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnUserService Lifetime: Scoped ImplementationType: Snblog.Service.SnUserService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnUserService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnOneTypeService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnOneTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnOneTypeService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnPictureService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnPictureService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnPictureService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnPictureTypeService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnPictureTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnPictureTypeService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnTalkService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnTalkService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnTalkService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnTalkTypeService Lifetime: Scoped ImplementationType: Snblog.Service.SnTalkTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnTalkTypeService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnNavigationTypeService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnNavigationTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationTypeService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnleaveService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnleaveService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnleaveService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnNavigationTypeService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnNavigationTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationTypeService'.) (Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnInterfaceService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnInterfaceService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnInterfaceService'.)
+ ---> System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnArticleService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnArticleService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnArticleService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnArticleService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.DefaultServiceProviderFactory.CreateServiceProvider(IServiceCollection containerBuilder)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at Snblog.Program.Main(String[] args) in F:\Test\netCore\Snblog\Snblog\Program.cs:line 29
+ ---> (Inner Exception #1) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnNavigationService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnNavigationService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #2) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnLabelsService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnLabelsService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnLabelsService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnLabelsService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #3) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnSortService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnSortService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnSortService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnSortService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #4) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnOneService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnOneService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnOneService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnOneService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #5) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnVideoService Lifetime: Scoped ImplementationType: Snblog.Service.SnVideoService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnVideoService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnVideoService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #6) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnVideoTypeService Lifetime: Scoped ImplementationType: Snblog.Service.SnVideoTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnVideoTypeService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnVideoTypeService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #7) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnUserService Lifetime: Scoped ImplementationType: Snblog.Service.SnUserService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnUserService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnUserService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #8) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnOneTypeService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnOneTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnOneTypeService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnOneTypeService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #9) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnPictureService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnPictureService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnPictureService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnPictureService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #10) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnPictureTypeService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnPictureTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnPictureTypeService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnPictureTypeService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #11) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnTalkService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnTalkService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnTalkService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnTalkService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #12) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.ISnTalkTypeService Lifetime: Scoped ImplementationType: Snblog.Service.SnTalkTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnTalkTypeService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.SnTalkTypeService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #13) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnNavigationTypeService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnNavigationTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationTypeService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationTypeService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #14) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnleaveService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnleaveService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnleaveService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnleaveService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #15) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnNavigationTypeService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnNavigationTypeService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationTypeService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnNavigationTypeService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #16) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Snblog.IService.IService.ISnInterfaceService Lifetime: Scoped ImplementationType: Snblog.Service.Service.SnInterfaceService': Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnInterfaceService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Snblog.Models.snblogContext' while attempting to activate 'Snblog.Service.Service.SnInterfaceService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, IServiceProviderEngine engine, ServiceProviderOptions options)<---
+
+2021-08-05 11:35:21.783 +08:00 [INF] 启动主机
+2021-08-05 11:39:14.858 +08:00 [INF] 启动主机
+2021-08-05 11:42:34.291 +08:00 [INF] 启动主机
+2021-08-05 11:44:00.741 +08:00 [INF] 查询标签总数_SnArticle7True
+2021-08-05 11:44:03.763 +08:00 [INF] 查询标签总数_SnArticle7True
+2021-08-05 11:44:03.940 +08:00 [INF] 查询标签总数_SnArticle7True
+2021-08-05 11:44:04.121 +08:00 [INF] 查询标签总数_SnArticle7True
+2021-08-05 11:44:04.296 +08:00 [INF] 查询标签总数_SnArticle7True
+2021-08-05 11:44:04.469 +08:00 [INF] 查询标签总数_SnArticle7True
+2021-08-05 11:44:04.640 +08:00 [INF] 查询标签总数_SnArticle7True
+2021-08-05 11:56:24.419 +08:00 [INF] 启动主机
+2021-08-05 11:56:59.125 +08:00 [INF] 查询所有_SnUserDtoTrue
+2021-08-05 11:59:08.628 +08:00 [INF] 启动主机

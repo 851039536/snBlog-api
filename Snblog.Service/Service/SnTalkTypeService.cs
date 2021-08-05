@@ -12,9 +12,9 @@ namespace Snblog.Service
 {
     public class SnTalkTypeService : ISnTalkTypeService
     {
-        private readonly snblogContext _coreDbContext;//DB
+        private readonly SnblogContext _coreDbContext;//DB
 
-        public SnTalkTypeService(snblogContext coreDbContext)
+        public SnTalkTypeService(SnblogContext coreDbContext)
         {
             _coreDbContext = coreDbContext;
         }

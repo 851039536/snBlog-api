@@ -10,12 +10,12 @@ namespace Snblog.Service.Service
 {
     public class SnTalkService : ISnTalkService
     {
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
-        private int result_Int;
-        private List<SnTalk> result_List = default;
+       // private int result_Int;
+      //  private List<SnTalk> result_List = default;
 
-        public SnTalkService(snblogContext service, ICacheUtil cacheutil)
+        public SnTalkService(SnblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
             _cacheutil = (CacheUtil) cacheutil;

@@ -13,13 +13,13 @@ namespace Snblog.Service.Service
 {
     public class SnNavigationService : ISnNavigationService
     {
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnNavigation> result_List = null;
         private SnNavigation result_Model = null;
         private readonly ILogger<SnNavigationService> _logger;
-        public SnNavigationService(snblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger)
+        public SnNavigationService(SnblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;

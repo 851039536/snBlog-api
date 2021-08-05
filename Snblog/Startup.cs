@@ -140,13 +140,10 @@ namespace Snblog
                   c.AddSecurityDefinition("bearerAuth", securityScheme);
                   c.AddSecurityRequirement(securityRequirement);
                   #endregion
-
-
-
               });
             #endregion
             #region DbContext
-            services.AddDbContext<snblogContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+       services.AddDbContext<SnblogContext>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             #endregion
             # region jwt
             services.ConfigureJwt(Configuration);
@@ -172,7 +169,7 @@ namespace Snblog
 
             // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
-            services.AddScoped<IconcardContext, snblogContext>();//db
+            services.AddScoped<IConcardContext, SnblogContext>();//db
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
             services.AddScoped<ISnNavigationService, SnNavigationService>();
             services.AddScoped<ISnLabelsService, SnLabelsService>();

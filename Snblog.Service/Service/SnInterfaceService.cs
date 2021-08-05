@@ -11,9 +11,9 @@ namespace Snblog.Service.Service
 {
   public  class SnInterfaceService : ISnInterfaceService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
 
-        public SnInterfaceService(snblogContext service)
+        public SnInterfaceService(SnblogContext service)
         {
             _service = service;
         }

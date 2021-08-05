@@ -14,12 +14,12 @@ namespace Snblog.Service
 {
     public class SnVideoService : ISnVideoService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnVideoService> _logger;
         private int result_Int;
         private List<SnVideo> result_List = default;
-        public SnVideoService(ILogger<SnVideoService> logger, snblogContext service, ICacheUtil cacheutil)
+        public SnVideoService(ILogger<SnVideoService> logger, SnblogContext service, ICacheUtil cacheutil)
         {
             _logger = logger;
             _service = service;

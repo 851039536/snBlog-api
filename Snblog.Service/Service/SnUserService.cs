@@ -16,14 +16,14 @@ namespace Snblog.Service
     public class SnUserService : BaseService, ISnUserService
     {
         private readonly CacheUtil _cacheutil;
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly ILogger<SnUserService> _logger;
         private int result_Int;
         private SnUserDto resultDto = default;
         private List<SnUserDto> result_ListDto = default;
         // 创建一个字段来存储mapper对象
         private readonly IMapper _mapper;
-        public SnUserService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext, snblogContext service, IMapper mapper, ILogger<SnUserService> logger, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
+        public SnUserService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, SnblogContext service, IMapper mapper, ILogger<SnUserService> logger, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
         {
             _service = service;
             _mapper = mapper;

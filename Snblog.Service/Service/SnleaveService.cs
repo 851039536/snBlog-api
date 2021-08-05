@@ -11,11 +11,11 @@ namespace Snblog.Service.Service
 {
     public class SnleaveService : ISnleaveService
     {
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnLeave> result_List = null;
-        public SnleaveService(snblogContext service, ICacheUtil cacheutil)
+        public SnleaveService(SnblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;

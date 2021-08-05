@@ -15,7 +15,7 @@ namespace Snblog.Service.ReService
         private int result_Int;
         private List<SnArticle> result_List = null;
 
-        public ReSnArticleService(ICacheUtil cacheUtil, IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        public ReSnArticleService(ICacheUtil cacheUtil, IRepositoryFactory repositoryFactory, IConcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
             _cacheutil = (CacheUtil)cacheUtil;
         }
@@ -101,15 +101,17 @@ namespace Snblog.Service.ReService
             var list = new List<SnArticle>();
             foreach (var t in data)
             {
-                var s = new SnArticle();
-                s.ArticleId = t.ArticleId;
-                s.Title = t.Title;
-                s.Comment = t.Comment;
-                s.Give = t.Give;
-                s.Read = t.Read;
-                s.TimeCreate = t.TimeCreate;
-                s.TitleText = t.TitleText;
-                s.UserId = t.UserId;
+                var s = new SnArticle
+                {
+                    ArticleId = t.ArticleId,
+                    Title = t.Title,
+                    Comment = t.Comment,
+                    Give = t.Give,
+                    Read = t.Read,
+                    TimeCreate = t.TimeCreate,
+                    TitleText = t.TitleText,
+                    UserId = t.UserId
+                };
                 list.Add(s);
             }
             return list;
@@ -269,13 +271,15 @@ namespace Snblog.Service.ReService
             var list = new List<SnArticle>();
             foreach (var t in data)
             {
-                var s = new SnArticle();
-                s.ArticleId = t.ArticleId;
-                s.Title = t.Title;
-                s.TitleText = t.TitleText;
-                s.TimeCreate = t.TimeCreate;
-                s.Give = t.Give;
-                s.Read = t.Read;
+                var s = new SnArticle
+                {
+                    ArticleId = t.ArticleId,
+                    Title = t.Title,
+                    TitleText = t.TitleText,
+                    TimeCreate = t.TimeCreate,
+                    Give = t.Give,
+                    Read = t.Read
+                };
                 list.Add(s);
             }
             return list;
@@ -290,7 +294,8 @@ namespace Snblog.Service.ReService
         public async Task<string> UpdateAsync(SnArticle entity)
         {
             int result = await CreateService<SnArticle>().UpdateAsync(entity);
-            string Func(int data) => data == 1 ? "更新成功" : "更新失败";
+
+            static string Func(int data) => data == 1 ? "更新成功" : "更新失败";
             return Func(result);
         }
 

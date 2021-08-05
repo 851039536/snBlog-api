@@ -10,13 +10,13 @@ namespace Snblog.Service.Service
 {
     public class SnOneTypeService : ISnOneTypeService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnOneType> result_List = null;
 
         private readonly ILogger<SnOneTypeService> _logger;
-        public SnOneTypeService(snblogContext service, ICacheUtil cacheutil, ILogger<SnOneTypeService> logger)
+        public SnOneTypeService(SnblogContext service, ICacheUtil cacheutil, ILogger<SnOneTypeService> logger)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;

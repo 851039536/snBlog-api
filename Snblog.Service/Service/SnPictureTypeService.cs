@@ -12,11 +12,11 @@ namespace Snblog.Service.Service
 {
     public class SnPictureTypeService : ISnPictureTypeService
     {
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int = default;
         private List<SnPictureType> result_List = default;
-        public SnPictureTypeService(snblogContext service, ICacheUtil cacheutil)
+        public SnPictureTypeService(SnblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;

@@ -3,13 +3,13 @@ using Snblog.IRepository;
 
 namespace Snblog.Models
 {
-    public partial class snblogContext : DbContext, IconcardContext
+    public partial class SnblogContext : DbContext, IConcardContext
     {
-        public snblogContext()
+        public SnblogContext()
         {
         }
 
-        public snblogContext(DbContextOptions<snblogContext> options)
+        public SnblogContext(DbContextOptions<SnblogContext> options)
             : base(options)
         {
         }

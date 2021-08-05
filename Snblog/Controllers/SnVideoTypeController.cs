@@ -16,9 +16,9 @@ namespace Snblog.Controllers
     [ApiController]
     public class SnVideoTypeController : Controller
     {
-        private readonly snblogContext _coreDbContext;
+        private readonly SnblogContext _coreDbContext;
         private readonly ISnVideoTypeService _service; //IOC依赖注入
-        public SnVideoTypeController(ISnVideoTypeService service, snblogContext coreDbContext)
+        public SnVideoTypeController(ISnVideoTypeService service, SnblogContext coreDbContext)
         {
             _service = service;
             _coreDbContext = coreDbContext;

@@ -1,6 +1,6 @@
 ﻿namespace Snblog.IRepository
 {
-     public interface IconcardContext
+     public interface IConcardContext
     {
     }
 }

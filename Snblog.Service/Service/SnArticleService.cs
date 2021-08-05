@@ -14,7 +14,7 @@ namespace Snblog.Service.Service
 {
     public class SnArticleService : ISnArticleService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnArticleService> _logger;
         private int result_Int;
@@ -23,7 +23,7 @@ namespace Snblog.Service.Service
         private List<SnArticleDto> result_ListDto = default;
         // 创建一个字段来存储mapper对象
         private readonly IMapper _mapper;
-        public SnArticleService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnArticleService> logger, IMapper mapper)
+        public SnArticleService(ICacheUtil cacheUtil, SnblogContext coreDbContext, ILogger<SnArticleService> logger, IMapper mapper)
         {
             _service = coreDbContext;
             _cacheutil = (CacheUtil)cacheUtil;
@@ -47,11 +47,10 @@ namespace Snblog.Service.Service
         public async Task<SnArticleDto> GetByIdAsync(int id, bool cache)
         {
             _logger.LogInformation("主键查询_SnArticleDto" + id + cache);
-            SnArticle result = null;
             resultDto = _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             if (resultDto == null)
             {
-                result = await _service.SnArticle.FindAsync(id);
+                SnArticle result = await _service.SnArticle.FindAsync(id);
                 resultDto = _mapper.Map<SnArticleDto>(result);
                 _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             }
@@ -218,7 +217,7 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync(bool cache)
         {
-            _logger.LogInformation("查询总数_SnArticle" + cache);
+            //_logger.LogInformation("查询总数_SnArticle" + cache);
             result_Int = _cacheutil.CacheNumber("Count_SnArticle" + cache, result_Int, cache);
             if (result_Int == 0)
             {
@@ -307,29 +306,24 @@ namespace Snblog.Service.Service
             {
                 if (type == 00)//表示查所有
                 {
-                    switch (name)
+                    return name switch
                     {
-                        case "read":
-                            return await _service.SnArticle.Where(s => true)
-                            .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
-                        case "data":
-                            return await _service.SnArticle.Where(s => true)
-                           .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
-                        case "give":
-                            return await _service.SnArticle.Where(s => true)
-                           .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
-                        case "comment":
-                            return await _service.SnArticle.Where(s => true)
-                           .OrderByDescending(c => c.Comment).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
-                        default:
-                            return await _service.SnArticle.Where(s => true)
-                            .OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
-                    }
+                        "read" => await _service.SnArticle.Where(s => true)
+                                                    .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
+                                                   .Take(pageSize).ToListAsync(),
+                        "data" => await _service.SnArticle.Where(s => true)
+.OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
+.Take(pageSize).ToListAsync(),
+                        "give" => await _service.SnArticle.Where(s => true)
+.OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
+.Take(pageSize).ToListAsync(),
+                        "comment" => await _service.SnArticle.Where(s => true)
+.OrderByDescending(c => c.Comment).Skip((pageIndex - 1) * pageSize)
+.Take(pageSize).ToListAsync(),
+                        _ => await _service.SnArticle.Where(s => true)
+.OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
+.Take(pageSize).ToListAsync(),
+                    };
                 }
                 else
                 {
@@ -343,29 +337,24 @@ namespace Snblog.Service.Service
             {
                 if (type.Equals(999))//表示查所有
                 {
-                    switch (name)
+                    return name switch
                     {
-                        case "read":
-                            return await _service.SnArticle.Where(s => true)
-                          .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                          .Take(pageSize).ToListAsync();
-                        case "data":
-                            return await _service.SnArticle.Where(s => true)
-                          .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-                          .Take(pageSize).ToListAsync();
-                        case "give":
-                            return await _service.SnArticle.Where(s => true)
-                          .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
-                          .Take(pageSize).ToListAsync();
-                        case "comment":
-                            return await _service.SnArticle.Where(s => true)
-                          .OrderBy(c => c.Comment).Skip((pageIndex - 1) * pageSize)
-                          .Take(pageSize).ToListAsync();
-                        default:
-                            return await _service.SnArticle.Where(s => true)
-                            .OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize).ToListAsync();
-                    }
+                        "read" => await _service.SnArticle.Where(s => true)
+                                                  .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
+                                                  .Take(pageSize).ToListAsync(),
+                        "data" => await _service.SnArticle.Where(s => true)
+.OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
+.Take(pageSize).ToListAsync(),
+                        "give" => await _service.SnArticle.Where(s => true)
+.OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
+.Take(pageSize).ToListAsync(),
+                        "comment" => await _service.SnArticle.Where(s => true)
+.OrderBy(c => c.Comment).Skip((pageIndex - 1) * pageSize)
+.Take(pageSize).ToListAsync(),
+                        _ => await _service.SnArticle.Where(s => true)
+.OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
+.Take(pageSize).ToListAsync(),
+                    };
                 }
                 else
                 {
@@ -418,15 +407,17 @@ namespace Snblog.Service.Service
                 var list = new List<SnArticle>();
                 foreach (var t in data)
                 {
-                    var s = new SnArticle();
-                    s.ArticleId = t.ArticleId;
-                    s.Title = t.Title;
-                    s.Comment = t.Comment;
-                    s.Give = t.Give;
-                    s.Read = t.Read;
-                    s.TimeCreate = t.TimeCreate;
-                    s.TitleText = t.TitleText;
-                    s.UserId = t.UserId;
+                    var s = new SnArticle
+                    {
+                        ArticleId = t.ArticleId,
+                        Title = t.Title,
+                        Comment = t.Comment,
+                        Give = t.Give,
+                        Read = t.Read,
+                        TimeCreate = t.TimeCreate,
+                        TitleText = t.TitleText,
+                        UserId = t.UserId
+                    };
                     list.Add(s);
                 }
                 return list;
@@ -448,15 +439,17 @@ namespace Snblog.Service.Service
                 var list = new List<SnArticle>();
                 foreach (var t in data)
                 {
-                    var s = new SnArticle();
-                    s.ArticleId = t.ArticleId;
-                    s.Title = t.Title;
-                    s.Comment = t.Comment;
-                    s.Give = t.Give;
-                    s.Read = t.Read;
-                    s.TimeCreate = t.TimeCreate;
-                    s.TitleText = t.TitleText;
-                    s.UserId = t.UserId;
+                    var s = new SnArticle
+                    {
+                        ArticleId = t.ArticleId,
+                        Title = t.Title,
+                        Comment = t.Comment,
+                        Give = t.Give,
+                        Read = t.Read,
+                        TimeCreate = t.TimeCreate,
+                        TitleText = t.TitleText,
+                        UserId = t.UserId
+                    };
                     list.Add(s);
                 }
                 return list;
@@ -513,13 +506,15 @@ namespace Snblog.Service.Service
                 var list = new List<SnArticle>();
                 foreach (var t in data)
                 {
-                    var s = new SnArticle();
-                    s.ArticleId = t.ArticleId;
-                    s.Title = t.Title;
-                    s.TitleText = t.TitleText;
-                    s.TimeCreate = t.TimeCreate;
-                    s.Give = t.Give;
-                    s.Read = t.Read;
+                    var s = new SnArticle
+                    {
+                        ArticleId = t.ArticleId,
+                        Title = t.Title,
+                        TitleText = t.TitleText,
+                        TimeCreate = t.TimeCreate,
+                        Give = t.Give,
+                        Read = t.Read
+                    };
                     list.Add(s);
                 }
                 return list;
@@ -538,13 +533,15 @@ namespace Snblog.Service.Service
                 var list = new List<SnArticle>();
                 foreach (var t in data)
                 {
-                    var s = new SnArticle();
-                    s.ArticleId = t.ArticleId;
-                    s.Title = t.Title;
-                    s.TitleText = t.TitleText;
-                    s.TimeCreate = t.TimeCreate;
-                    s.Give = t.Give;
-                    s.Read = t.Read;
+                    var s = new SnArticle
+                    {
+                        ArticleId = t.ArticleId,
+                        Title = t.Title,
+                        TitleText = t.TitleText,
+                        TimeCreate = t.TimeCreate,
+                        Give = t.Give,
+                        Read = t.Read
+                    };
                     list.Add(s);
                 }
                 return list;

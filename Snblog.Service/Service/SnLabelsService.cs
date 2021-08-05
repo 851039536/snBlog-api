@@ -12,13 +12,13 @@ namespace Snblog.Service.Service
 {
     public class SnLabelsService : ISnLabelsService
     {
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheUtil;
         private int result_Int;
         private List<SnLabels> result_List = null;
         private readonly ILogger<SnLabelsService> _logger;
 
-        public SnLabelsService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnLabelsService> logger)
+        public SnLabelsService(ICacheUtil cacheUtil, SnblogContext coreDbContext, ILogger<SnLabelsService> logger)
         {
             _service = coreDbContext;
             _cacheUtil = (CacheUtil)cacheUtil;
