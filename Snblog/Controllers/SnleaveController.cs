@@ -4,6 +4,7 @@ using Snblog.IService.IService;
 using System.Threading.Tasks;
 using System;
 using Snblog.Models;
+using Blog.Core;
 
 namespace Snblog.Controllers
 {
@@ -73,7 +74,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnLeave entity)
         {
             return Ok(await _service.AddAsync(entity));
@@ -85,7 +86,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));
@@ -97,7 +98,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnLeave entity)
         {
             return Ok(await _service.UpdateAsync(entity));

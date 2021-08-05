@@ -143,6 +143,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
+        [Authorize(Roles = Permissions.Name)]
         [HttpDelete("AsyDetUserId")]
         public async Task<IActionResult> AsyDetUserId(int userId)
         {
@@ -154,6 +155,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
+        [Authorize(Roles = Permissions.Name)]
         [HttpPut("AysUpUser")]
         public async Task<IActionResult> AysUpUser(SnUserDto user)
         {

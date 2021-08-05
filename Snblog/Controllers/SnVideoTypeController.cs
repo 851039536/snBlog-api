@@ -1,4 +1,5 @@
 ﻿﻿using System.Threading.Tasks;
+using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
@@ -61,7 +62,7 @@ namespace Snblog.Controllers
         /// <param name="Entity"></param>
         /// <returns></returns>
          [HttpPost("AddAsync")]
-         [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnVideoType Entity)
         {
             return Ok(await _service.AddAsync(Entity));
@@ -73,7 +74,7 @@ namespace Snblog.Controllers
         /// <param name="Entity"></param>
         /// <returns></returns>
          [HttpDelete("DelectAsync")]
-         [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DelectAsync(SnVideoType Entity)
         {
             return Ok(await _service.DeleteAsync(Entity));
@@ -85,7 +86,7 @@ namespace Snblog.Controllers
         /// <param name="Entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnVideoType Entity)
         {
             return Ok(await _service.UpdateAsync(Entity));

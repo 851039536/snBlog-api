@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IService;
@@ -78,7 +79,7 @@ namespace Snblog.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost("AddAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<ActionResult<SnLabels>> AddAsync(SnLabels entity)
         {
             return Ok(await _service.AddAsync(entity));
@@ -91,19 +92,19 @@ namespace Snblog.Controllers
         /// <param name="entity">标签id</param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnLabels entity)
         {
             var data = await _service.UpdateAsync(entity);
             return Ok(data);
         }
         #endregion
-        # region 删除数据
+        #region 删除数据
         /// <summary>
         /// 删除数据
         /// </summary>
         /// <param name="id">标签id</param>
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         [HttpDelete("DeleteAsync")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

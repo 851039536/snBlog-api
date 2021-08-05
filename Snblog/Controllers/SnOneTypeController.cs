@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Snblog.IService.IService;
 using Snblog.Models;
+using Blog.Core;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -78,7 +79,7 @@ namespace Snblog.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost("AddAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnOneType entity)
         {
             return Ok(await _service.AddAsync(entity));
@@ -90,7 +91,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));
@@ -103,7 +104,7 @@ namespace Snblog.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-           [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnOneType entity)
         {
             return Ok(await _service.UpdateAsync(entity));

@@ -132,7 +132,7 @@ namespace Snblog
                                     Id = "bearerAuth"
                                 }
                             },
-                            new string[] {}
+                            Array.Empty<string>()
                     }
                 };
 

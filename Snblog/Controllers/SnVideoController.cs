@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
@@ -42,6 +43,7 @@ namespace Snblog.Controllers
         /// <param name="typeId">分类条件</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
+       
         [HttpGet("GetTypeCountAsync")]
         public async Task<IActionResult> GetTypeCountAsync(int typeId, bool cache)
         {
@@ -117,7 +119,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<ActionResult<SnVideo>> AddAsync(SnVideo entity)
         {
             return Ok(await _service.AddAsync(entity));
@@ -128,7 +130,7 @@ namespace Snblog.Controllers
         /// <param name="id">视频id</param>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));
@@ -142,7 +144,7 @@ namespace Snblog.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnVideo entity)
         {
             var data = await _service.UpdateAsync(entity);

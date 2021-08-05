@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -100,7 +101,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AsyInsUserTalk")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<ActionResult<SnUserTalk>> AsyInsUserTalk(SnUserTalk talk)
         {
             return Ok(await _service.AsyInsUserTalk(talk));
@@ -111,7 +112,7 @@ namespace Snblog.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("AsyDetUserTalk")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AsyDetUserTalk(int id)
         {
             return Ok(await _service.AsyDetUserTalk(id));
@@ -123,7 +124,7 @@ namespace Snblog.Controllers
         /// <param name="talk"></param>
         /// <returns></returns>
         [HttpPut("AysUpArticle")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AysUpUserTalk(SnUserTalk talk)
         {
             var data = await _service.AysUpUserTalk(talk);

@@ -10,7 +10,7 @@ namespace Snblog.ControllersRepository
     [ApiController]
     public class ReSnArticleController : ControllerBase
     {
-        private readonly IReSnArticleService _service; //IOC依赖注入
+        private readonly IReSnArticleService _service;
 
         #region 构造函数
         public ReSnArticleController(IReSnArticleService service)
