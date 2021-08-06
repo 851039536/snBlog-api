@@ -20,8 +20,8 @@ namespace Snblog.Service.Service
         private int result_Int;
         private List<SnArticle> result_List = default;
         private SnArticleDto resultDto = default;
+        private SnArticle result = default;
         private List<SnArticleDto> result_ListDto = default;
-        // 创建一个字段来存储mapper对象
         private readonly IMapper _mapper;
         public SnArticleService(ICacheUtil cacheUtil, SnblogContext coreDbContext, ILogger<SnArticleService> logger, IMapper mapper)
         {
@@ -35,12 +35,10 @@ namespace Snblog.Service.Service
         public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("删除数据_SnArticle" + id);
-            //先查询出来，因为只能删除被追踪的数据
-            var todoItem = await _service.SnArticle.FindAsync(id);
-            if (todoItem == null) return false;
-            //1、单独删除方法
-            _service.SnArticle.Remove(todoItem);//删除单个Leagues
-            _service.Remove(todoItem);//直接在context上Remove()方法传入model，它会判断类型
+            var reslult = await _service.SnArticle.FindAsync(id);
+            if (reslult == null) return false;
+            _service.SnArticle.Remove(reslult);//删除单个
+            _service.Remove(reslult);//直接在context上Remove()方法传入model，它会判断类型
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -50,12 +48,13 @@ namespace Snblog.Service.Service
             resultDto = _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             if (resultDto == null)
             {
-                SnArticle result = await _service.SnArticle.FindAsync(id);
+                 result = await _service.SnArticle.FindAsync(id);
                 resultDto = _mapper.Map<SnArticleDto>(result);
                 _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             }
             return resultDto;
         }
+
 
 
         public async Task<List<SnArticle>> GetTypeIdAsync(int sortId, bool cache)
@@ -64,7 +63,7 @@ namespace Snblog.Service.Service
             result_List = _cacheutil.CacheString("GetTypeIdAsync_SnArticle" + sortId + cache, result_List, cache);
             if (result_List == null)
             {
-                result_List = await _service.SnArticle.Where(s => s.LabelId == sortId).ToListAsync();
+                result_List = await _service.SnArticle.Where(s => s.LabelId == sortId).AsNoTracking().ToListAsync();
                 _cacheutil.CacheString("GetTypeIdAsync_SnArticle" + sortId + cache, result_List, cache);
             }
             return result_List;
@@ -107,12 +106,12 @@ namespace Snblog.Service.Service
                 if (isDesc)
                 {
                     result_List = await _service.SnArticle.OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
+                           .Take(pageSize).AsNoTracking().ToListAsync();
                 }
                 else
                 {
                     result_List = await _service.SnArticle.OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize).ToListAsync();
+                             .Take(pageSize).AsNoTracking().ToListAsync();
                 }
             }
             else
@@ -120,12 +119,12 @@ namespace Snblog.Service.Service
                 if (isDesc)
                 {
                     result_List = await _service.SnArticle.Where(s => s.SortId == sort).OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize).ToListAsync();
+                            .Take(pageSize).AsNoTracking().ToListAsync();
                 }
                 else
                 {
                     result_List = await _service.SnArticle.Where(s => s.SortId == sort).OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
+                           .Take(pageSize).AsNoTracking().ToListAsync();
                 }
             }
             return result_List;
@@ -138,12 +137,12 @@ namespace Snblog.Service.Service
                 if (isDesc)
                 {
                     result_List = await _service.SnArticle.OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
+                           .Take(pageSize).AsNoTracking().ToListAsync();
                 }
                 else
                 {
                     result_List = await _service.SnArticle.OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize).ToListAsync();
+                             .Take(pageSize).AsNoTracking().ToListAsync();
                 }
             }
             else
@@ -151,12 +150,12 @@ namespace Snblog.Service.Service
                 if (isDesc)
                 {
                     result_List = await _service.SnArticle.Where(s => s.LabelId == label).OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize).ToListAsync();
+                            .Take(pageSize).AsNoTracking().ToListAsync();
                 }
                 else
                 {
                     result_List = await _service.SnArticle.Where(s => s.LabelId == label).OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                           .Take(pageSize).ToListAsync();
+                           .Take(pageSize).AsNoTracking().ToListAsync();
                 }
             }
             return result_List;
@@ -217,11 +216,11 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync(bool cache)
         {
-            //_logger.LogInformation("查询总数_SnArticle" + cache);
+            _logger.LogInformation("查询总数_SnArticle" + cache);
             result_Int = _cacheutil.CacheNumber("Count_SnArticle" + cache, result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnArticle.CountAsync();
+                result_Int = await _service.SnArticle.AsNoTracking().CountAsync();
                 _cacheutil.CacheNumber("Count_SnArticle" + cache, result_Int, cache);
             }
             return result_Int;
@@ -233,7 +232,7 @@ namespace Snblog.Service.Service
             result_ListDto = _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, result_ListDto, cache);
             if (result_ListDto == null)
             {
-                result_ListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticle.ToListAsync());
+                result_ListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticle.AsNoTracking().ToListAsync());
                 _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, result_ListDto, cache);
             }
             return result_ListDto;
@@ -310,26 +309,26 @@ namespace Snblog.Service.Service
                     {
                         "read" => await _service.SnArticle.Where(s => true)
                                                     .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                                                   .Take(pageSize).ToListAsync(),
+                                                   .Take(pageSize).AsNoTracking().ToListAsync(),
                         "data" => await _service.SnArticle.Where(s => true)
 .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-.Take(pageSize).ToListAsync(),
+.Take(pageSize).AsNoTracking().ToListAsync(),
                         "give" => await _service.SnArticle.Where(s => true)
 .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
-.Take(pageSize).ToListAsync(),
+.Take(pageSize).AsNoTracking().ToListAsync(),
                         "comment" => await _service.SnArticle.Where(s => true)
 .OrderByDescending(c => c.Comment).Skip((pageIndex - 1) * pageSize)
-.Take(pageSize).ToListAsync(),
+.Take(pageSize).AsNoTracking().ToListAsync(),
                         _ => await _service.SnArticle.Where(s => true)
 .OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-.Take(pageSize).ToListAsync(),
+.Take(pageSize).AsNoTracking().ToListAsync(),
                     };
                 }
                 else
                 {
                     return await _service.SnArticle.Where(s => s.SortId == type)
                   .OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                  .Take(pageSize).ToListAsync();
+                  .Take(pageSize).AsNoTracking().ToListAsync();
                 }
 
             }
@@ -344,23 +343,23 @@ namespace Snblog.Service.Service
                                                   .Take(pageSize).ToListAsync(),
                         "data" => await _service.SnArticle.Where(s => true)
 .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-.Take(pageSize).ToListAsync(),
+.Take(pageSize).AsNoTracking().ToListAsync(),
                         "give" => await _service.SnArticle.Where(s => true)
 .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
-.Take(pageSize).ToListAsync(),
+.Take(pageSize).AsNoTracking().ToListAsync(),
                         "comment" => await _service.SnArticle.Where(s => true)
 .OrderBy(c => c.Comment).Skip((pageIndex - 1) * pageSize)
-.Take(pageSize).ToListAsync(),
+.Take(pageSize).AsNoTracking().ToListAsync(),
                         _ => await _service.SnArticle.Where(s => true)
 .OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-.Take(pageSize).ToListAsync(),
+.Take(pageSize).AsNoTracking().ToListAsync(),
                     };
                 }
                 else
                 {
                     return await _service.SnArticle.Where(s => s.SortId == type)
                      .OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                      .Take(pageSize).ToListAsync();
+                      .Take(pageSize).AsNoTracking().ToListAsync();
                 }
 
             }
@@ -401,7 +400,7 @@ namespace Snblog.Service.Service
                     s.TitleText,
                     s.UserId
                 }).OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                             .Take(pageSize).ToListAsync();
+                             .Take(pageSize).AsNoTracking().ToListAsync();
 
                 //解决方案二：foreach遍历
                 var list = new List<SnArticle>();
@@ -435,7 +434,7 @@ namespace Snblog.Service.Service
                     s.TitleText,
                     s.UserId
                 }).OrderBy(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
-                         .Take(pageSize).ToListAsync();
+                         .Take(pageSize).AsNoTracking().ToListAsync();
                 var list = new List<SnArticle>();
                 foreach (var t in data)
                 {
@@ -502,7 +501,7 @@ namespace Snblog.Service.Service
                     s.TimeCreate,
                     s.Give,
                     s.Read
-                }).OrderByDescending(s => s.ArticleId).ToListAsync();
+                }).OrderByDescending(s => s.ArticleId).AsNoTracking().ToListAsync();
                 var list = new List<SnArticle>();
                 foreach (var t in data)
                 {
@@ -529,7 +528,7 @@ namespace Snblog.Service.Service
                     s.TimeCreate,
                     s.Give,
                     s.Read
-                }).OrderBy(s => s.ArticleId).ToListAsync();
+                }).OrderBy(s => s.ArticleId).AsNoTracking().ToListAsync();
                 var list = new List<SnArticle>();
                 foreach (var t in data)
                 {
@@ -557,7 +556,7 @@ namespace Snblog.Service.Service
                 result_ListDto = _mapper.Map<List<SnArticleDto>>(
                     result_List = await _service.SnArticle
                    .Where(l => l.Title.Contains(name))//查询条件
-                   .ToListAsync());
+                   .AsNoTracking().ToListAsync());
 
                 _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + name + cache, result_ListDto, cache); //设置缓存
             }

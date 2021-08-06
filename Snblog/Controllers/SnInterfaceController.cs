@@ -21,19 +21,35 @@ namespace Snblog.Controllers
         }
         #endregion
 
+        
+
         #region   分类查询
         /// <summary>
-        /// 分类查询
+        /// 根据用户分类查询
         /// </summary>
         /// <param name="userId">用户</param>
         /// <param name="type">分类 </param>
+        /// <param name="cache">缓存</param>
         [HttpGet("GetTypeAsync")]
-        public async Task<IActionResult> GetTypeAsync(int userId, int type)
+        public async Task<IActionResult> GetTypeAsync(int userId, int type,bool cache)
         {
-            return Ok(await _service.GetTypeAsync(userId,type));
+            return Ok(await _service.GetTypeAsync(userId,type,cache));
         }
         #endregion
-  
+
+        #region 查询所有
+        /// <summary>
+        /// 查询所有 
+        /// </summary>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync(bool cache)
+        {
+            return Ok(await _service.GetAllAsync(cache));
+        }
+        #endregion
+
 
     }
 }

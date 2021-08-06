@@ -9,7 +9,7 @@ namespace Snblog.IService.IService
     /// </summary>
     public interface ISnInterfaceService
     {
-        Task<List<SnInterface>> GetTypeAsync(int userId, int type);
+        Task<List<SnInterfaceDto>> GetTypeAsync(int userId, int type, bool cache);
 
     }
 }

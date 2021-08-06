@@ -364,3 +364,42 @@ File name: 'F:\Test\netCore\Snblog\Snblog\bin\Release\net5.0\Snblog.xml'
    at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass5_1.<UseMiddleware>b__2(HttpContext context)
    at StackExchange.Profiling.MiniProfilerMiddleware.Invoke(HttpContext context) in C:\projects\dotnet\src\MiniProfiler.AspNetCore\MiniProfilerMiddleware.cs:line 119
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-08-05 17:13:01.251 +08:00 [INF] 启动主机
+2021-08-05 17:14:06.657 +08:00 [INF] 查询总条数_SnLabelsFalse
+2021-08-05 17:14:06.924 +08:00 [INF] 主键查询_SnUserDto4True
+2021-08-05 17:14:06.924 +08:00 [INF] 查询文章(无文章内容)_SnArticle
+2021-08-05 17:14:06.931 +08:00 [INF] 读取分页数据
+2021-08-05 17:14:07.187 +08:00 [INF] 统计[字段/阅读/点赞]数量__SnArticletextFalse
+2021-08-05 17:14:07.191 +08:00 [INF] 读取总字数：text
+2021-08-05 17:14:08.170 +08:00 [INF] 统计[字段/阅读/点赞]数量__SnArticlereadFalse
+2021-08-05 17:14:08.172 +08:00 [INF] 读取总字数：read
+2021-08-05 17:14:09.478 +08:00 [INF] 查询文章(无文章内容)_SnArticle
+2021-08-05 17:14:09.480 +08:00 [INF] 读取分页数据
+2021-08-05 17:15:04.465 +08:00 [INF] 主键查询_SnUserDto4True
+2021-08-05 17:15:05.508 +08:00 [INF] 查询文章(无文章内容)_SnArticle
+2021-08-05 17:15:05.516 +08:00 [INF] 主键查询_SnUserDto4True
+2021-08-05 17:15:05.516 +08:00 [INF] 读取分页数据
+2021-08-05 17:15:05.538 +08:00 [INF] 统计[字段/阅读/点赞]数量__SnArticlereadFalse
+2021-08-05 17:15:05.539 +08:00 [INF] 查询总条数_SnLabelsFalse
+2021-08-05 17:15:05.540 +08:00 [INF] 统计[字段/阅读/点赞]数量__SnArticletextFalse
+2021-08-05 17:15:05.558 +08:00 [INF] 读取总字数：read
+2021-08-05 17:15:05.561 +08:00 [INF] 读取总字数：text
+2021-08-05 17:15:05.606 +08:00 [INF] 条件查询_SnNavigation网站TrueFalse
+2021-08-05 17:15:07.817 +08:00 [INF] 按标签条件查询_SnArticle1TrueTrue
+2021-08-05 17:15:07.854 +08:00 [INF] 查询所有_SnLabelsFalse
+2021-08-05 17:15:09.620 +08:00 [INF] 主键查询_SnArticleDto169True
+2021-08-05 17:15:10.835 +08:00 [INF] 按标签条件查询_SnArticle28TrueTrue
+2021-08-05 17:15:12.114 +08:00 [INF] 按标签条件查询_SnArticle1TrueTrue
+2021-08-05 17:15:12.629 +08:00 [INF] 按标签条件查询_SnArticle2TrueTrue
+2021-08-05 17:15:13.112 +08:00 [INF] 按标签条件查询_SnArticle4TrueTrue
+2021-08-05 17:15:13.623 +08:00 [INF] 按标签条件查询_SnArticle5TrueTrue
+2021-08-05 17:15:14.079 +08:00 [INF] 按标签条件查询_SnArticle5TrueTrue
+2021-08-05 17:15:14.516 +08:00 [INF] 按标签条件查询_SnArticle7TrueTrue
+2021-08-05 17:15:15.000 +08:00 [INF] 按标签条件查询_SnArticle9TrueTrue
+2021-08-05 17:15:15.466 +08:00 [INF] 按标签条件查询_SnArticle10TrueTrue
+2021-08-05 17:15:17.606 +08:00 [INF] 按标签条件查询_SnArticle23TrueTrue
+2021-08-05 17:15:18.107 +08:00 [INF] 按标签条件查询_SnArticle1TrueTrue
+2021-08-05 17:15:19.270 +08:00 [INF] 按标签条件查询_SnArticle1TrueTrue
+2021-08-05 17:15:19.285 +08:00 [INF] 查询所有_SnLabelsFalse
+2021-08-05 17:15:21.400 +08:00 [INF] 主键查询_SnArticleDto169True
+2021-08-05 17:15:24.348 +08:00 [INF] 按标签条件查询_SnArticle1TrueTrue
