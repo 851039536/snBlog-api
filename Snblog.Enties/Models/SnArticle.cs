@@ -14,6 +14,7 @@ namespace Snblog.Models
         public string Title { get; set; }
         public string TitleText { get; set; }
         public string Text { get; set; }
+        public string Html { get; set; }
         public DateTime TimeCreate { get; set; }
         public DateTime? TimeModified { get; set; }
         public short Read { get; set; }

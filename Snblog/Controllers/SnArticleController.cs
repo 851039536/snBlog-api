@@ -243,7 +243,10 @@ namespace Snblog.Controllers
         /// <param name="type">更新字段</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
-        public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type) => Ok(await _service.UpdatePortionAsync(entity, type));
+        public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type)
+        {
+            return Ok(await _service.UpdatePortionAsync(entity, type));
+        }
         #endregion
 
     }

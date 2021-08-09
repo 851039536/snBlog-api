@@ -46,7 +46,7 @@ namespace Snblog
             /// v2版本
             /// </summary>
             V2 = 2,
-             /// <summary>
+            /// <summary>
             /// AngleSharp
             /// </summary>
             AngleSharp = 3
@@ -143,7 +143,7 @@ namespace Snblog
               });
             #endregion
             #region DbContext
-       services.AddDbContext<SnblogContext>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<SnblogContext>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             #endregion
             # region jwt
             services.ConfigureJwt(Configuration);
@@ -189,7 +189,8 @@ namespace Snblog
             services.AddScoped<ICacheUtil, CacheUtil>();
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnInterfaceService, SnInterfaceService>();
-            
+            services.AddScoped<ISnSetBlogService, SnSetBlogService>();
+
             //缓存-整个应用程序生命周期以内只创建一个实例 
             services.AddSingleton<ICacheManager, CacheManager>();
 

@@ -36,17 +36,9 @@ namespace Snblog.Models
         public virtual DbSet<SnUserTalk> SnUserTalk { get; set; }
         public virtual DbSet<SnVideo> SnVideo { get; set; }
         public virtual DbSet<SnVideoType> SnVideoType { get; set; }
+        public virtual DbSet<SnSetBlog> SnSetBlogs { get; set; }
 
-        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //        {
-        //            if (!optionsBuilder.IsConfigured)
-        //            {
-        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-        //                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", x => x.ServerVersion("8.0.16-mysql"));
-        //            }
-        //        }
 
-      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SnArticle>(entity =>
@@ -97,6 +89,11 @@ namespace Snblog.Models
                     .HasColumnType("text")
                     .HasColumnName("text")
                     .HasComment("博客内容");
+                entity.Property(e => e.Html)
+                  .IsRequired()
+                  .HasColumnType("html")
+                  .HasColumnName("html")
+                  .HasComment("博客内容");
 
                 entity.Property(e => e.TimeCreate)
                     .HasColumnType("date")
@@ -155,7 +152,40 @@ namespace Snblog.Models
                 //    .OnDelete(DeleteBehavior.ClientSetNull)
                 //    .HasConstraintName("article_userId");
             });
+            modelBuilder.Entity<SnSetBlog>(entity =>
+            {
+                entity.ToTable("sn_set_blog");
 
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.SetIsopen)
+                    .HasColumnName("set_isopen")
+                    .HasComment("是否启用");
+
+                entity.Property(e => e.SetName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("set_name")
+                    .HasComment("设置的内容名称");
+
+                entity.Property(e => e.SetType)
+                    .HasColumnType("tinyint(5)")
+                    .HasColumnName("set_type")
+                    .HasComment("分类");
+
+                entity.Property(e => e.SetUrl)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("set_url")
+                    .HasComment("链接");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(5)")
+                    .HasColumnName("user_id")
+                    .HasComment("关联用户表");
+            });
             modelBuilder.Entity<SnComments>(entity =>
             {
                 entity.HasKey(e => e.CommentId)
@@ -752,7 +782,7 @@ namespace Snblog.Models
                     .HasComment("ip地址");
             });
 
-          
+
             modelBuilder.Entity<SnUserTalk>(entity =>
             {
                 entity.ToTable("sn_user_talk");

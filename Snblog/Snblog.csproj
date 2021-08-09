@@ -48,7 +48,6 @@
 
   <ItemGroup>
     <Folder Include="LogFiles\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

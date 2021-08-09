@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Snblog.Cache.CacheUtil;
 using Snblog.IService.IService;
 using Snblog.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
 {
@@ -31,7 +31,6 @@ namespace Snblog.Service.Service
             _mapper = mapper;
         }
 
-
         public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("删除数据_SnArticle" + id);
@@ -48,14 +47,12 @@ namespace Snblog.Service.Service
             resultDto = _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             if (resultDto == null)
             {
-                 result = await _service.SnArticle.FindAsync(id);
+                result = await _service.SnArticle.FindAsync(id);
                 resultDto = _mapper.Map<SnArticleDto>(result);
                 _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             }
             return resultDto;
         }
-
-
 
         public async Task<List<SnArticle>> GetTypeIdAsync(int sortId, bool cache)
         {
@@ -68,8 +65,6 @@ namespace Snblog.Service.Service
             }
             return result_List;
         }
-
-
         public async Task<List<SnArticle>> GetfyTestAsync(int label, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
             _logger.LogInformation("按标签分页查询_SnArticle :" + label + pageIndex + pageSize + isDesc + cache);
@@ -81,13 +76,7 @@ namespace Snblog.Service.Service
             }
             return result_List;
         }
-        /// <summary>
-        /// 按分类分页查询 
-        /// </summary>
-        /// <param name="sort"></param>
-        /// <param name="pageIndex">当前页码</param>
-        /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序</param>
+
         public async Task<List<SnArticle>> GetfySortTestAsync(int sort, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
             _logger.LogInformation("条件分页查询_SnArticle" + sort + pageIndex + pageSize + isDesc + cache);
@@ -161,19 +150,12 @@ namespace Snblog.Service.Service
             return result_List;
         }
 
-
-        /// <summary>
-        /// 添加数据
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
         public async Task<bool> AddAsync(SnArticle entity)
         {
             _logger.LogInformation("添加数据_SnArticle" + entity);
             await _service.SnArticle.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
-
         public async Task<bool> UpdateAsync(SnArticle entity)
         {
             _logger.LogInformation("更新数据_SnArticle" + entity);
@@ -181,11 +163,6 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        /// <summary>
-        /// 查询标签总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
         public int GetTypeCountAsync(int type, bool cache)
         {
             _logger.LogInformation("查询标签总数_SnArticle" + type + cache);
@@ -197,11 +174,7 @@ namespace Snblog.Service.Service
             }
             return result_Int;
         }
-        /// <summary>
-        /// 查询分类总数
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
+
         public async Task<int> GetConutSortAsync(int type, bool cache)
         {
             _logger.LogInformation("查询分类总数_SnArticle:" + type + cache);
@@ -250,11 +223,6 @@ namespace Snblog.Service.Service
             return result_Int;
         }
 
-        /// <summary>
-        /// 读取总字数
-        /// </summary>
-        /// <param name="type">阅读/点赞/评论</param>
-        /// <returns></returns>
         private async Task<int> GetSum(string type)
         {
             _logger.LogInformation("读取总字数：" + type);
@@ -377,13 +345,6 @@ namespace Snblog.Service.Service
             return result_List;
         }
 
-        /// <summary>
-        /// 读取分页数据
-        /// </summary>
-        /// <param name="pageIndex"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="isDesc"></param>
-        /// <returns></returns>
         private async Task<List<SnArticle>> GetFyTitle(int pageIndex, int pageSize, bool isDesc)
         {
             _logger.LogInformation("读取分页数据");
