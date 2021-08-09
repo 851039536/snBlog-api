@@ -20,12 +20,15 @@ using Snblog.Models;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
+
+    /// <summary>
+    /// 用户
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
     public class SnUserController : Controller
     {
-
         private readonly SnblogContext _coreDbContext;
         private readonly ISnUserService _service; //IOC依赖注入
         private readonly DbSet<SnUser> user;

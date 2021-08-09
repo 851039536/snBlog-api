@@ -12,6 +12,9 @@ using Snblog.Repository.Repository;
 namespace Snblog.Controllers
 {
 
+    /// <summary>
+    /// 视频内容
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     

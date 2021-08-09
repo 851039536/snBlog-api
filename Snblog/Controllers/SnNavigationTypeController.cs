@@ -8,6 +8,9 @@ using Blog.Core;
 namespace Snblog.Controllers
 {
 
+    /// <summary>
+    /// 导航表分类
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]

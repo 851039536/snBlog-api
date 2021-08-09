@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>567db4e4-11fb-473f-8644-35d99d13ce20</UserSecretsId>
    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+   <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

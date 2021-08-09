@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
+    /// <summary>
+    /// 文章内容
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
@@ -85,7 +88,7 @@ namespace Snblog.Controllers
         [HttpGet("GetContainsAsync")]
         public async Task<IActionResult> GetContainsAsync(string name, bool cache)
         {
-            return Ok(await _service.GetContainsAsync(name,cache));
+            return Ok(await _service.GetContainsAsync(name, cache));
         }
         #endregion
         #region 主键查询 
