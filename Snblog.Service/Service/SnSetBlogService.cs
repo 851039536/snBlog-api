@@ -33,10 +33,10 @@ namespace Snblog.Service.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            _logger.LogInformation("删除数据_SnArticle" + id);
-            var reslult = await _service.SnArticle.FindAsync(id);
+            _logger.LogInformation("删除数据_SnSetBlogs" + id);
+            var reslult = await _service.SnSetBlogs.FindAsync(id);
             if (reslult == null) return false;
-            _service.SnArticle.Remove(reslult);//删除单个
+            _service.SnSetBlogs.Remove(reslult);//删除单个
             _service.Remove(reslult);//直接在context上Remove()方法传入model，它会判断类型
             return await _service.SaveChangesAsync() > 0;
         }
@@ -90,17 +90,18 @@ namespace Snblog.Service.Service
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<bool> AddAsync(SnArticle entity)
+        public async Task<bool> AddAsync(SnSetBlogDto entity)
         {
-            _logger.LogInformation("添加数据_SnArticle" + entity);
-            await _service.SnArticle.AddAsync(entity);
+            _logger.LogInformation("添加数据_SnSetBlog" + entity);
+            await _service.SnSetBlogs.AddAsync(_mapper.Map<SnSetBlog>(entity));
             return await _service.SaveChangesAsync() > 0;
+
         }
 
-        public async Task<bool> UpdateAsync(SnArticle entity)
+        public async Task<bool> UpdateAsync(SnSetBlogDto entity)
         {
             _logger.LogInformation("更新数据_SnArticle" + entity);
-            _service.SnArticle.Update(entity);
+            _service.SnSetBlogs.Update(_mapper.Map<SnSetBlog>(entity));
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -128,7 +129,7 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public Task<List<SnArticleDto>> GetAllAsync(bool cache)
+        public Task<List<SnSetBlog>> GetAllAsync(bool cache)
         {
             throw new NotImplementedException();
         }
@@ -190,9 +191,16 @@ namespace Snblog.Service.Service
             throw new NotImplementedException();
         }
 
-        public Task<int> CountAsync(bool cache)
+        public async Task<int> CountAsync(bool cache)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("查询总数_SnSetBlogDto" + cache);
+            result_Int = _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, result_Int, cache);
+            if (result_Int == 0)
+            {
+                result_Int = await _service.SnSetBlogs.AsNoTracking().CountAsync();
+                _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, result_Int, cache);
+            }
+            return result_Int;
         }
     }
 }

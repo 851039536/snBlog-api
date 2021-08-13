@@ -27,8 +27,18 @@ namespace Snblog.Controllers
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         #endregion
-
-
+        #region 查询总数
+        /// <summary>
+        /// 查询总数 
+        /// </summary>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync(bool cache)
+        {
+            return Ok(await _service.CountAsync(cache));
+        }
+        #endregion
         #region  按标签分页查询  
         /// <summary>
         ///分页查询 
@@ -58,39 +68,45 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        //#region 添加数据
-        ///// <summary>
-        ///// 添加数据
-        ///// </summary>
-        ///// <param name="entity"></param>
-        ///// <returns></returns>
-        //[Authorize(Roles = Permissions.Name)]
-        //[HttpPost("AddAsync")]
-        //public async Task<ActionResult<SnArticle>> AddAsync(SnArticle entity)
-        //{
-        //    return Ok(await _service.AddAsync(entity));
-        //}
-        //#endregion
-        //#region 更新数据
-        ///// <summary>
-        ///// 更新数据
-        ///// </summary>
-        ///// <param name="entity"></param>
-        ///// <returns></returns>
-        //[Authorize(Roles = Permissions.Name)]
-        //[HttpPut("UpdateAsync")]
-        //public async Task<IActionResult> UpdateAsync(SnArticle entity) => Ok(await _service.UpdateAsync(entity));
-        //#endregion
-        //#region 删除数据
-        ///// <summary>
-        ///// 删除数据
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <returns></returns>
-        //[Authorize(Roles = Permissions.Name)]
-        //[HttpDelete("DeleteAsync")]
-        //public async Task<IActionResult> DeleteAsync(int id) => Ok(await _service.DeleteAsync(id));
-        //#endregion
+        #region 添加数据
+        /// <summary>
+        /// 添加数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+       [Authorize(Roles = Permissions.Name)]
+        [HttpPost("AddAsync")]
+        public async Task<IActionResult> AddAsync(SnSetBlogDto entity)
+        {
+            return Ok(await _service.AddAsync(entity));
+        }
+        #endregion
+        #region 更新数据
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+      [Authorize(Roles = Permissions.Name)]
+        [HttpPut("UpdateAsync")]
+        public async Task<IActionResult> UpdateAsync(SnSetBlogDto entity)
+        {
+            return Ok(await _service.UpdateAsync(entity));
+        }
+        #endregion
+        #region 删除数据
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+       [Authorize(Roles = Permissions.Name)]
+        [HttpDelete("DeleteAsync")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            return Ok(await _service.DeleteAsync(id));
+        }
+        #endregion
         #region 更新部分列[comment give read]
         /// <summary>
         /// 更新部分列

@@ -77,7 +77,6 @@ namespace Snblog.Controllers
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
-
         #region 模糊查询 Contains
         /// <summary>
         /// 模糊查询
@@ -213,7 +212,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpPost("AddAsync")]
-        public async Task<ActionResult<SnArticle>> AddAsync(SnArticle entity)
+        public async Task<IActionResult> AddAsync(SnArticle entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
@@ -226,7 +225,10 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpPut("UpdateAsync")]
-        public async Task<IActionResult> UpdateAsync(SnArticle entity) => Ok(await _service.UpdateAsync(entity));
+        public async Task<IActionResult> UpdateAsync(SnArticle entity)
+        {
+            return Ok(await _service.UpdateAsync(entity));
+        }
         #endregion
         #region 删除数据
         /// <summary>
@@ -236,7 +238,10 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpDelete("DeleteAsync")]
-        public async Task<IActionResult> DeleteAsync(int id) => Ok(await _service.DeleteAsync(id));
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            return Ok(await _service.DeleteAsync(id));
+        }
         #endregion
         #region 更新部分列[comment give read]
         /// <summary>
