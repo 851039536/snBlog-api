@@ -9,6 +9,9 @@ using Blog.Core;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
+    /// <summary>
+    /// SnOneTypeController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
@@ -16,6 +19,11 @@ namespace Snblog.Controllers
     {
 
         private readonly ISnOneTypeService _service; //IOC依赖注入
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnOneTypeController(ISnOneTypeService service)
         {
             _service = service;

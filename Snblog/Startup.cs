@@ -218,7 +218,12 @@ namespace Snblog
 
         }
 
-        // 运行时将调用此方法。 使用此方法来配置HTTP请求管道。
+
+        /// <summary>
+        ///   运行时将调用此方法。 使用此方法来配置HTTP请求管道。
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

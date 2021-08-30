@@ -33,7 +33,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            _logger.LogInformation("删除数据_SnArticle" + id);
+            _logger.LogInformation(message: $"删除数据_SnArticle{{id}}");
             var reslult = await _service.SnArticle.FindAsync(id);
             if (reslult == null) return false;
             _service.SnArticle.Remove(reslult);//删除单个
@@ -43,7 +43,7 @@ namespace Snblog.Service.Service
 
         public async Task<SnArticleDto> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation("主键查询_SnArticleDto" + id + cache);
+            _logger.LogInformation(message: $"主键查询_SnArticleDto{id}{cache}");
             resultDto = _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             if (resultDto == null)
             {
@@ -56,7 +56,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticle>> GetTypeIdAsync(int sortId, bool cache)
         {
-            _logger.LogInformation("分类条件查询_SnArticle" + sortId + cache);
+            _logger.LogInformation(message: $"分类条件查询_SnArticle{sortId}{cache}");
             result_List = _cacheutil.CacheString("GetTypeIdAsync_SnArticle" + sortId + cache, result_List, cache);
             if (result_List == null)
             {
@@ -358,6 +358,7 @@ namespace Snblog.Service.Service
                     s.Give,
                     s.Read,
                     s.TimeCreate,
+                    s.TimeModified,
                     s.TitleText,
                     s.UserId
                 }).OrderByDescending(c => c.ArticleId).Skip((pageIndex - 1) * pageSize)
@@ -375,6 +376,7 @@ namespace Snblog.Service.Service
                         Give = t.Give,
                         Read = t.Read,
                         TimeCreate = t.TimeCreate,
+                        TimeModified = t.TimeModified,
                         TitleText = t.TitleText,
                         UserId = t.UserId
                     };
@@ -510,7 +512,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticleDto>> GetContainsAsync(string name, bool cache)
         {
-            _logger.LogInformation("模糊查询_SnArticleDto" + name + cache);
+            _logger.LogInformation(message: $"模糊查询_SnArticleDto{name}{cache}");
             result_ListDto = _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + name + cache, result_ListDto, cache); //设置缓存
             if (result_ListDto == null)
             {

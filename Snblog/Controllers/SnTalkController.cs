@@ -11,7 +11,9 @@ using Blog.Core;
 namespace Snblog.Controllers
 {
 
-
+    /// <summary>
+    /// SnTalkController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
@@ -19,6 +21,10 @@ namespace Snblog.Controllers
     {
         private readonly ISnTalkService _service; //IOC依赖注入
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnTalkController(ISnTalkService service)
         {
             _service = service;

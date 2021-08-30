@@ -18,6 +18,10 @@ namespace Snblog.Controllers
     public class SnPictureTypeController : ControllerBase
     {
         private readonly ISnPictureTypeService _service; //IOC依赖注入
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnPictureTypeController(ISnPictureTypeService service)
         {
             _service = service;

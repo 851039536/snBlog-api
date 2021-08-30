@@ -22,7 +22,7 @@ namespace Snblog.Controllers
 {
 
     /// <summary>
-    /// 用户
+    /// 用户SnUserController
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -35,6 +35,12 @@ namespace Snblog.Controllers
         private readonly JwtConfig jwtModel = null;
 
      
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="coreDbContext"></param>
+        /// <param name="_jwtModel"></param>
         public SnUserController(ISnUserService service, SnblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
         {
             _service = service;

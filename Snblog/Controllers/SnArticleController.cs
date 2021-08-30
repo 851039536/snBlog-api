@@ -22,6 +22,10 @@ namespace Snblog.Controllers
         private readonly ISnArticleService _service; //IOC依赖注入
 
         #region 构造函数
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnArticleController(ISnArticleService service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));

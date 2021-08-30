@@ -19,6 +19,11 @@ namespace Snblog.Controllers
     public class SnNavigationController : ControllerBase
     {
         private readonly ISnNavigationService _service; //IOC依赖注入
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnNavigationController(ISnNavigationService service)
         {
             _service = service;

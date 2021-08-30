@@ -20,6 +20,10 @@ namespace Snblog.Controllers
 
         private readonly ISnLabelsService _service; //IOC依赖注入
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnLabelsController(ISnLabelsService service)
         {
             _service = service;

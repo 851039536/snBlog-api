@@ -6,8 +6,16 @@ using System.Text;
 
 namespace Snblog.Jwt
 {
-   public static class AuthConfigure
+    /// <summary>
+    /// AuthConfigure
+    /// </summary>
+    public static class AuthConfigure
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
             if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))

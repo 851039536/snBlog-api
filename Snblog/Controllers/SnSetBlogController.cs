@@ -22,6 +22,9 @@ namespace Snblog.Controllers
         private readonly ISnSetBlogService _service; //IOC依赖注入
 
         #region 构造函数
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public SnSetBlogController(ISnSetBlogService service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));

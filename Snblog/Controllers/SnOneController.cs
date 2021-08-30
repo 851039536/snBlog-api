@@ -19,6 +19,10 @@ namespace Snblog.Controllers
     public class SnOneController : ControllerBase
     {
         private readonly ISnOneService _service; //IOC依赖注入
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnOneController(ISnOneService service)
         {
             _service = service;

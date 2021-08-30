@@ -136,12 +136,12 @@ namespace Snblog.IService.IService
         /// <returns></returns>
         Task<bool> UpdateAsync(SnArticle entity);
 
-      /// <summary>
-      /// 更新部分列[comment give read]
-      /// </summary>
-      /// <param name="snArticle"></param>
-      /// <param name="type">更新的字段</param>
-      /// <returns></returns>
+        /// <summary>
+        /// 更新部分列[comment give read]
+        /// </summary>
+        /// <param name="snArticle"></param>
+        /// <param name="type">更新的字段</param>
+        /// <returns></returns>
         Task<bool> UpdatePortionAsync(SnArticle snArticle, string type);
 
 

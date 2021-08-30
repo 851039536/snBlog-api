@@ -18,7 +18,9 @@ namespace Snblog.Controllers
     public class SnPictureController : ControllerBase
     {
         private readonly ISnPictureService _service;
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public SnPictureController(ISnPictureService service)
         {
             _service = service;

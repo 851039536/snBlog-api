@@ -5,6 +5,9 @@ using Snblog.Models;
 
 namespace Snblog.ControllersRepository
 {
+    /// <summary>
+    /// ReSnArticleController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V2")] //版本控制
     [ApiController]
@@ -13,6 +16,10 @@ namespace Snblog.ControllersRepository
         private readonly IReSnArticleService _service;
 
         #region 构造函数
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public ReSnArticleController(IReSnArticleService service)
         {
             _service = service;

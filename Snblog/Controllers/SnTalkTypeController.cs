@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Snblog.Controllers
 {
+    /// <summary>
+    /// SnTalkTypeController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
@@ -17,6 +20,10 @@ namespace Snblog.Controllers
     {
         private readonly ISnTalkTypeService _service; //IOC依赖注入
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnTalkTypeController(ISnTalkTypeService service)
         {
             _service = service;

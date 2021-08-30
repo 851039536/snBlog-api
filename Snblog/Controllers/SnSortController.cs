@@ -19,6 +19,10 @@ namespace Snblog.Controllers
     public class SnSortController : ControllerBase
     {
         private readonly ISnSortService _service; //IOC依赖注入
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnSortController(ISnSortService service)
         {
             _service = service;

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.ControllersAngleSharp
 {
+
+    /// <summary>
+    /// AngleSharp
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "AngleSharp")] //版本控制
     [ApiController]
@@ -13,6 +17,10 @@ namespace Snblog.ControllersAngleSharp
     {
         private readonly HotNewsAngleSharp _angle; //IOC依赖注入
         #region 构造函数
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="angle"></param>
         public AngleSharpController(HotNewsAngleSharp angle)
         {
             _angle = angle;

@@ -7,9 +7,15 @@ using Serilog;
 
 namespace Snblog
 {
+    /// <summary>
+    /// Program
+    /// </summary>
     public class Program
     {
 
+        /// <summary>
+        /// Configuration
+        /// </summary>
         public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
        .SetBasePath(Directory.GetCurrentDirectory())
        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -17,6 +23,10 @@ namespace Snblog
        .AddEnvironmentVariables()
        .Build();
 
+        /// <summary>
+        /// Main
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -40,6 +50,11 @@ namespace Snblog
             //CreateHostBuilder(args).Build().Run();
         }
 
+        /// <summary>
+        /// CreateHostBuilder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
              .UseSerilog() // <-Ìí¼Ó´ËÐÐ

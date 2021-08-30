@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Jwt
 {
+    /// <summary>
+    /// JwtConfig
+    /// </summary>
     public class JwtConfig
     {
         /// <summary>
@@ -10,7 +13,10 @@
         /// 所属者
         /// </summary>
         public string Issuer { get; set; }
- 
+
+        /// <summary>
+        /// Audience
+        /// </summary>
         public string Audience { get; set; }
  
         /// <summary>

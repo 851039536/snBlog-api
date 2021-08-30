@@ -6,6 +6,9 @@ using Snblog.Models;
 
 namespace Snblog.ControllersRepository
 {
+    /// <summary>
+    /// ReSnLabelsController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V2")] //版本控制
     [ApiController]
@@ -13,6 +16,10 @@ namespace Snblog.ControllersRepository
     {
         private readonly IReSnLabelsService _service; //IOC依赖注入
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public ReSnLabelsController(IReSnLabelsService service)
         {
             _service = service;
