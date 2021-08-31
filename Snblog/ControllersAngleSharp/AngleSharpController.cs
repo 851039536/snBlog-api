@@ -53,6 +53,15 @@ namespace Snblog.ControllersAngleSharp
         /// </summary>
         /// <returns></returns>
         [HttpGet("GiteeItem")]
-        public async Task<IActionResult> GiteeItem() => Ok(await _angle.GiteeItem());
+        public async Task<IActionResult> GiteeItem()
+        {
+            return Ok(await _angle.GiteeItem());
+        }
+        [HttpGet("Daka")]
+        public  async Task<IActionResult> Daka()
+        {
+           
+            return Ok(await _angle.Daka());
+        }
     }
 }

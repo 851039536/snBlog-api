@@ -48,6 +48,19 @@ namespace Snblog.Service.AngleSharp
             return resultData;
         }
 
+        public async Task<string> Daka()
+        {
+            // 设置配置以支持文档加载
+            var config = Configuration.Default.WithDefaultLoader();
+            // 请求
+            var document = await  BrowsingContext.New(config).OpenAsync(@"http://183.63.20.253:8008/consume/login.php");
+            // 根据css选择器获取html元素
+            var doc = document.QuerySelectorAll("div");
+        //    document.GetElementById("username").ClassName = "190006";
+              //doc.getElementById("submit").click();//执行提交事件
+
+            return "1";
+        }
         private async Task<List<string>> reptile(string url, string selector, string selectorall)
         {
             int num = 1;
@@ -106,6 +119,8 @@ namespace Snblog.Service.AngleSharp
             // 根据css选择器获取html元素
             var container = document.QuerySelector("#popular-pinned-projects");
             var matches = container.QuerySelectorAll("div.header > a");
+
+
             // We are only interested in the text - select it with LINQ
             foreach (var item in matches)
             {
