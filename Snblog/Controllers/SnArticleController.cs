@@ -94,6 +94,20 @@ namespace Snblog.Controllers
             return Ok(await _service.GetContainsAsync(name, cache));
         }
         #endregion
+        #region 条件模糊查询 Contains
+        /// <summary>
+        /// 条件模糊查询
+        /// </summary>
+        /// <param name="type">标签</param>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetTypeContainsAsync")]
+        public async Task<IActionResult> GetTypeContainsAsync(int type, string name, bool cache)
+        {
+            return Ok(await _service.GetTypeContainsAsync(type,name, cache));
+        }
+        #endregion
         #region 主键查询 
         /// <summary>
         /// 主键查询 

@@ -247,19 +247,6 @@ namespace Snblog.Service.Service
 
             var resulet = await _service.SnOne.FindAsync(snOne.OneId);
             if (resulet == null) return false;
-            //var date = _service.SnOne.Update(snOne);
-            ////默认不更新
-            //date.Property("OneId").IsModified = false;
-            //date.Property("OneTitle").IsModified = false;
-            //date.Property("OneText").IsModified = false;
-            //date.Property("OneImg").IsModified = false;
-            //date.Property("OneTypeId").IsModified = false;
-            //date.Property("OneAuthor").IsModified = false;
-            //date.Property("OneData").IsModified = false;
-            //date.Property("OneRead").IsModified = false;
-            //date.Property("OneGive").IsModified = false;
-            //date.Property("OneComment").IsModified = false;
-
             switch (type)
             {    //指定字段进行更新操作
                 case "give":

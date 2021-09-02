@@ -525,5 +525,20 @@ namespace Snblog.Service.Service
             }
             return result_ListDto;
         }
+
+        public async Task<List<SnArticleDto>> GetTypeContainsAsync(int type, string name, bool cache)
+        {
+            _logger.LogInformation(message: $"条件模糊查询_SnArticleDto{type}{name}{cache}");
+            result_ListDto = _cacheutil.CacheString("GetTypeContainsAsync_SnArticleDto" + type + name + cache, result_ListDto, cache);
+            if (result_ListDto == null)
+            {
+                result_ListDto = _mapper.Map<List<SnArticleDto>>(
+                    result_List = await _service.SnArticle
+                   .Where(l => l.Title.Contains(name) && l.LabelId == type)
+                   .AsNoTracking().ToListAsync());
+                _cacheutil.CacheString("GetTypeContainsAsync_SnArticleDto" + type + name + cache, result_ListDto, cache);
+            }
+            return result_ListDto;
+        }
     }
 }

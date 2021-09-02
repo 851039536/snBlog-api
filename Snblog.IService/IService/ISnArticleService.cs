@@ -26,6 +26,14 @@ namespace Snblog.IService.IService
         /// <returns></returns>
         Task<List<SnArticleDto>> GetContainsAsync(string name, bool cache);
         /// <summary>
+        /// 条件模糊查询
+        /// </summary>
+        /// <param name="type">标签</param>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        Task<List<SnArticleDto>> GetTypeContainsAsync(int type, string name, bool cache);
+        /// <summary>
         /// 读取[字段/阅读/点赞]数量
         /// </summary>
         /// <param name="type">条件</param>
