@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
@@ -11,130 +12,145 @@ using Snblog.Repository.Repository;
 namespace Snblog.Controllers
 {
 
+    /// <summary>
+    /// 视频内容
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    
     [ApiController]
     public class SnVideoController : Controller
     {
-        private readonly snblogContext _coreDbContext;
         private readonly ISnVideoService _service; //IOC依赖注入
-        public SnVideoController(ISnVideoService service, snblogContext coreDbContext)
+        public SnVideoController(ISnVideoService service)
         {
             _service = service;
-            _coreDbContext = coreDbContext;
+        }
+
+
+
+        /// <summary>
+        /// 查询总数
+        /// </summary>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync(bool cache)
+        {
+            return Ok(await _service.GetCountAsync(cache));
         }
 
         /// <summary>
-        /// 视频查询
+        /// 按条件查询总数
         /// </summary>
+        /// <param name="typeId">分类条件</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("GetTest")]
-        public IActionResult GetTest()
+       
+        [HttpGet("GetTypeCountAsync")]
+        public async Task<IActionResult> GetTypeCountAsync(int typeId, bool cache)
         {
-            return Ok(_service.GetTest());
-        }
-        /// <summary>
-        /// 视频查询
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("AsyGestTest")]
-        public async Task<IActionResult> AsyGestTest()
-        {
-            return Ok(await _service.AsyGetTest());
+            return Ok(await _service.GetTypeCount(typeId, cache));
         }
 
         /// <summary>
-        /// id查询视频
+        /// 查询所有
         /// </summary>
-        /// <param name="id">视频id</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("AsyGetTestId")]
-        public async Task<IActionResult> AsyGetTestId(int id)
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync(bool cache)
         {
-            return Ok(await _service.AsyGetTestId(id));
+            return Ok(await _service.GetAllAsync(cache));
         }
 
         /// <summary>
-        /// 分页查询视频 - 支持排序
+        /// 主键查询
         /// </summary>
-        /// <param name="type">分类条件:99999 -表示查询所有</param>
+        /// <param name="id">主键</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetByIdAsync")]
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache)
+        {
+            return Ok(await _service.GetByIdAsync(id, cache));
+        }
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="type">分类条件: 9999表示查询所有s</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
-        [HttpGet("GetfyVideo")]
-        public IActionResult GetfyVideo(int type, int pageIndex, int pageSize, bool isDesc)
+        /// <param name="cache">是否开启缓存</param>
+        [HttpGet("GetFyAsync")]
+        public async Task<IActionResult> GetFyAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            return Ok(_service.GetPagingWhere(type, pageIndex, pageSize, out _, isDesc));
+            return Ok(await _service.GetFyAsync(type, pageIndex, pageSize, isDesc, cache));
         }
 
 
         /// <summary>
-        /// 视频总数
+        /// 条件查询
         /// </summary>
+        /// <param name="type">分类id</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("GetVideoCount")]
-        public IActionResult GetVideoCount()
+        [HttpGet("GetTypeAllAsync")]
+        public async Task<IActionResult> GetTypeAllAsync(int type, bool cache)
         {
-            return Ok(_service.GetVideoCount());
+            return Ok(await _service.GetTypeAllAsync(type, cache));
         }
+
+        #region 读取[字段/阅读/点赞]总数量
+        /// <summary>
+        /// 统计标题字数
+        /// </summary>
+        /// <param name="cache">是否开启缓存</param>
+        [HttpGet("GetSumAsync")]
+        public async Task<IActionResult> GetSumAsync(bool cache)
+        {
+            return Ok(await _service.GetSumAsync(cache));
+        }
+
+        #endregion
 
 
         /// <summary>
-        /// 条件查视频总数
+        /// 添加数据 （权限）
         /// </summary>
-        /// <param name="typeId">视频分类id</param>
         /// <returns></returns>
-        [HttpGet("GetVideoCountType")]
-        public IActionResult GetVideoCountType(int typeId)
+        [HttpPost("AddAsync")]
+        [Authorize(Roles = Permissions.Name)]
+        public async Task<ActionResult<SnVideo>> AddAsync(SnVideo entity)
         {
-            return Ok(_service.GetVideoCount(typeId));
+            return Ok(await _service.AddAsync(entity));
         }
-
-
-        /// <summary>
-        /// 分类查询
-        /// </summary>
-        /// <param name="type">ID</param>
-        /// <returns></returns>
-        [HttpGet("GetTestWhere")]
-        public IActionResult GetTestWhere(int type)
-        {
-            return Ok(_service.GetTestWhere(type));
-        }
-
         /// <summary>
         /// 删除视频 （权限）
         /// </summary>
         /// <param name="id">视频id</param>
         /// <returns></returns>
-        [HttpDelete("AsyDetVideo")]
-        [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AsyDetVideo(int id)
+        [HttpDelete("DeleteAsync")]
+        [Authorize(Roles = Permissions.Name)]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.AsyDetVideo(id));
+            return Ok(await _service.DeleteAsync(id));
         }
 
-        /// <summary>
-        /// 添加视频 （权限）
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("AsyInsVideo")]
-        [Authorize(Roles = "kai")] //角色授权
-        public async Task<ActionResult<SnVideo>> AsyInsVideo(SnVideo test)
-        {
-            return Ok(await _service.AsyInsVideo(test));
-        }
+
 
         /// <summary>
         /// 更新视频 （权限）
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        [HttpPut("AysUpVideo")]
-        [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AysUpVideo(SnVideo test)
+        [HttpPut("UpdateAsync")]
+        [Authorize(Roles = Permissions.Name)]
+        public async Task<IActionResult> UpdateAsync(SnVideo entity)
         {
-            var data = await _service.AysUpVideo(test);
+            var data = await _service.UpdateAsync(entity);
             return Ok(data);
         }
     }

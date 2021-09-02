@@ -11,11 +11,11 @@ namespace Snblog.Service.Service
 {
     public class SnPictureService : ISnPictureService
     {
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnPicture> result_List = default;
-        public SnPictureService(snblogContext service, ICacheUtil cacheutil)
+        public SnPictureService(SnblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -29,25 +29,25 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnPicture>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString("SnPicture_GetAllAsync", result_List);
+            result_List = _cacheutil.CacheString1("SnPicture_GetAllAsync", result_List);
             if (result_List != null)
             {
                 return result_List;
             }
             result_List = await _service.SnPicture.ToListAsync();
-            _cacheutil.CacheString("SnPicture_GetAllAsync", result_List);
+            _cacheutil.CacheString1("SnPicture_GetAllAsync", result_List);
             return result_List;
         }
 
         public async Task<int> CountAsync()
         {
-             result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int);
+             result_Int = _cacheutil.CacheNumber1("SnPicture_CountAsync", result_Int);
             if (result_Int != 0)
             {
                 return result_Int;
             }
             result_Int = await _service.SnPicture.CountAsync();
-            _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int);
+            _cacheutil.CacheNumber1("SnPicture_CountAsync", result_Int);
             return result_Int;
         }
 
@@ -65,13 +65,13 @@ namespace Snblog.Service.Service
         public async Task<SnPicture> GetByIdAsync(int id)
         {
             SnPicture result = default;
-            result = _cacheutil.CacheString("SnPicture_GetByIdAsync", result);
+            result = _cacheutil.CacheString1("SnPicture_GetByIdAsync", result);
             if (result != null)
             {
                 return result;
             }
             result = await _service.SnPicture.FindAsync(id);
-            _cacheutil.CacheString("SnPicture_GetByIdAsync", result);
+            _cacheutil.CacheString1("SnPicture_GetByIdAsync", result);
             return result;
         }
 
@@ -83,13 +83,13 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnPicture>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-             result_List = _cacheutil.CacheString("SnPicture_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+             result_List = _cacheutil.CacheString1("SnPicture_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
             if (result_List != null)
             {
                 return result_List;
             }
             result_List =await GetFyAll(pageIndex, pageSize, isDesc);
-             _cacheutil.CacheString("SnPicture_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+             _cacheutil.CacheString1("SnPicture_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
             return result_List;
         }
 
@@ -105,13 +105,13 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnPicture>> GetFyTypeAllAsync(int type, int pageIndex, int pageSize, bool isDesc)
         {
-              result_List = _cacheutil.CacheString("SnPicture_GetFyTypeAllAsync"+pageIndex+pageSize+isDesc+type, result_List);
+              result_List = _cacheutil.CacheString1("SnPicture_GetFyTypeAllAsync"+pageIndex+pageSize+isDesc+type, result_List);
             if (result_List != null)
             {
                 return result_List;
             }
             result_List =await GetFyType(type, pageIndex, pageSize, isDesc);
-            _cacheutil.CacheString("SnPicture_GetFyTypeAllAsync"+pageIndex+pageSize+isDesc+type, result_List);
+            _cacheutil.CacheString1("SnPicture_GetFyTypeAllAsync"+pageIndex+pageSize+isDesc+type, result_List);
             return result_List;
         }
 
@@ -129,13 +129,13 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync(int type)
         {
-              result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync"+type, result_Int);
+              result_Int = _cacheutil.CacheNumber1("SnPicture_CountAsync"+type, result_Int);
             if (result_Int != 0)
             {
                 return result_Int;
             }
             result_Int =  await _service.SnPicture.CountAsync(s=>s.PictureTypeId==type);
-        _cacheutil.CacheNumber("SnPicture_CountAsync"+type, result_Int);
+        _cacheutil.CacheNumber1("SnPicture_CountAsync"+type, result_Int);
             return result_Int;
         }
     }

@@ -1,4 +1,5 @@
 ﻿﻿using System.Threading.Tasks;
+using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
@@ -9,16 +10,17 @@ using Snblog.Models;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-
-
+    /// <summary>
+    /// 视频分类
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
     public class SnVideoTypeController : Controller
     {
-        private readonly snblogContext _coreDbContext;
+        private readonly SnblogContext _coreDbContext;
         private readonly ISnVideoTypeService _service; //IOC依赖注入
-        public SnVideoTypeController(ISnVideoTypeService service, snblogContext coreDbContext)
+        public SnVideoTypeController(ISnVideoTypeService service, SnblogContext coreDbContext)
         {
             _service = service;
             _coreDbContext = coreDbContext;
@@ -61,7 +63,7 @@ namespace Snblog.Controllers
         /// <param name="Entity"></param>
         /// <returns></returns>
          [HttpPost("AddAsync")]
-         [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnVideoType Entity)
         {
             return Ok(await _service.AddAsync(Entity));
@@ -73,7 +75,7 @@ namespace Snblog.Controllers
         /// <param name="Entity"></param>
         /// <returns></returns>
          [HttpDelete("DelectAsync")]
-         [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DelectAsync(SnVideoType Entity)
         {
             return Ok(await _service.DeleteAsync(Entity));
@@ -85,7 +87,7 @@ namespace Snblog.Controllers
         /// <param name="Entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnVideoType Entity)
         {
             return Ok(await _service.UpdateAsync(Entity));

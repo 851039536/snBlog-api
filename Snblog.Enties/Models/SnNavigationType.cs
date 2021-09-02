@@ -1,4 +1,8 @@
-﻿namespace Snblog.Enties.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace Snblog.Models
 {
     public partial class SnNavigationType
     {

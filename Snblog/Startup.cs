@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +12,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Snblog.Cache.Cache;
 using Snblog.Cache.CacheUtil;
+using Snblog.Controllers;
+using Snblog.Enties.AutoMapper;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.IService.IReService;
 using Snblog.IService.IService;
 using Snblog.Jwt;
 using Snblog.Models;
-using Snblog.Repository;
 using Snblog.Repository.Repository;
 using Snblog.Service;
+using Snblog.Service.AngleSharp;
 using Snblog.Service.ReService;
 using Snblog.Service.Service;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -28,8 +31,8 @@ namespace Snblog
 {
     public class Startup
     {
-         
-        # region 版本控制枚举
+
+        #region 版本控制枚举
         /// <summary>
         /// 版本控制
         /// </summary>
@@ -42,7 +45,11 @@ namespace Snblog
             /// <summary>
             /// v2版本
             /// </summary>
-            V2 = 2
+            V2 = 2,
+            /// <summary>
+            /// AngleSharp
+            /// </summary>
+            AngleSharp = 3
         }
         #endregion
 
@@ -70,7 +77,6 @@ namespace Snblog
                   {
                       c.SwaggerDoc(version, new OpenApiInfo
                       {
-                          //Version = "v1", //版本号
                           Title = "SN blog API", //标题
                           Description = "EFCore数据操作 ASP.NET Core Web API", //描述
                           TermsOfService = new Uri("https://example.com/terms"), //服务条款
@@ -126,7 +132,7 @@ namespace Snblog
                                     Id = "bearerAuth"
                                 }
                             },
-                            new string[] {}
+                            Array.Empty<string>()
                     }
                 };
 
@@ -134,13 +140,10 @@ namespace Snblog
                   c.AddSecurityDefinition("bearerAuth", securityScheme);
                   c.AddSecurityRequirement(securityRequirement);
                   #endregion
-
-
-
               });
             #endregion
             #region DbContext
-            services.AddDbContext<snblogContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<SnblogContext>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             #endregion
             # region jwt
             services.ConfigureJwt(Configuration);
@@ -164,9 +167,9 @@ namespace Snblog
 
 
 
-           // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
+            // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
-            services.AddScoped<IconcardContext, snblogContext>();//db
+            services.AddScoped<IConcardContext, SnblogContext>();//db
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
             services.AddScoped<ISnNavigationService, SnNavigationService>();
             services.AddScoped<ISnLabelsService, SnLabelsService>();
@@ -184,21 +187,48 @@ namespace Snblog
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
             services.AddScoped<ICacheUtil, CacheUtil>();
-            services.AddSingleton<ICacheManager, CacheManager>(); //缓存-整个应用程序生命周期以内只创建一个实例 
+            services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
+            services.AddScoped<ISnInterfaceService, SnInterfaceService>();
+            services.AddScoped<ISnSetBlogService, SnSetBlogService>();
+
+            //缓存-整个应用程序生命周期以内只创建一个实例 
+            services.AddSingleton<ICacheManager, CacheManager>();
+
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
             services.AddScoped<IReSnLabelsService, ReSnLabelsService>();
             services.AddScoped<IReSnNavigationService, ReSnNavigationService>();
+            services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
 
             #endregion
+
+
+            #region 实体映射
+
+            //services.AddAutoMapper(typeof(MappingProfile));
+
+            //自动化注册
+            services.AddAutoMapper(
+               Assembly.Load("Snblog.Enties").GetTypes()
+                   .Where(t => t.FullName.EndsWith("Mapper"))
+                   .ToArray()
+           );
+            #endregion
+
             services.AddControllers();
 
         }
 
-        // 运行时将调用此方法。 使用此方法来配置HTTP请求管道。
+
+        /// <summary>
+        ///   运行时将调用此方法。 使用此方法来配置HTTP请求管道。
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
+                //对于开发模式，一旦报错就跳转到错误堆栈页面
                 app.UseDeveloperExceptionPage();
             }
             #region Swagger+性能分析（MiniProfiler）+自定义页面

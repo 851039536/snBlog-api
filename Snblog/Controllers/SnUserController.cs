@@ -5,6 +5,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Blog.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -12,24 +14,34 @@ using Microsoft.IdentityModel.Tokens;
 using Snblog.IService;
 using Snblog.Jwt;
 using Snblog.Models;
-using Snblog.Repository.Repository;
 
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
+
+    /// <summary>
+    /// 用户SnUserController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
     public class SnUserController : Controller
     {
-
-        private readonly snblogContext _coreDbContext;
+        private readonly SnblogContext _coreDbContext;
         private readonly ISnUserService _service; //IOC依赖注入
         private readonly DbSet<SnUser> user;
         private readonly JwtConfig jwtModel = null;
-        public SnUserController(ISnUserService service, snblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
+
+     
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="coreDbContext"></param>
+        /// <param name="_jwtModel"></param>
+        public SnUserController(ISnUserService service, SnblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;
@@ -39,7 +51,6 @@ namespace Snblog.Controllers
 
 
         [HttpGet("Login")]
-
         public IActionResult Login(string users, string pwd)
         {
             if (string.IsNullOrEmpty(users) && string.IsNullOrEmpty(pwd))
@@ -47,15 +58,14 @@ namespace Snblog.Controllers
                 return Ok("用户密码不能为空");
             }
             var data = from u in user
-                       where u.UserName == users && u.UserPwd == pwd
-                       select u.UserName;
+                       where u.Name == users && u.Pwd == pwd
+                       select u.Name;
             if (data.Count() == 0)
             {
                 return Ok("用户或密码错误");
             }
             else
             {
-          
                 var claims = new List<Claim>();
                 claims.AddRange(new[]
                 {
@@ -81,33 +91,37 @@ namespace Snblog.Controllers
         }
 
         /// <summary>
-        /// 用户查询
+        /// 查询所有
         /// </summary>
-        [HttpGet("AsyGestTest")] 
-        public async Task<IActionResult> AsyGetUser()
+        /// <param name="cache">缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync(bool cache)
         {
-            return Ok(await _service.AsyGetUser());
+            return Ok(await _service.GetAllAsync(cache));
         }
 
         /// <summary>
-        /// 主键id查询
+        /// 主键查询
         /// </summary>
-        /// <param name="userId">主键id</param>
+        /// <param name="id">主键</param>
+        /// <param name="cache">缓存</param>
         /// <returns></returns>
-        [HttpGet("AsyGetUserId")]
-        public async Task<IActionResult> AsyGetUserId(int userId)
+        [HttpGet("GetByIdAsync")]
+        public async Task<IActionResult> GetByIdAsync(int id ,bool cache)
         {
-            return Ok(await _service.AsyGetUserId(userId));
+            return Ok(await _service.GetByIdAsync(id,cache));
         }
 
         /// <summary>
-        /// 用户总数
+        /// 查询总数
         /// </summary>
+        /// <param name="cache">缓存</param>
         /// <returns></returns>
-        [HttpGet("GetUserCount")]
-        public IActionResult GetUserCount()
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync(bool cache)
         {
-            return Ok(_service.GetUserCount());
+            return Ok(await _service.GetCountAsync(cache));
         }
 
         /// <summary>
@@ -126,6 +140,7 @@ namespace Snblog.Controllers
         /// 添加数据
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = Permissions.Name)] 
         [HttpPost("AsyInsArticle")]
         public async Task<ActionResult<SnUser>> AsyInsArticle(SnUser user)
         {
@@ -137,6 +152,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
+        [Authorize(Roles = Permissions.Name)]
         [HttpDelete("AsyDetUserId")]
         public async Task<IActionResult> AsyDetUserId(int userId)
         {
@@ -148,12 +164,13 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
+        [Authorize(Roles = Permissions.Name)]
         [HttpPut("AysUpUser")]
-        public async Task<IActionResult> AysUpUser(SnUser user)
+        public async Task<IActionResult> AysUpUser(SnUserDto user)
         {
             var data = await _service.AysUpUser(user);
             return Ok(data);
         }
-
+        
     }
 }

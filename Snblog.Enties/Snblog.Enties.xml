@@ -4,69 +4,34 @@
         <name>Snblog.Enties</name>
     </assembly>
     <members>
-        <member name="P:Snblog.Enties.Models.SnArticle.article_id">
+        <member name="M:Snblog.Enties.AutoMapper.ArticleMapper.#ctor">
             <summary>
-            文章主键
+            配置构造函数，用来创建关系映射
             </summary>
         </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.user_id">
+        <member name="M:Snblog.Enties.AutoMapper.SetBlogxMapper.#ctor">
             <summary>
-            发表人id
+            配置构造函数，用来创建关系映射
             </summary>
         </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.title">
+        <member name="M:Snblog.Enties.AutoMapper.SnInterfaceMapper.#ctor">
             <summary>
-            标题
+            配置构造函数，用来创建关系映射
             </summary>
         </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.title_text">
+        <member name="M:Snblog.Enties.AutoMapper.UserMapper.#ctor">
             <summary>
-            内容简述
+            配置构造函数，用来创建关系映射
             </summary>
         </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.text">
+        <member name="P:Snblog.Models.SnArticleDto.ArticleId">
             <summary>
-            博客内容
+            主键
             </summary>
         </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.time">
+        <member name="P:Snblog.Models.SnArticle.ArticleId">
             <summary>
-            发表时间
-            </summary>
-        </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.label_id">
-            <summary>
-            标签
-            </summary>
-        </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.read">
-            <summary>
-            阅读次数
-            </summary>
-        </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.give">
-            <summary>
-            点赞
-            </summary>
-        </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.comment">
-            <summary>
-            评论
-            </summary>
-        </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.sort_id">
-            <summary>
-            分类
-            </summary>
-        </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.type_title">
-            <summary>
-            分类标题
-            </summary>
-        </member>
-        <member name="P:Snblog.Enties.Models.SnArticle.url_img">
-            <summary>
-            图片
+            主键
             </summary>
         </member>
     </members>

@@ -10,7 +10,7 @@ namespace Snblog.Service
 {
     public class SnUserTalkService : BaseService, ISnUserTalkService
     {
-        public SnUserTalkService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        public SnUserTalkService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
         }
         /// <summary>

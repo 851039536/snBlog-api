@@ -1,18 +1,25 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Snblog.Enties.Models;
 using Snblog.IService.IReService;
+using Snblog.Models;
 
 namespace Snblog.ControllersRepository
 {
+    /// <summary>
+    /// ReSnArticleController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V2")] //版本控制
     [ApiController]
     public class ReSnArticleController : ControllerBase
     {
-        private readonly IReSnArticleService _service; //IOC依赖注入
+        private readonly IReSnArticleService _service;
 
         #region 构造函数
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public ReSnArticleController(IReSnArticleService service)
         {
             _service = service;

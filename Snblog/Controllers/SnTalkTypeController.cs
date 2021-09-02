@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Blog.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
@@ -9,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Snblog.Controllers
 {
+    /// <summary>
+    /// SnTalkTypeController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
@@ -16,6 +20,10 @@ namespace Snblog.Controllers
     {
         private readonly ISnTalkTypeService _service; //IOC依赖注入
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnTalkTypeController(ISnTalkTypeService service)
         {
             _service = service;
@@ -72,7 +80,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnTalkType Entity)
         {
             return Ok(await _service.AddAsync(Entity));
@@ -83,7 +91,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));
@@ -93,7 +101,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnTalkType Entity)
         {
             return Ok(await _service.UpdateAsync(Entity));

@@ -4,6 +4,6 @@ namespace Snblog.IRepository
 {
     public interface IRepositoryFactory
     {
-        IRepositorys<T> CreateRepository<T>(IconcardContext mydbcontext) where T : class;
+        IRepositorys<T> CreateRepository<T>(IConcardContext mydbcontext) where T : class;
     }
 }

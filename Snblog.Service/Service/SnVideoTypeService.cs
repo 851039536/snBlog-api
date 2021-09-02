@@ -11,8 +11,8 @@ namespace Snblog.Service
 {
     public class SnVideoTypeService : BaseService, ISnVideoTypeService
     {
-        private readonly snblogContext _coreDbContext;//DB
-        public SnVideoTypeService(IRepositoryFactory repositoryFactory, IconcardContext mydbcontext,snblogContext coreDbContext) : base(repositoryFactory, mydbcontext)
+        private readonly SnblogContext _coreDbContext;//DB
+        public SnVideoTypeService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext,SnblogContext coreDbContext) : base(repositoryFactory, mydbcontext)
         {
              _coreDbContext = coreDbContext;
         }

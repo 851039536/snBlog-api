@@ -9,74 +9,74 @@ namespace Snblog.IService
         /// <summary>
         /// 查询所有
         /// </summary>
+        /// <param name="cache">是否缓存</param>
         /// <returns></returns>
-        List<SnVideo> GetTest();
+        Task<List<SnVideo>> GetAllAsync(bool cache);
 
-        int GetVideoCount();
         /// <summary>
-        /// 查询视频总数
+        /// 查询总条数
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        int GetVideoCount(int type);
+        Task<int> GetCountAsync(bool cache);
         /// <summary>
-        /// 异步查询
+        /// 按条件查询总数
         /// </summary>
+        /// <param name="type">条件</param>
+        /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnVideo>> AsyGetTest();
+        Task<int> GetTypeCount(int type, bool cache);
+
+        /// <summary>
+        /// 主键查询
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        Task<SnVideo> GetByIdAsync(int id, bool cache);
 
         /// <summary>
         /// 条件查询
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="sortId">ID</param>
         /// <returns></returns>
-        Task<List<SnVideo>> AsyGetTestId(int id);
+        Task<List<SnVideo>> GetTypeAllAsync(int type, bool cache);
 
         /// <summary>
-        /// where条件查询
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        List<SnVideo> GetTestWhere(int type);
-
-
-        /// <summary>
-        /// 条件分页查询 - 支持排序
+        /// 分页查询 
         /// </summary>
         /// <param name="type"></param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
-        List<SnVideo> GetPagingWhere(int type, int pageIndex, int pageSize, out int count, bool isDesc);
+        ///  /// <param name="cache">是否开启缓存</param>
+        Task<List<SnVideo>> GetFyAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache);
+
+
 
         /// <summary>
-        /// 查询分类总数
+        /// 读取[字段/阅读/点赞]数量
         /// </summary>
-        /// <param name="type"></param>
         /// <returns></returns>
-        int ConutType(int type);
+        Task<int> GetSumAsync(bool cache);
         /// <summary>
         /// 按id删除
         /// </summary>
-        Task<string> AsyDetVideo(int id);
-        /// <summary>
-        /// 按id删除
-        /// </summary>
-        string DetTestId(int id);
-
+        Task<bool> DeleteAsync(int id);
 
         /// <summary>
-        /// 异步添加数据
+        /// 添加数据
         /// </summary>
+        /// <param name="entity">对象</param>
         /// <returns></returns>
-        Task<SnVideo> AsyInsVideo(SnVideo test);
+        Task<bool> AddAsync(SnVideo entity);
 
-
-
-        Task<string> AysUpVideo(SnVideo test);
-
-
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="entity">对象</param>
+        /// <returns></returns>
+        Task<bool> UpdateAsync(SnVideo entity);
 
     }
 }

@@ -4,16 +4,23 @@ using Snblog.IService;
 using Snblog.Models;
 using System.Threading.Tasks;
 using Snblog.IService.IService;
+using Blog.Core;
 
 namespace Snblog.Controllers
 {
+
+    /// <summary>
+    /// 图床
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
     public class SnPictureController : ControllerBase
     {
         private readonly ISnPictureService _service;
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public SnPictureController(ISnPictureService service)
         {
             _service = service;
@@ -102,7 +109,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnPicture entity)
         {
             return Ok(await _service.AddAsync(entity));
@@ -114,7 +121,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));
@@ -126,7 +133,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnPicture entity)
         {
             return Ok(await _service.UpdateAsync(entity));

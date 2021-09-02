@@ -2,13 +2,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Snblog.IService;
 using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Snblog.IService.IService;
+using Blog.Core;
 
+//默认的约定集将应用于程序集中的所有操作：
+[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
+
+    /// <summary>
+    /// SnTalkController
+    /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
@@ -16,13 +21,18 @@ namespace Snblog.Controllers
     {
         private readonly ISnTalkService _service; //IOC依赖注入
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnTalkController(ISnTalkService service)
         {
             _service = service;
         }
 
+        #region 查询所有
        /// <summary>
-        /// 查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
@@ -30,6 +40,7 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetAllAsync());
         }
+       #endregion
 
         /// <summary>
         /// 主键查询
@@ -93,10 +104,10 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("AddAsync")]
-        [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> AddAsync(SnTalk Entity)
+        [Authorize(Roles = Permissions.Name)]
+        public async Task<IActionResult> AddAsync(SnTalk entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
 
         /// <summary>
@@ -104,7 +115,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("DeleteAsync")]
-        [Authorize(Roles = "kai")] //角色授权
+        [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));
@@ -114,10 +125,10 @@ namespace Snblog.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> UpdateAsync(SnTalk Entity)
+        [Authorize(Roles = Permissions.Name)]
+        public async Task<IActionResult> UpdateAsync(SnTalk entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
     }
 }

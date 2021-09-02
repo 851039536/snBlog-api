@@ -1,10 +1,8 @@
-﻿using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Snblog.Models;
 
-namespace Snblog.IService
+namespace Snblog.IService.IService
 {
     public interface ISnTalkService
     {
@@ -55,21 +53,22 @@ namespace Snblog.IService
         /// <summary>
         /// 添加数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> AddAsync(SnTalk Entity);
+        Task<bool> AddAsync(SnTalk entity);
+
         /// <summary>
         /// 删除数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         Task<bool> DeleteAsync(int id);
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnTalk Entity);
+        Task<bool> UpdateAsync(SnTalk entity);
     }
 }

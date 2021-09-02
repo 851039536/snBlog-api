@@ -17,13 +17,13 @@ namespace Snblog.Repository.Repository
     //实现了CRUD基本功能的封装
     public class Repositorys<T> : IRepositorys<T> where T : class
     {
-        private snblogContext _dbContext;
+        private readonly SnblogContext _dbContext;
         private readonly DbSet<T> _dbSet;
         private readonly string _connStr;
 
-        public Repositorys(IconcardContext mydbcontext)
+        public Repositorys(IConcardContext mydbcontext)
         {
-            _dbContext = mydbcontext as snblogContext;
+            _dbContext = mydbcontext as SnblogContext;
             if (_dbContext == null)
             {
                 return;
@@ -136,9 +136,9 @@ namespace Snblog.Repository.Repository
 
         public async Task<int> DeleteAsync(object id)
         {
-            int data = 0;
             //执行查询
             var todoItem = await _dbSet.FindAsync(id);
+            int data;
             if (todoItem == null)
             {
                 data = 0;
@@ -153,9 +153,9 @@ namespace Snblog.Repository.Repository
 
         public int Delete(object id)
         {
-            int de = 0;
             //执行查询
             var todoItem = _dbSet.Find(id);
+            int de;
             if (todoItem == null)
             {
                 //return NotFound();
@@ -355,7 +355,7 @@ namespace Snblog.Repository.Repository
             {
                 return this._dbSet.AsNoTracking().Max(column);
             }
-            return default(TType);
+            return default;
         }
 
         public TType Max<TType>(Expression<Func<T, TType>> column, Expression<Func<T, bool>> @where)
@@ -364,7 +364,7 @@ namespace Snblog.Repository.Repository
             {
                 return this._dbSet.AsNoTracking().Where(@where).Max(column);
             }
-            return default(TType);
+            return default;
         }
 
         public TType Min<TType>(Expression<Func<T, TType>> column)
@@ -373,7 +373,7 @@ namespace Snblog.Repository.Repository
             {
                 return this._dbSet.AsNoTracking().Min(column);
             }
-            return default(TType);
+            return default;
         }
 
         public TType Min<TType>(Expression<Func<T, TType>> column, Expression<Func<T, bool>> @where)
@@ -382,7 +382,7 @@ namespace Snblog.Repository.Repository
             {
                 return this._dbSet.AsNoTracking().Where(@where).Min(column);
             }
-            return default(TType);
+            return default;
         }
 
         public TType Sum<TType>(Expression<Func<T, TType>> selector, Expression<Func<T, bool>> @where) where TType : new()
@@ -502,14 +502,14 @@ namespace Snblog.Repository.Repository
                 _dbSet.Attach(entity);
                 _dbSet.Remove(entity);
             });
-            return isSaveChange ? SaveChanges() > 0 : false;
+            return isSaveChange && SaveChanges() > 0;
         }
 
         public virtual async Task<bool> DeleteAsync(T entity, bool isSaveChange = true)
         {
             _dbSet.Attach(entity);
             _dbSet.Remove(entity);
-            return isSaveChange ? await SaveChangesAsync() > 0 : false;
+            return isSaveChange && await SaveChangesAsync() > 0;
         }
         public virtual async Task<bool> DeleteAsync(List<T> entitys, bool isSaveChange = true)
         {
@@ -518,7 +518,7 @@ namespace Snblog.Repository.Repository
                 _dbSet.Attach(entity);
                 _dbSet.Remove(entity);
             });
-            return isSaveChange ? await SaveChangesAsync() > 0 : false;
+            return isSaveChange && await SaveChangesAsync() > 0;
         }
         #endregion
 
@@ -620,29 +620,29 @@ namespace Snblog.Repository.Repository
 #pragma warning restore CS0693 // 类型参数“T”与外部类型“Repositorys<T>”中的类型参数同名
         { }
 
-        [Obsolete]
-        public int ExecuteSql(string sql)
-        {
-            return _dbContext.Database.ExecuteSqlCommand(sql);
-        }
+       // [Obsolete]
+        //public int ExecuteSql(string sql)
+        //{
+        //    return _dbContext.Database.ExecuteSqlCommand(sql);
+        //}
 
-        [Obsolete]
-        public Task<int> ExecuteSqlAsync(string sql)
-        {
-            return _dbContext.Database.ExecuteSqlCommandAsync(sql);
-        }
+        //[Obsolete]
+        //public Task<int> ExecuteSqlAsync(string sql)
+        //{
+        //    return _dbContext.Database.ExecuteSqlCommandAsync(sql);
+        //}
 
-        [Obsolete]
-        public int ExecuteSql(string sql, List<DbParameter> spList)
-        {
-            return _dbContext.Database.ExecuteSqlCommand(sql, spList.ToArray());
-        }
+        //[Obsolete]
+        //public int ExecuteSql(string sql, List<DbParameter> spList)
+        //{
+        //    return _dbContext.Database.ExecuteSqlCommand(sql, spList.ToArray());
+        //}
 
-        [Obsolete]
-        public Task<int> ExecuteSqlAsync(string sql, List<DbParameter> spList)
-        {
-            return _dbContext.Database.ExecuteSqlCommandAsync(sql, spList.ToArray());
-        }
+        //[Obsolete]
+        //public Task<int> ExecuteSqlAsync(string sql, List<DbParameter> spList)
+        //{
+        //    return _dbContext.Database.ExecuteSqlCommandAsync(sql, spList.ToArray());
+        //}
 
 
         public virtual DataTable GetDataTableWithSql(string sql)
@@ -655,10 +655,7 @@ namespace Snblog.Repository.Repository
             throw new NotImplementedException();
         }
 
-        public IQueryable<T> Where1<TOrder>(Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, int pageIndex, int pageSize, out int count, bool isDesc = false)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         IQueryable<T> IRepositorys<T>.GetAll()
         {

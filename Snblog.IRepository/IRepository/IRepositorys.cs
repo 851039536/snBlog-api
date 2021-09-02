@@ -346,10 +346,10 @@ namespace Snblog.IRepository.IRepository
 #pragma warning disable CS0693 // 类型参数与外部类型中的类型参数同名
         void BulkInsert<T>(List<T> entities);
 #pragma warning restore CS0693 // 类型参数与外部类型中的类型参数同名
-        int ExecuteSql(string sql);
-        Task<int> ExecuteSqlAsync(string sql);
-        int ExecuteSql(string sql, List<DbParameter> spList);
-        Task<int> ExecuteSqlAsync(string sql, List<DbParameter> spList);
+        //int ExecuteSql(string sql);
+        //Task<int> ExecuteSqlAsync(string sql);
+        //int ExecuteSql(string sql, List<DbParameter> spList);
+        //Task<int> ExecuteSqlAsync(string sql, List<DbParameter> spList);
         DataTable GetDataTableWithSql(string sql);
         DataTable GetDataTableWithSql(string sql, List<DbParameter> spList);
         #endregion

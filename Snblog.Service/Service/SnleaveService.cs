@@ -3,19 +3,19 @@ using Snblog.IService.IService;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Snblog.Enties.Models;
 using Snblog.Cache.CacheUtil;
 using Snblog.Repository.Repository;
+using Snblog.Models;
 
 namespace Snblog.Service.Service
 {
     public class SnleaveService : ISnleaveService
     {
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnLeave> result_List = null;
-        public SnleaveService(snblogContext service, ICacheUtil cacheutil)
+        public SnleaveService(SnblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -29,11 +29,11 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync()
         {
-            result_Int = _cacheutil.CacheNumber("CountAsyncSnLeave", result_Int);
+            result_Int = _cacheutil.CacheNumber1("CountAsyncSnLeave", result_Int);
             if (result_Int == 0)
             {
                 result_Int = await _service.SnLeave.CountAsync();
-                _cacheutil.CacheNumber("CountAsyncSnLeave", result_Int);
+                _cacheutil.CacheNumber1("CountAsyncSnLeave", result_Int);
             }
             return result_Int;
         }
@@ -47,11 +47,11 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnLeave>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString("GetAllAsyncSnLeave", result_List);
+            result_List = _cacheutil.CacheString1("GetAllAsyncSnLeave", result_List);
             if (result_List == null)
             {
                 result_List = await _service.SnLeave.ToListAsync();
-                _cacheutil.CacheString("GetAllAsyncSnLeave", result_List);
+                _cacheutil.CacheString1("GetAllAsyncSnLeave", result_List);
             }
             return result_List;
         }
@@ -59,22 +59,22 @@ namespace Snblog.Service.Service
         public async Task<SnLeave> GetByIdAsync(int id)
         {
             SnLeave result = default;
-            result = _cacheutil.CacheString("GetByIdAsyncSnLeave", result);
+            result = _cacheutil.CacheString1("GetByIdAsyncSnLeave", result);
             if (result == null)
             {
                 result = await _service.SnLeave.FindAsync(id);
-                _cacheutil.CacheString("GetByIdAsyncSnLeave", result);
+                _cacheutil.CacheString1("GetByIdAsyncSnLeave", result);
             }
             return result;
         }
 
         public async Task<List<SnLeave>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            result_List = _cacheutil.CacheString("GetFyAllAsyncSnLeave", result_List);
+            result_List = _cacheutil.CacheString1("GetFyAllAsyncSnLeave", result_List);
             if (result_List == null)
             {
                 result_List = await GetFyListAsync(pageIndex, pageSize, isDesc);
-                _cacheutil.CacheString("GetFyAllAsyncSnLeave", result_List);
+                _cacheutil.CacheString1("GetFyAllAsyncSnLeave", result_List);
             }
             return result_List;
         }
