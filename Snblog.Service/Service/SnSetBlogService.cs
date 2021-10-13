@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Snblog.Cache.CacheUtil;
 using Snblog.IService.IService;
 using Snblog.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
 {
@@ -104,13 +104,6 @@ namespace Snblog.Service.Service
             _service.SnSetBlogs.Update(_mapper.Map<SnSetBlog>(entity));
             return await _service.SaveChangesAsync() > 0;
         }
-
-
-
-
-
-
-
 
 
         public async Task<bool> UpdatePortionAsync(SnSetBlogDto entity, string type)

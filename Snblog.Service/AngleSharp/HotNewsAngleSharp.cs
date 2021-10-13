@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AngleSharp;
 using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 
 namespace Snblog.Service.AngleSharp
 {
@@ -128,6 +130,51 @@ namespace Snblog.Service.AngleSharp
                 resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
             }
             return resultData;
+        }
+
+
+
+        public string SqlBackups(string ip, string user, string pwd, string database)
+        {
+            string constring = "server="+ ip +";user="+user+";pwd="+ pwd +";database="+ database +";";
+            string time1 = DateTime.Now.ToString("d").Replace("/", "-");
+            string file = ".//mysql/" + time1 + "_blog.sql";
+            using (MySqlConnection conn = new(constring))
+            {
+                using (MySqlCommand cmd = new())
+                {
+                    using (MySqlBackup mb = new(cmd))
+                    {
+                        cmd.Connection = conn;
+                        conn.Open();
+                        mb.ExportToFile(file);
+                        conn.Close();
+                    }
+                }
+            }
+
+            return "已备份";
+        }
+
+        public string SqlRestore(string ip, string user, string pwd, string database)
+        {
+            string constring = "server=" + ip + ";user=" + user + ";pwd=" + pwd + ";database=" + database + ";";
+            string file = ".//mysql/" +"blog.sql";
+            using (MySqlConnection conn = new(constring))
+            {
+                using (MySqlCommand cmd = new())
+                {
+                    using (MySqlBackup mb = new(cmd))
+                    {
+                        cmd.Connection = conn;
+                        conn.Open();
+                        mb.ImportFromFile(file);
+                        conn.Close();
+                    }
+                }
+            }
+
+            return "还原";
         }
     }
 }

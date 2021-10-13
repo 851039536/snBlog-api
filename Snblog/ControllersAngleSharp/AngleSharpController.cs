@@ -60,8 +60,34 @@ namespace Snblog.ControllersAngleSharp
         [HttpGet("Daka")]
         public  async Task<IActionResult> Daka()
         {
-           
             return Ok(await _angle.Daka());
+        }
+        /// <summary>
+        ///  数据备份
+        /// </summary>
+        /// <param name="ip">ip</param>
+        /// <param name="user">用户</param>
+        /// <param name="pwd">密码</param>
+        /// <param name="database">数据库</param>
+        /// <returns></returns>
+        [HttpGet("SqlBackups")]
+        public  ActionResult SqlBackups(string ip= "localhost", string user= "root", string pwd= "woshishui", string database= "snblog")
+        {
+            return Ok( _angle.SqlBackups(ip,user,pwd,database));
+        }
+
+        /// <summary>
+        /// 还原数据
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="user"></param>
+        /// <param name="pwd"></param>
+        /// <param name="database"></param>
+        /// <returns></returns>
+        [HttpGet("SqlRestore")]
+        public ActionResult SqlRestore(string ip = "localhost", string user = "root", string pwd = "woshishui", string database = "snblog")
+        {
+            return Ok(_angle.SqlRestore(ip, user, pwd, database));
         }
     }
 }
