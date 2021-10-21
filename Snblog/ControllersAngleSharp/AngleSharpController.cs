@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Blog.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snblog.Service.AngleSharp;
 using System.Threading.Tasks;
 
@@ -47,7 +49,6 @@ namespace Snblog.ControllersAngleSharp
         {
             return Ok(await _angle.Cnblogs(url, selector, selectorall));
         }
-
         /// <summary>
         /// 读取项目名称
         /// </summary>
@@ -75,7 +76,6 @@ namespace Snblog.ControllersAngleSharp
         {
             return Ok( _angle.SqlBackups(ip,user,pwd,database));
         }
-
         /// <summary>
         /// 还原数据
         /// </summary>
@@ -88,6 +88,14 @@ namespace Snblog.ControllersAngleSharp
         public ActionResult SqlRestore(string ip = "localhost", string user = "root", string pwd = "woshishui", string database = "snblog")
         {
             return Ok(_angle.SqlRestore(ip, user, pwd, database));
+        }
+
+     
+        [HttpGet("TOKEN")]
+         [Authorize(Roles = Permissions.Name)]
+        public ActionResult TOKEN()
+        {
+            return Ok();
         }
     }
 }

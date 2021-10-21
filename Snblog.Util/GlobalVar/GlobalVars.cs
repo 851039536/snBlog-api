@@ -5,7 +5,7 @@
     /// </summary>
     public static class Permissions
     {
-        public const string Name = "kai";
+        public const string Name = "kai,1";
     }
 
     /// <summary>

@@ -16,7 +16,7 @@ namespace Snblog.Controllers
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    //  [Authorize]
+    //[Authorize]
     public class SnArticleController : ControllerBase
     {
         private readonly ISnArticleService _service; //IOC依赖注入
@@ -155,6 +155,7 @@ namespace Snblog.Controllers
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
+      // [Authorize(Roles = Permissions.Name)]
         [HttpGet("GetFyTitleAsync")]
         public async Task<IActionResult> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
