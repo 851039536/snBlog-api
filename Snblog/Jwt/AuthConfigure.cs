@@ -30,19 +30,19 @@ namespace Snblog.Jwt
  
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        // The signing key must match!
+                        //是否验证IssuerSigningKey 
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Authentication:JwtBearer:SecurityKey"])),
- 
-                        // Validate the JWT Issuer (iss) claim
+
+                        // //是否验证Issuer
                         ValidateIssuer = true,
                         ValidIssuer = configuration["Authentication:JwtBearer:Issuer"],
- 
-                        // Validate the JWT Audience (aud) claim
+
+                        // 是否验证 Audience 
                         ValidateAudience = true,
                         ValidAudience = configuration["Authentication:JwtBearer:Audience"],
- 
-                        // Validate the token expiry
+
+                        // //是否验证超时  当设置exp和nbf时有效 同时启用ClockSkew 
                         ValidateLifetime = true,
  
                         // If you want to allow a certain amount of clock drift, set that here

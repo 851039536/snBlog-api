@@ -33,7 +33,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            _logger.LogInformation(message: $"删除数据_SnArticle{{id}}");
+            _logger.LogInformation(message: $"SnArticle删除数据 id:{{id}}");
             var reslult = await _service.SnArticle.FindAsync(id);
             if (reslult == null) return false;
             _service.SnArticle.Remove(reslult);//删除单个
@@ -43,7 +43,7 @@ namespace Snblog.Service.Service
 
         public async Task<SnArticleDto> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation(message: $"主键查询_SnArticleDto{id}{cache}");
+            _logger.LogInformation(message: $"SnArticle主键查询 id:{id} 缓存:{cache}");
             resultDto = _cacheutil.CacheString("GetByIdAsync_SnArticleDto" + id + cache, resultDto, cache);
             if (resultDto == null)
             {
@@ -56,7 +56,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticle>> GetTypeIdAsync(int sortId, bool cache)
         {
-            _logger.LogInformation(message: $"分类条件查询_SnArticle{sortId}{cache}");
+            _logger.LogInformation(message: $"SnArticle分类条件查询=>分类:{sortId} 缓存:{cache}");
             result_List = _cacheutil.CacheString("GetTypeIdAsync_SnArticle" + sortId + cache, result_List, cache);
             if (result_List == null)
             {
@@ -67,7 +67,7 @@ namespace Snblog.Service.Service
         }
         public async Task<List<SnArticle>> GetfyTestAsync(int label, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            _logger.LogInformation("按标签分页查询_SnArticle :" + label + pageIndex + pageSize + isDesc + cache);
+            _logger.LogInformation("SnArticle按标签分页查询 :" +"标签:"+ label + "当前页码:"+pageIndex + "记录数:"+pageSize +"排序:"+ isDesc +"缓存:"+ cache);
             result_List = _cacheutil.CacheString("GetfyTestAsync_SnArticle" + label + pageIndex + pageSize + isDesc + cache, result_List, cache);
             if (result_List == null)
             {
@@ -79,7 +79,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticle>> GetfySortTestAsync(int sort, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            _logger.LogInformation("条件分页查询_SnArticle" + sort + pageIndex + pageSize + isDesc + cache);
+            _logger.LogInformation("SnArticle条件分页查询" + sort + pageIndex + pageSize + isDesc + cache);
             result_List = _cacheutil.CacheString("GetfySortTestAsync_SnArticle" + sort + pageIndex + pageSize + isDesc + cache, result_List, cache);
             if (result_List == null)
             {
@@ -152,20 +152,20 @@ namespace Snblog.Service.Service
 
         public async Task<bool> AddAsync(SnArticle entity)
         {
-            _logger.LogInformation("添加数据_SnArticle" + entity);
+            _logger.LogInformation("SnArticle添加:" + entity);
             await _service.SnArticle.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
         public async Task<bool> UpdateAsync(SnArticle entity)
         {
-            _logger.LogInformation("更新数据_SnArticle" + entity);
+            _logger.LogInformation("SnArticle更新:" + entity);
             _service.SnArticle.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public int GetTypeCountAsync(int type, bool cache)
         {
-            _logger.LogInformation("查询标签总数_SnArticle" + type + cache);
+            _logger.LogInformation("SnArticle查询标签总数:" + type + cache);
             result_Int = _cacheutil.CacheNumber("GetTypeCountAsync_SnArticle" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
@@ -177,7 +177,7 @@ namespace Snblog.Service.Service
 
         public async Task<int> GetConutSortAsync(int type, bool cache)
         {
-            _logger.LogInformation("查询分类总数_SnArticle:" + type + cache);
+            _logger.LogInformation("SnArticle查询分类总数:" + type + cache);
             result_Int = _cacheutil.CacheNumber("GetConutSortAsync_SnArticle" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
@@ -189,7 +189,7 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync(bool cache)
         {
-            _logger.LogInformation("查询总数_SnArticle" + cache);
+            _logger.LogInformation("SnArticle查询总数,缓存:" + cache);
             result_Int = _cacheutil.CacheNumber("Count_SnArticle" + cache, result_Int, cache);
             if (result_Int == 0)
             {
@@ -201,7 +201,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticleDto>> GetAllAsync(bool cache)
         {
-            _logger.LogInformation("查询所有_SnArticleDto" + cache);
+            _logger.LogInformation("SnArticleDto查询所有" + cache);
             result_ListDto = _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, result_ListDto, cache);
             if (result_ListDto == null)
             {
@@ -213,7 +213,7 @@ namespace Snblog.Service.Service
 
         public async Task<int> GetSumAsync(string type, bool cache)
         {
-            _logger.LogInformation("统计[字段/阅读/点赞]数量__SnArticle" + type + cache);
+            _logger.LogInformation("SnArticle统计[字段/阅读/点赞]数量" + type + cache);
             result_Int = _cacheutil.CacheNumber("GetSumAsync_SnArticle" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
@@ -257,7 +257,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticle>> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc, bool cache)
         {
-            _logger.LogInformation("分页查询(条件排序)_SnArticle" + type + pageIndex + pageSize + name + isDesc + cache);
+            _logger.LogInformation("SnArticle分页查询(条件排序)" + type + pageIndex + pageSize + name + isDesc + cache);
             result_List = _cacheutil.CacheString("GetFyAsync_SnArticle" + type + pageIndex + pageSize + name + isDesc + cache, result_List, cache); //设置缓存
             if (result_List == null)
             {
@@ -347,7 +347,6 @@ namespace Snblog.Service.Service
 
         private async Task<List<SnArticle>> GetFyTitle(int pageIndex, int pageSize, bool isDesc)
         {
-            _logger.LogInformation("读取分页数据");
             if (isDesc) //降序
             {
                 var data = await _service.SnArticle.Where(s => true).Select(s => new
@@ -420,7 +419,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> UpdatePortionAsync(SnArticle snArticle, string type)
         {
-            _logger.LogInformation("更新部分参数");
+            _logger.LogInformation("SnArticle更新部分参数");
             var resulet = await _service.SnArticle.FindAsync(snArticle.ArticleId);
             if (resulet == null) return false;
             switch (type)
@@ -442,7 +441,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticle>> GetTagAsync(int tag, bool isDesc, bool cache)
         {
-            _logger.LogInformation("按标签条件查询_SnArticle" + tag + isDesc + cache);
+            _logger.LogInformation("SnArticle按标签条件查询" + tag + isDesc + cache);
             result_List = _cacheutil.CacheString("GetTagAsync_SnArticle" + tag + isDesc + cache, result_List, cache); //设置缓存
             if (result_List == null)
             {
@@ -512,7 +511,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticleDto>> GetContainsAsync(string name, bool cache)
         {
-            _logger.LogInformation(message: $"模糊查询_SnArticleDto{name}{cache}");
+            _logger.LogInformation(message: $"SnArticleDto模糊查询{name}{cache}");
             result_ListDto = _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + name + cache, result_ListDto, cache); //设置缓存
             if (result_ListDto == null)
             {
@@ -522,6 +521,21 @@ namespace Snblog.Service.Service
                    .AsNoTracking().ToListAsync());
 
                 _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + name + cache, result_ListDto, cache); //设置缓存
+            }
+            return result_ListDto;
+        }
+
+        public async Task<List<SnArticleDto>> GetTypeContainsAsync(int type, string name, bool cache)
+        {
+            _logger.LogInformation(message: $"SnArticleDto条件模糊查询{type}{name}{cache}");
+            result_ListDto = _cacheutil.CacheString("GetTypeContainsAsync_SnArticleDto" + type + name + cache, result_ListDto, cache);
+            if (result_ListDto == null)
+            {
+                result_ListDto = _mapper.Map<List<SnArticleDto>>(
+                    result_List = await _service.SnArticle
+                   .Where(l => l.Title.Contains(name) && l.LabelId == type)
+                   .AsNoTracking().ToListAsync());
+                _cacheutil.CacheString("GetTypeContainsAsync_SnArticleDto" + type + name + cache, result_ListDto, cache);
             }
             return result_ListDto;
         }

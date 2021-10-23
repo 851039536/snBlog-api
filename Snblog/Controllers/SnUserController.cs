@@ -76,12 +76,19 @@ namespace Snblog.Controllers
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             });
                 DateTime now = DateTime.UtcNow;
+
+                //生成token
                 var jwtSecurityToken = new JwtSecurityToken(
+                    //签发者
                     issuer: jwtModel.Issuer,
+                    //生成token
                     audience: jwtModel.Audience,
+                    //jwt令牌数据体
                     claims: claims,
                     notBefore: now,
+                    //令牌过期时间
                     expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)),
+                    //为数字签名定义SecurityKey
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
                 );
                 string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);

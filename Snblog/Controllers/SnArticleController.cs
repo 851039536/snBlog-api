@@ -16,7 +16,7 @@ namespace Snblog.Controllers
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    //  [Authorize]
+    //[Authorize]
     public class SnArticleController : ControllerBase
     {
         private readonly ISnArticleService _service; //IOC依赖注入
@@ -94,6 +94,20 @@ namespace Snblog.Controllers
             return Ok(await _service.GetContainsAsync(name, cache));
         }
         #endregion
+        #region 条件模糊查询 Contains
+        /// <summary>
+        /// 条件模糊查询
+        /// </summary>
+        /// <param name="type">标签</param>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetTypeContainsAsync")]
+        public async Task<IActionResult> GetTypeContainsAsync(int type, string name, bool cache)
+        {
+            return Ok(await _service.GetTypeContainsAsync(type,name, cache));
+        }
+        #endregion
         #region 主键查询 
         /// <summary>
         /// 主键查询 
@@ -141,6 +155,7 @@ namespace Snblog.Controllers
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
+      // [Authorize(Roles = Permissions.Name)]
         [HttpGet("GetFyTitleAsync")]
         public async Task<IActionResult> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
