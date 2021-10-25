@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
@@ -18,19 +19,22 @@ namespace Snblog.Service.Service
         private int result_Int;
         private List<SnNavigation> result_List = null;
         private SnNavigation result_Model = null;
+        private List<SnNavigationDto> result_ListDto = default;
         private readonly ILogger<SnNavigationService> _logger;
-        public SnNavigationService(SnblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger)
+        private readonly IMapper _mapper;
+        public SnNavigationService(SnblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger, IMapper mapper)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
             _logger = logger;
+            _mapper = mapper;
         }
 
 
         public async Task<List<SnNavigation>> GetFyAllAsync(string type, int pageIndex, int pageSize, bool isDesc, bool cahe)
         {
 
-            _logger.LogInformation("分页查询_SnNavigation" + type + pageIndex + pageSize + isDesc + cahe);
+            _logger.LogInformation("SnNavigation分页查询=>" + type + pageIndex + pageSize + isDesc + cahe);
             result_List = _cacheutil.CacheString("GetFyAllAsync_SnNavigation" + type + pageIndex + pageSize + isDesc + cahe, result_List, cahe);
             if (result_List == null)
             {
@@ -73,20 +77,16 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<bool> DeleteAsync(int id)
         {
-            _logger.LogInformation("删除数据_SnNavigation" + id);
+            _logger.LogInformation("SnNavigation删除数据=>" + id);
             var todoItem = await _service.SnNavigation.FindAsync(id);
             if (todoItem == null) return false;
             _service.SnNavigation.Remove(todoItem);
             return await _service.SaveChangesAsync() > 0;
-
         }
-
-
-
 
         public async Task<List<SnNavigation>> GetTypeOrderAsync(string type, bool order, bool cache)
         {
-            _logger.LogInformation("条件查询_SnNavigation" + type + order + cache);
+            _logger.LogInformation("SnNavigation条件查询=>" + type + order + cache);
             result_List = _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + order + cache, result_List, cache);
             if (result_List == null)
             {
@@ -110,14 +110,14 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<bool> AddAsync(SnNavigation entity)
         {
-            _logger.LogInformation("添加数据_SnNavigation" + entity);
+            _logger.LogInformation("SnNavigation添加数据=>" + entity);
             await _service.SnNavigation.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateAsync(SnNavigation entity)
         {
-            _logger.LogInformation("修改数据_SnNavigation" + entity);
+            _logger.LogInformation("SnNavigation修改数据=>" + entity);
             _service.SnNavigation.Update(entity);
             return await _service.SaveChangesAsync() > 0;
 
@@ -125,7 +125,7 @@ namespace Snblog.Service.Service
 
         public async Task<int> GetCountAsync(bool cache)
         {
-            _logger.LogInformation("查询总数_SnNavigation" + cache);
+            _logger.LogInformation("SnNavigation查询总数=>" + cache);
             result_Int = _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + cache, result_Int, cache);
             if (result_Int == 0)
             {
@@ -137,7 +137,7 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountTypeAsync(string type, bool cache)
         {
-            _logger.LogInformation("条件查询总数_SnNavigation" + type + cache);
+            _logger.LogInformation("SnNavigation条件查询总数=>" + type + cache);
             result_Int = _cacheutil.CacheNumber("CountTypeAsync_SnNavigation" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
@@ -146,11 +146,9 @@ namespace Snblog.Service.Service
             }
             return result_Int;
         }
-
-
         public async Task<List<SnNavigation>> GetAllAsync(bool cache)
         {
-            _logger.LogInformation("查询所有_SnNavigation" + cache);
+            _logger.LogInformation("SnNavigation查询所有=>" + cache);
             result_List = _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, result_List, cache);
             if (result_List == null)
             {
@@ -174,7 +172,7 @@ namespace Snblog.Service.Service
 
         public async Task<SnNavigation> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation("主键查询_SnNavigation" + id + cache);
+            _logger.LogInformation("SnNavigation主键查询=>" + id + cache);
             result_Model = _cacheutil.CacheString("GetByIdAsync_SnNavigation" + id + cache, result_Model, cache);
             if (result_Model == null)
             {
@@ -183,6 +181,37 @@ namespace Snblog.Service.Service
             }
 
             return result_Model;
+        }
+
+        public async Task<List<SnNavigationDto>> GetContainsAsync(string name, bool cache)
+        {
+            _logger.LogInformation(message: $"SnNavigationDto模糊查询=>{name}{cache}");
+             result_ListDto = _cacheutil.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, result_ListDto, cache); 
+            if (result_ListDto == null)
+            {
+                result_ListDto = _mapper.Map<List<SnNavigationDto>>(
+                    result_List = await _service.SnNavigation
+                   .Where(l => l.NavTitle.Contains(name))//查询条件
+                   .AsNoTracking().ToListAsync());
+
+                _cacheutil.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, result_ListDto, cache);
+            }
+            return result_ListDto;
+        }
+
+        public async Task<List<SnNavigationDto>> GetTypeContainsAsync(string type, string name, bool cache)
+        {
+            _logger.LogInformation(message: $"SnNavigationDto条件模糊查询=>{type}{name}{cache}");
+            result_ListDto = _cacheutil.CacheString("GetTypeContainsAsync_SnNavigationDto" + type + name + cache, result_ListDto, cache);
+            if (result_ListDto == null)
+            {
+                result_ListDto = _mapper.Map<List<SnNavigationDto>>(
+                    result_List = await _service.SnNavigation
+                   .Where(l => l.NavTitle.Contains(name) && l.NavType == type)
+                   .AsNoTracking().ToListAsync());
+                _cacheutil.CacheString("GetTypeContainsAsync_SnNavigationDto" + type + name + cache, result_ListDto, cache);
+            }
+            return result_ListDto;
         }
     }
 }

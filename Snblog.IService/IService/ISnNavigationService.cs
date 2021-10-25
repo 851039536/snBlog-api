@@ -64,9 +64,22 @@ namespace Snblog.IService.IService
         /// <returns></returns>
         Task<List<SnNavigation>> GetDistinct(string type);
 
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否缓存</param>
+        /// <returns></returns>
+        Task<List<SnNavigationDto>> GetContainsAsync(string name, bool cache);
 
-
-
+        /// <summary>
+        /// 条件模糊查询
+        /// </summary>
+        /// <param name="type">标签</param>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        Task<List<SnNavigationDto>> GetTypeContainsAsync(string type, string name, bool cache);
         /// <summary>
         /// 按id删除
         /// </summary>

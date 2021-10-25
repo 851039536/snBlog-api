@@ -28,7 +28,7 @@ namespace Snblog.Controllers
         {
             _service = service;
         }
-        #region 查询所有
+        #region 查询所有GetAllAsync
         /// <summary>
         /// 查询所有
         /// </summary>
@@ -40,7 +40,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
-        #region 主键查询
+        #region 主键查询GetByIdAsync
         /// <summary>
         /// 主键查询
         /// </summary>
@@ -53,7 +53,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetByIdAsync(id,cache));
         }
         #endregion
-        #region 查询总数
+        #region 查询总数GetCountAsync
         /// <summary>
         /// 查询总数
         /// </summary>
@@ -65,7 +65,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetCountAsync(cache));
         }
         #endregion
-        #region 条件查询总数
+        #region 条件查询总数CountTypeAsync
         /// <summary>
         /// 条件查询总数
         /// </summary>
@@ -79,7 +79,34 @@ namespace Snblog.Controllers
         }
 
         #endregion
-        #region 去重查询 (缓存)
+        #region 模糊查询 GetContainsAsync
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetContainsAsync")]
+        public async Task<IActionResult> GetContainsAsync(string name, bool cache)
+        {
+            return Ok(await _service.GetContainsAsync(name, cache));
+        }
+        #endregion
+        #region 条件模糊查询 Contains
+        /// <summary>
+        /// 条件模糊查询
+        /// </summary>
+        /// <param name="type">标签</param>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetTypeContainsAsync")]
+        public async Task<IActionResult> GetTypeContainsAsync(string type, string name, bool cache)
+        {
+            return Ok(await _service.GetTypeContainsAsync(type, name, cache));
+        }
+        #endregion
+        #region 去重查询 (缓存)GetDistinct
 
         /// <summary>
         /// 去重查询 
@@ -93,7 +120,7 @@ namespace Snblog.Controllers
         }
 
         #endregion
-        #region 条件查询
+        #region 条件查询GetTypeOrderAsync
         /// <summary>
         /// 条件查询 
         /// </summary>
@@ -107,7 +134,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetTypeOrderAsync(type, order,cache));
         }
         #endregion
-        #region 分页查询 
+        #region 分页查询 GetFyAllAsync
         /// <summary>
         /// 分页查询 
         /// </summary>
@@ -122,7 +149,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetFyAllAsync(type, pageIndex, pageSize, isDesc,cache));
         }
         #endregion
-        #region 添加数据
+        #region 添加数据AddAsync
         /// <summary>
         /// 添加数据 
         /// </summary>
@@ -134,7 +161,7 @@ namespace Snblog.Controllers
             return Ok(await _service.AddAsync(entity));
         }
         #endregion
-        #region 更新数据 
+        #region 更新数据 UpdateAsync
         /// <summary>
         /// 更新数据 
         /// </summary>
@@ -147,8 +174,8 @@ namespace Snblog.Controllers
             return Ok(await _service.UpdateAsync(entity));
         }
         #endregion
-        #region 删除数据
-         /// <summary>
+        #region 删除数据DeleteAsync
+        /// <summary>
         /// 删除数据
         /// </summary>
         /// <param name="id">主键</param>
