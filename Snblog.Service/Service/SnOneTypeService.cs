@@ -3,20 +3,21 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
 using Snblog.IService.IService;
-using Snblog.Models;
+using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {
     public class SnOneTypeService : ISnOneTypeService
     {
-        private readonly SnblogContext _service;
+        private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnOneType> result_List = null;
 
         private readonly ILogger<SnOneTypeService> _logger;
-        public SnOneTypeService(SnblogContext service, ICacheUtil cacheutil, ILogger<SnOneTypeService> logger)
+        public SnOneTypeService(snblogContext service, ICacheUtil cacheutil, ILogger<SnOneTypeService> logger)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -26,7 +27,7 @@ namespace Snblog.Service.Service
         public async Task<bool> AddAsync(SnOneType entity)
         {
             _logger.LogInformation("添加数据_SnOneType" + entity);
-            await _service.SnOneType.AddAsync(entity);
+            await _service.SnOneTypes.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -38,7 +39,7 @@ namespace Snblog.Service.Service
             {
                 return result_Int;
             }
-            result_Int = await _service.SnOneType.CountAsync();
+            result_Int = await _service.SnOneTypes.CountAsync();
             _cacheutil.CacheNumber("CountAsync_SnOneType"+cache, result_Int,cache);
             return result_Int;
         }
@@ -46,8 +47,8 @@ namespace Snblog.Service.Service
         public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("删除数据_SnOneType" + id);
-            var result = await _service.SnOneType.FindAsync(id);
-            _service.SnOneType.Remove(result);
+            var result = await _service.SnOneTypes.FindAsync(id);
+            _service.SnOneTypes.Remove(result);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -59,7 +60,7 @@ namespace Snblog.Service.Service
             {
                 return result_List;
             }
-            result_List = await _service.SnOneType.ToListAsync();
+            result_List = await _service.SnOneTypes.ToListAsync();
             _cacheutil.CacheString("GetAllAsync_SnOneType"+cache, result_List,cache);
             return result_List;
         }
@@ -73,7 +74,7 @@ namespace Snblog.Service.Service
             {
                 return result;
             }
-            result = await _service.SnOneType.FindAsync(id);
+            result = await _service.SnOneTypes.FindAsync(id);
             _cacheutil.CacheString("GetByIdAsync_SnOneType" + id+cache, result,cache);
             return result;
         }
@@ -87,7 +88,7 @@ namespace Snblog.Service.Service
             {
                 return result;
             }
-            result = await _service.SnOneType.FirstAsync(s => s.SoTypeId == type);
+            result = await _service.SnOneTypes.FirstAsync(s => s.Id == type);
             _cacheutil.CacheString("GetTypeAsync_SnOneType" + type+cache, result,cache);
             return result;
         }
@@ -95,7 +96,7 @@ namespace Snblog.Service.Service
         public async Task<bool> UpdateAsync(SnOneType entity)
         {
             _logger.LogInformation("更新数据_SnOneType" + entity);
-            _service.SnOneType.Update(entity);
+            _service.SnOneTypes.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
     }

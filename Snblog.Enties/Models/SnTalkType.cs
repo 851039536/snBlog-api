@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnTalkType
     {
+        public SnTalkType()
+        {
+            SnTalks = new HashSet<SnTalk>();
+        }
+
         public int Id { get; set; }
-        public int? TalkId { get; set; }
-        public string Type { get; set; }
+        public string Name { get; set; }
+
+        public virtual ICollection<SnTalk> SnTalks { get; set; }
     }
 }

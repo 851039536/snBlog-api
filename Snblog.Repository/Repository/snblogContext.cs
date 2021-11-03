@@ -1,51 +1,64 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Snblog.Enties.Models;
 using Snblog.IRepository;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Repository.Repository
 {
-    public partial class SnblogContext : DbContext, IConcardContext
+    public partial class snblogContext : DbContext, IConcardContext
     {
-        public SnblogContext()
+        public snblogContext()
         {
         }
 
-        public SnblogContext(DbContextOptions<SnblogContext> options)
+        public snblogContext(DbContextOptions<snblogContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<SnArticle> SnArticle { get; set; }
-        public virtual DbSet<SnComments> SnComments { get; set; }
-        public virtual DbSet<SnInterface> SnInterface { get; set; }
-        public virtual DbSet<SnInterfaceType> SnInterfaceType { get; set; }
-        public virtual DbSet<SnLabels> SnLabels { get; set; }
-        public virtual DbSet<SnLeave> SnLeave { get; set; }
-        public virtual DbSet<SnNavigation> SnNavigation { get; set; }
-        public virtual DbSet<SnNavigationType> SnNavigationType { get; set; }
-        public virtual DbSet<SnOne> SnOne { get; set; }
-        public virtual DbSet<SnOneType> SnOneType { get; set; }
-        public virtual DbSet<SnPicture> SnPicture { get; set; }
-        public virtual DbSet<SnPictureType> SnPictureType { get; set; }
-        public virtual DbSet<SnSoftware> SnSoftware { get; set; }
-        public virtual DbSet<SnSoftwareType> SnSoftwareType { get; set; }
-        public virtual DbSet<SnSort> SnSort { get; set; }
-        public virtual DbSet<SnTalk> SnTalk { get; set; }
-        public virtual DbSet<SnTalkType> SnTalkType { get; set; }
-        public virtual DbSet<SnUser> SnUser { get; set; }
-        public virtual DbSet<SnUserFriends> SnUserFriends { get; set; }
-        public virtual DbSet<SnUserTalk> SnUserTalk { get; set; }
-        public virtual DbSet<SnVideo> SnVideo { get; set; }
-        public virtual DbSet<SnVideoType> SnVideoType { get; set; }
+        public virtual DbSet<SnArticle> SnArticles { get; set; }
+        public virtual DbSet<SnComment> SnComments { get; set; }
+        public virtual DbSet<SnInterface> SnInterfaces { get; set; }
+        public virtual DbSet<SnInterfaceType> SnInterfaceTypes { get; set; }
+        public virtual DbSet<SnLabel> SnLabels { get; set; }
+        public virtual DbSet<SnLeave> SnLeaves { get; set; }
+        public virtual DbSet<SnNavigation> SnNavigations { get; set; }
+        public virtual DbSet<SnNavigationType> SnNavigationTypes { get; set; }
+        public virtual DbSet<SnOne> SnOnes { get; set; }
+        public virtual DbSet<SnOneType> SnOneTypes { get; set; }
+        public virtual DbSet<SnPicture> SnPictures { get; set; }
+        public virtual DbSet<SnPictureType> SnPictureTypes { get; set; }
         public virtual DbSet<SnSetBlog> SnSetBlogs { get; set; }
+        public virtual DbSet<SnSoftware> SnSoftwares { get; set; }
+        public virtual DbSet<SnSoftwareType> SnSoftwareTypes { get; set; }
+        public virtual DbSet<SnSort> SnSorts { get; set; }
+        public virtual DbSet<SnTalk> SnTalks { get; set; }
+        public virtual DbSet<SnTalkType> SnTalkTypes { get; set; }
+        public virtual DbSet<SnUser> SnUsers { get; set; }
+        public virtual DbSet<SnUserFriend> SnUserFriends { get; set; }
+        public virtual DbSet<SnUserTalk> SnUserTalks { get; set; }
+        public virtual DbSet<SnVideo> SnVideos { get; set; }
+        public virtual DbSet<SnVideoType> SnVideoTypes { get; set; }
 
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", ServerVersion.Parse("8.0.16-mysql"));
+//            }
+//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasCharSet("utf8")
+                .UseCollation("utf8_general_ci");
+
             modelBuilder.Entity<SnArticle>(entity =>
             {
-                entity.HasKey(e => e.ArticleId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_article");
 
                 entity.HasIndex(e => e.LabelId, "article_labelsId");
@@ -54,14 +67,14 @@ namespace Snblog.Models
 
                 entity.HasIndex(e => e.UserId, "user_id");
 
-                entity.Property(e => e.ArticleId)
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("article_id")
+                    .HasColumnName("id")
                     .HasComment("主键");
 
-                entity.Property(e => e.Comment)
+                entity.Property(e => e.CommentId)
                     .HasColumnType("smallint(8)")
-                    .HasColumnName("comment")
+                    .HasColumnName("comment_id")
                     .HasComment("评论");
 
                 entity.Property(e => e.Give)
@@ -69,8 +82,14 @@ namespace Snblog.Models
                     .HasColumnName("give")
                     .HasComment("点赞");
 
+                entity.Property(e => e.Img)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("img")
+                    .HasComment("图片");
+
                 entity.Property(e => e.LabelId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("int(5)")
                     .HasColumnName("label_id")
                     .HasComment("标签外键");
 
@@ -79,8 +98,14 @@ namespace Snblog.Models
                     .HasColumnName("read")
                     .HasComment("阅读次数");
 
+                entity.Property(e => e.Sketch)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasColumnName("sketch")
+                    .HasComment("内容简述");
+
                 entity.Property(e => e.SortId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("int(5)")
                     .HasColumnName("sort_id")
                     .HasComment("分类外键");
 
@@ -89,11 +114,6 @@ namespace Snblog.Models
                     .HasColumnType("text")
                     .HasColumnName("text")
                     .HasComment("博客内容");
-                entity.Property(e => e.Html)
-                  .IsRequired()
-                  .HasColumnType("html")
-                  .HasColumnName("html")
-                  .HasComment("博客内容");
 
                 entity.Property(e => e.TimeCreate)
                     .HasColumnType("date")
@@ -103,7 +123,7 @@ namespace Snblog.Models
                 entity.Property(e => e.TimeModified)
                     .HasColumnType("date")
                     .HasColumnName("time_modified")
-                    .HasComment("修改时间");
+                    .HasComment("更新时间");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
@@ -111,126 +131,63 @@ namespace Snblog.Models
                     .HasColumnName("title")
                     .HasComment("标题 ");
 
-                entity.Property(e => e.TitleText)
-                    .IsRequired()
-                    .HasColumnType("text")
-                    .HasColumnName("title_text")
-                    .HasComment("内容简述");
-
-                entity.Property(e => e.TypeTitle)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .HasColumnName("type_title")
-                    .HasComment("分类标题");
-
-                entity.Property(e => e.UrlImg)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("url_img")
-                    .HasComment("图片");
-
                 entity.Property(e => e.UserId)
                     .HasColumnType("int(5)")
                     .HasColumnName("user_id")
                     .HasComment("用户外键id");
 
-                //entity.HasOne(d => d.Label)
-                //    .WithMany(p => p.SnArticles)
-                //    .HasForeignKey(d => d.LabelId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("article_labelsId");
+                entity.HasOne(d => d.Label)
+                    .WithMany(p => p.SnArticles)
+                    .HasForeignKey(d => d.LabelId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("abelsId");
 
-                //entity.HasOne(d => d.Sort)
-                //    .WithMany(p => p.SnArticles)
-                //    .HasForeignKey(d => d.SortId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("article_sortId");
+                entity.HasOne(d => d.Sort)
+                    .WithMany(p => p.SnArticles)
+                    .HasForeignKey(d => d.SortId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("sortId");
 
-                //entity.HasOne(d => d.User)
-                //    .WithMany(p => p.SnArticles)
-                //    .HasForeignKey(d => d.UserId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("article_userId");
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnArticles)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("userId");
             });
-            modelBuilder.Entity<SnSetBlog>(entity =>
+
+            modelBuilder.Entity<SnComment>(entity =>
             {
-                entity.ToTable("sn_set_blog");
+                entity.ToTable("sn_comments");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("id");
-
-                entity.Property(e => e.SetIsopen)
-                    .HasColumnName("set_isopen")
-                    .HasComment("是否启用");
-
-                entity.Property(e => e.SetName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("set_name")
-                    .HasComment("设置的内容名称");
-
-                entity.Property(e => e.SetType)
-                    .HasColumnType("tinyint(5)")
-                    .HasColumnName("set_type")
-                    .HasComment("分类");
-
-                entity.Property(e => e.SetUrl)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .HasColumnName("set_url")
-                    .HasComment("链接");
-
-                entity.Property(e => e.UserId)
-                    .HasColumnType("int(5)")
-                    .HasColumnName("user_id")
-                    .HasComment("关联用户表");
-            });
-            modelBuilder.Entity<SnComments>(entity =>
-            {
-                entity.HasKey(e => e.CommentId)
-                    .HasName("PRIMARY");
-                entity.ToTable("sn_comments");
-
-                entity.Property(e => e.CommentId)
-                    .HasColumnName("comment_id")
-                    .HasColumnType("int(11)")
+                    .HasColumnName("id")
                     .HasComment("评论主键");
 
-                entity.Property(e => e.ArticleId)
-                    .HasColumnName("article_id")
+                entity.Property(e => e.Give)
                     .HasColumnType("int(11)")
-                    .HasComment("评论博文id");
-
-                entity.Property(e => e.CommentCount)
-                    .HasColumnName("comment_count")
-                    .HasColumnType("int(11)")
+                    .HasColumnName("give")
                     .HasComment("点赞数");
 
-                entity.Property(e => e.CommentDate)
+                entity.Property(e => e.Text)
                     .IsRequired()
-                    .HasColumnName("comment_date")
-                    .HasColumnType("varchar(20)")
-                    .HasComment("评论日期")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                    .HasColumnType("text")
+                    .HasColumnName("text")
+                    .HasComment("内容");
 
-                entity.Property(e => e.CommentText)
-                    .IsRequired()
-                    .HasColumnName("comment_text")
-                    .HasColumnType("varchar(255)")
-                    .HasComment("内容")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                entity.Property(e => e.TimeCreate)
+                    .HasColumnType("date")
+                    .HasColumnName("time_create")
+                    .HasComment("评论日期");
 
-                entity.Property(e => e.ParentCommentId)
-                    .HasColumnName("parent_comment_id")
-                    .HasColumnType("int(11)")
-                    .HasComment("父评论id");
+                entity.Property(e => e.TimeModified)
+                    .HasColumnType("date")
+                    .HasColumnName("time_modified")
+                    .HasComment("更新时间");
 
                 entity.Property(e => e.UserId)
-                    .HasColumnName("user_id")
                     .HasColumnType("int(11)")
+                    .HasColumnName("user_id")
                     .HasComment("用户id");
             });
 
@@ -272,16 +229,16 @@ namespace Snblog.Models
                     .HasColumnName("user_id")
                     .HasComment("用户");
 
-                //entity.HasOne(d => d.Type)
-                //    .WithMany(p => p.SnInterfaces)
-                //    .HasForeignKey(d => d.TypeId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("sn_interface_ibfk_1");
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.SnInterfaces)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("type");
 
-                //entity.HasOne(d => d.User)
-                //    .WithMany(p => p.SnInterfaces)
-                //    .HasForeignKey(d => d.UserId)
-                //    .HasConstraintName("sn_interface_ibfk_2");
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnInterfaces)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("sn_interface_ibfk_2");
             });
 
             modelBuilder.Entity<SnInterfaceType>(entity =>
@@ -298,240 +255,240 @@ namespace Snblog.Models
                     .HasColumnName("name");
             });
 
-            modelBuilder.Entity<SnLabels>(entity =>
+            modelBuilder.Entity<SnLabel>(entity =>
             {
-                entity.HasKey(e => e.LabelId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_labels");
 
-                entity.Property(e => e.LabelId)
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("label_id");
+                    .HasColumnName("id");
 
-                entity.Property(e => e.LabelAlias)
-                    .HasMaxLength(20)
-                    .HasColumnName("label_alias")
-                    .HasComment("标签别名");
-
-                entity.Property(e => e.LabelDescription)
+                entity.Property(e => e.Description)
                     .HasColumnType("text")
-                    .HasColumnName("label_description")
+                    .HasColumnName("description")
                     .HasComment("标签描述");
 
-                entity.Property(e => e.LabelName)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(20)
-                    .HasColumnName("label_name")
+                    .HasColumnName("name")
                     .HasComment("标签名称");
             });
 
             modelBuilder.Entity<SnLeave>(entity =>
             {
-                entity.HasKey(e => e.Id)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_leave");
 
-                entity.Property(e => e.Id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("le_id")
-                    .HasComment("主键");
-
-                entity.Property(e => e.Time)
-                    .HasColumnType("date")
-                    .HasColumnName("le_time")
-                    .HasComment("发布时间");
-
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasColumnType("text")
-                    .HasColumnName("le_title")
-                    .HasComment("标题");
-
-                entity.Property(e => e.UserId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("user_id")
-                    .HasComment("用户外键");
-            });
-
-            modelBuilder.Entity<SnNavigation>(entity =>
-            {
-                entity.HasKey(e => e.NavId)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("sn_navigation");
-
-                entity.HasIndex(e => e.NavType, "nav_type");
-
-                entity.Property(e => e.NavId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("nav_id")
-                    .HasComment("主键");
-
-                entity.Property(e => e.NavImg)
-                    .HasMaxLength(255)
-                    .HasColumnName("nav_img")
-                    .HasComment("图片路径");
-
-                entity.Property(e => e.NavText)
-                    .HasColumnType("text")
-                    .HasColumnName("nav_text")
-                    .HasComment("标题描述");
-
-                entity.Property(e => e.NavTitle)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("nav_title")
-                    .HasComment("标题");
-
-                entity.Property(e => e.NavType)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .HasColumnName("nav_type")
-                    .HasComment("分类");
-
-                entity.Property(e => e.NavUrl)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .HasColumnName("nav_url")
-                    .HasComment("链接路径");
-            });
-
-
-            modelBuilder.Entity<SnNavigationType>(entity =>
-            {
-                entity.ToTable("sn_navigation_type");
-
-                entity.HasIndex(e => new { e.Id, e.NavType }, "id");
-
-                entity.HasIndex(e => e.NavType, "nav_type");
+                entity.HasIndex(e => e.UserId, "user_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id")
                     .HasComment("主键");
 
-                entity.Property(e => e.NavType)
-                    .HasMaxLength(50)
-                    .HasColumnName("nav_type")
-                    .HasComment("分类外键");
+                entity.Property(e => e.Text)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasColumnName("text")
+                    .HasComment("留言内容");
+
+                entity.Property(e => e.TimeCreate)
+                    .HasColumnType("date")
+                    .HasColumnName("time_create")
+                    .HasComment("发布时间");
+
+                entity.Property(e => e.TimeModified)
+                    .HasColumnType("date")
+                    .HasColumnName("time_modified");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("user_id")
+                    .HasComment("用户外键");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnLeaves)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("user_id");
+            });
+
+            modelBuilder.Entity<SnNavigation>(entity =>
+            {
+                entity.ToTable("sn_navigation");
+
+                entity.HasIndex(e => e.TypeId, "nav_type_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id")
+                    .HasComment("主键");
+
+                entity.Property(e => e.Describe)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasColumnName("describe")
+                    .HasComment("标题描述");
+
+                entity.Property(e => e.Img)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("img")
+                    .HasComment("图片路径");
 
                 entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(60)
+                    .HasColumnName("title")
+                    .HasComment("标题");
+
+                entity.Property(e => e.TypeId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("type_id")
+                    .HasComment("分类");
+
+                entity.Property(e => e.Url)
+                    .IsRequired()
                     .HasMaxLength(255)
+                    .HasColumnName("url")
+                    .HasComment("链接路径");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.SnNavigations)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("nav_type_id");
+            });
+
+            modelBuilder.Entity<SnNavigationType>(entity =>
+            {
+                entity.ToTable("sn_navigation_type");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id")
+                    .HasComment("主键");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(50)
                     .HasColumnName("title")
                     .HasComment("标题");
             });
 
             modelBuilder.Entity<SnOne>(entity =>
             {
-                entity.HasKey(e => e.OneId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_one");
 
-                entity.HasIndex(e => e.OneTypeId, "sn_one_type");
+                entity.HasIndex(e => e.TypeId, "sn_one_type");
 
-                entity.Property(e => e.OneId)
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("one_id")
+                    .HasColumnName("id")
                     .HasComment("主键");
 
-                entity.Property(e => e.OneAuthor)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .HasColumnName("one_author")
-                    .HasComment("作者");
-
-                entity.Property(e => e.OneComment)
+                entity.Property(e => e.CommentId)
                     .HasColumnType("int(11) unsigned")
-                    .HasColumnName("one_comment")
+                    .HasColumnName("comment_id")
                     .HasComment("评论");
 
-                entity.Property(e => e.OneData)
-                    .HasColumnType("date")
-                    .HasColumnName("one_data")
-                    .HasComment("时间");
-
-                entity.Property(e => e.OneGive)
+                entity.Property(e => e.Give)
                     .HasColumnType("int(11)")
-                    .HasColumnName("one_give")
+                    .HasColumnName("give")
                     .HasComment("点赞");
 
-                entity.Property(e => e.OneImg)
+                entity.Property(e => e.Img)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .HasColumnName("one_img")
+                    .HasColumnName("img")
                     .HasComment("图片");
 
-                entity.Property(e => e.OneRead)
+                entity.Property(e => e.Read)
                     .HasColumnType("int(11)")
-                    .HasColumnName("one_read")
+                    .HasColumnName("read")
                     .HasComment("阅读数");
 
-                entity.Property(e => e.OneText)
+                entity.Property(e => e.Text)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasColumnName("one_text")
+                    .HasColumnName("text")
                     .HasComment("内容");
 
-                entity.Property(e => e.OneTitle)
+                entity.Property(e => e.TimeCreate)
+                    .HasColumnType("date")
+                    .HasColumnName("time_create")
+                    .HasComment("时间");
+
+                entity.Property(e => e.TimeModified)
+                    .HasColumnType("date")
+                    .HasColumnName("time_modified");
+
+                entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .HasColumnName("one_title")
+                    .HasColumnName("title")
                     .HasComment("标题");
 
-                entity.Property(e => e.OneTypeId)
+                entity.Property(e => e.TypeId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("one_type_id")
+                    .HasColumnName("type_id")
                     .HasComment("分类");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("user_id")
+                    .HasComment("作者");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.SnOnes)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("one_type_id");
             });
 
             modelBuilder.Entity<SnOneType>(entity =>
             {
                 entity.ToTable("sn_one_type");
 
-                entity.HasIndex(e => e.SoTypeId, "so_type_id");
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("title");
+            });
+
+            modelBuilder.Entity<SnPicture>(entity =>
+            {
+                entity.ToTable("sn_picture");
+
+                entity.HasIndex(e => e.TypeId, "prcture_type_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
-                entity.Property(e => e.SoTypeId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("so_type_id");
-
-                entity.Property(e => e.SoTypeTitle)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasColumnName("so_type_title");
-            });
-
-            modelBuilder.Entity<SnPicture>(entity =>
-            {
-                entity.HasKey(e => e.PictureId)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("sn_picture");
-
-                entity.Property(e => e.PictureId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("picture_id");
-
-                entity.Property(e => e.PictureTitle)
+                entity.Property(e => e.Itle)
                     .HasMaxLength(255)
-                    .HasColumnName("picture_title")
+                    .HasColumnName("itle")
                     .HasComment("标题");
 
-                entity.Property(e => e.PictureTypeId)
+                entity.Property(e => e.TypeId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("picture_type_id")
+                    .HasColumnName("type_id")
                     .HasComment("分类");
 
-                entity.Property(e => e.PictureUrl)
+                entity.Property(e => e.Url)
                     .HasMaxLength(255)
-                    .HasColumnName("picture_url")
+                    .HasColumnName("url")
                     .HasComment("图片地址");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.SnPictures)
+                    .HasForeignKey(d => d.TypeId)
+                    .HasConstraintName("prcture_type_id");
             });
 
             modelBuilder.Entity<SnPictureType>(entity =>
@@ -542,100 +499,122 @@ namespace Snblog.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
-                entity.Property(e => e.PictureTypeId)
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .HasColumnName("name")
+                    .HasComment("分类名称");
+            });
+
+            modelBuilder.Entity<SnSetBlog>(entity =>
+            {
+                entity.ToTable("sn_set_blog");
+
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("picture_type_id")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Isopen)
+                    .HasColumnName("isopen")
+                    .HasComment("是否启用");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("name")
+                    .HasComment("设置的内容名称");
+
+                entity.Property(e => e.Type)
+                    .HasColumnType("tinyint(5)")
+                    .HasColumnName("type")
                     .HasComment("分类");
 
-                entity.Property(e => e.PictureTypeName)
-                    .HasMaxLength(100)
-                    .HasColumnName("picture_type_name")
-                    .HasComment("分类名称");
+                entity.Property(e => e.Url)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("url")
+                    .HasComment("链接");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(5)")
+                    .HasColumnName("user_id")
+                    .HasComment("关联用户表");
             });
 
             modelBuilder.Entity<SnSoftware>(entity =>
             {
-                entity.HasKey(e => e.SoId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_software");
 
-                entity.Property(e => e.SoId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("so_id");
+                entity.HasIndex(e => e.TypeId, "software_type_id");
 
-                entity.Property(e => e.SoComment)
-                    .HasMaxLength(255)
-                    .HasColumnName("so_comment")
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.CommentId)
+                    .HasColumnType("int(255)")
+                    .HasColumnName("comment_id")
                     .HasComment("评论");
 
-                entity.Property(e => e.SoData)
-                    .HasMaxLength(20)
-                    .HasColumnName("so_data")
-                    .HasComment("时间");
-
-                entity.Property(e => e.SoImg)
+                entity.Property(e => e.Img)
                     .HasMaxLength(200)
-                    .HasColumnName("so_img")
+                    .HasColumnName("img")
                     .HasComment("图片路径");
 
-                entity.Property(e => e.SoTitle)
+                entity.Property(e => e.TimeCreate)
+                    .HasColumnType("date")
+                    .HasColumnName("time_create")
+                    .HasComment("时间");
+
+                entity.Property(e => e.TimeModified)
+                    .HasColumnType("date")
+                    .HasColumnName("time_modified");
+
+                entity.Property(e => e.Title)
                     .HasMaxLength(100)
-                    .HasColumnName("so_title")
+                    .HasColumnName("title")
                     .HasComment("标题");
 
-                entity.Property(e => e.SoTypeid)
+                entity.Property(e => e.TypeId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("so_typeid")
+                    .HasColumnName("type_id")
                     .HasComment("分类");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.SnSoftwares)
+                    .HasForeignKey(d => d.TypeId)
+                    .HasConstraintName("software_type_id");
             });
 
             modelBuilder.Entity<SnSoftwareType>(entity =>
             {
-                entity.HasKey(e => e.SoId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_software_type");
 
-                entity.Property(e => e.SoId)
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("so_id");
+                    .HasColumnName("id");
 
-                entity.Property(e => e.SoType)
+                entity.Property(e => e.Name)
                     .HasMaxLength(20)
-                    .HasColumnName("so-type");
+                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<SnSort>(entity =>
             {
-                entity.HasKey(e => e.SortId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_sort");
 
-                entity.Property(e => e.SortId)
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("sort_id");
+                    .HasColumnName("id");
 
-                entity.Property(e => e.ParentSortId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("parent_sort_id")
-                    .HasComment("父分类id");
-
-                entity.Property(e => e.SortAlias)
-                    .HasMaxLength(50)
-                    .HasColumnName("sort_alias")
-                    .HasComment("分类别名");
-
-                entity.Property(e => e.SortDescription)
+                entity.Property(e => e.Description)
                     .HasColumnType("text")
-                    .HasColumnName("sort_description")
+                    .HasColumnName("description")
                     .HasComment("分类描述");
 
-                entity.Property(e => e.SortName)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(20)
-                    .HasColumnName("sort_name")
+                    .HasColumnName("name")
                     .HasComment("分类名称");
             });
 
@@ -643,7 +622,7 @@ namespace Snblog.Models
             {
                 entity.ToTable("sn_talk");
 
-                entity.HasIndex(e => e.TalkTypeId, "sn_talk_typeId");
+                entity.HasIndex(e => e.TypeId, "sn_talk_typeId");
 
                 entity.HasIndex(e => e.UserId, "user_id");
 
@@ -651,82 +630,83 @@ namespace Snblog.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
-                entity.Property(e => e.TalkBrief)
-                    .HasMaxLength(255)
-                    .HasColumnName("talk_brief")
-                    .HasComment("简介");
-
-                entity.Property(e => e.TalkComment)
+                entity.Property(e => e.CommentId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("talk_comment")
+                    .HasColumnName("comment_id")
                     .HasComment("评论");
 
-                entity.Property(e => e.TalkGive)
+                entity.Property(e => e.Describe)
+                    .HasMaxLength(255)
+                    .HasColumnName("describe")
+                    .HasComment("简介");
+
+                entity.Property(e => e.Give)
                     .HasColumnType("int(11)")
-                    .HasColumnName("talk_give")
+                    .HasColumnName("give")
                     .HasComment("点赞");
 
-                entity.Property(e => e.TalkRead)
+                entity.Property(e => e.Read)
                     .HasColumnType("int(11)")
-                    .HasColumnName("talk_read")
+                    .HasColumnName("read")
                     .HasComment("阅读量");
 
-                entity.Property(e => e.TalkText)
+                entity.Property(e => e.Text)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasColumnName("talk_text")
+                    .HasColumnName("text")
                     .HasComment("内容");
 
-                entity.Property(e => e.TalkTime)
+                entity.Property(e => e.TimeCreate)
                     .HasColumnType("date")
-                    .HasColumnName("talk_time")
+                    .HasColumnName("time_create")
                     .HasComment("发表时间");
 
-                entity.Property(e => e.TalkTitle)
+                entity.Property(e => e.TimeModified)
+                    .HasColumnType("date")
+                    .HasColumnName("time_modified");
+
+                entity.Property(e => e.Title)
                     .IsRequired()
-                    .HasMaxLength(255)
-                    .HasColumnName("talk_title")
+                    .HasMaxLength(100)
+                    .HasColumnName("title")
                     .HasComment("标题");
 
-                entity.Property(e => e.TalkTypeId)
+                entity.Property(e => e.TypeId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("talk_type_id");
+                    .HasColumnName("type_id");
 
                 entity.Property(e => e.UserId)
                     .HasColumnType("int(11)")
                     .HasColumnName("user_id")
                     .HasComment("用户");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.SnTalks)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("talk_type_id");
             });
 
             modelBuilder.Entity<SnTalkType>(entity =>
             {
                 entity.ToTable("sn_talk_type");
 
-                entity.HasIndex(e => e.TalkId, "talk_id");
-
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
-                entity.Property(e => e.TalkId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("talk_id");
-
-                entity.Property(e => e.Type)
-                    .HasMaxLength(100)
-                    .HasColumnName("type");
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<SnUser>(entity =>
             {
-                entity.HasKey(e => e.UserId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_user");
 
-                entity.Property(e => e.UserId)
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("user_id")
+                    .HasColumnName("id")
                     .HasComment("主键");
 
                 entity.Property(e => e.Brief)
@@ -740,6 +720,12 @@ namespace Snblog.Models
                     .HasMaxLength(30)
                     .HasColumnName("email")
                     .HasComment("邮箱");
+
+                entity.Property(e => e.Ip)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("ip")
+                    .HasComment("ip地址");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -774,14 +760,36 @@ namespace Snblog.Models
                     .HasColumnType("date")
                     .HasColumnName("time_modified")
                     .HasComment("更新时间");
-
-                entity.Property(e => e.UserIp)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("user_ip")
-                    .HasComment("ip地址");
             });
 
+            modelBuilder.Entity<SnUserFriend>(entity =>
+            {
+                entity.ToTable("sn_user_friends");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.UserFriendsId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("user_friends_id")
+                    .HasComment("好友id");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("user_id")
+                    .HasComment("用户id");
+
+                entity.Property(e => e.UserNote)
+                    .HasMaxLength(20)
+                    .HasColumnName("user_note")
+                    .HasComment("好友备注");
+
+                entity.Property(e => e.UserStatus)
+                    .HasMaxLength(20)
+                    .HasColumnName("user_status")
+                    .HasComment("好友状态");
+            });
 
             modelBuilder.Entity<SnUserTalk>(entity =>
             {
@@ -820,76 +828,74 @@ namespace Snblog.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("user_id");
 
-                //entity.HasOne(d => d.User)
-                //    .WithMany(p => p.SnUserTalks)
-                //    .HasForeignKey(d => d.UserId)
-                //    .HasConstraintName("sn_user_talk_userId");
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnUserTalks)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("sn_user_talk_userId");
             });
 
             modelBuilder.Entity<SnVideo>(entity =>
             {
-                entity.HasKey(e => e.VId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_video");
 
-                entity.HasIndex(e => e.VTypeid, "video");
+                entity.HasIndex(e => e.TypeId, "video_type_id");
 
-                entity.Property(e => e.VId)
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("v_id");
+                    .HasColumnName("id");
 
-                entity.Property(e => e.VData)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("v_data")
-                    .HasComment("时间");
-
-                entity.Property(e => e.VImg)
+                entity.Property(e => e.Img)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .HasColumnName("v_img")
+                    .HasColumnName("img")
                     .HasComment("图片");
 
-                entity.Property(e => e.VTitle)
+                entity.Property(e => e.TimeCreate)
+                    .HasColumnType("date")
+                    .HasColumnName("time_create")
+                    .HasComment("时间");
+
+                entity.Property(e => e.TimeModified)
+                    .HasColumnType("date")
+                    .HasColumnName("time_modified");
+
+                entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .HasColumnName("v_title")
+                    .HasColumnName("title")
                     .HasComment("标题");
 
-                entity.Property(e => e.VTypeid)
+                entity.Property(e => e.TypeId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("v_typeid")
+                    .HasColumnName("type_id")
                     .HasComment("分类");
 
-                entity.Property(e => e.VUrl)
+                entity.Property(e => e.Url)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .HasColumnName("v_url")
+                    .HasColumnName("url")
                     .HasComment("链接路径");
 
-                //entity.HasOne(d => d.VType)
-                //    .WithMany(p => p.SnVideos)
-                //    .HasForeignKey(d => d.VTypeid)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("video");
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.SnVideos)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("video_type_id");
             });
 
             modelBuilder.Entity<SnVideoType>(entity =>
             {
-                entity.HasKey(e => e.VId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("sn_video_type");
 
-                entity.Property(e => e.VId)
+                entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .HasColumnName("v_id");
+                    .HasColumnName("id");
 
-                entity.Property(e => e.VType)
+                entity.Property(e => e.Name)
                     .HasMaxLength(20)
-                    .HasColumnName("v_type");
+                    .HasColumnName("name");
             });
+
             OnModelCreatingPartial(modelBuilder);
         }
 

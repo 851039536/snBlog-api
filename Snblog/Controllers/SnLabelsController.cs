@@ -2,8 +2,8 @@
 using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Snblog.Enties.Models;
 using Snblog.IService.IService;
-using Snblog.Models;
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
@@ -88,7 +88,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<ActionResult<SnLabels>> AddAsync(SnLabels entity)
+        public async Task<ActionResult<SnLabel>> AddAsync(SnLabel entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
@@ -101,7 +101,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnLabels entity)
+        public async Task<IActionResult> UpdateAsync(SnLabel entity)
         {
             var data = await _service.UpdateAsync(entity);
             return Ok(data);

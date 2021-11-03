@@ -3,19 +3,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
 using Snblog.IService.IService;
-using Snblog.Models;
 using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {
     public class SnPictureService : ISnPictureService
     {
-        private readonly SnblogContext _service;//DB
+        private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnPicture> result_List = default;
-        public SnPictureService(SnblogContext service, ICacheUtil cacheutil)
+        public SnPictureService(snblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -23,7 +23,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> AddAsync(SnPicture entity)
         {
-            await _service.SnPicture.AddAsync(entity);
+            await _service.SnPictures.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -34,7 +34,7 @@ namespace Snblog.Service.Service
             {
                 return result_List;
             }
-            result_List = await _service.SnPicture.ToListAsync();
+            result_List = await _service.SnPictures.ToListAsync();
             _cacheutil.CacheString1("SnPicture_GetAllAsync", result_List);
             return result_List;
         }
@@ -46,7 +46,7 @@ namespace Snblog.Service.Service
             {
                 return result_Int;
             }
-            result_Int = await _service.SnPicture.CountAsync();
+            result_Int = await _service.SnPictures.CountAsync();
             _cacheutil.CacheNumber1("SnPicture_CountAsync", result_Int);
             return result_Int;
         }
@@ -56,8 +56,8 @@ namespace Snblog.Service.Service
             // _service.SnPicture.Remove(Entity);
             //return await _service.SaveChangesAsync()>0;
             //执行查询
-            var todoItem = await _service.SnPicture.FindAsync(id);
-            _service.SnPicture.Remove(todoItem);
+            var todoItem = await _service.SnPictures.FindAsync(id);
+            _service.SnPictures.Remove(todoItem);
             return await _service.SaveChangesAsync() > 0;
 
         }
@@ -70,14 +70,14 @@ namespace Snblog.Service.Service
             {
                 return result;
             }
-            result = await _service.SnPicture.FindAsync(id);
+            result = await _service.SnPictures.FindAsync(id);
             _cacheutil.CacheString1("SnPicture_GetByIdAsync", result);
             return result;
         }
 
         public async Task<bool> UpdateAsync(SnPicture entity)
         {
-            _service.SnPicture.Update(entity);
+            _service.SnPictures.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -97,10 +97,10 @@ namespace Snblog.Service.Service
         {
             if (isDesc)
             {
-                return await _service.SnPicture.Where(s => true).OrderByDescending(c => c.PictureId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                return await _service.SnPictures.Where(s => true).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
 
-            return await _service.SnPicture.Where(s => true).OrderBy(c => c.PictureId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return await _service.SnPictures.Where(s => true).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
         public async Task<List<SnPicture>> GetFyTypeAllAsync(int type, int pageIndex, int pageSize, bool isDesc)
@@ -119,11 +119,11 @@ namespace Snblog.Service.Service
         {
             if (isDesc)
             {
-                return await _service.SnPicture.Where(s => s.PictureTypeId == type).OrderByDescending(c => c.PictureId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                return await _service.SnPictures.Where(s => s.TypeId == type).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
             else
             {
-                return await _service.SnPicture.Where(s => s.PictureTypeId == type).OrderBy(c => c.PictureId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                return await _service.SnPictures.Where(s => s.TypeId == type).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
         }
 
@@ -134,7 +134,7 @@ namespace Snblog.Service.Service
             {
                 return result_Int;
             }
-            result_Int =  await _service.SnPicture.CountAsync(s=>s.PictureTypeId==type);
+            result_Int =  await _service.SnPictures.CountAsync(s=>s.TypeId==type);
         _cacheutil.CacheNumber1("SnPicture_CountAsync"+type, result_Int);
             return result_Int;
         }

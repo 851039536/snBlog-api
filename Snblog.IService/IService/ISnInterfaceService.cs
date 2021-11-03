@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Snblog.Enties.ModelsDto;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Snblog.Models;
 
 namespace Snblog.IService.IService
 {
@@ -9,7 +9,14 @@ namespace Snblog.IService.IService
     /// </summary>
     public interface ISnInterfaceService
     {
-        Task<List<SnInterfaceDto>> GetTypeAsync(int userId, int type, bool cache);
+        /// <summary>
+        ///条件查询 
+        /// </summary>
+        /// <param name="identity">分类和用户:0 || 用户:1 || 分类:2</param>
+        /// <param name="users">条件:用户</param>
+        /// <param name="type">条件:类别</param>
+        /// <param name="cache">是否开启缓存</param>
+        Task<List<SnInterfaceDto>> GetTypeAsync(int identity, int users, int type, bool cache);
 
         Task<List<SnInterfaceDto>> GetAllAsync(bool cache);
 

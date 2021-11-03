@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Snblog.IRepository;
 using Snblog.IRepository.IRepository;
-using Snblog.Models;
 
 namespace Snblog.Repository.Repository
 {
@@ -17,13 +16,13 @@ namespace Snblog.Repository.Repository
     //实现了CRUD基本功能的封装
     public class Repositorys<T> : IRepositorys<T> where T : class
     {
-        private readonly SnblogContext _dbContext;
+        private readonly snblogContext _dbContext;
         private readonly DbSet<T> _dbSet;
         private readonly string _connStr;
 
         public Repositorys(IConcardContext mydbcontext)
         {
-            _dbContext = mydbcontext as SnblogContext;
+            _dbContext = mydbcontext as snblogContext;
             if (_dbContext == null)
             {
                 return;

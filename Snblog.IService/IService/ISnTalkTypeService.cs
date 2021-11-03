@@ -1,4 +1,4 @@
-﻿using Snblog.Models;
+﻿using Snblog.Enties.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService
 {
-  public  interface ISnTalkTypeService
+    public  interface ISnTalkTypeService
     {
         /// <summary>
         /// 查询所有

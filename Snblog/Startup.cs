@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Snblog.Cache.Cache;
 using Snblog.Cache.CacheUtil;
 using Snblog.Controllers;
@@ -19,7 +20,6 @@ using Snblog.IService;
 using Snblog.IService.IReService;
 using Snblog.IService.IService;
 using Snblog.Jwt;
-using Snblog.Models;
 using Snblog.Repository.Repository;
 using Snblog.Service;
 using Snblog.Service.AngleSharp;
@@ -63,6 +63,10 @@ namespace Snblog
         //运行时将调用此方法。 使用此方法将服务添加到容器。
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddNewtonsoftJson(option =>
+              //忽略循环引用
+              option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+          );
             #region MiniProfiler 性能分析
             services.AddMiniProfiler(options =>
             options.RouteBasePath = "/profiler"
@@ -143,7 +147,7 @@ namespace Snblog
               });
             #endregion
             #region DbContext
-            services.AddDbContext<SnblogContext>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<snblogContext>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             #endregion
             # region jwt
             services.ConfigureJwt(Configuration);
@@ -169,7 +173,7 @@ namespace Snblog
 
             // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
-            services.AddScoped<IConcardContext, SnblogContext>();//db
+            services.AddScoped<IConcardContext, snblogContext>();//db
             services.AddScoped<ISnArticleService, SnArticleService>();//ioc
             services.AddScoped<ISnNavigationService, SnNavigationService>();
             services.AddScoped<ISnLabelsService, SnLabelsService>();

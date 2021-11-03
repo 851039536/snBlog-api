@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnOneType
     {
+        public SnOneType()
+        {
+            SnOnes = new HashSet<SnOne>();
+        }
+
         public int Id { get; set; }
-        public int SoTypeId { get; set; }
-        public string SoTypeTitle { get; set; }
+        public string Title { get; set; }
+
+        public virtual ICollection<SnOne> SnOnes { get; set; }
     }
 }

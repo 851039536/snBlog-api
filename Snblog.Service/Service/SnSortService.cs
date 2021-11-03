@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
 using Snblog.IRepository;
 using Snblog.IService;
-using Snblog.Models;
 using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
@@ -13,11 +13,11 @@ namespace Snblog.Service.Service
     public class SnSortService : BaseService, ISnSortService
     {
 
-        private readonly SnblogContext _service;
+        private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnSort> result_List = default;
-        public SnSortService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, SnblogContext service, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
+        public SnSortService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, snblogContext service, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -30,9 +30,9 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<bool> DeleteAsync(int id)
         {
-            var result = await _service.SnSort.FindAsync(id);
+            var result = await _service.SnSorts.FindAsync(id);
             if (result == null) return false;
-            _service.SnSort.Remove(result);
+            _service.SnSorts.Remove(result);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -50,7 +50,7 @@ namespace Snblog.Service.Service
             {
                 return result;
             }
-            result = await _service.SnSort.FindAsync(id);
+            result = await _service.SnSorts.FindAsync(id);
             _cacheutil.CacheString("GetByIdAsync_SnSort" + id + cache, result, cache);
             return result;
         }
@@ -62,14 +62,14 @@ namespace Snblog.Service.Service
         /// <returns></returns>
         public async Task<bool> AddAsync(SnSort entity)
         {
-            await _service.SnSort.AddAsync(entity);
+            await _service.SnSorts.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
 
         }
 
         public async Task<bool> UpdateAsync(SnSort entity)
         {
-            _service.SnSort.Update(entity);
+            _service.SnSorts.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -89,11 +89,11 @@ namespace Snblog.Service.Service
         {
             if (isDesc)
             {
-                result_List = await _service.SnSort.OrderByDescending(c => c.SortId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                result_List = await _service.SnSorts.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
             else
             {
-                result_List = await _service.SnSort.OrderBy(c => c.SortId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                result_List = await _service.SnSorts.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
 
             return result_List;
@@ -111,7 +111,7 @@ namespace Snblog.Service.Service
             {
                 return result_List;
             }
-            result_List = await _service.SnSort.ToListAsync();
+            result_List = await _service.SnSorts.ToListAsync();
             _cacheutil.CacheString("GetAllAsync_SnSort" + cache, result_List, cache);
 
             return result_List;
@@ -124,7 +124,7 @@ namespace Snblog.Service.Service
             {
                 return result_Int;
             }
-            result_Int = await _service.SnSort.CountAsync();
+            result_Int = await _service.SnSorts.CountAsync();
             _cacheutil.CacheNumber("GetCountAsync_SnSort" + cache, result_Int, cache);
 
             return result_Int;

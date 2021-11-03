@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
 using Snblog.IService.IService;
-using Snblog.Models;
+using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {
@@ -14,10 +15,10 @@ namespace Snblog.Service.Service
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnOne> result_List = null;
-        private readonly SnblogContext _service;//DB
+        private readonly snblogContext _service;//DB
 
         private readonly ILogger<SnOneService> _logger;
-        public SnOneService(SnblogContext service, ICacheUtil cacheutil, ILogger<SnOneService> logger)
+        public SnOneService(snblogContext service, ICacheUtil cacheutil, ILogger<SnOneService> logger)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -30,7 +31,7 @@ namespace Snblog.Service.Service
             result_List = _cacheutil.CacheString("GetAllAsync_SnOne" + cache, result_List, cache);
             if (result_List == null)
             {
-                result_List = await _service.SnOne.ToListAsync();
+                result_List = await _service.SnOnes.ToListAsync();
                 _cacheutil.CacheString("GetAllAsync_SnOne" + cache, result_List, cache);
             }
             return result_List;
@@ -44,7 +45,7 @@ namespace Snblog.Service.Service
             result = _cacheutil.CacheString("GetByIdAsync_SnOne" + id + cache, result, cache);
             if (result == null)
             {
-                result = await _service.SnOne.FindAsync(id);
+                result = await _service.SnOnes.FindAsync(id);
                 _cacheutil.CacheString("GetByIdAsync_SnOne" + id + cache, result, cache);
             }
             return result;
@@ -58,11 +59,11 @@ namespace Snblog.Service.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnOne.OrderByDescending(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnOnes.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnOne.OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnOnes.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
 
                 _cacheutil.CacheString("GetFyAllAsync_SnOne" + pageIndex + pageSize + isDesc + cache, result_List, cache);
@@ -77,9 +78,9 @@ namespace Snblog.Service.Service
         public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("删除数据_SnOne" + id);
-            var result = await _service.SnOne.FindAsync(id);
+            var result = await _service.SnOnes.FindAsync(id);
             if (result == null) return false;
-            _service.SnOne.Remove(result);
+            _service.SnOnes.Remove(result);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -91,7 +92,7 @@ namespace Snblog.Service.Service
         public async Task<bool> AddAsync(SnOne entity)
         {
             _logger.LogInformation("添加数据_SnOne" + entity);
-            await _service.SnOne.AddAsync(entity);
+            await _service.SnOnes.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
             // return await CreateService<SnOne>().AddAsync(entity);
         }
@@ -99,7 +100,7 @@ namespace Snblog.Service.Service
         public async Task<bool> UpdateAsync(SnOne entity)
         {
             _logger.LogInformation("更新数据_SnOne" + entity);
-            _service.SnOne.Update(entity);
+            _service.SnOnes.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -109,7 +110,7 @@ namespace Snblog.Service.Service
             result_Int = _cacheutil.CacheNumber("CountAsync_SnOne" + cache, result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnOne.CountAsync();
+                result_Int = await _service.SnOnes.CountAsync();
                 _cacheutil.CacheNumber("CountAsync_SnOne" + cache, result_Int, cache);
             }
             return result_Int;
@@ -122,7 +123,7 @@ namespace Snblog.Service.Service
             result_Int = _cacheutil.CacheNumber("CountTypeAsync_SnOne" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnOne.CountAsync(s => s.OneTypeId == type);
+                result_Int = await _service.SnOnes.CountAsync(s => s.TypeId == type);
                 _cacheutil.CacheNumber("CountTypeAsync_SnOne" + type + cache, result_Int, cache);
             }
             return result_Int;
@@ -150,20 +151,20 @@ namespace Snblog.Service.Service
                     switch (name)
                     {
                         case "read":
-                            return await _service.SnOne.OrderByDescending(c => c.OneRead).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                         case "data":
-                            return await _service.SnOne.OrderByDescending(c => c.OneData).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                         case "give":
-                            return await _service.SnOne.OrderByDescending(c => c.OneGive).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                         case "comment":
-                            return await _service.SnOne.OrderByDescending(c => c.OneComment).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderByDescending(c => c.CommentId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                         default:
-                            return await _service.SnOne.OrderByDescending(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                     }
                 }
                 else
                 {
-                    return await _service.SnOne.Where(s => s.OneTypeId == type).OrderByDescending(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    return await _service.SnOnes.Where(s => s.TypeId == type).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
             }
             else //升序
@@ -173,20 +174,20 @@ namespace Snblog.Service.Service
                     switch (name)
                     {
                         case "read":
-                            return await _service.SnOne.OrderBy(c => c.OneRead).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                         case "data":
-                            return await _service.SnOne.OrderBy(c => c.OneData).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                         case "give":
-                            return await _service.SnOne.OrderBy(c => c.OneGive).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                         case "comment":
-                            return await _service.SnOne.OrderBy(c => c.OneComment).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderBy(c => c.CommentId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                         default:
-                            return await _service.SnOne.OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                            return await _service.SnOnes.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                     }
                 }
                 else
                 {
-                    return await _service.SnOne.Where(s => s.OneTypeId == type).OrderBy(c => c.OneId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    return await _service.SnOnes.Where(s => s.TypeId == type).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
             }
         }
@@ -211,7 +212,7 @@ namespace Snblog.Service.Service
             switch (type) //按类型查询
             {
                 case "read":
-                    var read = await _service.SnOne.Select(c => c.OneRead).ToListAsync();
+                    var read = await _service.SnOnes.Select(c => c.Read).ToListAsync();
                     foreach (var i in read)
                     {
                         var item = i;
@@ -220,7 +221,7 @@ namespace Snblog.Service.Service
 
                     break;
                 case "text":
-                    var text = await _service.SnOne.Select(c => c.OneText).ToListAsync();
+                    var text = await _service.SnOnes.Select(c => c.Text).ToListAsync();
                     foreach (var t in text)
                     {
                         num += t.Length;
@@ -228,7 +229,7 @@ namespace Snblog.Service.Service
 
                     break;
                 case "give":
-                    var give = await _service.SnOne.Select(c => c.OneGive).ToListAsync();
+                    var give = await _service.SnOnes.Select(c => c.Give).ToListAsync();
                     foreach (var i in give)
                     {
                             var item = i;
@@ -245,17 +246,17 @@ namespace Snblog.Service.Service
         {
             _logger.LogInformation("新部分列_snOne" + snOne + type);
 
-            var resulet = await _service.SnOne.FindAsync(snOne.OneId);
+            var resulet = await _service.SnOnes.FindAsync(snOne.Id);
             if (resulet == null) return false;
             switch (type)
             {    //指定字段进行更新操作
                 case "give":
                     //date.Property("OneGive").IsModified = true;
-                    resulet.OneGive = snOne.OneGive;
+                    resulet.Give = snOne.Give;
                     break;
                 case "read":
                     //date.Property("OneRead").IsModified = true;
-                    resulet.OneRead = snOne.OneRead;
+                    resulet.Read = snOne.Read;
                     break;
             }
             return await _service.SaveChangesAsync() > 0;

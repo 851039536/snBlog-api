@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Snblog.Models;
+using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.Text;

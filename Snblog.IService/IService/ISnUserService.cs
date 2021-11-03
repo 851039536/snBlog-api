@@ -1,4 +1,5 @@
-﻿using Snblog.Models;
+﻿using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

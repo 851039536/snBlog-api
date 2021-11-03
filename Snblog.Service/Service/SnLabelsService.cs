@@ -4,21 +4,21 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
 using Snblog.IService.IService;
-using Snblog.Models;
 using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {
     public class SnLabelsService : ISnLabelsService
     {
-        private readonly SnblogContext _service;//DB
+        private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheUtil;
         private int result_Int;
-        private List<SnLabels> result_List = null;
+        private List<SnLabel> result_List = null;
         private readonly ILogger<SnLabelsService> _logger;
 
-        public SnLabelsService(ICacheUtil cacheUtil, SnblogContext coreDbContext, ILogger<SnLabelsService> logger)
+        public SnLabelsService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnLabelsService> logger)
         {
             _service = coreDbContext;
             _cacheUtil = (CacheUtil)cacheUtil;
@@ -39,11 +39,11 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<SnLabels> GetByIdAsync(int id,bool cache)
+        public async Task<SnLabel> GetByIdAsync(int id,bool cache)
         {
 
             _logger.LogInformation("主键查询_SnLabels" + id+cache);
-            SnLabels labels = null;
+            SnLabel labels = null;
             labels = _cacheUtil.CacheString("GetByIdAsync_SnLabels" + id+cache, labels,cache);
             if (labels == null)
             {
@@ -58,7 +58,7 @@ namespace Snblog.Service.Service
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<bool> AddAsync(SnLabels entity)
+        public async Task<bool> AddAsync(SnLabel entity)
         {
             _logger.LogInformation("添加数据_SnLabels" + entity);
             await _service.SnLabels.AddAsync(entity);
@@ -70,7 +70,7 @@ namespace Snblog.Service.Service
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateAsync(SnLabels entity)
+        public async Task<bool> UpdateAsync(SnLabel entity)
         {
             _logger.LogInformation("更新数据_SnLabels" + entity);
             _service.SnLabels.Update(entity);
@@ -82,7 +82,7 @@ namespace Snblog.Service.Service
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-        public async Task<List<SnLabels>> GetAllAsync(bool cache)
+        public async Task<List<SnLabel>> GetAllAsync(bool cache)
         {
 
             _logger.LogInformation("查询所有_SnLabels" + cache);
@@ -107,7 +107,7 @@ namespace Snblog.Service.Service
             return result_Int;
         }
 
-        public async Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
+        public async Task<List<SnLabel>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
             _logger.LogInformation("条件分页查询_SnLabels" + pageIndex+pageSize+isDesc+cache);
 
@@ -124,12 +124,12 @@ namespace Snblog.Service.Service
         {
             if (isDesc)
             {
-                result_List = await _service.SnLabels.OrderByDescending(c => c.LabelId).Skip((pageIndex - 1) * pageSize)
+                result_List = await _service.SnLabels.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                        .Take(pageSize).ToListAsync();
             }
             else
             {
-                result_List = await _service.SnLabels.OrderBy(c => c.LabelId).Skip((pageIndex - 1) * pageSize)
+                result_List = await _service.SnLabels.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                          .Take(pageSize).ToListAsync();
             }
         }

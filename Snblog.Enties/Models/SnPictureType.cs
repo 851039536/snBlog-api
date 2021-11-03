@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnPictureType
     {
+        public SnPictureType()
+        {
+            SnPictures = new HashSet<SnPicture>();
+        }
+
         public int Id { get; set; }
-        public int? PictureTypeId { get; set; }
-        public string PictureTypeName { get; set; }
+        public string Name { get; set; }
+
+        public virtual ICollection<SnPicture> SnPictures { get; set; }
     }
 }

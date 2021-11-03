@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Snblog.IService.IService;
 using System.Threading.Tasks;
 using System;
-using Snblog.Models;
 using Blog.Core;
+using Snblog.Enties.Models;
 
 namespace Snblog.Controllers
 {

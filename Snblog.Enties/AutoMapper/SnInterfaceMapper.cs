@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
+using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 namespace Snblog.Enties.AutoMapper
 {
     public class SnInterfaceMapper : Profile

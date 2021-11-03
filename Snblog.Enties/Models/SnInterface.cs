@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
+#nullable disable
 
-namespace Snblog.Models
+namespace Snblog.Enties.Models
 {
     public partial class SnInterface
     {
@@ -16,7 +14,7 @@ namespace Snblog.Models
         public int? UserId { get; set; }
         public bool Identity { get; set; }
 
-        //public virtual SnInterfaceType Type { get; set; }
-        //public virtual SnUser User { get; set; }
+        public virtual SnInterfaceType Type { get; set; }
+        public virtual SnUser User { get; set; }
     }
 }

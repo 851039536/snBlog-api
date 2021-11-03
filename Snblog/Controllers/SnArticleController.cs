@@ -1,8 +1,8 @@
 ﻿using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Snblog.Enties.Models;
 using Snblog.IService.IService;
-using Snblog.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -31,43 +31,19 @@ namespace Snblog.Controllers
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         #endregion
-        #region 查询总数GetCountAsync
         /// <summary>
         /// 查询总数 
         /// </summary>
-        /// <param name="cache">是否开启缓存</param>
+        /// <param name="identity">所有:0 || 分类:1 || 标签:2 || 用户3  </param>
+        /// <param name="type">条件(identity为0则填0) </param>
+        /// <param name="cache"></param>
         /// <returns></returns>
         [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(bool cache)
+        public async Task<IActionResult> GetCountAsync(int identity=0, int type =0,bool cache=false)
         {
-            return Ok(await _service.CountAsync(cache));
-        }
-        #endregion
-        #region 条件查询总数GetTypeCountAsync
-        /// <summary>
-        /// 条件查询总数
-        /// </summary>
-        /// <param name="type">分类id</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetTypeCountAsync")]
-        public IActionResult GetTypeCountAsync(int type, bool cache)
-        {
-            return Ok(_service.GetTypeCountAsync(type, cache));
+            return Ok(await _service.GetCountAsync(identity,type,cache));
         }
 
-        /// <summary>
-        /// 查询分类总数 
-        /// </summary>
-        /// <param name="type">分类id</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetConutSortAsync")]
-        public async Task<IActionResult> GetConutSortAsync(int type, bool cache)
-        {
-            return Ok(await _service.GetConutSortAsync(type, cache));
-        }
-        #endregion
         #region 查询所有GetAllAsync
         /// <summary>
         /// 查询所有 
@@ -81,29 +57,16 @@ namespace Snblog.Controllers
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
-        #region 模糊查询 GetContainsAsync
+        #region 模糊查询 Contains
         /// <summary>
         /// 模糊查询
         /// </summary>
+        /// <param name="type">无条件:0 || 分类:1 || 标签:2</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetContainsAsync")]
-        public async Task<IActionResult> GetContainsAsync(string name, bool cache)
-        {
-            return Ok(await _service.GetContainsAsync(name, cache));
-        }
-        #endregion
-        #region 条件模糊查询 Contains
-        /// <summary>
-        /// 条件模糊查询
-        /// </summary>
-        /// <param name="type">标签</param>
-        /// <param name="name">查询字段</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetTypeContainsAsync")]
-        public async Task<IActionResult> GetTypeContainsAsync(int type, string name, bool cache)
+        public async Task<IActionResult> GetContainsAsync(int type, string name, bool cache)
         {
             return Ok(await _service.GetTypeContainsAsync(type,name, cache));
         }
@@ -121,16 +84,17 @@ namespace Snblog.Controllers
             return Ok(await _service.GetByIdAsync(id, cache));
         }
         #endregion
-        #region  分类ID查询 GetTypeIdAsync
+        #region  条件查询 GetTypeAsync
         /// <summary>
-        ///分类条件查询 
+        ///条件查询 
         /// </summary>
-        /// <param name="sortId">分类id</param>
+        /// <param name="identity">分类:1 || 标签:2</param>
+        /// <param name="type">类别</param>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetTypeIdAsync")]
-        public async Task<IActionResult> GetTypeIdAsync(int sortId, bool cache)
+        [HttpGet("GetTypeAsync")]
+        public async Task<IActionResult> GetTypeAsync(int identity, int type, bool cache)
         {
-            return Ok(await _service.GetTypeIdAsync(sortId, cache));
+            return Ok(await _service.GetTypeAsync(identity,type, cache));
         }
         #endregion
         #region 读取[字段/阅读/点赞]总数量GetSumAsync
@@ -146,81 +110,22 @@ namespace Snblog.Controllers
         }
 
         #endregion
-        #region 查询文章(无文章内容)GetFyTitleAsync
+        #region 分页查询GetFyAsync
         /// <summary>
-        /// 查询文章(无文章内容)
+        /// 分页查询
         /// </summary>
-        /// <param name="pageIndex">当前页码[1]</param>
-        /// <param name="pageSize">每页记录条数[10]</param>
-        /// <param name="isDesc">是否倒序[true/false]</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-      // [Authorize(Roles = Permissions.Name)]
-        [HttpGet("GetFyTitleAsync")]
-        public async Task<IActionResult> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
-        {
-            return Ok(await _service.GetFyTitleAsync(pageIndex, pageSize, isDesc, cache));
-        }
-        #endregion
-        #region  按标签分页查询  GetfyTestAsync
-        /// <summary>
-        /// 按标签分页查询 
-        /// </summary>
-        /// <param name="type">分类 : 00-表示查询所有</param>
+        /// <param name="identity">所有:0 || 分类:1 || 标签:2</param>
+        /// <param name="type">类别参数, identity 0 可不填</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序</param>
-        /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetfyTestAsync")]
-        public async Task<IActionResult> GetfyTestAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
-        {
-            return Ok(await _service.GetfyTestAsync(type, pageIndex, pageSize, isDesc, cache));
-        }
-        #endregion
-        #region   按分类分页查询GetfySortTestAsync
-        /// <summary>
-        /// 按分类分页查询
-        /// </summary>
-        /// <param name="type">分类 : 00-表示查询所有</param>
-        /// <param name="pageIndex">当前页码</param>
-        /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序</param>
-        /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetfySortTestAsync")]
-        public async Task<IActionResult> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
-        {
-            return Ok(await _service.GetfySortTestAsync(type, pageIndex, pageSize, isDesc, cache));
-        }
-        #endregion
-        #region 分页查询(条件排序)GetFyAsync
-        /// <summary>
-        /// 分页查询(条件排序)
-        /// </summary>
-        /// <param name="type">查询条件[00查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
-        /// <param name="pageIndex">当前页码[1]</param>
-        /// <param name="pageSize">每页记录条数[10]</param>
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
-        /// <param name="name">排序条件[data:时间,read:阅读,give:点赞,comment:评论]默认按id排序</param>
+        /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
         /// <returns></returns>
         [HttpGet("GetFyAsync")]
-        public async Task<IActionResult> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc, bool cache)
+        public async Task<IActionResult> GetFyAsync(int  identity, int type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
-            return Ok(await _service.GetFyAsync(type, pageIndex, pageSize, name, isDesc, cache));
-        }
-        #endregion
-        #region 按标签条件查询GetTagAsync
-        /// <summary>
-        /// 按标签条件查询
-        /// </summary>
-        /// <param name="labelId">标签id</param>
-        /// <param name="isDesc"></param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetTagAsync")]
-        public async Task<IActionResult> GetTagAsync(int labelId, bool isDesc, bool cache)
-        {
-            return Ok(await _service.GetTagAsync(labelId, isDesc, cache));
+            return Ok(await _service.GetFyAsync(identity,type, pageIndex, pageSize, ordering, isDesc, cache));
         }
         #endregion
         #region 添加数据AddAsync

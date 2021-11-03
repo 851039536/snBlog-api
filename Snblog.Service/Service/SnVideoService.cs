@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
 using Snblog.IRepository;
 using Snblog.IService;
-using Snblog.Models;
 using Snblog.Repository.Repository;
 using System;
 using System.Collections.Generic;
@@ -14,12 +14,12 @@ namespace Snblog.Service
 {
     public class SnVideoService : ISnVideoService
     {
-        private readonly SnblogContext _service;
+        private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnVideoService> _logger;
         private int result_Int;
         private List<SnVideo> result_List = default;
-        public SnVideoService(ILogger<SnVideoService> logger, SnblogContext service, ICacheUtil cacheutil)
+        public SnVideoService(ILogger<SnVideoService> logger, snblogContext service, ICacheUtil cacheutil)
         {
             _logger = logger;
             _service = service;
@@ -35,7 +35,7 @@ namespace Snblog.Service
             result = _cacheutil.CacheString("GetByIdAsync_SnVideo" + id + cache, result, cache);
             if (result == null)
             {
-                result = await _service.SnVideo.FindAsync(id);
+                result = await _service.SnVideos.FindAsync(id);
                 _cacheutil.CacheString("GetByIdAsync_SnVideo" + id + cache, result, cache);
             }
             return result;
@@ -60,7 +60,7 @@ namespace Snblog.Service
             result_List = _cacheutil.CacheString1("GetAllAsync_SnVideo", result_List);
             if (result_List == null)
             {
-                result_List = await _service.SnVideo.ToListAsync();
+                result_List = await _service.SnVideos.ToListAsync();
                 _cacheutil.CacheString("GetAllAsync_SnVideo", result_List, cache);
             }
             return result_List;
@@ -84,12 +84,12 @@ namespace Snblog.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnVideo.OrderByDescending(c => c.VId).Skip((pageIndex - 1) * pageSize)
+                    result_List = await _service.SnVideos.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnVideo.OrderBy(c => c.VId).Skip((pageIndex - 1) * pageSize)
+                    result_List = await _service.SnVideos.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize).ToListAsync();
                 }
             }
@@ -97,12 +97,12 @@ namespace Snblog.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnVideo.Where(s => s.VTypeid == type).OrderByDescending(c => c.VId).Skip((pageIndex - 1) * pageSize)
+                    result_List = await _service.SnVideos.Where(s => s.TypeId == type).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnVideo.Where(s => s.VTypeid == type).OrderBy(c => c.VId).Skip((pageIndex - 1) * pageSize)
+                    result_List = await _service.SnVideos.Where(s => s.TypeId == type).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).ToListAsync();
                 }
             }
@@ -115,7 +115,7 @@ namespace Snblog.Service
             result_Int = _cacheutil.CacheNumber("Count_SnVideo", result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnVideo.CountAsync();
+                result_Int = await _service.SnVideos.CountAsync();
                 _cacheutil.CacheNumber("Count_SnVideo", result_Int, cache);
             }
             return result_Int;
@@ -128,7 +128,7 @@ namespace Snblog.Service
             result_Int = _cacheutil.CacheNumber("GetTypeCount_SnVideo" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnVideo.CountAsync(c => c.VTypeid == type);
+                result_Int = await _service.SnVideos.CountAsync(c => c.TypeId == type);
                 _cacheutil.CacheNumber("GetTypeCount_SnVideo" + type + cache, result_Int, cache);
             }
             return result_Int;
@@ -140,7 +140,7 @@ namespace Snblog.Service
             result_List = _cacheutil.CacheString("GetTypeAllAsync_SnVideo" + type + cache, result_List, cache);
             if (result_List == null)
             {
-                result_List = await _service.SnVideo.Where(s => s.VTypeid == type).ToListAsync();
+                result_List = await _service.SnVideos.Where(s => s.TypeId == type).ToListAsync();
                 _cacheutil.CacheString("GetTypeAllAsync_SnVideo" + type + cache, result_List, cache);
             }
             return result_List;
@@ -149,23 +149,23 @@ namespace Snblog.Service
         public async Task<bool> AddAsync(SnVideo entity)
         {
             _logger.LogInformation("添加数据_SnVideo :" + entity);
-            await _service.SnVideo.AddAsync(entity);
+            await _service.SnVideos.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateAsync(SnVideo entity)
         {
             _logger.LogInformation("删除数据_SnVideo :" + entity);
-            _service.SnVideo.Update(entity);
+            _service.SnVideos.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("删除数据_SnVideo:" + id);
-            var todoItem = await _service.SnVideo.FindAsync(id);
+            var todoItem = await _service.SnVideos.FindAsync(id);
             if (todoItem == null) return false;
-            _service.SnVideo.Remove(todoItem);
+            _service.SnVideos.Remove(todoItem);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -188,7 +188,7 @@ namespace Snblog.Service
         private async Task<int> GetSum()
         {
             int num = 0;
-            var text = await _service.SnVideo.Select(c => c.VTitle).ToListAsync();
+            var text = await _service.SnVideos.Select(c => c.Title).ToListAsync();
             for (int i = 0; i < text.Count; i++)
             {
                 num += text[i].Length;

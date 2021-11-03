@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnVideo
     {
-        public int VId { get; set; }
-        public string VTitle { get; set; }
-        public string VData { get; set; }
-        public string VImg { get; set; }
-        public int VTypeid { get; set; }
-        public string VUrl { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Img { get; set; }
+        public string Url { get; set; }
+        public int TypeId { get; set; }
+        public DateTime TimeCreate { get; set; }
+        public DateTime? TimeModified { get; set; }
 
-        //public virtual SnVideoType VType { get; set; }
+        public virtual SnVideoType Type { get; set; }
     }
 }

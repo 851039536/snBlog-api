@@ -1,8 +1,8 @@
 ﻿using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Snblog.Enties.Models;
 using Snblog.IService;
-using Snblog.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

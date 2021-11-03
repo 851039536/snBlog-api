@@ -5,17 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Snblog.Cache.CacheUtil;
 using Snblog.Repository.Repository;
-using Snblog.Models;
+using Snblog.Enties.Models;
 
 namespace Snblog.Service.Service
 {
     public class SnleaveService : ISnleaveService
     {
-        private readonly SnblogContext _service;//DB
+        private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnLeave> result_List = null;
-        public SnleaveService(SnblogContext service, ICacheUtil cacheutil)
+        public SnleaveService(snblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -23,7 +23,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> AddAsync(SnLeave entity)
         {
-            await _service.SnLeave.AddAsync(entity);
+            await _service.SnLeaves.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -32,7 +32,7 @@ namespace Snblog.Service.Service
             result_Int = _cacheutil.CacheNumber1("CountAsyncSnLeave", result_Int);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnLeave.CountAsync();
+                result_Int = await _service.SnLeaves.CountAsync();
                 _cacheutil.CacheNumber1("CountAsyncSnLeave", result_Int);
             }
             return result_Int;
@@ -40,8 +40,8 @@ namespace Snblog.Service.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var todoItem = await _service.SnLeave.FindAsync(id);
-            _service.SnLeave.Remove(todoItem);
+            var todoItem = await _service.SnLeaves.FindAsync(id);
+            _service.SnLeaves.Remove(todoItem);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -50,7 +50,7 @@ namespace Snblog.Service.Service
             result_List = _cacheutil.CacheString1("GetAllAsyncSnLeave", result_List);
             if (result_List == null)
             {
-                result_List = await _service.SnLeave.ToListAsync();
+                result_List = await _service.SnLeaves.ToListAsync();
                 _cacheutil.CacheString1("GetAllAsyncSnLeave", result_List);
             }
             return result_List;
@@ -62,7 +62,7 @@ namespace Snblog.Service.Service
             result = _cacheutil.CacheString1("GetByIdAsyncSnLeave", result);
             if (result == null)
             {
-                result = await _service.SnLeave.FindAsync(id);
+                result = await _service.SnLeaves.FindAsync(id);
                 _cacheutil.CacheString1("GetByIdAsyncSnLeave", result);
             }
             return result;
@@ -83,17 +83,17 @@ namespace Snblog.Service.Service
         {
             if (isDesc)
             {
-                return await _service.SnLeave.Where(s => true).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                return await _service.SnLeaves.Where(s => true).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
             else
             {
-                return await _service.SnLeave.Where(s => true).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                return await _service.SnLeaves.Where(s => true).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
         }
 
         public async Task<bool> UpdateAsync(SnLeave entity)
         {
-            _service.SnLeave.Update(entity);
+            _service.SnLeaves.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
     }

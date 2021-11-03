@@ -11,9 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using Snblog.IService;
 using Snblog.Jwt;
-using Snblog.Models;
+using Snblog.Repository.Repository;
 
 
 //默认的约定集将应用于程序集中的所有操作：
@@ -29,7 +31,7 @@ namespace Snblog.Controllers
     //[Authorize]
     public class SnUserController : Controller
     {
-        private readonly SnblogContext _coreDbContext;
+        private readonly snblogContext _coreDbContext;
         private readonly ISnUserService _service; //IOC依赖注入
         private readonly DbSet<SnUser> user;
         private readonly JwtConfig jwtModel = null;
@@ -41,11 +43,11 @@ namespace Snblog.Controllers
         /// <param name="service"></param>
         /// <param name="coreDbContext"></param>
         /// <param name="_jwtModel"></param>
-        public SnUserController(ISnUserService service, SnblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
+        public SnUserController(ISnUserService service, snblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;
-            user = coreDbContext.SnUser;
+            user = coreDbContext.SnUsers;
             jwtModel = _jwtModel.Value;
         }
 

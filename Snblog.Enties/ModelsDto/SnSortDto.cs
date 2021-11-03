@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Snblog.Enties.Models;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
 
-namespace Snblog.Enties.Models
+namespace Snblog.Enties.ModelsDto
 {
-    public partial class SnSort
+    public partial class SnSortDto
     {
-        public SnSort()
+        public SnSortDto()
         {
             SnArticles = new HashSet<SnArticle>();
         }

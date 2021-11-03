@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Snblog.Enties.Models;
 using Snblog.IService.IReService;
-using Snblog.Models;
 
 namespace Snblog.ControllersRepository
 {
@@ -79,7 +79,7 @@ namespace Snblog.ControllersRepository
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<ActionResult<SnLabels>> AddAsync(SnLabels entity)
+        public async Task<ActionResult<SnLabel>> AddAsync(SnLabel entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
@@ -92,7 +92,7 @@ namespace Snblog.ControllersRepository
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = "kai")] //角色授权
-        public async Task<IActionResult> UpdateAsync(SnLabels entity)
+        public async Task<IActionResult> UpdateAsync(SnLabel entity)
         {
             var data = await _service.UpdateAsync(entity);
             return Ok(data);

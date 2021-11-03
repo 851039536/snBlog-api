@@ -5,16 +5,16 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
-using Snblog.IRepository;
+using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using Snblog.IService.IService;
-using Snblog.Models;
 using Snblog.Repository.Repository;
 
 namespace Snblog.Service.Service
 {
     public class SnNavigationService : ISnNavigationService
     {
-        private readonly SnblogContext _service;//DB
+        private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnNavigation> result_List = null;
@@ -22,7 +22,7 @@ namespace Snblog.Service.Service
         private List<SnNavigationDto> result_ListDto = default;
         private readonly ILogger<SnNavigationService> _logger;
         private readonly IMapper _mapper;
-        public SnNavigationService(SnblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger, IMapper mapper)
+        public SnNavigationService(snblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger, IMapper mapper)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
@@ -50,22 +50,22 @@ namespace Snblog.Service.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnNavigation.OrderByDescending(c => c.NavId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnNavigations.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnNavigation.OrderBy(c => c.NavId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnNavigations.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
             }
             else
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnNavigation.Where(c => c.NavType == type).OrderByDescending(c => c.NavId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnNavigations.Where(c => c.Type.Name == type).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnNavigation.Where(c => c.NavType == type).OrderBy(c => c.NavId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnNavigations.Where(c => c.Type.Name == type).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
             }
         }
@@ -78,9 +78,9 @@ namespace Snblog.Service.Service
         public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("SnNavigation删除数据=>" + id);
-            var todoItem = await _service.SnNavigation.FindAsync(id);
+            var todoItem = await _service.SnNavigations.FindAsync(id);
             if (todoItem == null) return false;
-            _service.SnNavigation.Remove(todoItem);
+            _service.SnNavigations.Remove(todoItem);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -92,11 +92,11 @@ namespace Snblog.Service.Service
             {
                 if (order)
                 {
-                    result_List = await _service.SnNavigation.Where(c => c.NavType == type).OrderByDescending(c => c.NavId).ToListAsync();
+                    result_List = await _service.SnNavigations.Where(c => c.Type.Name == type).OrderByDescending(c => c.Id).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnNavigation.Where(c => c.NavType == type).OrderBy(c => c.NavId).ToListAsync();
+                    result_List = await _service.SnNavigations.Where(c => c.Type.Name == type).OrderBy(c => c.Id).ToListAsync();
                 }
                 _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + order + cache, result_List, cache);
             }
@@ -111,14 +111,14 @@ namespace Snblog.Service.Service
         public async Task<bool> AddAsync(SnNavigation entity)
         {
             _logger.LogInformation("SnNavigation添加数据=>" + entity);
-            await _service.SnNavigation.AddAsync(entity);
+            await _service.SnNavigations.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateAsync(SnNavigation entity)
         {
             _logger.LogInformation("SnNavigation修改数据=>" + entity);
-            _service.SnNavigation.Update(entity);
+            _service.SnNavigations.Update(entity);
             return await _service.SaveChangesAsync() > 0;
 
         }
@@ -129,7 +129,7 @@ namespace Snblog.Service.Service
             result_Int = _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + cache, result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnNavigation.CountAsync();
+                result_Int = await _service.SnNavigations.CountAsync();
                 _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + cache, result_Int, cache);
             }
             return result_Int;
@@ -141,7 +141,7 @@ namespace Snblog.Service.Service
             result_Int = _cacheutil.CacheNumber("CountTypeAsync_SnNavigation" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnNavigation.CountAsync(c => c.NavType == type);
+                result_Int = await _service.SnNavigations.CountAsync(c => c.Type.Name == type);
                 _cacheutil.CacheNumber("CountTypeAsync_SnNavigation" + type + cache, result_Int, cache);
             }
             return result_Int;
@@ -152,7 +152,7 @@ namespace Snblog.Service.Service
             result_List = _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, result_List, cache);
             if (result_List == null)
             {
-                result_List = await _service.SnNavigation.ToListAsync();
+                result_List = await _service.SnNavigations.ToListAsync();
                 _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, result_List, cache);
             }
             return result_List;
@@ -163,7 +163,7 @@ namespace Snblog.Service.Service
             result_List = _cacheutil.CacheString1("GetDistinct" + type, result_List);
             if (result_List == null)
             {
-                result_List = await _service.SnNavigation.Distinct().Where(c => c.NavType == type).ToListAsync();
+                result_List = await _service.SnNavigations.Distinct().Where(c => c.Type.Name == type).ToListAsync();
                 _cacheutil.CacheString1("GetDistinct" + type, result_List);
             }
             return result_List;
@@ -176,7 +176,7 @@ namespace Snblog.Service.Service
             result_Model = _cacheutil.CacheString("GetByIdAsync_SnNavigation" + id + cache, result_Model, cache);
             if (result_Model == null)
             {
-                result_Model = await _service.SnNavigation.FindAsync(id);
+                result_Model = await _service.SnNavigations.FindAsync(id);
                 _cacheutil.CacheString("GetByIdAsync_SnNavigation" + id + cache, result_Model, cache);
             }
 
@@ -190,8 +190,8 @@ namespace Snblog.Service.Service
             if (result_ListDto == null)
             {
                 result_ListDto = _mapper.Map<List<SnNavigationDto>>(
-                    result_List = await _service.SnNavigation
-                   .Where(l => l.NavTitle.Contains(name))//查询条件
+                    result_List = await _service.SnNavigations
+                   .Where(l => l.Title.Contains(name))//查询条件
                    .AsNoTracking().ToListAsync());
 
                 _cacheutil.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, result_ListDto, cache);
@@ -206,8 +206,8 @@ namespace Snblog.Service.Service
             if (result_ListDto == null)
             {
                 result_ListDto = _mapper.Map<List<SnNavigationDto>>(
-                    result_List = await _service.SnNavigation
-                   .Where(l => l.NavTitle.Contains(name) && l.NavType == type)
+                    result_List = await _service.SnNavigations
+                   .Where(l => l.Title.Contains(name) && l.Type.Name == type)
                    .AsNoTracking().ToListAsync());
                 _cacheutil.CacheString("GetTypeContainsAsync_SnNavigationDto" + type + name + cache, result_ListDto, cache);
             }

@@ -3,9 +3,11 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using Snblog.IRepository;
 using Snblog.IService;
-using Snblog.Models;
+using Snblog.Repository.Repository;
 using Snblog.Service.Service;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +18,14 @@ namespace Snblog.Service
     public class SnUserService : BaseService, ISnUserService
     {
         private readonly CacheUtil _cacheutil;
-        private readonly SnblogContext _service;
+        private readonly snblogContext _service;
         private readonly ILogger<SnUserService> _logger;
         private int result_Int;
         private SnUserDto resultDto = default;
         private List<SnUserDto> result_ListDto = default;
         // 创建一个字段来存储mapper对象
         private readonly IMapper _mapper;
-        public SnUserService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, SnblogContext service, IMapper mapper, ILogger<SnUserService> logger, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
+        public SnUserService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, snblogContext service, IMapper mapper, ILogger<SnUserService> logger, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
         {
             _service = service;
             _mapper = mapper;
@@ -44,7 +46,7 @@ namespace Snblog.Service
             result_ListDto = _cacheutil.CacheString("GetAllAsync_SnUserDto" + cache, result_ListDto, cache);
             if (result_ListDto == null)
             {
-                result_ListDto = _mapper.Map<List<SnUserDto>>(await _service.SnUser.ToListAsync());
+                result_ListDto = _mapper.Map<List<SnUserDto>>(await _service.SnUsers.ToListAsync());
                 _cacheutil.CacheString("GetAllAsync_SnUserDto" + cache, result_ListDto, cache);
             }
             return result_ListDto;
@@ -58,7 +60,7 @@ namespace Snblog.Service
             resultDto = _cacheutil.CacheString("GetByIdAsync_SnUserDto" + id + cache, resultDto, cache);
             if (resultDto == null)
             {
-                resultDto = _mapper.Map<SnUserDto>(await _service.SnUser.FindAsync(id));
+                resultDto = _mapper.Map<SnUserDto>(await _service.SnUsers.FindAsync(id));
                 _cacheutil.CacheString("GetByIdAsync_SnUserDto" + id + cache, resultDto, cache);
             }
             return resultDto;
@@ -66,7 +68,7 @@ namespace Snblog.Service
 
         public async Task<bool> AsyInsUser(SnUser test)
         {
-            await _service.SnUser.AddAsync(test);
+            await _service.SnUsers.AddAsync(test);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -90,7 +92,7 @@ namespace Snblog.Service
         /// <param name="isDesc">是否倒序</param>
         public List<SnUser> GetPagingUser(int label, int pageIndex, int pageSize, out int count, bool isDesc)
         {
-            var data = CreateService<SnUser>().Wherepage(s => true, c => c.UserId, pageIndex, pageSize, out count, isDesc);
+            var data = CreateService<SnUser>().Wherepage(s => true, c => c.Id, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
         }
 
@@ -100,7 +102,7 @@ namespace Snblog.Service
             result_Int = _cacheutil.CacheString("GetCountAsync_SnUserDto" + cache, result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnUser.CountAsync();
+                result_Int = await _service.SnUsers.CountAsync();
                 _cacheutil.CacheString("GetCountAsync_SnUserDto" + cache, result_Int, cache);
             }
             return result_Int;

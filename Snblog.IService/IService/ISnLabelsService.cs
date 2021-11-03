@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Snblog.Models;
+using Snblog.Enties.Models;
 
 namespace Snblog.IService.IService
 {
@@ -11,7 +11,7 @@ namespace Snblog.IService.IService
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnLabels>> GetAllAsync(bool cache);
+        Task<List<SnLabel>> GetAllAsync(bool cache);
 
         /// <summary>
         /// 主键查询
@@ -19,7 +19,7 @@ namespace Snblog.IService.IService
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnLabels> GetByIdAsync(int id,bool cache);
+        Task<SnLabel> GetByIdAsync(int id,bool cache);
 
         /// <summary>
         /// 条件分页查询 - 支持排序
@@ -28,7 +28,7 @@ namespace Snblog.IService.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         ///   /// <param name="cache">是否开启缓存</param>
-        Task<List<SnLabels>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc,bool cache);
+        Task<List<SnLabel>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc,bool cache);
         /// <summary>
         ///  查询总数
         /// </summary>
@@ -40,14 +40,14 @@ namespace Snblog.IService.IService
         /// 添加数据
         /// </summary>
         /// <returns></returns>
-        Task<bool> AddAsync(SnLabels entity);
+        Task<bool> AddAsync(SnLabel entity);
 
         /// <summary>
         /// 更新数据
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnLabels entity);
+        Task<bool> UpdateAsync(SnLabel entity);
 
         /// <summary>
         /// 异步按id删除

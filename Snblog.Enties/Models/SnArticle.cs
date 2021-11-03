@@ -1,33 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnArticle
     {
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public int ArticleId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
-        public string TitleText { get; set; }
+        public string Sketch { get; set; }
         public string Text { get; set; }
-        public string Html { get; set; }
-        public DateTime TimeCreate { get; set; }
-        public DateTime? TimeModified { get; set; }
         public short Read { get; set; }
         public short Give { get; set; }
-        public short Comment { get; set; }
-        public string TypeTitle { get; set; }
-        public string UrlImg { get; set; }
+        public string Img { get; set; }
+        public short CommentId { get; set; }
         public int LabelId { get; set; }
         public int SortId { get; set; }
         public int UserId { get; set; }
+        public DateTime TimeCreate { get; set; }
+        public DateTime TimeModified { get; set; }
 
-        //public virtual SnLabels Label { get; set; }
-        //public virtual SnSort Sort { get; set; }
-        //public virtual SnUser User { get; set; }
+        public virtual SnLabel Label { get; set; }
+        public virtual SnSort Sort { get; set; }
+        public virtual SnUser User { get; set; }
     }
 }

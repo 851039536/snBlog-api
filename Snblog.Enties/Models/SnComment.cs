@@ -5,14 +5,13 @@ using System.Collections.Generic;
 
 namespace Snblog.Enties.Models
 {
-    public partial class SnLeave
+    public partial class SnComment
     {
         public int Id { get; set; }
-        public string Text { get; set; }
         public int UserId { get; set; }
+        public int Give { get; set; }
+        public string Text { get; set; }
         public DateTime TimeCreate { get; set; }
         public DateTime TimeModified { get; set; }
-
-        public virtual SnUser User { get; set; }
     }
 }

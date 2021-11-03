@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Snblog.Enties.Models;
 using Snblog.IRepository;
 using Snblog.IService;
-using Snblog.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

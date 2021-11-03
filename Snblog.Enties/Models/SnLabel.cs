@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Snblog.Enties.Models
 {
-    public partial class SnSort
+    public partial class SnLabel
     {
-        public SnSort()
+        public SnLabel()
         {
             SnArticles = new HashSet<SnArticle>();
         }

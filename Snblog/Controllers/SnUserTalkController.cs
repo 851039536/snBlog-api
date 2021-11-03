@@ -3,9 +3,9 @@ using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Snblog.Enties.Models;
 using Snblog.IService;
 using Snblog.Jwt;
-using Snblog.Models;
 using Snblog.Repository.Repository;
 
 //默认的约定集将应用于程序集中的所有操作：
@@ -18,12 +18,12 @@ namespace Snblog.Controllers
     public class SnUserTalkController : Controller
     {
 
-        private readonly SnblogContext _coreDbContext;
+        private readonly snblogContext _coreDbContext;
         private readonly ISnUserTalkService _service; //IOC依赖注入
 
 
 
-        public SnUserTalkController(ISnUserTalkService service, SnblogContext coreDbContext)
+        public SnUserTalkController(ISnUserTalkService service, snblogContext coreDbContext)
         {
             _service = service;
             _coreDbContext = coreDbContext;

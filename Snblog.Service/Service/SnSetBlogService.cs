@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using Snblog.IService.IService;
-using Snblog.Models;
+using Snblog.Repository.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace Snblog.Service.Service
 {
     public class SnSetBlogService : ISnSetBlogService
     {
-        private readonly SnblogContext _service;
+        private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnSetBlogService> _logger;
         private int result_Int;
@@ -23,7 +25,7 @@ namespace Snblog.Service.Service
         private SnSetBlog result = default;
         private List<SnSetBlogDto> result_ListDto = default;
         private readonly IMapper _mapper;
-        public SnSetBlogService(ICacheUtil cacheUtil, SnblogContext coreDbContext, ILogger<SnSetBlogService> logger, IMapper mapper)
+        public SnSetBlogService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnSetBlogService> logger, IMapper mapper)
         {
             _service = coreDbContext;
             _cacheutil = (CacheUtil)cacheUtil;
@@ -72,12 +74,12 @@ namespace Snblog.Service.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnSetBlogs.Where(s => s.SetType == label).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                    result_List = await _service.SnSetBlogs.Where(s => s.Type == label).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnSetBlogs.Where(s => s.SetType == label).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                    result_List = await _service.SnSetBlogs.Where(s => s.Type == label).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).AsNoTracking().ToListAsync();
                 }
             }
@@ -115,7 +117,7 @@ namespace Snblog.Service.Service
             {    //指定字段进行更新操作
                 case "type":
                     //修改属性，被追踪的Read状态属性就会变为Modify
-                    resulet.SetIsopen = entity.SetIsopen;
+                    resulet.Isopen = entity.Isopen;
                     break;
             }
             ////执行数据库操作

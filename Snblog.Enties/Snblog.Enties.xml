@@ -29,15 +29,5 @@
             配置构造函数，用来创建关系映射
             </summary>
         </member>
-        <member name="P:Snblog.Models.SnArticleDto.ArticleId">
-            <summary>
-            主键
-            </summary>
-        </member>
-        <member name="P:Snblog.Models.SnArticle.ArticleId">
-            <summary>
-            主键
-            </summary>
-        </member>
     </members>
 </doc>

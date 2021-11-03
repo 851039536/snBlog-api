@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Snblog.Models;
+using Snblog.Enties.Models;
 
 namespace Snblog.IService.IService
 {

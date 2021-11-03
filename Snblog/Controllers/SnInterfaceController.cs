@@ -14,26 +14,26 @@ namespace Snblog.Controllers
     public class SnInterfaceController : ControllerBase
     {
         private readonly ISnInterfaceService _service; //IOC依赖注入
-        #region 构造函数
+        #region 构造函数 SnInterfaceController
         public SnInterfaceController(ISnInterfaceService service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         #endregion
 
-        
 
-        #region   分类查询
+        #region  条件查询 GetTypeAsync
         /// <summary>
-        /// 根据用户分类查询
+        ///条件查询 
         /// </summary>
-        /// <param name="userId">用户</param>
-        /// <param name="type">分类 </param>
-        /// <param name="cache">缓存</param>
+        /// <param name="identity">分类和用户:0 || 用户:1 || 分类:2</param>
+        /// <param name="users">条件:用户</param>
+        /// <param name="type">条件:类别</param>
+        /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetTypeAsync")]
-        public async Task<IActionResult> GetTypeAsync(int userId, int type,bool cache)
+        public async Task<IActionResult> GetTypeAsync(int identity, int users, int type, bool cache)
         {
-            return Ok(await _service.GetTypeAsync(userId,type,cache));
+            return Ok(await _service.GetTypeAsync(identity, users, type, cache));
         }
         #endregion
 

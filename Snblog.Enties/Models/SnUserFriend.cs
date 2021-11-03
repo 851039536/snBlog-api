@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
-    public partial class SnUserFriends
+    public partial class SnUserFriend
     {
         public int Id { get; set; }
         public int? UserId { get; set; }

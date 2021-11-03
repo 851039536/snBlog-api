@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnNavigation
     {
-        public int NavId { get; set; }
-        public string NavTitle { get; set; }
-        public string NavText { get; set; }
-        public string NavImg { get; set; }
-        public string NavType { get; set; }
-        public string NavUrl { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Describe { get; set; }
+        public string Img { get; set; }
+        public int TypeId { get; set; }
+        public string Url { get; set; }
+
+        public virtual SnInterfaceType Type { get; set; }
     }
 }
