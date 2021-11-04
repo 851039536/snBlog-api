@@ -31,7 +31,8 @@ namespace Snblog.Repository.Repository
         public virtual DbSet<SnOneType> SnOneTypes { get; set; }
         public virtual DbSet<SnPicture> SnPictures { get; set; }
         public virtual DbSet<SnPictureType> SnPictureTypes { get; set; }
-        public virtual DbSet<SnSetBlog> SnSetBlogs { get; set; }
+        public virtual DbSet<SnSetblog> SnSetblogs { get; set; }
+        public virtual DbSet<SnSetblogType> SnSetblogTypes { get; set; }
         public virtual DbSet<SnSoftware> SnSoftwares { get; set; }
         public virtual DbSet<SnSoftwareType> SnSoftwareTypes { get; set; }
         public virtual DbSet<SnSort> SnSorts { get; set; }
@@ -43,14 +44,7 @@ namespace Snblog.Repository.Repository
         public virtual DbSet<SnVideo> SnVideos { get; set; }
         public virtual DbSet<SnVideoType> SnVideoTypes { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", ServerVersion.Parse("8.0.16-mysql"));
-//            }
-//        }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -238,6 +232,7 @@ namespace Snblog.Repository.Repository
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.SnInterfaces)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("sn_interface_ibfk_2");
             });
 
@@ -264,6 +259,7 @@ namespace Snblog.Repository.Repository
                     .HasColumnName("id");
 
                 entity.Property(e => e.Description)
+                    .IsRequired()
                     .HasColumnType("text")
                     .HasColumnName("description")
                     .HasComment("标签描述");
@@ -319,6 +315,8 @@ namespace Snblog.Repository.Repository
 
                 entity.HasIndex(e => e.TypeId, "nav_type_id");
 
+                entity.HasIndex(e => e.UserId, "nav_user_id");
+
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id")
@@ -336,11 +334,19 @@ namespace Snblog.Repository.Repository
                     .HasColumnName("img")
                     .HasComment("图片路径");
 
+                entity.Property(e => e.TimeCreate)
+                    .HasColumnType("date")
+                    .HasColumnName("time_create");
+
+                entity.Property(e => e.TimeModified)
+                    .HasColumnType("date")
+                    .HasColumnName("time_modified");
+
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(60)
                     .HasColumnName("title")
-                    .HasComment("标题");
+                    .HasComment("导航标题");
 
                 entity.Property(e => e.TypeId)
                     .HasColumnType("int(11)")
@@ -353,11 +359,22 @@ namespace Snblog.Repository.Repository
                     .HasColumnName("url")
                     .HasComment("链接路径");
 
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("user_id")
+                    .HasComment("用户");
+
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.SnNavigations)
                     .HasForeignKey(d => d.TypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("nav_type_id");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnNavigations)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("nav_user_id");
             });
 
             modelBuilder.Entity<SnNavigationType>(entity =>
@@ -379,6 +396,8 @@ namespace Snblog.Repository.Repository
             modelBuilder.Entity<SnOne>(entity =>
             {
                 entity.ToTable("sn_one");
+
+                entity.HasIndex(e => e.UserId, "one_user_id");
 
                 entity.HasIndex(e => e.TypeId, "sn_one_type");
 
@@ -444,6 +463,12 @@ namespace Snblog.Repository.Repository
                     .HasForeignKey(d => d.TypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("one_type_id");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnOnes)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("one_user_id");
             });
 
             modelBuilder.Entity<SnOneType>(entity =>
@@ -464,31 +489,46 @@ namespace Snblog.Repository.Repository
             {
                 entity.ToTable("sn_picture");
 
+                entity.HasIndex(e => e.UserId, "pivture_user_id");
+
                 entity.HasIndex(e => e.TypeId, "prcture_type_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
 
-                entity.Property(e => e.Itle)
+                entity.Property(e => e.ImgUrl)
+                    .IsRequired()
                     .HasMaxLength(255)
-                    .HasColumnName("itle")
-                    .HasComment("标题");
+                    .HasColumnName("img_url")
+                    .HasComment("图片地址");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("name")
+                    .HasComment("图床名");
 
                 entity.Property(e => e.TypeId)
                     .HasColumnType("int(11)")
                     .HasColumnName("type_id")
                     .HasComment("分类");
 
-                entity.Property(e => e.Url)
-                    .HasMaxLength(255)
-                    .HasColumnName("url")
-                    .HasComment("图片地址");
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("user_id");
 
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.SnPictures)
                     .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("prcture_type_id");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnPictures)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("pivture_user_id");
             });
 
             modelBuilder.Entity<SnPictureType>(entity =>
@@ -500,14 +540,19 @@ namespace Snblog.Repository.Repository
                     .HasColumnName("id");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("name")
                     .HasComment("分类名称");
             });
 
-            modelBuilder.Entity<SnSetBlog>(entity =>
+            modelBuilder.Entity<SnSetblog>(entity =>
             {
-                entity.ToTable("sn_set_blog");
+                entity.ToTable("sn_setblog");
+
+                entity.HasIndex(e => e.TypeId, "setblog_type_id");
+
+                entity.HasIndex(e => e.UserId, "setblog_user_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
@@ -523,21 +568,47 @@ namespace Snblog.Repository.Repository
                     .HasColumnName("name")
                     .HasComment("设置的内容名称");
 
-                entity.Property(e => e.Type)
-                    .HasColumnType("tinyint(5)")
-                    .HasColumnName("type")
-                    .HasComment("分类");
-
-                entity.Property(e => e.Url)
+                entity.Property(e => e.RouterUrl)
                     .IsRequired()
                     .HasMaxLength(255)
-                    .HasColumnName("url")
-                    .HasComment("链接");
+                    .HasColumnName("router_url")
+                    .HasComment("路由链接");
+
+                entity.Property(e => e.TypeId)
+                    .HasColumnType("int(5)")
+                    .HasColumnName("type_id")
+                    .HasComment("分类");
 
                 entity.Property(e => e.UserId)
                     .HasColumnType("int(5)")
                     .HasColumnName("user_id")
                     .HasComment("关联用户表");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.SnSetblogs)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("setblog_type_id");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnSetblogs)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("setblog_user_id");
+            });
+
+            modelBuilder.Entity<SnSetblogType>(entity =>
+            {
+                entity.ToTable("sn_setblog_type");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<SnSoftware>(entity =>
@@ -636,6 +707,7 @@ namespace Snblog.Repository.Repository
                     .HasComment("评论");
 
                 entity.Property(e => e.Describe)
+                    .IsRequired()
                     .HasMaxLength(255)
                     .HasColumnName("describe")
                     .HasComment("简介");
@@ -685,6 +757,12 @@ namespace Snblog.Repository.Repository
                     .HasForeignKey(d => d.TypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("talk_type_id");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnTalks)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("lalk_user_id");
             });
 
             modelBuilder.Entity<SnTalkType>(entity =>
@@ -696,6 +774,7 @@ namespace Snblog.Repository.Repository
                     .HasColumnName("id");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("name");
             });
@@ -840,6 +919,8 @@ namespace Snblog.Repository.Repository
 
                 entity.HasIndex(e => e.TypeId, "video_type_id");
 
+                entity.HasIndex(e => e.UserId, "video_user_id");
+
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
@@ -876,11 +957,21 @@ namespace Snblog.Repository.Repository
                     .HasColumnName("url")
                     .HasComment("链接路径");
 
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("user_id");
+
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.SnVideos)
                     .HasForeignKey(d => d.TypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("video_type_id");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SnVideos)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("video_user_id");
             });
 
             modelBuilder.Entity<SnVideoType>(entity =>
@@ -892,6 +983,7 @@ namespace Snblog.Repository.Repository
                     .HasColumnName("id");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(20)
                     .HasColumnName("name");
             });

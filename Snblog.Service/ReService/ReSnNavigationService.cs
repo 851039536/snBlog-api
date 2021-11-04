@@ -72,7 +72,7 @@ namespace Snblog.Service.ReService
             result_Int = _cacheutil.CacheNumber1("ReCountTypeAsync", result_Int);
             if (result_Int == 0)
             {
-                result_Int = await CreateService<SnNavigation>().CountAsync(c => c.Type.Name == type);
+                result_Int = await CreateService<SnNavigation>().CountAsync(c => c.Type.Title == type);
                 _cacheutil.CacheNumber1("ReCountTypeAsync", result_Int);
             }
             return result_Int;
@@ -88,7 +88,7 @@ namespace Snblog.Service.ReService
             result_List = _cacheutil.CacheString1("ReGetDistinct" + type, result_List);
             if (result_List == null)
             {
-                result_List = await CreateService<SnNavigation>().Distinct(s => s.Type.Name == type).ToListAsync();
+                result_List = await CreateService<SnNavigation>().Distinct(s => s.Type.Title == type).ToListAsync();
                 _cacheutil.CacheString1("ReGetDistinct" + type, result_List);
             }
             return result_List;
@@ -106,7 +106,7 @@ namespace Snblog.Service.ReService
              result_List = _cacheutil.CacheString1("ReGetTypeOrderAsync" + type + order, result_List);
             if (result_List == null)
             {
-                result_List = await CreateService<SnNavigation>().Where(c => c.Type.Name == type, s => s.Id, order).ToListAsync();
+                result_List = await CreateService<SnNavigation>().Where(c => c.Type.Title == type, s => s.Id, order).ToListAsync();
                 _cacheutil.CacheString1("ReGetTypeOrderAsync" + type + order, result_List);
             }
             return result_List;
@@ -162,12 +162,12 @@ namespace Snblog.Service.ReService
         {
             if (type == "all")
             {
-                var data = await CreateService<SnNavigation>().WherepageAsync(s => s.Type.Name != null, c => c.Id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnNavigation>().WherepageAsync(s => s.Type.Title != null, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
             else
             {
-                var data = await CreateService<SnNavigation>().WherepageAsync(s => s.Type.Name == type, c => c.Id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnNavigation>().WherepageAsync(s => s.Type.Title == type, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
         }

@@ -61,11 +61,11 @@ namespace Snblog.Service.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnNavigations.Where(c => c.Type.Name == type).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnNavigations.Where(c => c.Type.Title == type).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnNavigations.Where(c => c.Type.Name == type).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                    result_List = await _service.SnNavigations.Where(c => c.Type.Title == type).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 }
             }
         }
@@ -92,11 +92,11 @@ namespace Snblog.Service.Service
             {
                 if (order)
                 {
-                    result_List = await _service.SnNavigations.Where(c => c.Type.Name == type).OrderByDescending(c => c.Id).ToListAsync();
+                    result_List = await _service.SnNavigations.Where(c => c.Type.Title == type).OrderByDescending(c => c.Id).ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnNavigations.Where(c => c.Type.Name == type).OrderBy(c => c.Id).ToListAsync();
+                    result_List = await _service.SnNavigations.Where(c => c.Type.Title == type).OrderBy(c => c.Id).ToListAsync();
                 }
                 _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + order + cache, result_List, cache);
             }
@@ -141,7 +141,7 @@ namespace Snblog.Service.Service
             result_Int = _cacheutil.CacheNumber("CountTypeAsync_SnNavigation" + type + cache, result_Int, cache);
             if (result_Int == 0)
             {
-                result_Int = await _service.SnNavigations.CountAsync(c => c.Type.Name == type);
+                result_Int = await _service.SnNavigations.CountAsync(c => c.Type.Title == type);
                 _cacheutil.CacheNumber("CountTypeAsync_SnNavigation" + type + cache, result_Int, cache);
             }
             return result_Int;
@@ -163,7 +163,7 @@ namespace Snblog.Service.Service
             result_List = _cacheutil.CacheString1("GetDistinct" + type, result_List);
             if (result_List == null)
             {
-                result_List = await _service.SnNavigations.Distinct().Where(c => c.Type.Name == type).ToListAsync();
+                result_List = await _service.SnNavigations.Distinct().Where(c => c.Type.Title == type).ToListAsync();
                 _cacheutil.CacheString1("GetDistinct" + type, result_List);
             }
             return result_List;
@@ -207,7 +207,7 @@ namespace Snblog.Service.Service
             {
                 result_ListDto = _mapper.Map<List<SnNavigationDto>>(
                     result_List = await _service.SnNavigations
-                   .Where(l => l.Title.Contains(name) && l.Type.Name == type)
+                   .Where(l => l.Title.Contains(name) && l.Type.Title == type)
                    .AsNoTracking().ToListAsync());
                 _cacheutil.CacheString("GetTypeContainsAsync_SnNavigationDto" + type + name + cache, result_ListDto, cache);
             }

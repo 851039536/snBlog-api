@@ -17,7 +17,7 @@ namespace Snblog.IService.IService
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnSetBlog>> GetAllAsync(bool cache);
+        Task<List<SnSetblog>> GetAllAsync(bool cache);
 
         /// <summary>
         /// 模糊查询
@@ -39,7 +39,7 @@ namespace Snblog.IService.IService
         /// <param name="id"></param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnSetBlogDto> GetByIdAsync(int id,bool cache);
+        Task<SnSetblogDto> GetByIdAsync(int id,bool cache);
 
         /// <summary>
         /// 按分类条件查询
@@ -58,7 +58,7 @@ namespace Snblog.IService.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         ///  /// <param name="cache">是否开启缓存</param>
-        Task< List<SnSetBlogDto>> GetfyAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache);
+        Task< List<SnSetblogDto>> GetfyAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache);
 
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Snblog.IService.IService
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
-        Task<bool> AddAsync(SnSetBlogDto entity);
+        Task<bool> AddAsync(SnSetblogDto entity);
 
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace Snblog.IService.IService
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnSetBlogDto entity);
+        Task<bool> UpdateAsync(SnSetblogDto entity);
 
       /// <summary>
       /// 更新部分列[comment give read]
@@ -143,7 +143,7 @@ namespace Snblog.IService.IService
       /// <param name="snArticle"></param>
       /// <param name="type">更新的字段</param>
       /// <returns></returns>
-        Task<bool> UpdatePortionAsync(SnSetBlogDto entity, string type);
+        Task<bool> UpdatePortionAsync(SnSetblogDto entity, string type);
 
 
         /// <summary>

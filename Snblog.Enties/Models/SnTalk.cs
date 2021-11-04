@@ -17,8 +17,9 @@ namespace Snblog.Enties.Models
         public int UserId { get; set; }
         public int TypeId { get; set; }
         public DateTime TimeCreate { get; set; }
-        public DateTime? TimeModified { get; set; }
+        public DateTime TimeModified { get; set; }
 
         public virtual SnTalkType Type { get; set; }
+        public virtual SnUser User { get; set; }
     }
 }

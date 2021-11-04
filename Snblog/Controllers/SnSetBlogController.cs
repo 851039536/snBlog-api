@@ -79,7 +79,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
        [Authorize(Roles = Permissions.Name)]
         [HttpPost("AddAsync")]
-        public async Task<IActionResult> AddAsync(SnSetBlogDto entity)
+        public async Task<IActionResult> AddAsync(SnSetblogDto entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
@@ -92,7 +92,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
       [Authorize(Roles = Permissions.Name)]
         [HttpPut("UpdateAsync")]
-        public async Task<IActionResult> UpdateAsync(SnSetBlogDto entity)
+        public async Task<IActionResult> UpdateAsync(SnSetblogDto entity)
         {
             return Ok(await _service.UpdateAsync(entity));
         }
@@ -111,14 +111,14 @@ namespace Snblog.Controllers
         }
         #endregion
         #region 更新部分列[comment give read]
-        /// <summary>
+        /// <summary>snblog
         /// 更新部分列
         /// </summary>
         /// <param name="entity">对象</param>
         /// <param name="type">更新字段 type</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
-        public async Task<IActionResult> UpdatePortionAsync(SnSetBlogDto entity, string type)
+        public async Task<IActionResult> UpdatePortionAsync(SnSetblogDto entity, string type)
         {
             return Ok(await _service.UpdatePortionAsync(entity, type));
         }

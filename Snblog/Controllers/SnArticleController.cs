@@ -66,7 +66,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetContainsAsync")]
-        public async Task<IActionResult> GetContainsAsync(int type, string name, bool cache)
+        public async Task<IActionResult> GetContainsAsync(int type=0, string name="c", bool cache=false)
         {
             return Ok(await _service.GetTypeContainsAsync(type,name, cache));
         }
@@ -79,7 +79,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache=false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
         }
@@ -92,7 +92,7 @@ namespace Snblog.Controllers
         /// <param name="type">类别</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetTypeAsync")]
-        public async Task<IActionResult> GetTypeAsync(int identity, int type, bool cache)
+        public async Task<IActionResult> GetTypeAsync(int identity=1, int type=1, bool cache=false)
         {
             return Ok(await _service.GetTypeAsync(identity,type, cache));
         }
@@ -104,7 +104,7 @@ namespace Snblog.Controllers
         /// <param name="type">text-内容-read:阅读-give:点赞</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetSumAsync")]
-        public async Task<IActionResult> GetSumAsync(string type, bool cache)
+        public async Task<IActionResult> GetSumAsync(string type="text", bool cache=false)
         {
             return Ok(await _service.GetSumAsync(type, cache));
         }
@@ -123,7 +123,7 @@ namespace Snblog.Controllers
         /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
         /// <returns></returns>
         [HttpGet("GetFyAsync")]
-        public async Task<IActionResult> GetFyAsync(int  identity, int type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
+        public async Task<IActionResult> GetFyAsync(int  identity=0, int type=0, int pageIndex=1, int pageSize=10, string ordering="id", bool isDesc=true, bool cache=false)
         {
             return Ok(await _service.GetFyAsync(identity,type, pageIndex, pageSize, ordering, isDesc, cache));
         }

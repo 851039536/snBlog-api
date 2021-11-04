@@ -1,5 +1,5 @@
 -- MySqlBackup.NET 2.3.5
--- Dump Time: 2021-11-03 16:31:23
+-- Dump Time: 2021-11-04 11:07:51
 -- --------------------------------------
 -- Server version 8.0.16 MySQL Community Server - GPL
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `sn_interface` (
   `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
   `path` varchar(80) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '路径',
   `type_id` int(5) NOT NULL COMMENT '类别',
-  `user_id` int(5) DEFAULT NULL COMMENT '用户',
+  `user_id` int(5) NOT NULL COMMENT '用户',
   `identity` tinyint(1) NOT NULL COMMENT '显示隐藏',
   PRIMARY KEY (`id`),
   KEY `type_id` (`type_id`),
@@ -110,7 +110,7 @@ DROP TABLE IF EXISTS `sn_labels`;
 CREATE TABLE IF NOT EXISTS `sn_labels` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标签名称',
-  `description` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '标签描述',
+  `description` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标签描述',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
@@ -125,439 +125,24 @@ INSERT INTO `sn_labels`(`id`,`name`,`description`) VALUES
 (4,'webapi','webapi'),
 (5,'wpf','wpf'),
 (7,'mysql','mysql'),
-(9,'ORM',NULL),
-(10,'JWT',NULL),
-(12,'CSS',NULL),
-(13,'HTML',NULL),
-(14,'WinForm',NULL),
-(15,'vueperess',NULL),
-(16,'Vue',NULL),
-(17,'VSCode',NULL),
-(18,'NetCore',NULL),
-(19,'工具',NULL),
-(20,'npm',NULL),
-(21,' EntityFramework ',NULL),
-(23,'Csharp',NULL),
-(24,'Axios ',NULL),
-(25,'搭建 ',NULL),
+(9,'ORM','1'),
+(10,'JWT','1'),
+(12,'CSS','1'),
+(13,'HTML','1'),
+(14,'WinForm','1'),
+(15,'vueperess','1'),
+(16,'Vue','1'),
+(17,'VSCode','1'),
+(18,'NetCore','1'),
+(19,'工具','1'),
+(20,'npm','1'),
+(21,' EntityFramework ','1'),
+(23,'Csharp','1'),
+(24,'Axios ','1'),
+(25,'搭建 ','1'),
 (27,'linq','c#提供的ling查询极大的遍历了集合的查询过程，且使用简单方便，非常的有用。  下面将分别用简单的例子说明：ling基本查询、延迟查询属性、类型筛选、复合from字句、多级排序、分组查询、联合查询、合并、分页、聚合操作符、并行linq、取消长时间运行的并行ling查询。'),
 (28,'Markdown','Markdown 是一种轻量级标记语言,它允许人们使用易读易写的纯文本格式编写文档。');
 /*!40000 ALTER TABLE `sn_labels` ENABLE KEYS */;
-
--- 
--- Definition of sn_navigation
--- 
-
-DROP TABLE IF EXISTS `sn_navigation`;
-CREATE TABLE IF NOT EXISTS `sn_navigation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `title` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
-  `describe` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题描述',
-  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片路径',
-  `type_id` int(11) NOT NULL COMMENT '分类',
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接路径',
-  PRIMARY KEY (`id`),
-  KEY `nav_type_id` (`type_id`),
-  CONSTRAINT `nav_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_interface_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=450 DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table sn_navigation
--- 
-
-/*!40000 ALTER TABLE `sn_navigation` DISABLE KEYS */;
-INSERT INTO `sn_navigation`(`id`,`title`,`describe`,`img`,`type_id`,`url`) VALUES
-(1,'Webpack','Webpack 是当下最热门的前端资源模块化管理和打包工具。它可以将许多松散的模块按照依赖和规则打包成符合生产环境部署的前端资源。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/webpack.png',2,'https://www.webpackjs.com/'),
-(2,'React','React 起源于 Facebook 的内部项目，是一个用于构建用户界面的 JavaScript 库。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/react.png',2,'https://reactjs.bootcss.com/'),
-(3,'TypeScript','TypeScript 是由微软开源的编程语言。它是 JavaScript 的一个超集，而且本质上向这个语言添加了可选的静态类型和基于类的面向对象编程。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/typescript.png',2,'https://typescript.bootcss.com/'),
-(4,'Svelte','Svelte 是构建 Web 应用程序的一种新方法。Svelte 是一个编译器，它将声明性组件转换成高效的 JavaScript 代码，并像做外科手术一样细粒度地更新 DOM。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/svelte.png',2,'https://www.sveltejs.cn/'),
-(5,'Next.js','Next.js 是一个轻量级的 React 服务端渲染应用框架。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/nextjs.png',2,'https://www.nextjs.cn/'),
-(6,'Babel','Babel 是一个 JavaScript 编译器。Babel 通过语法转换器支持最新版本的 JavaScript 语法。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/babeljs.png',2,'https://www.babeljs.cn/'),
-(7,'Node.js','Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型，使其轻量又高效。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/nodejs.png',2,'https://www.nodeapp.cn/'),
-(8,'Deno','Deno 是一个简单、现代且安全的 JavaScript 和 TypeScript 运行时，deno 基于 V8 引擎并使用 Rust 编程语言构建。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/deno.png',2,'https://deno.bootcss.com/'),
-(9,'Yarn','Yarn 是一个快速、可靠、安全的依赖管理工具。是 NPM 的替代品。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/yarn.png',2,'https://yarn.bootcss.com/'),
-(10,'Yarn v2','Yarn 是一个快速、可靠、安全的依赖管理工具。是 NPM 的替代品。Yarn v2 与 v1 版本有很大的不同，Yarn v2 改进了 CLI 交互、支持 workspace、PnP 等新功能。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/yarn.png',2,'https://www.yarnpkg.com.cn/'),
-(11,'前端学习路线','好好学习，天天敲代码','https://objtube.github.io/front-end-roadmap/#/',2,'https://objtube.github.io/front-end-roadmap/#/'),
-(12,'Visual Studio 2019','功能完备的集成开发环境 (IDE)，适用于 Android、iOS、Windows、Web 和云 (IDE)','https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE1Mu3b?ver=5c31',2,'https://visualstudio.microsoft.com/zh-hans/downloads/'),
-(13,'webpack','本质上，webpack 是一个现代 JavaScript 应用程序的静态模块打包器(module bundler)。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图(dependency graph)，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个 bundle。','1',2,'https://www.webpackjs.com/concepts/'),
-(14,'现代 JavaScript','以最新的 JavaScript 标准为基准。通过简单但足够详细的内容，为你讲解从基础到高阶的 JavaScript 相关知识。','https://zh.javascript.info/',2,'https://zh.javascript.info/'),
-(15,'Sass中文网','Sass 是一款强化 CSS 的辅助工具，它在 CSS 语法的基础上增加了变量 (variables)、嵌套 (nested rules)、混合 (mixins)、导入 (inline imports) 等高级功能，这些拓展令 CSS 更加强大与优雅。使用 Sass 以及 Sass 的样式库（如 Compass）有助于更好地组织管理样式文件，以及更高效地开发项目。','https://www.sass.hk/docs/',2,'https://www.sass.hk/docs/'),
-(16,'BootstrapVue','我们开始BootstrapVue之旅游，基于全球最流行的Bootstrap V4框架，构建移动优先的响应式门户，在Vue.js前端栈基础上。','http://code.z01.com/bootstrap-vue/docs/',2,'http://code.z01.com/bootstrap-vue/docs/'),
-(17,'前端导航站','前端内容汇总','http://jsdig.com/',2,'http://jsdig.com/'),
-(18,'Md2All排版','Markdown排版利器，支持 \"一键排版\" 、自定义css、80多种代码高亮。\n能让Markdown内容，无需作任何调整就能一键复制到微信公众号、博客园、掘金、知乎、csdn、51cto、wordpress、hexo。。。等平台。','http://md.aclickall.com/',2,'http://md.aclickall.com/'),
-(19,'VuePress','Vue 驱动的静态网站生成器','https://v0.vuepress.vuejs.org/zh/',2,'https://v0.vuepress.vuejs.org/zh/'),
-(20,'Blog.Core','BCVP（Blog.Core & Vue Project）是一个开箱即用的企业级权限管理应用框架。\n采用最新的前后端完全分离技术【 ASP.NET Core Api 3.x + Vue 2.x 】。','http://apk.neters.club/.doc/',2,'http://apk.neters.club/.doc/'),
-(21,'sqlSugar','.NET 4.+ & .NET CORE 高性能 轻量级 ORM框架，众多.NET框架中最容易使用的数据库访问技术','http://www.codeisbug.com/',2,'http://www.codeisbug.com/'),
-(22,'Avue','一个很多骚操作的前端框架\n让数据驱动视图，减去繁琐的操作，更贴近企业级的前端开发组件','https://avuejs.com/',2,'https://avuejs.com/'),
-(24,'Bootstrap ','基于 Bootstrap 样式库精心打造，并且额外增加了 50 多种常用的组件，为您快速开发项目带来非一般的感觉','https://blazor.sdgxgz.com/',2,'https://blazor.sdgxgz.com/'),
-(25,'Editor.md','\n开源在线 Markdown 编辑器','http://editor.md.ipandao.com/',2,'http://editor.md.ipandao.com/'),
-(26,'标签[c#]','','https://stackoom.com/img/logo.png',2,'https://stackoom.com/'),
-(27,'Font Aweso','世界上最流行的ICON图标字体库和CSS工具包','http://www.fontawesome.com.cn/',2,'http://www.fontawesome.com.cn/'),
-(28,'Dotnet9','Donet技术论坛','https://dotnet9.com/',2,'https://dotnet9.com/'),
-(29,'vol.vue','前后端分离\n\n全自动代码生成\n\n支持前端、后台扩展的快速开发框架','http://www.volcore.xyz/',2,'http://www.volcore.xyz/'),
-(30,'jQuery插件库','jQuery插件库','https://www.jq22.com/',2,'https://www.jq22.com/'),
-(31,'Vue.js中文文档','渐进式\nJavaScript 框架','https://vue.docschina.org/',2,'https://vue.docschina.org/'),
-(32,'我是前端','前端学习','https://www.imqianduan.com/',2,'https://www.imqianduan.com/'),
-(33,'CSS Fonts','网络安全 CSS 字体堆栈的完整集合。','',2,'https://www.cssfontstack.com/'),
-(34,'CSS速查总表 ','','http://css.cuishifeng.cn/',2,'http://css.cuishifeng.cn/'),
-(35,'爆胎','互联网长方体空间移动师','https://tvax1.sinaimg.cn/square/0084aYsLly1ggmuk8fguaj305k05kq30.jpg',2,'https://itggg.cn/'),
-(36,'青找博客','我们总在生活中与「一瞬的感动」相遇。','https://tva3.sinaimg.cn/square/0084aYsLly1ggmukfjc0uj3068068dfs.jpg',2,'https://www.linguang.me/'),
-(37,'axios中文网','易用、简洁且高效的http库','',2,'http://www.axios-js.com/'),
-(38,'layui','由职业前端倾情打造，面向全层次的前后端开发者，低门槛开箱即用的前端 UI 解决方案','',2,'https://www.layui.com/'),
-(39,'我爱斗图','在线表情包','',2,'https://www.52doutu.cn/'),
-(40,'Quasar Fra','以最短时间构建高性能的VueJS用户界面','',2,'http://www.quasarchs.com/'),
-(41,'Electron','使用 JavaScript，HTML 和 CSS 构建跨平台的桌面应用程序','',2,'https://www.electronjs.org/'),
-(42,'2020年Web前端','新手入门前端，需要学习的基础内容有很多，如下。','',2,'https://www.cnblogs.com/qianguyihao/p/8776837.html'),
-(43,'ZUI','一个基于 Bootstrap 深度定制开源前端实践方案，帮助你快速构建现代跨屏应用。','',2,'https://www.openzui.com/'),
-(44,'Aplayer','Wow, such a beautiful HTML5 music player','',2,'https://aplayer.js.org/#/zh-Hans/'),
-(45,'alloyteam','','',2,'http://www.alloyteam.com/'),
-(46,'.NET万能框架','项目基于.NET 4.5构建，语法版本C#6.0，包含日常编程多数的常用封装，可以说是一个万能框架，能够用于任何基于.NET平台的项目当中。','',2,'https://masuit.com/55'),
-(47,'Tailwind Grids','为 Tailwind CSS 项目轻松生成响应式网格。所有生成的类都基于 Tailwind 默认值，只需选择您的设置即可开始使用。','',2,'https://tailwindgrids.com/#/'),
-(48,'CSS Inspiration -- CSS灵感','这里可以让你寻找到使用或者是学习 CSS 的灵感，以分类的形式，展示不同 CSS 属性或者不同的课题使用 CSS 来解决的各种方法。','',2,'https://csscoco.com/inspiration/#/'),
-(49,'小游网','二次元技术宅','https://img.xiaoyou66.com/images/2020/02/20/tTSY.jpg',2,'https://xiaoyou66.com/'),
-(50,'全历史','全历史(Allhistory)以AI知识图谱为核心引擎,通过高度时空化、关联化数据的方式构造及展现数字人文内容,尤其是历史知识。','https://img.xiaoyou66.com/images/2020/02/20/tTSY.jpg',2,'https://www.allhistory.com/'),
-(51,'疯狂去水印','打开短视频APP， 选择要下载的视频，点击右下角分享按钮，在分享弹框中点击“复制链接”','https://douyin.video996.com/img/mp.jpg',2,'https://douyin.video996.com/'),
-(52,'知妖','知妖是一个开放的在线“妖怪”资料库。致力于收集、整理、介绍、分享古人文献中的“妖怪”。我们尽可能地收录古文献中的“妖怪”资料，让更多的人能够完整，系统地了解中国“妖怪”文化。','https://static.cbaigui.com/images/2020/04/loading.jpg!full',2,'https://www.cbaigui.com/'),
-(53,'煎蛋','地球上没有新鲜事','http://img.jandan.net/news/2020/03/2e4024373d26ccd3888e29a6f4152076.jpg!square',2,'http://jandan.net/'),
-(54,'小鸡词典','查网络流行语','https://jikipedia.com/images/logo/logo_full_side.png',2,'https://jikipedia.com/'),
-(55,'网站任意门','你将被传送到完全随机的一个网站，传送到任何一个网站的概率都是相等的。','https://gate.ofo.moe/social/hero-4.jpg',2,'https://gate.ofo.moe/'),
-(56,'Tailwind C','Tailwind 是基于 PostCSS 开发的,通过 JavaScript 代码进行配置,这意味着你可以完全发挥真正的编程语言的能力。 Tailwind 不仅仅是一个 CSS 框架,他更是构建设计系统','',2,'https://www.tailwindcss.cn/'),
-(57,'Flexbox网格','基于flex显示属性的网格系统。','',2,'http://flexboxgrid.com/'),
-(58,'purecss','一组小型的自适应CSS模块，您可以在每个Web项目中使用。','https://purecss.io/img/logo_pure@2x.png',2,'https://purecss.io/'),
-(59,'vue-aplayer','A beautiful HTML5 music player for Vue.js','https://aplayer.netlify.app/docs/hero.png',2,'https://aplayer.netlify.app/docs/'),
-(60,'林德熙','微软最具价值专家 Windows Development MVP','https://blog.lindexi.com/img/avatar.png',2,'https://blog.lindexi.com/'),
-(61,'MahApps.Me','MahApps.Metro是一个框架，使开发人员可以轻松地为自己的WPF应用程序整合Metro或Modern UI。','https://mahapps.com/assets/img/oss.png',2,'https://mahapps.com/'),
-(62,'C#入门经典教程','C# 是微软推出的一门面向对象的通用型编程语言，它除了可以开发 PC 软件、网站（借助 ASP.NET）和 APP（基于 Windows Phone），还能作为游戏脚本，编写游戏逻辑。','',2,'http://c.biancheng.net/csharp/'),
-(63,'.NET技术','代码改变世界','http://www.vnfan.com/lteui/dist/img/user2-160x160.jpg',2,'http://www.vnfan.com/'),
-(64,'C# 指南','官方指南','https://docs.microsoft.com/favicon.ico',2,'https://docs.microsoft.com/zh-cn/dotnet/csharp/'),
-(65,'Ant Design','这里是 Ant Design 的 Blazor 实现，开发和服务于企业级后台产品。','https://raw.githubusercontent.com/ant-design-blazor/ant-design-blazor/master/logo.svg',2,'https://ant-design-blazor.gitee.io/zh-CN/docs/introduce'),
-(66,'mavonEdito','关于\nmavonEditor-基于Vue的markdown编辑器，支持多种个性化功能','https://raw.githubusercontent.com/ant-design-blazor/ant-design-blazor/master/logo.svg',2,'https://github.com/hinesboy/mavonEditor'),
-(67,'Lodash','关于\nmavonEditor-基于Vue的markdown编辑器，支持多种个性化功能','https://www.lodashjs.com/',2,'https://www.lodashjs.com/'),
-(68,'VUE粒子','粒子背景的Vue.js组件','',2,'https://vue-particles.netlify.app/'),
-(69,'Element','Element，一套为开发者、设计师和产品经理准备的基于 Vue 2.0 的桌面端组件库','',2,'https://element.eleme.cn/#/zh-CN'),
-(70,'outils','前端业务代码工具库','',2,'https://www.npmjs.com/package/outils'),
-(71,'Anime.js','一个强大的、轻量级的用来制作动画的javascript库','',2,'https://animejs.com/'),
-(72,'Hover.css','CSS hover 悬停效果，可以应用于链接、按钮、图片等等','',2,'http://ianlunn.github.io/Hover/'),
-(73,'Waves','点击波纹效果','',2,'http://fian.my.id/Waves/#examples'),
-(74,'Viewer.js','图片滑动切换展示效果','',2,'https://fengyuanchen.github.io/viewerjs/'),
-(75,'clipboard','复制粘贴插件','',2,'https://clipboardjs.com/'),
-(76,'You-need-to-know-css','作为一名Web开发者，CSS是必备技能之一，我一直以为自己对CSS的掌握已经够用了，直到读Lea Verou的《CSS揭秘》，我发现自己充其量就算个会打CS的选手，书中针对我们常见的网页设计难题从不同的角度提出了多种实用又优雅的解决方案，在这里强烈的推荐给每一位从事前端相关工作和对前端有兴趣的同学，相信你一定会有所收获','https://lhammer.cn/You-need-to-know-css/static/logo.png',2,'https://lhammer.cn/You-need-to-know-css/#/zh-cn/'),
-(77,'Shiro','Shiro，是alphardex平时所做的CSS创意作品集','',2,'https://shiroi.netlify.app/'),
-(78,'今日热榜','每日榜单','https://file.ipadown.com/tophub/assets/images/logo.png',2,'https://tophub.today/'),
-(79,'艾特网','程序员之家','https://iiter.cn/_nuxt/img/f996b71.png',2,'https://iiter.cn/'),
-(80,'PostCSS','是一个用 JavaScript 工具和插件转换 CSS 代码的工具','https://www.postcss.com.cn/postcss.1b20c651.png',2,'https://www.postcss.com.cn/'),
-(81,'Articles','css技巧','',2,'https://css-tricks.com/archives/'),
-(82,'JavaScript 秘密花园','此中文翻译由三生石上独立完成，博客园首发，转载请注明出处。','',2,'https://bonsaiden.github.io/JavaScript-Garden/zh/#intro'),
-(83,'uni-app','uni-app 是一个使用 Vue.js 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、H5、以及各种小程序（微信/支付宝/百度/头条/QQ/钉钉/淘宝）、快应用等多个平台。','https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni-app-doc/7c946930-bcf2-11ea-b997-9918a5dda011.png',2,'https://uniapp.dcloud.io/README'),
-(84,'前端小册子','前端学习曲线陡峭，入门容易精通难。后期有瓶颈往往是因为前期基础不扎实。学习一点，掌握一点，貌似慢，实际快。实战是好事，但理论不扎实就着急实战并非是好事。实战帮助更好地理解理论，而不是帮助学习理论。理论学明白，项目才能踏实做，否则，在实战的过程中得到的只是零碎知识点，并没有形成完善的理论体系，收效不大\n好的代码像粥一样，都是用时间熬出来的。小火柴立志要做一名前端工匠\n\n这个小册子是小火柴总结的前端知识结构，方便自己学习，也希望能够帮到更多人\n由于里面许多内容是自己的总结，可能会有错误或纰漏之处，希望不会造成误导，多多交流','https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni-app-doc/7c946930-bcf2-11ea-b997-9918a5dda011.png',2,'https://xiaohuochai.site/introduce.html'),
-(85,'uView(uni-appUI框架)','uView UI，是uni-app生态最优秀的UI框架，全面的组件和便捷的工具会让您信手拈来，如鱼得水','https://uviewui.com/common/logo.png',2,'https://uviewui.com/'),
-(86,'umy-ui','为开发者准备的基于 Vue 2.0 的桌面端组件库; 流畅渲染表格万级数据','',2,'https://www.umyui.com/'),
-(87,'Element UI表单设计及代码生成器','可将生成的代码直接运行在基于Element的vue项目中；也可导出JSON表单，使用配套的解析器将JSON解析成真实的表单。','',2,'https://jakhuang.github.io/form-generator/#/'),
-(88,'luch-request(uni-app)','基于Promise开发的uni-app跨平台请求库','https://www.quanzhan.co/luch-request/assets/img/logo.jpg',2,'https://www.quanzhan.co/luch-request/'),
-(89,'Entity Framework Core API 参考','欢迎使用 .NET API 浏览器！这个一站式商店，销售 Microsoft 提供的所有基于 .NET 的 API。 在下面的框中键入字词，开始搜索任意托管 API 吧。 可以通过我们的博文详细了解 API 浏览器。','',2,'https://docs.microsoft.com/zh-cn/dotnet/api/?view=efcore-3.1'),
-(90,'Furion','Furion 是 .NET 5 平台下极易入门、极速开发的 Web 应用框架。','https://monksoul.gitee.io/fur/img/logo.png',2,'https://dotnetchina.gitee.io/furion/'),
-(91,'Phonto','Hey There\nI''m Bruce.Au\n( σ''ω'')σ#Skr','https://cdn.toofook.com/my-blog/myfont.png',2,'https://www.vanoc.top/about'),
-(92,'vue-admin-beautiful','是一款基于vue+element-ui的绝佳的中后台前端开发管理框架（基于vue/cli 4 最新版，同时支持电脑，手机，平板）,他同时是拥有100+页面的大型vue前端单页应用','',2,'https://gitee.com/chu1204505056/vue-admin-beautiful/?hmsr=github&hmpl=&hmcu=&hmkw=&hmci='),
-(93,'Animate中文网','强大的跨平台的预设css3动画库\n内置了很多典型的css3动画，兼容性好使用方便','',2,'http://www.animate.net.cn/'),
-(94,'jQuery API 3.3.1 速查表','速查表','',2,'https://www.94xh.com/index.html'),
-(95,'flv.js(播放器)','flv.js 是一个使用纯JavaScript编写的FLV(HTML5 Flash Video)播放器。','',2,'https://www.bootcdn.cn/flv.js/1.5.0/'),
-(96,'福利汇总','大千世界收集福利分享','',2,'https://www.gifxu.com/'),
-(97,'Animate.css','Just-add-water CSS animations','',2,'https://animate.style/'),
-(98,'Typecho','Typecho博客分享','https://qqdie.com/wp-content/themes/lighthouse/images/typecho.png',2,'https://qqdie.com/links.html'),
-(99,'Umar Hansa的开发人员技巧','开发人员技巧','',2,'https://umaar.com/dev-tips/'),
-(100,'iconfont','阿里巴巴图形库','',2,'https://www.iconfont.cn/'),
-(101,'highlight.js','Web语法突出显示','',2,'https://highlightjs.org/'),
-(102,'MakingCSS','The web tool for generating CSS3 code','',2,'https://makingcss.com/'),
-(103,'CSS生成器','','',2,'https://www.cssportal.com/'),
-(104,'LintCode 领扣','空前强大的  在线编程  训练系统  即刻启程！','',2,'https://www.lintcode.com/'),
-(105,'postcss简介','PostCSS 是一个允许使用 JS 插件转换样式的工具。 这些插件可以检查（lint）你的 CSS，支持 CSS Variables 和 Mixins， 编译尚未被浏览器广泛支持的先进的 CSS 语法，内联图片，以及其它很多优秀的功能。','',2,'https://www.cnblogs.com/aidixie/p/12771985.html'),
-(106,'TypeScript','TypeScript是JavaScript类型的超集，它可以编译成纯JavaScript。\nTypeScript可以在任何浏览器、任何计算机和任何操作系统上运行，并且是开源的。','',2,'https://www.tslang.cn/index.html'),
-(107,'Axios中文文档','Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。','',2,'https://www.kancloud.cn/yunye/axios/234845'),
-(108,'关于ASP.NETCore的分享之路','学习路线图\nASP.NET CORE学习指南\n《基础知识掌握部分》\n《部署与组件学习部分》\n《容器化与跨平台部分》','',2,'https://www.cnblogs.com/laozhang-is-phi/p/all-knowledge-for-netcore.html#autoid-2-1-0'),
-(109,'C#之Action和Func的用法','','',2,'https://www.cnblogs.com/LipeiNet/p/4694225.html'),
-(110,'NanUI 界面组件','这是一个开放源代码的 .NET / .NET Core 窗体应用程序（WinForms）界面组件。您可以使用 HTML5 / CSS3 / Javascript 等前端技术来构建您的应用程序界面。主流的Javascript框架，比如Angular, React, Vue都是可以用来构架SPA应用的明智选择。使用 NanUI 界面组件将给您的窗体设计工作带来无限可能。','',2,'https://www.formium.net/'),
-(111,'让你30分钟快速掌握vue 3','经过了漫长的迭代，Vue 3.0终于在上2020-09-18发布了，带了翻天覆地的变化，使用了Typescript 进行了大规模的重构，带来了Composition API RFC版本，类似React Hook 一样的写Vue，可以自定义自己的hook ，让使用者更加的灵活，接下来总结一下vue 3.0  带来的部分新特性。\n\n作者：撒点料儿\n链接：https://juejin.im/post/6887359442354962445\n来源：掘金\n著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。','',2,'https://juejin.im/post/6887359442354962445'),
-(112,'vuepress-theme-vdoing','一款简洁高效的VuePress 知识管理&博客 主题','https://doc.xugaoyi.com/vuepress-theme-vdoing-doc/',2,'https://doc.xugaoyi.com/vuepress-theme-vdoing-doc/'),
-(113,'软件工艺师(bibi)','视频教程','https://doc.xugaoyi.com/vuepress-theme-vdoing-doc/',2,'https://space.bilibili.com/361469957/video'),
-(114,'NetModular','为中小型企业而生的基于.Net Core平台的模块化快速开发解决方案','https://docs.17mkh.com/images/logo.png',2,'https://docs.17mkh.com/'),
-(115,'秦枫鸢梦','花有重开日，人无再少年','https://q1.qlogo.cn/g?b=qq&nk=2013143650&s=100',2,'https://blog.zwying.com/'),
-(116,'Mikutap','','',2,'https://xiabor.com/mikutap/'),
-(117,'Typora','Typora 是一款支持实时预览的 Markdown 文本编辑器。它有 OS X、Windows、Linux 三个平台的版本，并且由于仍在测试中，是完全免费的。','12321',2,'https://typora.io/'),
-(118,'LtGt','LtGt是一个用于处理HTML的简约库','',2,'https://www.ctolib.com/Tyrrrz-LtGt.html'),
-(119,'ExCSS','一个CSS3解析器C#库','',2,'https://www.ctolib.com/ExCSS.html'),
-(120,'Everything','Everything中文版是一款功能强大，便捷实用的文件搜索软件。','',2,'https://everything.en.softonic.com/'),
-(121,'AnyDesk','远程连接到您的计算机，无论是从办公室的另一层还是世界的另一端。 AnyDesk为IT专业人员和移动用户提供安全可靠的远程桌面连接。','',2,'https://anydesk.com/zhs'),
-(122,'WebStorm','WebStorm 是jetbrains公司旗下一款JavaScript 开发工具。已经被广大中国JS开发者誉为“Web前端开发神器”、“最强大的HTML5编辑器”、“最智能的JavaScript IDE”等。与IntelliJ IDEA同源，继承了IntelliJ IDEA强大的JS部分的功能。','',2,'https://www.jetbrains.com/help/webstorm/installation-guide.html'),
-(123,'Snipaste','截图工具','',2,'https://www.snipaste.com/'),
-(124,'XMind','思如泉涌 • 成竹在图','',2,'https://www.xmind.cn/'),
-(125,'Postman','API开发协作平台','',2,'https://www.postman.com/'),
-(126,'AutoHotkey','AutoHotkey 是一个自由、开源的宏生成器和自动化软件工具，它让用户能够自动执行重复性任务。AutoHotkey 可以修改任何应用程序的用户界面（例如，把默认的 Windows 按键控制命令替换为 Emacs 风格）。它是由定制的脚本语言驱动，旨在提供键盘快捷键或热键。——wikipedia','',2,'https://www.autohotkey.com/'),
-(127,'Notepad++','Notepad++ 是在微软视窗环境之下的一个免费的代码编辑器。为了产生小巧且有效率的代码编辑器,这个在GPL许可证下的自由软体开发专案采用 win32 api 和 STL 以 ...','',2,'https://notepad-plus-plus.org/'),
-(128,'字体仓库','免费字体库','',2,'https://www.ziticangku.com/'),
-(129,'You-need-to-know-css','为了以后可以更爽的复制粘贴，笔者把自己的收获和工作中常用的一些CSS小样式总结成这份文档','',2,'https://lhammer.cn/You-need-to-know-css/#/zh-cn/'),
-(130,'CSS Tricks','总结一些常用的 CSS 样式\n记录一些 CSS 的新属性和一点奇技淫巧\n在“动”部分下有些动画并不是 CSS 效果，因为没有地方放置，所以暂时寄存在这里\n尽量少说废话，代码简单易用，方便复制','',2,'http://css-tricks.neatbang.com/'),
-(131,'animista','该项目里面有各种 CSS 实现的效果，还有代码演示，方便直接复制代码，还可以复制压缩后的代码，如果你在找某个 CSS 的效果的话，可以到这里找找看。','',2,'https://animista.net/'),
-(132,'spinkit','汇集了实现各种加载效果的 CSS 代码片段。\n\nSpinKit 仅使用（transform 和 opacity）CSS 动画来创建平滑且易于自定义的动画。','',2,'https://tobiasahlin.com/spinkit/'),
-(133,'Blog.Admin','框架涵盖 VUE 开发中常见的基本知识点，不仅适合初学者入门，同时也适用于企业级别的开发。','',2,'https://vueadmin.neters.club/.doc/'),
-(134,'.NET Core 学习资料精选：入门','主要分享一些.NET Core比较优秀的社区资料和微软官方资料。我进行了知识点归类，让大家可以更清晰的学习.NET Core。\n\n首先感谢资料原作者的贡献。','',2,'https://www.cnblogs.com/heyuquan/p/dotnet-basic-learning-resource.html'),
-(135,'.NET Core 学习资料精选：进阶','主要分享一些.NET Core比较优秀的社区资料和微软官方资料。我进行了知识点归类，让大家可以更清晰的学习.NET Core。\n\n首先感谢资料原作者的贡献。','',2,'https://www.cnblogs.com/heyuquan/p/dotnet-advance-learning-resource.html'),
-(136,'ASP.NET Core on K8S 入门学习系列文章目录','K8S的入门学习放到了2019年的学习列表中，并总结了一些学习笔记和实践总结的文章并汇总在这里，希望对各位园友有帮助！','',2,'https://www.cnblogs.com/edisonchou/'),
-(137,'.NET Core微服务架构学习与实践系列文章目录','拥抱开源，任重而道远！','K8S的入门学习放到了2019年的学习列表中，并总结了一些学习笔记和实践总结的文章并汇总在这里，希望对各位园友有帮助！',2,'https://www.cnblogs.com/edisonchou/p/dotnetcore_microservice_foundation_blogs_index_final.html'),
-(138,'C# 官方语言指南','提供许多有关 C# 语言学习资源、新增功能、概念、操作指南、编程指南和语言参考等。','',2,'https://docs.microsoft.com/zh-cn/dotnet/csharp/'),
-(139,'ASP.NET Core 教程','跨平台的高性能开源框架，用于在 Windows、Mac 或 Linux 上开发基于现代化的 Web 应用程序。','',2,'https://docs.microsoft.com/zh-cn/aspnet/core/?view=aspnetcore-5.0'),
-(140,'EF Core 官方教程','Entity Framework (EF) Core 是轻量化、可扩展、开源和跨平台版的常用数据访问技术。','',2,'https://docs.microsoft.com/zh-cn/ef/core/'),
-(141,'Visual Studio 文档','学习使用强大功能提高开发效率，开发、生成、调试、测试、部署、版本控制、 DevOps 和性能分析','',2,'https://docs.microsoft.com/zh-cn/visualstudio/?view=vs-2019'),
-(142,'.NET 微服务应用程序架构指南','本指南介绍如何使用 .NET Core 和 Docker 容器开发基于微服务的应用程序并对其进行管理。','',2,'https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/'),
-(143,'微软 eShopOnWeb 开源框架','基于 ASP.NET Core 构建的单体分层应用架构，使用 DDD 领域驱动设计程序体系结构和部署模型。','',2,'https://www.cnblogs.com/MrHSR/p/10855824.html'),
-(144,'IdentityServer4中文文档','dentityServer4 是一个免费的开源 OpenID Connect 和 OAuth 2.0 身份认证与授权框架，适用于 ASP.NET Core 平台，IdentityServer4 由 Dominick Baier 和 Brock Allen 两位大神创建和维护，您可以快捷的在应用程序中集成基于令牌的身份验证，单点登录和 API 访问控制，支持非常多的协议实现和可扩展点，IdentityServer4 由 OpenID 基金会正式认证，因此符合规范且可互操作，被微软作为 .NET 基金会项目的一部分，并根据其行为准则运行，虽然这个框架也非常的好，博客也不少，但以下整理的中文文档值得推荐学习。','',2,'https://www.xcode.me/post/6038#'),
-(145,'dnSpy基于.NET的反编译工具','dnSpy是一款基于.NET的反编译与调试工具，开源免费，能够讲.NET开发的Exe和Dll程序集反编译为C#代码，同时支持断点调试和代码二次编辑，如果您只有编译后的程序集，在没有源码的情况下想还原C#源码，dnSpy绝对是首选。','',2,'https://github.com/dnSpy/dnSpy/releases'),
-(146,'Visual Studio 2015','软就放出了VS2015不同版本的离线安装镜像包，支持32位和64位，现在，您就可以下载并安装它','',2,'https://www.xcode.me/post/1916'),
-(147,'微软官方常用系统工具合集','这些小工具原本是为了解决工程师们平常在工作上遇到的各种问题而开发的，之后他们将这些工具集合起来称为 Sysinternals，并免费提供公众下载，其中部分还开源了，一直以来都颇受 IT 界人士的好评。如果把管理员比喻成战士的话，那么 Sysinternals 就是我们手中的良兵利器。熟悉和掌握这些工具，并且对 Windows 的体系有一定的了解，将大幅提高你的电脑维护、应用技能。','',2,'https://www.xcode.me/post/1631'),
-(149,'零度编程','分享编程之美','',2,'https://www.xcode.me/'),
-(150,'技术胖','专注前端开发,每年100集免费视频。','https://blogimages.jspang.com/blogtouxiang1.jpg',2,'http://www.jspang.com/'),
-(151,'网站(Web App)','这里包含了基于Vue.js开发的网站应用程序，包括管理工具、网页游戏、购物社交网站等。','',2,'https://madewith.cn/'),
-(152,'任务协助系统','任何业务场景，您都可以找到合适的方案 PearProject 拥有丰富且灵活的产品研发管理功能，协助您释放产品研发能力，是推动研发进程的强力驱动','',2,'https://home.vilson.xyz/?from=madewith.cn#/'),
-(154,'NPM','NPM（node package manager）是 Node.js 世界的包管理器。NPM 可以让 JavaScript 开发者在共享代码、复用代码以及更新共享的代码上更加方便。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/npm.png',2,'https://www.npmjs.cn/'),
-(155,'Lerna','Lerna 是一个管理工具，用于管理包含多个软件包（package）的 JavaScript 项目。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/lernajs.png',2,'https://lernajs.bootcss.com/'),
-(156,'Vue.js','Vue.js - 是一套构建用户界面的渐进式框架。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/vuejs.png',2,'https://vuejs.bootcss.com/guide/'),
-(157,'Nuxt.js','Nuxt.js 是一个基于 Vue.js 的通用应用框架。通过对客户端/服务端基础架构的抽象组织，Nuxt.js 主要关注的是应用的 UI渲染。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/nuxtjs.png',2,'https://www.nuxtjs.cn/'),
-(158,'Parcel','Parcel - 极速、零配置的 web 应用打包工具。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/parcel.png',2,'https://www.parceljs.cn/'),
-(160,'Pro Git','Pro Git 中文版（第二版）是一本详细的 Git 指南，主要介绍了 Git 的使用基础和原理，让你从 Git 初学者成为 Git 专家。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/progit.png',2,'https://www.progit.cn/'),
-(161,'PurgeCSS','PurgeCSS 是一个用来删除未使用的 CSS 代码的工具，能够减小 CSS 文件的体积。例如可以用来减小 Bootstrap 等前端框架的文件体积，提升加载速度。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/purgecss.png',2,'https://www.purgecss.cn/'),
-(162,'Markdown','Markdown 是一种轻量级标记语言，便于人们使用易读易写的纯文本格式编写文档并添加格式元素。Markdown 是 John Gruber 于 2004 年创建的。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/markdown.png',2,'https://www.markdown.xyz/'),
-(163,'ESLint','ESLint 是一个插件化并且可配置的 JavaScript 语法规则和代码风格的检查工具。ESLint 能够帮你轻松写出高质量的 JavaScript 代码。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/eslint.png',2,'https://cn.eslint.org/'),
-(164,'Infima CSS 框架','Infima 是 Facebook 出品的一个 CSS 框架，专为内容驱动型网站而设计，并且内建对暗模式的支持。是 Docusaurus 的姊妹项目。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/infima.png',2,'https://infima.bootcss.com/'),
-(165,'Stylus','Stylus - 富于表现力、健壮、功能丰富的 CSS 预处理语言。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/stylus.png',2,'https://stylus.bootcss.com/'),
-(166,'懒得勤快','勤于发现,乐于分享','https://git.imweb.io/ldqk/imgbed/raw/master/20190606/5dc7fc1266bfd8109d1ef5e0e7630f2c_2_3_art.png',2,'https://masuit.com/'),
-(167,'爱哔哔','视频解析','',2,'https://www.ibilibili.com/'),
-(168,'果核剥壳','工具分享','https://www.ghpym.com/wp-content/uploads/2019/12/2020logo.png',2,'https://www.ghpym.com/category/all/pcsoft/pccode'),
-(169,'醉秋风','要相信一切都是最好的安排','https://blog.slomoo.cn/slomoo.png',2,'https://blog.slomoo.cn/'),
-(170,'薛定喵君','scan to see more ?','http://tiaocaoer.com/images/site_icon.png',2,'http://tiaocaoer.com/'),
-(171,'舔狗日记','我们是狗,是舔狗','https://we.dog/assets/images/logo.gif',2,'https://we.dog/'),
-(172,'rscss','CSS样式表结构的合理系统。\n一组简单的想法可以指导您构建可维护CSS的过程。','https://we.dog/assets/images/logo.gif',2,'https://rscss.io/index.html'),
-(173,'WEB安全色','WEB安全色','',2,'https://www.bootcss.com/p/websafecolors/'),
-(174,'Adobe Color ','色輪 (或「擷取主題」標籤中的影像)','',2,'https://color.adobe.com/zh/create/color-wheel'),
-(175,'中国色 ','中国色 ','',2,'http://zhongguose.com/'),
-(176,'托盘式 ','利用数百万设计师的知识生成漂亮的调色板。','',2,'https://www.palettable.io/CCCC82'),
-(177,'itmeo','WebGradients 是180个线性渐变的免费集合，您可以将其用作\n网站任何部分的内容背景。轻松复制CSS3跨浏览器代码\n，稍后使用！我们还为每个渐变准备了.PNG版本。\n 作为奖励，还有用于Sketch  ＆  Photoshop的软件包 。','',2,'https://webgradients.com/'),
-(178,'配色表','网页设计常用色彩搭配表','',2,'http://tool.c7sky.com/webcolor/'),
-(179,'avascript粒子动画引擎','avascript粒子动画引擎','',2,'https://drawcall.github.io/Proton/#examples'),
-(180,'Keyframes helps you write better CSS','Dead simple visual tools to help you generate CSS for your projects.','',2,'https://keyframes.app/'),
-(181,'Ant Design Pro','开箱即用的中台前端/设计解决方案','',2,'https://pro.ant.design/index-cn'),
-(182,'Laravel诗词博客','','',2,'https://www.qqphp.com/article'),
-(183,'hexo','快速、简洁且高效的博客框架','',2,'https://hexo.io/zh-cn/'),
-(184,'Gridea',' 是一个静态博客写作客户端，帮助你更容易地构建并管理博客或任何静态站点。','',2,'https://gridea.dev/'),
-(185,'awesome-bookmarks','个人收藏夹','',2,'https://panjiachen.github.io/awesome-bookmarks/'),
-(186,'VueRequest','⚡️ 一个很酷的 Vue3 的请求库','',2,'https://cn.attojs.org/'),
-(187,'牛客网','','',2,'https://www.nowcoder.com/profile/8768562'),
-(188,'TinyPNG','','',2,'https://tinypng.com/'),
-(189,'长征部落格','事 不 三 思 终 有 悔， 人 能 百 忍 自 无 忧。','',2,'https://www.cz5h.com/'),
-(190,'Zidone','莫道君行早 更有早行人','',2,'https://www.aye.ink/'),
-(191,'天涯社区','提供论坛、部落、博客、问答、文学、相册、个人空间等服务。拥有天涯杂谈、娱乐八卦、情感天地等人气栏目,以及关天茶舍、煮酒论史等高端人文论坛。','https://static.tianyaui.com/global/bbs/web/static/images/weixin_code.jpg',2,'https://bbs.tianya.cn/'),
-(192,'胶囊日记','凌晨零点，集体失忆','http://s4.timepill.net/s/w220/topic/74toih.png',2,'http://www.timepill.net/'),
-(193,'码库CTOlib','收集GitHub上的实用dotnet开源项目，并进行分类。每天都有新的库和项目添加到列表中。','https://www.ctolib.com/static/img/getqrcode.jpg',2,'https://www.ctolib.com/'),
-(194,'SegmentFault','每一位开发者都在贡献和更新技术内容，共同参与社区建设，维护社区秩序。\n\n如果你和我们一样有技术理想，并愿意贡献自己的力量，欢迎加入我们。','https://cdn.segmentfault.com/r-d209f51c/static/logo-b.d865fc97.svg',2,'https://segmentfault.com/'),
-(195,'LearnKu','编程者社区','https://cdn.learnku.com/uploads/images/201901/24/1/OyBnfB2vlk.png!/both/44x44',2,'https://learnku.com/'),
-(196,'毒导航','网络资源','https://www.toxic.ltd/wp-content/uploads/2020/04/lang_logo.png',2,'https://www.toxic.ltd/'),
-(197,'tailblocks','tailblocks','',2,'https://tailblocks.cc/'),
-(198,'TailwindCSS 中文网','TailwindCSS 使用教程、TailwindCSS 中文文档及 TailwindCSS 相关资源','https://tailwindchina.com/logo.png',2,'https://tailwindchina.com/'),
-(199,'vue-tailwind.com','针对 TailwindCss 优化的 Lightview 和完全可定制的 Vue 组件集','',2,'https://www.vue-tailwind.com/'),
-(200,'emantic UI','用户界面就是 Web 的语言','',2,'https://semantic-ui.com/'),
-(201,'be-a-professional-programmer','成为专业程序员路上用到的各种优秀资料、神器及框架','',2,'http://tools.stanzhai.site/'),
-(202,'Bulma','现代化的CSS框架','Bulma是一个免费、开源的CSS框架，它提供了易于使用的前端的组件，您可以轻松地组合这些组件来构建响应式Web界面。',2,'https://bulma.zcopy.site/'),
-(203,'PhotoKit','图片编辑器','https://photokit.com/images/editor.min.webp',2,'https://photokit.com/?lang=zh'),
-(204,'V2EX','V2EX 是一个关于分享和探索的地方','',2,'https://www.v2ex.com/'),
-(205,'screensiz','screensiz','',2,'https://screensiz.es/phone'),
-(206,'Vue Router','用 Vue + Vue Router 创建单页应用非常简单：通过 Vue.js，我们已经用组件组成了我们的应用。当加入 Vue Router 时，我们需要做的就是将我们的组件映射到路由上，让 Vue Router 知道在哪里渲染它们。','https://cdn4.buysellads.net/uu/1/3386/1525189943-38523.png',2,'https://next.router.vuejs.org/'),
-(207,'View UI','View UI®，即原先的 iView，是一套基于 Vue.js 的开源 UI 组件库，主要服务于 PC 界面的中后台产品。','https://file.iviewui.com/dist/7dcf5af41fac2e4728549fa7e73d61c5.svg',2,'https://www.iviewui.com/docs/introduce'),
-(208,'it365万能解码器','it365万能解码器，能自动识别各种编码的文本文件，如：GB2312、Big5、UTF-8等。此解码器小巧，但是非常强悍。支持几十种编码，支持自动探测文件编码。一个web网页程序，就能解决文件乱码、编码转换等工作。','https://c10365.now.sh/zan/active.jpg',2,'https://it365.gitlab.io/zh-cn/decode/?81206z'),
-(209,'果糖网net论坛','','https://www.donet5.com/HtmlTemplate2/com_files/logo.png',2,'https://www.donet5.com/'),
-(210,'Vue3 One Piece','下一代web开发方式，更快，更轻，易维护，更多的原生支持','https://static.vue-js.com/6280b990-ff19-11ea-85f6-6fac77c0c9b3.png',2,'https://vue3js.cn/'),
-(211,'vuepress-theme-vdoing','一款简洁高效的VuePress 知识管理&博客 主题','https://cdn.jsdelivr.net/gh/xugaoyi/image_store/blog/20200409124835.png',2,'https://doc.xugaoyi.com/'),
-(212,'TailwindCSS的漂亮扩展。','Tailwind Starter Kit是免费和开源的。它不会更改或从TailwindCSS向已添加的CSS添加任何CSS 。它具有多个HTML元素，并带有ReactJS，Vue和Angular的动态组件。','',2,'https://www.creative-tim.com/learning-lab/tailwind-starter-kit/presentation'),
-(213,'创造者日报','一群创造者','',2,'https://creatorsdaily.com/'),
-(214,'唧唧','','',2,'https://www.jijidown.com/'),
-(215,'OpenJudge','OpenJudge是开放的在线程序评测系统','',2,'http://openjudge.cn/'),
-(216,'levy','','',2,'http://book.levy.net.cn/'),
-(217,'万有导航','','',2,'http://wanyouw.com/'),
-(218,'极客阅读','','',2,'https://jikeyuedu.cn/topic/Vue.js'),
-(219,'鱼塘热榜','','',2,'https://mo.fish/'),
-(220,'老张的哲学','','',2,'https://www.cnblogs.com/laozhang-is-phi/'),
-(221,'软件盒子','','',2,'https://www.bsc1011.top/'),
-(222,'编程导航','站长是腾讯全栈开发 & 腾讯云开发高级布道师，欢迎关注他的  微信公众号【程序员鱼皮】，或添加  微信 liyupi66  交流学习 ','',2,'https://www.code-nav.cn/recommend'),
-(223,'手把手教你AspNetCore WebApi：数据验证','小明最近又遇到麻烦了，小红希望对接接口传送的数据进行验证，既然是小红要求，那小明说什么都得满足呀，这还不简单嘛。','',2,'https://www.cnblogs.com/zcqiand/p/13795675.html'),
-(224,'缓存（MemoryCache和Redis）','这几天小明又有烦恼了，系统上线一段时间后，系统性能出现了问题，马老板很生气，叫小明一定要解决这个问题。性能问题一般用什么来解决呢？小明第一时间想到了缓存。','',2,'https://www.cnblogs.com/zcqiand/p/13816732.html'),
-(225,'Autofac一个优秀的.NET IoC框架','Autofac与C#语言的结合非常紧密，并学习它非常的简单，也是.NET领域最为流行的IoC框架之一。','',2,'https://www.cnblogs.com/zcqiand/p/14257650.html'),
-(226,'.net Core 使用AutoMapper','在我们的项目中慢慢的要把数据库的实体模型和视图模型进行分离，防止被人拿到我们表字段。在学校的时候自己只是有将很多数据库模型，写成一个视图模型返回到前台。','',2,'https://www.cnblogs.com/chenxi001/p/11800943.html'),
-(227,'Autofac 框架初识与应用','AutoFac是一个开源的轻量级的依赖注入容器，也是.net下比较流行的实现依赖注入的工具之一。','',2,'https://www.cnblogs.com/i3yuan/archive/2021/04/13/14654547.html'),
-(228,'Vue项目中实现用户登录及token验证','','',2,'https://www.cnblogs.com/web-record/p/9876916.html'),
-(229,'asp.net core 批量依赖注入服务','看园子里netcore的文章都是简单的注入几个服务的例子,在项目中肯定不会一行一行的写注册服务的代码，参考网上，找到一些解决方案，根据自己实际需求进行更改，特记录下来。','',2,'https://www.cnblogs.com/5jia0/archive/2021/04/14/14658642.html'),
-(230,'张鑫旭的个人主页','张鑫旭-鑫空间-鑫生活','',2,'https://www.zhangxinxu.com/'),
-(231,'colorui文档','','',2,'https://www.kancloud.cn/m22543/colorui/1289223'),
-(232,'lucky-canvas','一个基于 Js + Canvas 的【大转盘 & 九宫格】抽奖，致力于为 web 前端提供一个功能强大且专业可靠的组件，只需要通过简单配置即可实现自由化定制，帮助你快速的完成产品需求','',2,'https://100px.net/'),
-(233,'[C#] NAudio 库的各种常见使用方式: 播放 录制 转码 音频可视化','在 NAudio 中, 常用类型有 WaveIn, WaveOut, WaveStream, WaveFileWriter, WaveFileReader, AudioFileReader 以及接口: IWaveProvider, ISampleProvider, IWaveIn, IWavePlayer','',2,'https://www.cnblogs.com/slimenull/p/14735111.html'),
-(234,'.NET之生成数据库全流程','本文主要是回顾下从项目创建到生成数据到数据库(代码优先)的全部过程。采用EFCore作为ORM框架。','',2,'https://www.cnblogs.com/azrng/p/14757769.html'),
-(235,'24K导航','','',2,'https://www.24kdh.com/'),
-(236,'印记中文','','',2,'https://docschina.org/'),
-(237,'NuxtJS ','NuxtJS 让你构建你的下一个 Vue.js 应用程序变得更有信心。这是一个 开源 的框架，让 web 开发变得简单而强大','',2,'https://www.nuxtjs.cn/'),
-(238,'Tailwind CSS文档','开始 Tailwind CSS 之旅\n用最适合您的方式学习 Tailwind','',2,'https://www.tailwindcss.cn/docs'),
-(239,'outils 代码库','','',2,'https://www.npmjs.com/package/outils'),
-(240,'30 seconds of code ','代码片段','',2,'https://www.30secondsofcode.org/'),
-(242,'Hover.css','','',2,'http://ianlunn.github.io/Hover/'),
-(243,'Pagination.js','分页控件','',2,'http://pagination.js.org/'),
-(244,'Lodash 中文文档','Lodash 是一个一致性、模块化、高性能的 JavaScript 实用工具库。','',2,'https://www.lodashjs.com/'),
-(245,'微信SDK微信SDK','','',2,'https://sdk.weixin.senparc.com/Document'),
-(246,'VUE API 手册','','',2,'https://vue3js.cn/vue-composition-api/'),
-(247,'极客导航','','',2,'https://geekdocs.cn/'),
-(248,'.NET 官方文档','了解如何使用 .NET 在任何使用 C#、F# 和 Visual Basic 的平台上创建应用程序。 浏览 API 引用、代码示例、教程以及其他内容。','',2,'https://docs.microsoft.com/zh-cn/dotnet/'),
-(249,'开源前哨','分享热门、有趣和实用的开源项目～','',2,'https://www.zhihu.com/column/c_1317124962785062912'),
-(250,'DotNet 资源大全中文版','DotNet 资源大全中文版，内容包括：编译器、压缩、应用框架、应用模板、加密、数据库、反编译、IDE、日志、风格指南等。','',2,'https://github.com/jobbole/awesome-dotnet-cn#api'),
-(251,'C#/.NET/.NET Core学习视频汇总（持续更新ing）','之前有很多小伙伴在我的公众号后台留言问有没有C#/.NET/.NET Core这方面相关的视频推荐，我一般都会推荐他们去B站搜索一下。今天刚好有空收集了网上一些比较好的C#/.NET/.NET Core这方面的学习视频，希望能够帮助到有需要的小伙伴们。当然假如你有更好的资源视频推荐可以在我的文章下面留言，开篇之前我要感谢各位小伙伴对【C#/.NET/.NET Core学习、工作、面试指南','',2,'https://www.cnblogs.com/Can-daydayup/p/15046838.html'),
-(256,'MYSQL中数据类型介绍','MySQL的数据类型','1',2,'https://www.cnblogs.com/-xlp/p/8617760.html'),
-(287,'LBO.net','保持饥饿！保持愚蠢！ ->C#在线编辑','',2,'https://www.cnblogs.com/lbonet/'),
-(288,'牛客网','求职之前，先上牛客','',2,'https://www.nowcoder.com/'),
-(289,'GitHub Profile README Generator','简历生成','',2,'https://rahuldkjain.github.io/gh-profile-readme-generator/'),
-(290,'vue3最新学习资料集合，不断更新','vue3最新学习资料集合，不断更新','',2,'https://learnku.com/articles/48928'),
-(291,'daisyUI','Tailwind CSS Components','https://daisyui.com/',2,'https://daisyui.com/'),
-(292,'wangEditorV4','wangEditorV4\nTypescript 开发的 Web 富文本编辑器， 轻量、简洁、易用、开源免费','',2,'https://www.wangeditor.com/'),
-(293,'最好的uniapp入门实战教程','uniapp是Dcloud公司的产品，是一个跨端开发框架，基于vue.js技术栈。开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信/支付宝/百度/头条/QQ/钉钉/淘宝）、快应用等多个平台。这是它的功能架构图','',2,'https://juejin.cn/post/6899642866693423111#heading-16'),
-(294,'EFCore之详细增删改查','EFCore之详细增删改查','',2,'https://juejin.cn/post/6965727147189075976#heading-31'),
-(295,'NET Core和Blog.Core【老张的哲学】','NET Core和Blog.Core【老张的哲学】','',2,'https://www.yuque.com/docs/share/c58f37a4-677c-4a08-b240-4f7f4088a63b#dlCt7'),
-(296,'Vue3+Vite工程常用工具的接入方法','Vue3+Vite工程常用工具的接入方法','',2,'https://juejin.cn/post/6982476410279460878'),
-(297,'Uni-App从入门到实战-黑马程序员杭州校区出品','Uni-App从入门到实战-黑马程序员杭州校区出品','',2,'https://www.bilibili.com/video/BV1BJ411W7pX?p=40'),
-(298,'dotNet全栈开发','dotNet全栈开发\n.NET Core\\xamarin爱好者、篮球狂热爱好者https://dwz.cn/ppnuFzrZ','',2,'https://blog.csdn.net/kebi007'),
-(299,'什么是 Docker','Docker 最初是 dotCloud 公司创始人 Solomon Hykes (opens new window)在法国期间发起的一个公司内部项目，它是基于 dotCloud 公司多年云服务技术的一次革新，并于 2013 年 3 月以 Apache 2.0 授权协议开源 (opens new window)，主要项目代码在 GitHub (opens new window)上进行维护。Docker 项目后来还加入了 Linux 基金会，并成立推动 开放容器联盟（OCI） (opens new window)。','',2,'https://vuepress.mirror.docker-practice.com/'),
-(300,'编程之家','','',2,'https://www.jb51.cc/netcore/index_2.html'),
-(303,'宝塔','','',2,'http://129.204.92.64:8888/6904e070/'),
-(304,'.NetCore中EFCore的使用整理','EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术.\n\n其中的.NetCore版本对应EntityFrameworkCore','',2,'https://www.cnblogs.com/tianma3798/p/6835400.html'),
-(305,'【EFCORE笔记】添加数据的多种方案','','',2,'https://www.cnblogs.com/lbonet/p/14599549.html'),
-(306,'ES6 入门教程','《ECMAScript 6 入门教程》是一本开源的 JavaScript 语言教程，全面介绍 ECMAScript 6 新引入的语法特性。','',2,'https://es6.ruanyifeng.com/'),
-(307,'图文','','',2,'https://pixabay.com/'),
-(308,'免费个人图床搭建gitee+PicGo','','',2,'https://www.cnblogs.com/jiba/p/15147616.html'),
-(309,'Moment.js','JavaScript 日期处理类库','',2,'http://momentjs.cn/'),
-(310,'daisyUI','Tailwind CSS Components','',2,'https://daisyui.com/'),
-(311,'泽泽社长','','',2,'https://zezeshe.com/'),
-(312,'逗比表情包','','',2,'https://www.dbbqb.com/'),
-(313,'两个BT','','',2,'https://www.bttwo.com/'),
-(314,'电影蜜蜂','','',2,'https://www.idybee.com/'),
-(315,'人人影视','','',2,'https://yyets.dmesg.app/home'),
-(316,'努努影视','','',2,'https://www.nunuyy.cc/'),
-(317,'人人美剧','','',2,'https://www.meiju11.com/'),
-(318,'pianku','','',2,'https://www.pianku.li/'),
-(319,'换脸','','',2,'https://myvoiceyourface.com/'),
-(320,'ECMAScript 6 入门','《ECMAScript 6 入门教程》是一本开源的 JavaScript 语言教程，全面介绍 ECMAScript 6 新引入的语法特性。','',2,'https://es6.ruanyifeng.com/'),
-(321,'Windi CSS','下一代工具类 CSS 框架','',2,'https://cn.windicss.org/'),
-(322,'wow.js','滚动时显示动画。非常Animate.css朋友 :-)\n轻松自定义动画设置：样式、延迟、长度、偏移、迭代...','https://www.delac.io/WOW/img/wow-logo.jpg',2,'https://www.delac.io/WOW/'),
-(323,'.Net Core + DDD基础分层 + 项目基本框架 + 个人总结','','',2,'https://www.cnblogs.com/shijiehaiyang/p/14918544.html'),
-(324,'一文梳理CSS必会知识点','','',2,'https://juejin.cn/post/6854573212337078285'),
-(325,'30个你必须熟记的CSS选择器','','',2,'https://code.tutsplus.com/zh-hans/tutorials/the-30-css-selectors-you-must-memorize--net-16048'),
-(326,'深入理解 TypeScript','','',2,'https://jkchao.github.io/typescript-book-chinese/#why'),
-(327,'Vue Patterns CN','有用的Vue模式，技巧，提示和技巧以及有帮助的精选链接。','',2,'https://zyszys.github.io/vue-patterns-cn/'),
-(328,'代码整洁的 JavaScript','','',2,'https://github.com/beginor/clean-code-javascript'),
-(329,'JavaScript 风格指南','','',2,'https://github.com/alivebao/clean-code-js'),
-(330,'typescript基础史上最强学习文章','','',2,'https://juejin.cn/post/7018805943710253086'),
-(331,'CSS Icons','Open-source CSS, SVG and Figma UI Icons\nAvailable in SVG Sprite, styled-components, NPM & API','',2,'https://css.gg/'),
-(332,'发现导航','','',2,'https://www.nav3.cn/#/light'),
-(333,'50个Vue知识点','','',2,'https://juejin.cn/post/6984210440276410399#heading-21'),
-(334,'daisyUI','Tailwind CSS Components','',2,'https://daisyui.com/'),
-(335,'Vue风格指南','这里是官方的 Vue 特有代码的风格指南。如果在工程中使用 Vue，为了回避错误、小纠结和反模式，该指南是份不错的参考。不过我们也不确信风格指南的所有内容对于所有的团队或工程都是理想的。所以根据过去的经验、周围的技术栈、个人价值观做出有意义的偏差是可取的。','',2,'https://cn.vuejs.org/v2/style-guide/index.html'),
-(336,'SqlSugar','','',2,'https://www.donet5.com/'),
-(337,'使用 FluentValidation 实现数据校验、验重','','',2,'https://www.cnblogs.com/zl33842902/p/13514929.html'),
-(338,'c# asp.net core 3.1 自动注入','','',2,'https://www.cnblogs.com/Byboys/p/13744481.html'),
-(339,'.Net Core3.1下Autofac的使用','','',2,'https://blog.csdn.net/sammy520/article/details/114417432'),
-(340,'获取windows 操作系统下的硬件或操作系统信息等','','',2,'https://www.cnblogs.com/pilgrim/p/15115782.html'),
-(341,'pixabay','Stunning free images & royalty free stock','',2,'https://pixabay.com/'),
-(342,'学会这几招,轻松让你的github脱颖而出','','',2,'https://juejin.cn/post/6997070653010477087'),
-(343,'使用模板生成网页/Pdf/Word/Png/Html的简历','','',2,'https://github.com/liangjingkanji/Resume-Template'),
-(344,'ASP.NET Core定时之Quartz.NET使用','Quartz.NET 是一个功能齐全的开源作业调度系统，可用于从最小的应用程序到大型企业系统。\n\nQuartz.NET是纯净的，它是一个.Net程序集，是非常流行的Java作业调度系统Quartz的C#实现。','',2,'https://www.cnblogs.com/LaoPaoEr/p/15129899.html'),
-(345,'C# 实现发送QQ邮箱功能','','',2,'https://www.cnblogs.com/2002-YiZhiYu/p/15118080.html'),
-(346,'.Net Core5.0中Autofac依赖注入整合多层，项目中可直接用','','',2,'https://www.cnblogs.com/wei325/p/15121451.html#autoid-3-0-0'),
-(347,'Fantastic-admin','一款开箱即用的 Vue 中后台管理系统框架','',2,'https://hooray.gitee.io/fantastic-admin/'),
-(348,'vue-element-admin','A magical vue admin','',2,'https://panjiachen.gitee.io/vue-element-admin-site/zh/'),
-(349,'wallhaven','','',2,'https://wallhaven.cc/'),
-(350,'基于vue3实现的vue3-seamless-scroll无缝滚动','','',2,'https://juejin.cn/post/7001831268811800584'),
-(351,'在vite2和Vue3中配置Mockjs _','','',2,'https://www.cnblogs.com/wdyyy/p/mockjs_vite2.html'),
-(352,'Vue 3.0 训练营','','',2,'https://vue3.github.io/vue3-News/'),
-(353,'宝塔','','',2,'http://129.204.92.64:8888/6904e070/'),
-(354,'Quasar ','','',2,'https://quasar.dev/start/pick-quasar-flavour'),
-(355,'jstips','','',2,'https://www.jstips.co/zh_CN/javascript/'),
-(356,'Pinia','状态管理','',2,'https://pinia.esm.dev/'),
-(357,'Vue-H5-Template','使用 Vue3.0+Typescript+Vant 搭建 h5 开发基础模板，并提供通用型的解决方案。','',2,'https://docs.xwhx.top/'),
-(358,'片段生成器','','',2,'https://snippet-generator.app/'),
-(359,'Vben Admin ','一个开箱即用的前端框架','',2,'https://vvbin.cn/doc-next/'),
-(360,'Vue-Mastery学习笔记','','',2,'https://www.yuque.com/nxtt7g/kompdt'),
-(361,'u.tools','新一代效率工具平台\n自由组合丰富插件，打造随手可取的终极神器','',2,'https://u.tools/'),
-(362,'VARLET','面向Vue3的Material风格移动端组件库','',2,'https://varlet.gitee.io/varlet-ui/#/zh-CN/home'),
-(363,'devhints.io','Rico''s cheatsheets','',2,'https://devhints.io/'),
-(364,'TypeScript 4.0 使用手册','TypeScript语言用于大规模应用的JavaScript开发。 ✔️ TypeScript支持类型，是JavaScript的超集且可以编译成纯JavaScript代码。 ✔️ TypeScript兼容所有浏览器，所有宿主环境，所有操作系统。 ✔️ TypeScript是开源的。','',2,'https://www.bookstack.cn/read/TypeScript-4.0-zh/README.md'),
-(365,'Apifox 使用文档','API 文档、API 调试、API Mock、API 自动化测试一体化协作平台，定位 Postman + Swagger + Mock + JMeter。通过一套系统、一份数据，解决多个系统之间的数据同步问题。只要定义好 API 文档，API 调试、API 数据 Mock、API 自动化测试就可以直接使用，无需再次定义；API 文档和 API 开发调试使用同一个工具，API 调试完成后即可保证和 API 文档定义完全一致。高效、及时、准确！','',2,'https://www.apifox.cn/help/'),
-(366,'Snipaste','Snipaste 不只是截图，善用贴图功能将帮助你提升工作效率','',2,'https://docs.snipaste.com/zh-cn/'),
-(367,'【TypeScript】- 一篇够用的TS总结','','',2,'https://alexwjj.github.io/pages/cf42a74e3cc8f/'),
-(368,'柠檬大师的空间站','','',2,'https://leidl.top/'),
-(369,'Loader Gallery','customize and make your own unique loader!','',2,'https://loading.io/spinner/'),
-(370,'程序员导航','','',2,'https://cxy521.com/'),
-(371,'Live Demo','','',2,'https://theoxiong.github.io/vue-search-panel/'),
-(372,'书栈网','','',2,'https://www.bookstack.cn/'),
-(373,'axios','易用、简洁且高效的http库','',2,'http://www.axios-js.com/zh-cn/'),
-(374,'jQuery','','',2,'http://hemin.cn/jq/'),
-(375,'Linux命令大全(手册)','准确，丰富，稳定，在技术之路上为您护航！','',2,'https://www.linuxcool.com/'),
-(376,'JavaScript中的这些骚操作，你都知道吗？','','',2,'https://juejin.cn/post/7007306019307175966'),
-(377,'分享32个JavaScript工作中常用的代码片段','整理一下工作中常用的JavaScript小技巧分享给大家，希望能帮助到各位小伙伴们，在工作中提升开发效率。','',2,'https://segmentfault.com/a/1190000040637925'),
-(378,'Vue3的7种和Vue2的12种组件通信','','',2,'https://juejin.cn/post/6999687348120190983'),
-(379,'v-md-editor','v-md-editor 是基于 Vue 开发的 markdown 编辑器组件','',2,'https://ckang1229.gitee.io/vue-markdown-editor/zh/#%E4%BB%8B%E7%BB%8D'),
-(384,'前端“技师”们强推的效率开发工具汇总','各位程序员“技师”提供的小技巧的汇总。将我们平常累计的一些开发技巧分享给大家，希望能对大家有所帮助','图片链接',2,'https://juejin.cn/post/7021320464836329502#heading-3'),
-(385,'Windows 快捷操作大全','快捷键只介绍能让你成为开发大佬的，类似 Ctrl+C、Ctrl+V 这种大家熟知的，一概省略，咱们只来干货。','....',2,'https://juejin.cn/post/7020574670097219621'),
-(386,'一文让你30分钟快速掌握Vue3','经过了漫长的迭代，Vue 3.0 终于在上 2020-09-18 发布了，带了翻天覆地的变化，使用了 Typescript 进行了大规模的重构，带来了 Composition API RFC 版本，类似 React Hook 一样的写 Vue，可以自定义自己的 hook ，让使用者更加的灵活，接下来总结一下 vue 3.0 带来的部分新特性。','图片链接',2,'https://mp.weixin.qq.com/s/1orWGlOXT2Wn2pJLK6VAIg'),
-(387,'前端进阶之道','针对前端的知识难点进行细致入微的讲解，让你的进阶之路不再崎岖！','图片链接',2,'https://yuchengkai.cn/'),
-(388,'Web 控制台终极指南','一旦掌握了控制台，它将帮助我们更有条理、更快地调试并了解应用程序中发生的一切。所以我会试着用例子总结你需要知道的所有内容','图片链接',2,'https://segmentfault.com/a/1190000040705234'),
-(389,'JSRUN.NET','用代码说话,一惯的风格','图片链接',2,'http://jsrun.net/t'),
-(390,'vue-manage-system','','图片链接',2,'https://github.com/lin-xin/vue-manage-system'),
-(391,'微信Markdown','导航简述','图片链接',2,'https://doocs.github.io/md/#/'),
-(392,'cssreference.io','免费的 CSS 视觉指南 通过示例学习：cssreference.io是一个免费的 CSS 视觉指南。它以最流行的属性为特色，并通过插图和动画示例对其进行了解释。','图片链接',2,'https://cssreference.io/'),
-(393,'css-tricks.com','可以包含（在另一个特定 HTML 元素中的特定 HTML 元素）','图片链接',2,'https://css-tricks.com/'),
-(400,'color-ui','简述','图片链接',2,'https://www.color-ui.com/'),
-(402,'codemyui','简述','图片链接',2,'https://codemyui.com/'),
-(403,'学习CSS布局','本站教授的是现在广泛使用于网站布局领域的CSS基础。  我们假设你已经掌握了CSS的选择器、属性和值。并且你可能已经对布局有一定了解，即使亲自去写的话还是会很苦恼。如果你想要从头开始学习HTML和CSS，那么你可以看下这篇教程。不然的话，让我们看看我们是否可以让你在下一个项目少一些烦恼。','图片链接',2,'https://zh.learnlayout.com/'),
-(410,'CSShake','一些 CSS 类 移动你的 DOM！','图片链接',2,'https://elrumordelaluz.github.io/csshake/'),
-(411,'Nuxt3','使用 Vue 3 构建您的下一个应用程序，体验混合渲染、强大的数据获取和新功能。Nuxt 3 是一个开源框架，使 Web 开发变得简单而强大。','图片链接',2,'https://v3.nuxtjs.org/'),
-(412,'Day.js中文网','Day.js是一个极简的JavaScript库，可以为现代浏览器解析、验证、操作和显示日期和时间。','图片链接',2,'https://dayjs.fenxianglu.cn/'),
-(413,'fenxianglu','','图片链接',2,'https://www.fenxianglu.cn/'),
-(414,'Vuex','Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式 + 库。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。','图片链接',2,'https://next.vuex.vuejs.org/zh/'),
-(415,'Vue I18n','Vue I18n 是 Vue.js 的国际化插件','图片链接',2,'https://kazupon.github.io/vue-i18n/zh/'),
-(416,'Material Design 框架','Vuetify 是一个纯手工精心打造的 Material 样式的 Vue UI 组件库。 不需要任何设计技能 — 创建叹为观止的应用程序所需的一切都触手可及。','图片链接',2,'https://vuetifyjs.com/zh-Hans/'),
-(417,'Typora+picGo+Gitee搭建图床','Vuetify 是一个纯手工精心打造的 Material 样式的 Vue UI 组件库。 不需要任何设计技能 — 创建叹为观止的应用程序所需的一切都触手可及。','图片链接',2,'https://juejin.cn/post/7011762633691168805'),
-(418,'Axios的封装思想及实践（TS版本）','','图片链接',2,'https://juejin.cn/post/7023006049732919309'),
-(419,'wangEditor','开源 Web 富文本编辑器，开箱即用，配置简单  快速上手demo 演示 ','图片链接',2,'https://juejin.cn/post/7023006049732919309'),
-(420,'Fect UI -Vue','@fect-ui/vue是根据 Geist-ui/vue作为设计依赖对 vue2 版本进行升级的一个Vue3UI 库。项目基于typescript,拥有更完备的类型提示和对编译器的友好支持, 相较 vue2 版本组件库进行了交互的优化。','图片链接',2,'https://vue.miaya.art/Introduce'),
-(421,'CSS Layout','使用 CSS 制作的流行布局和图案','图片链接',2,'https://csslayout.io/'),
-(422,'vue3-progress','进度条','图片链接',2,'https://vue3-progress-demo.netlify.app/'),
-(423,'webPack转vite所遇到的问题','','图片链接',2,'https://blog.csdn.net/WH_Crx/article/details/118106097'),
-(424,'mind-map','vue 图文','图片链接',2,'https://github.com/jCodeLife/mind-map/'),
-(425,'最优 图像优化','在文件尺寸和质量之间选择完美平衡，并且可获取完整在线预览。  您的图像从不会离开您的浏览器。','图片链接',2,'https://zh.recompressor.com/'),
-(426,'Vue Trend','Vue.js Live Demo 的简单、优雅的火花线','图片链接',2,'https://cinwell.com/vue-trend/'),
-(427,'极客猿导航','导航','图片链接',2,'https://nav.geekape.net/'),
-(428,'vue-fullscreen','一个用于将任意页面元素进行全屏切换的vue组件，基于 screenfull.js','图片链接',2,'https://mirari.cc/2017/08/14/%E5%85%A8%E5%B1%8F%E5%88%87%E6%8D%A2%E7%BB%84%E4%BB%B6vue-fullscreen/'),
-(429,'CodePen','CodePen 是一个面向前端设计人员和开发人员的社交开发环境。构建和部署网站，展示您的工作，构建测试用例以学习和调试，并寻找灵感。','图片链接',2,'https://codepen.io/'),
-(430,'GKA','简单的、高效的帧动画生成工具.  使用简单(仅需一行命令) 内置多种图片优化 多类生成模板，支持定制','图片链接',2,'https://gka.js.org/#/'),
-(431,'Sonar','\"Sonar一个Web系统，展现了静态代码扫描的结果，结果是可以自定义的 ,支持多种语言的原理是它的扩展性 \"','图片链接',2,'http://www.sonar.org.cn/'),
-(432,'highcharts','数据可视化','图片链接',2,'http://www.sonar.org.cn/'),
-(433,'chartjs','图表','图片链接',2,'https://www.chartjs.org/'),
-(434,'Apache ECharts','一个基于 JavaScript 的开源可视化图表库','图片链接',2,'https://echarts.apache.org/zh/index.html'),
-(435,'JavaScript Promise迷你书','本书的目的是以目前还在制定中的ECMAScript 6 Promises规范为中心，着重向各位读者介绍JavaScript中对Promise相关技术的支持情况。','图片链接',2,'http://liubin.org/promises-book/#introduction'),
-(436,'EJS','嵌入式 JavaScript 模板。','图片链接',2,'https://ejs.co/#promo'),
-(437,'Redux 中文官网','JS 应用的状态容器，提供可预测的状态管理','图片链接',2,'https://cn.redux.js.org/'),
-(438,'LOCALFORAGE','localForage 是一个 JavaScript 库，通过简单类似 localStorage API 的异步存储来改进你的 Web 应用程序的离线体验。它能存储多种类型的数据，而不仅仅是字符串。','图片链接',2,'https://localforage.docschina.org/#api-getitem'),
-(439,'v-charts','在使用 echarts 生成图表时，经常需要做繁琐的数据类型转化、修改复杂的配置项，v-charts 的出现正是为了解决这个痛点。基于 Vue2.0 和 echarts 封装的 v-charts 图表组件，只需要统一提供一种对前后端都友好的数据格式设置简单的配置项，便可轻松生成常见的图表。','图片链接',2,'https://v-charts.js.org/#/'),
-(440,'pexels','免费图库','图片链接',2,'https://www.pexels.com/zh-cn/'),
-(441,'HELLOGITHUB','分享 GitHub 上 有趣、入门级的开源项目','图片链接',2,'https://hellogithub.com/'),
-(442,'GitHub Corners','Phew, GitHub is over ten years old now... and is unquestionably synonomous with open source. After 10 years, those GitHub ribbons are more than overdue for a cleaner, more modern alternative. This is my take.  By using SVG, these ','图片链接',2,'https://tholman.com/github-corners/'),
-(444,'Vuetable-2','数据表','图片链接',2,'https://www.vuetable.com/#current-version'),
-(445,'v-viewer','vue的图片查看器组件，支持旋转、缩放、缩放等，基于viewer.js','图片链接',2,'https://mirari.cc/v-viewer/'),
-(446,'Vue 3 选框','为你的 Vue 3 应用程序制作的一个简单的动态选取框组件','图片链接',2,'https://vue3-marquee.vercel.app/'),
-(447,' GoGoCode','代码转换从未如此简单 全网最简单易上手，可读性最强的 AST 处理工具！','图片链接',2,'https://gogocode.io/zh'),
-(448,'hammerjs','','图片链接',2,'http://hammerjs.github.io/'),
-(449,'导航标题2','导航简述','图片链接',2,'www.xxx.com');
-/*!40000 ALTER TABLE `sn_navigation` ENABLE KEYS */;
 
 -- 
 -- Definition of sn_navigation_type
@@ -623,59 +208,13 @@ INSERT INTO `sn_one_type`(`id`,`title`) VALUES
 /*!40000 ALTER TABLE `sn_one_type` ENABLE KEYS */;
 
 -- 
--- Definition of sn_one
--- 
-
-DROP TABLE IF EXISTS `sn_one`;
-CREATE TABLE IF NOT EXISTS `sn_one` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `title` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
-  `text` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
-  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片',
-  `read` int(11) NOT NULL COMMENT '阅读数',
-  `give` int(11) NOT NULL COMMENT '点赞',
-  `user_id` int(11) NOT NULL COMMENT '作者',
-  `comment_id` int(11) unsigned NOT NULL COMMENT '评论',
-  `type_id` int(11) NOT NULL COMMENT '分类',
-  `time_create` date NOT NULL COMMENT '时间',
-  `time_modified` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sn_one_type` (`type_id`),
-  CONSTRAINT `one_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_one_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table sn_one
--- 
-
-/*!40000 ALTER TABLE `sn_one` DISABLE KEYS */;
-INSERT INTO `sn_one`(`id`,`title`,`text`,`img`,`read`,`give`,`user_id`,`comment_id`,`type_id`,`time_create`,`time_modified`) VALUES
-(8,'vol.001 舔狗日记','没事，你有对象不重要，你可以偶尔回一下我的信息好吗，一天一条也行，让我知道你还在。','321321',8,9,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(9,'vol.002 舔狗日记','时隔30个小时，你终于发了信息给我，你说“宝贝，我想你了。”，我很开心，我终于以为我的舔狗日子到了，可没想到信息发出来两秒都没有，你就撤回了，你说发错了，当我说准备要回没关系的时候，我看见了红色的感叹号。','321321',1,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(10,'vol.003 舔狗日记','蒋介石因为宋美龄的一句喜欢梧桐，他便种满了整个南京。而我因为你的一句不喜欢小偷，我便放过了整个上海的电动车。','321321',1,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(11,'vol.004 舔狗日记','我今天送了你一支口红，你拿到之后很开心，在他的嘴巴上亲了一下，或许他送你口红的时候，你也会在我的嘴巴上亲一下吧。','321321',4,1,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(12,'vol.005 舔狗日记','别的妹妹叫你打游戏，你让人家语音给你发了句哥哥，你就陪她打一天。我叫你打游戏，你回了我一句 70/h。','321321',6,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(13,'vol.006 舔狗日记','今天在楼上窗户上看见你和他在公园里接吻，我看见哭了出来，并打电话给你，想问问你为什么？但你说怎么了，声音是那么好听。于是我说“以后你和他接吻的时候，能不能用我送给你的口红啊？”','321321',5,1,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(14,'vol.007 舔狗日记','今天上班不是太忙，百无聊赖，又翻出了你的相片，看了又看。今天是我认识你的第302天，也是我爱你的第302天，可是这些你并不知道，也许你知道了，也不会在意吧。 此刻的我好想你！','321321',0,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(15,'vol.008 舔狗日记','你好像从来没有对我说过晚安，我在我们的聊天记录里搜索了关键字：“晚安”，你说过一次：我早晚安排人弄死你。','321321',0,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(16,'vol.009 舔狗日记','她好像从来没有主动说过爱我，我搜索了一下关键字“爱”。在我们的聊天记录里，她只说过一次：爱奇艺会员借我一下。','321321',5,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
-(17,'vol.010 毒鸡汤','如果人生是一部电影，那你就是，中间弹出来的广告。','string',7,1,4,0,4,'2020-12-23 00:00:00','2020-12-18 00:00:00'),
-(20,'vol.011 舔狗日记','现在已经凌晨一点多了，我望着手机屏幕迟迟没有他的消息：你知道吗？我等了一晚上你的消息。他终于回复我了：是我让你等的？','无',5,3,4,0,4,'2020-12-23 00:00:00','2020-12-18 00:00:00'),
-(21,'vol.012 舔狗日记','今天你又来我们班看美女了，路过的时候瞥了一眼坐在第一排的我，我就知道你心里还是有我的。啊！真是美好的一天！','无',14,2,4,0,4,'2021-01-03 00:00:00','2020-12-18 00:00:00'),
-(22,'vol.013 毒鸡汤','别以为你一无所有，至少你还有丑！','无',11,0,4,0,4,'2021-01-03 00:00:00','2020-12-18 00:00:00'),
-(31,'vol.014 舔狗日记','今天打单子赚了56，给你转了52自己留了4块钱。我花两块买了两包泡面，用剩下的两块钱买了一瓶矿泉水，自己烧水泡面吃，而你用那52块钱想都没想的给你别的哥哥买了皮肤。 我太开心了，因为你用上我的钱了，以后我要赚更多的钱给你','无',11,2,4,0,4,'2021-07-20 00:00:00','2020-12-18 00:00:00'),
-(33,'vol.015 舔狗日记','今天你说了要和我打电话，我等了一天，马上十二点了才打过来，我有点不高兴就挂了，你骂了句给脸不要脸。我想了一下，哎呀你还会关心我的脸，多么善良的女孩子，我发誓还能再等一天电话','无',7,3,4,0,4,'2021-09-02 00:00:00','2020-12-18 00:00:00'),
-(34,'vol.016 舔狗日记','你好像成熟了，你学会隐忍，开始压抑自己对我的感情。这很好……可是我觉得自己被你忽略了……你好像看不见我。这不可能，对吗？','无',12,4,4,0,4,'2021-09-02 00:00:00','2020-12-18 00:00:00');
-/*!40000 ALTER TABLE `sn_one` ENABLE KEYS */;
-
--- 
 -- Definition of sn_picture_type
 -- 
 
 DROP TABLE IF EXISTS `sn_picture_type`;
 CREATE TABLE IF NOT EXISTS `sn_picture_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '分类名称',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
@@ -697,11 +236,14 @@ INSERT INTO `sn_picture_type`(`id`,`name`) VALUES
 DROP TABLE IF EXISTS `sn_picture`;
 CREATE TABLE IF NOT EXISTS `sn_picture` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '图片地址',
-  `itle` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '标题',
-  `type_id` int(11) DEFAULT NULL COMMENT '分类',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图床名',
+  `img_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片地址',
+  `type_id` int(11) NOT NULL COMMENT '分类',
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `prcture_type_id` (`type_id`),
+  KEY `pivture_user_id` (`user_id`),
+  CONSTRAINT `pivture_user_id` FOREIGN KEY (`user_id`) REFERENCES `sn_user` (`id`),
   CONSTRAINT `prcture_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_picture_type` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
@@ -710,38 +252,34 @@ CREATE TABLE IF NOT EXISTS `sn_picture` (
 -- 
 
 /*!40000 ALTER TABLE `sn_picture` DISABLE KEYS */;
-INSERT INTO `sn_picture`(`id`,`url`,`itle`,`type_id`) VALUES
-(2,'/img/blog/1.jpg','blog',1),
-(3,'/img/blog/2.jpg','blog',1),
-(4,'/img/blog/3.jpg','blog',1),
-(6,'/img/blog/4.jpg','blog',1),
-(7,'/img/blog/5.jpg','blog',1);
+INSERT INTO `sn_picture`(`id`,`name`,`img_url`,`type_id`,`user_id`) VALUES
+(2,'blog','/img/blog/1.jpg',1,4),
+(3,'blog','/img/blog/2.jpg',1,4),
+(4,'blog','/img/blog/3.jpg',1,4),
+(6,'blog','/img/blog/4.jpg',1,4),
+(7,'blog','/img/blog/5.jpg',1,4);
 /*!40000 ALTER TABLE `sn_picture` ENABLE KEYS */;
 
 -- 
--- Definition of sn_set_blog
+-- Definition of sn_setblog_type
 -- 
 
-DROP TABLE IF EXISTS `sn_set_blog`;
-CREATE TABLE IF NOT EXISTS `sn_set_blog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '设置的内容名称',
-  `user_id` int(5) NOT NULL COMMENT '关联用户表',
-  `isopen` tinyint(1) NOT NULL COMMENT '是否启用',
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接',
-  `type` tinyint(5) NOT NULL COMMENT '分类',
+DROP TABLE IF EXISTS `sn_setblog_type`;
+CREATE TABLE IF NOT EXISTS `sn_setblog_type` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 
--- Dumping data for table sn_set_blog
+-- Dumping data for table sn_setblog_type
 -- 
 
-/*!40000 ALTER TABLE `sn_set_blog` DISABLE KEYS */;
-INSERT INTO `sn_set_blog`(`id`,`name`,`user_id`,`isopen`,`url`,`type`) VALUES
-(1,'SetPage',4,0,'df',1),
-(2,'1',4,1,'5',0);
-/*!40000 ALTER TABLE `sn_set_blog` ENABLE KEYS */;
+/*!40000 ALTER TABLE `sn_setblog_type` DISABLE KEYS */;
+INSERT INTO `sn_setblog_type`(`id`,`name`) VALUES
+(0,'后台设置'),
+(1,'主页设置');
+/*!40000 ALTER TABLE `sn_setblog_type` ENABLE KEYS */;
 
 -- 
 -- Definition of sn_software_type
@@ -825,7 +363,7 @@ INSERT INTO `sn_sort`(`id`,`name`,`description`) VALUES
 DROP TABLE IF EXISTS `sn_talk_type`;
 CREATE TABLE IF NOT EXISTS `sn_talk_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
@@ -848,7 +386,7 @@ DROP TABLE IF EXISTS `sn_talk`;
 CREATE TABLE IF NOT EXISTS `sn_talk` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
-  `describe` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '简介',
+  `describe` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '简介',
   `text` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
   `read` int(11) NOT NULL COMMENT '阅读量',
   `give` int(11) NOT NULL COMMENT '点赞',
@@ -856,10 +394,11 @@ CREATE TABLE IF NOT EXISTS `sn_talk` (
   `user_id` int(11) NOT NULL COMMENT '用户',
   `type_id` int(11) NOT NULL,
   `time_create` date NOT NULL COMMENT '发表时间',
-  `time_modified` date DEFAULT NULL,
+  `time_modified` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `sn_talk_typeId` (`type_id`),
+  CONSTRAINT `lalk_user_id` FOREIGN KEY (`user_id`) REFERENCES `sn_user` (`id`),
   CONSTRAINT `talk_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_talk_type` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
@@ -869,13 +408,13 @@ CREATE TABLE IF NOT EXISTS `sn_talk` (
 
 /*!40000 ALTER TABLE `sn_talk` DISABLE KEYS */;
 INSERT INTO `sn_talk`(`id`,`title`,`describe`,`text`,`read`,`give`,`comment_id`,`user_id`,`type_id`,`time_create`,`time_modified`) VALUES
-(3,'Blog-12.18更新','favorite,博客页面样式更新样式更新,内容页面,时间线页面动态加载组件数据提示框更新为骨架框','<h3>1.样式更新</h3><p><span style=\"color: rgb(68, 68, 68);\">favorite</span>,<span style=\"color: rgb(68, 68, 68);\">博客页面样式更新样式更新</span></p><h3>2.内容页改动</h3><p><span style=\"color: rgb(68, 68, 68);\">内容页面,时间线页面动态加载组件数据提示框更新为骨架框</span></p><h3>3.时间线改动</h3><p><span style=\"color: rgb(68, 68, 68);\">增加one日记动态数据时间线增加跳转到页面详情</span></p>',0,0,0,4,3,'2020-12-18 00:00:00',NULL),
-(17,'Blog-12.21更新','','<h3>1.增加页面</h3><p>增加日志详情页面-TalkText.vue, OneSidebar.vue 文章侧边栏界面</p><h3>2.Talk页面改动</h3><p>增加页面跳转至TalkText.vue</p><p>About关于界面增加功能跳转</p><p>One文章页面增加 OneSidebar文章侧边栏</p>',0,0,0,4,3,'2020-12-21 00:00:00',NULL),
-(18,'Blog-12.23更新','优化了Indexs,Talk及侧边栏等页面字体样式及抗齿轮,one页面增加点击弹出详情框及更新了css样式','<h3>1.页面优化</h3><ul><li>优化了Indexs,Talk及侧边栏等页面字体样式及抗齿轮</li><li>one页面增加点击弹出详情框及更新了css样式</li><li>OneSidebar侧边栏时间字段格式优化,增加点击弹出详情页</li><li>Snvodeo视频页面及详情页增加时间字段格式优化</li><li>TalkTest页面头部组件更新</li><li>TimeLine时间组件动态字段更新增加(分类,标签,文章,阅读,字段数)</li><li>Sidebarsn css样式更新</li><li>IndexSidebar 站点信息增加动态更新</li></ul><h3>2.新增</h3><ul><li>增加nprogress顶部加载组件</li><li>增加store状态管理</li><li>增加Transfer文章中转站页面</li></ul><p><br></p><h3>3.页面重构</h3><ul><li>app页面js更改为ts方式重写</li></ul><h3>4.其他优化</h3><ul><li>修复Indextext2页面跳转当前页面不刷新</li><li>封装了内容详情(blogs)css样式</li><li>增加视频图片</li></ul>',0,0,0,4,3,'2020-12-23 00:00:00',NULL),
-(19,'Blog-12.25更新','','<h3>1.页面改动</h3><p>app.vue 删除背景颜色设定</p><p>com.scss 封装line-ome index.css</p><p>增加响应式设定</p><p>导航页面css调整</p><p>收藏页面增加动态数据分类框(之前是静态)</p><p>one侧边栏动态增加字段,文章数量,阅读显示</p><p>删除日志Talk页面顶部信息框,删除侧边栏图标框 Headers.vue 样式调整</p><h3>2.新增内容</h3><p>增加新字体 font.css并应用页面</p><p>增加响应式断点主页面已完成响应式设定</p><p>新增字体文件 新增移动端状态下显示底部导航框bootom</p>',0,0,0,4,3,'2020-12-25 00:00:00',NULL),
-(20,'展望','','<p>是佛挡杀佛的范德萨发</p>',0,0,0,4,3,'2020-12-26 00:00:00',NULL),
-(21,'青春真的结束了吗','','',0,0,0,4,3,'2020-12-26 00:00:00',NULL),
-(22,'Blog正式投入使用','','<p>经过接近一个月时间的项目重构(vue2--&gt;vue3+ts),主要部分功能已经完善。</p><p><strong>以下已完成功能</strong></p><p>主页技术方面的文章阅读</p><p>标签页面方面查找对应的文章进行阅读</p><p>时间线</p><p>导航站</p><p>日志-&gt;只做个人文章展示</p><p><strong>娱乐项</strong></p><p>短文仅供一乐(舔狗日志)</p><p>收藏,博客页面分享各路大神技术博客</p><p><strong>待进行功能</strong></p><p>书单--准备进行</p><p>后台-- 后台系统大部分功能已近完善,基本可以投入生产,但是还有很多细节方面没弄好暂不上线</p><p>留言-- 前端已完成,后台api已完成待导入接口</p><p><strong>待优化功能项</strong></p><p>额!!!!!!! 好像都需要优化</p><p>后续增加一个新页面来追踪自己要做什么,做到什么进度。就叫个人项目进度追踪应该也算是新功能了</p><p><strong>项目架构</strong></p><p>前端项目使用到的技术</p><p><span style=\"color: rgb(136, 136, 136);\">VUE3 -- TS -- Router -- Axios -- Store -- AntDesignVue -- TaiwindCss -- animate.css -- marked</span></p><p>后端项目</p><p>NetCore3.1webApi</p><p><strong>本次更新</strong></p><p>1.增加导航侧边栏 FavSidebar.vue</p><p>2.增加书单页面 Book.vue</p><p>3.增加图片视频展示</p><p>4.删除字体(太大了)</p><p>5.Talk.vue 页面进行重构(想好看点)</p><p><br></p>',0,0,0,4,3,'2020-12-26 00:00:00',NULL);
+(3,'Blog-12.18更新','favorite,博客页面样式更新样式更新,内容页面,时间线页面动态加载组件数据提示框更新为骨架框','<h3>1.样式更新</h3><p><span style=\"color: rgb(68, 68, 68);\">favorite</span>,<span style=\"color: rgb(68, 68, 68);\">博客页面样式更新样式更新</span></p><h3>2.内容页改动</h3><p><span style=\"color: rgb(68, 68, 68);\">内容页面,时间线页面动态加载组件数据提示框更新为骨架框</span></p><h3>3.时间线改动</h3><p><span style=\"color: rgb(68, 68, 68);\">增加one日记动态数据时间线增加跳转到页面详情</span></p>',0,0,0,4,3,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(17,'Blog-12.21更新','','<h3>1.增加页面</h3><p>增加日志详情页面-TalkText.vue, OneSidebar.vue 文章侧边栏界面</p><h3>2.Talk页面改动</h3><p>增加页面跳转至TalkText.vue</p><p>About关于界面增加功能跳转</p><p>One文章页面增加 OneSidebar文章侧边栏</p>',0,0,0,4,3,'2020-12-21 00:00:00','2020-12-18 00:00:00'),
+(18,'Blog-12.23更新','优化了Indexs,Talk及侧边栏等页面字体样式及抗齿轮,one页面增加点击弹出详情框及更新了css样式','<h3>1.页面优化</h3><ul><li>优化了Indexs,Talk及侧边栏等页面字体样式及抗齿轮</li><li>one页面增加点击弹出详情框及更新了css样式</li><li>OneSidebar侧边栏时间字段格式优化,增加点击弹出详情页</li><li>Snvodeo视频页面及详情页增加时间字段格式优化</li><li>TalkTest页面头部组件更新</li><li>TimeLine时间组件动态字段更新增加(分类,标签,文章,阅读,字段数)</li><li>Sidebarsn css样式更新</li><li>IndexSidebar 站点信息增加动态更新</li></ul><h3>2.新增</h3><ul><li>增加nprogress顶部加载组件</li><li>增加store状态管理</li><li>增加Transfer文章中转站页面</li></ul><p><br></p><h3>3.页面重构</h3><ul><li>app页面js更改为ts方式重写</li></ul><h3>4.其他优化</h3><ul><li>修复Indextext2页面跳转当前页面不刷新</li><li>封装了内容详情(blogs)css样式</li><li>增加视频图片</li></ul>',0,0,0,4,3,'2020-12-23 00:00:00','2020-12-18 00:00:00'),
+(19,'Blog-12.25更新','','<h3>1.页面改动</h3><p>app.vue 删除背景颜色设定</p><p>com.scss 封装line-ome index.css</p><p>增加响应式设定</p><p>导航页面css调整</p><p>收藏页面增加动态数据分类框(之前是静态)</p><p>one侧边栏动态增加字段,文章数量,阅读显示</p><p>删除日志Talk页面顶部信息框,删除侧边栏图标框 Headers.vue 样式调整</p><h3>2.新增内容</h3><p>增加新字体 font.css并应用页面</p><p>增加响应式断点主页面已完成响应式设定</p><p>新增字体文件 新增移动端状态下显示底部导航框bootom</p>',0,0,0,4,3,'2020-12-25 00:00:00','2020-12-18 00:00:00'),
+(20,'展望','','<p>是佛挡杀佛的范德萨发</p>',0,0,0,4,3,'2020-12-26 00:00:00','2020-12-18 00:00:00'),
+(21,'青春真的结束了吗','','',0,0,0,4,3,'2020-12-26 00:00:00','2020-12-18 00:00:00'),
+(22,'Blog正式投入使用','','<p>经过接近一个月时间的项目重构(vue2--&gt;vue3+ts),主要部分功能已经完善。</p><p><strong>以下已完成功能</strong></p><p>主页技术方面的文章阅读</p><p>标签页面方面查找对应的文章进行阅读</p><p>时间线</p><p>导航站</p><p>日志-&gt;只做个人文章展示</p><p><strong>娱乐项</strong></p><p>短文仅供一乐(舔狗日志)</p><p>收藏,博客页面分享各路大神技术博客</p><p><strong>待进行功能</strong></p><p>书单--准备进行</p><p>后台-- 后台系统大部分功能已近完善,基本可以投入生产,但是还有很多细节方面没弄好暂不上线</p><p>留言-- 前端已完成,后台api已完成待导入接口</p><p><strong>待优化功能项</strong></p><p>额!!!!!!! 好像都需要优化</p><p>后续增加一个新页面来追踪自己要做什么,做到什么进度。就叫个人项目进度追踪应该也算是新功能了</p><p><strong>项目架构</strong></p><p>前端项目使用到的技术</p><p><span style=\"color: rgb(136, 136, 136);\">VUE3 -- TS -- Router -- Axios -- Store -- AntDesignVue -- TaiwindCss -- animate.css -- marked</span></p><p>后端项目</p><p>NetCore3.1webApi</p><p><strong>本次更新</strong></p><p>1.增加导航侧边栏 FavSidebar.vue</p><p>2.增加书单页面 Book.vue</p><p>3.增加图片视频展示</p><p>4.删除字体(太大了)</p><p>5.Talk.vue 页面进行重构(想好看点)</p><p><br></p>',0,0,0,4,3,'2020-12-26 00:00:00','2020-12-18 00:00:00');
 /*!40000 ALTER TABLE `sn_talk` ENABLE KEYS */;
 
 -- 
@@ -1194,6 +733,503 @@ INSERT INTO `sn_leave`(`id`,`text`,`user_id`,`time_create`,`time_modified`) VALU
 /*!40000 ALTER TABLE `sn_leave` ENABLE KEYS */;
 
 -- 
+-- Definition of sn_navigation
+-- 
+
+DROP TABLE IF EXISTS `sn_navigation`;
+CREATE TABLE IF NOT EXISTS `sn_navigation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '导航标题',
+  `describe` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题描述',
+  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片路径',
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接路径',
+  `type_id` int(11) NOT NULL COMMENT '分类',
+  `user_id` int(11) NOT NULL COMMENT '用户',
+  `time_create` date NOT NULL,
+  `time_modified` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `nav_user_id` (`user_id`),
+  KEY `nav_type_id` (`type_id`),
+  CONSTRAINT `nav_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_navigation_type` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `nav_user_id` FOREIGN KEY (`user_id`) REFERENCES `sn_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=450 DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table sn_navigation
+-- 
+
+/*!40000 ALTER TABLE `sn_navigation` DISABLE KEYS */;
+INSERT INTO `sn_navigation`(`id`,`title`,`describe`,`img`,`url`,`type_id`,`user_id`,`time_create`,`time_modified`) VALUES
+(1,'Webpack','Webpack 是当下最热门的前端资源模块化管理和打包工具。它可以将许多松散的模块按照依赖和规则打包成符合生产环境部署的前端资源。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/webpack.png','https://www.webpackjs.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(2,'React','React 起源于 Facebook 的内部项目，是一个用于构建用户界面的 JavaScript 库。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/react.png','https://reactjs.bootcss.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(3,'TypeScript','TypeScript 是由微软开源的编程语言。它是 JavaScript 的一个超集，而且本质上向这个语言添加了可选的静态类型和基于类的面向对象编程。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/typescript.png','https://typescript.bootcss.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(4,'Svelte','Svelte 是构建 Web 应用程序的一种新方法。Svelte 是一个编译器，它将声明性组件转换成高效的 JavaScript 代码，并像做外科手术一样细粒度地更新 DOM。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/svelte.png','https://www.sveltejs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(5,'Next.js','Next.js 是一个轻量级的 React 服务端渲染应用框架。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/nextjs.png','https://www.nextjs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(6,'Babel','Babel 是一个 JavaScript 编译器。Babel 通过语法转换器支持最新版本的 JavaScript 语法。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.27/dist/img/babeljs.png','https://www.babeljs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(7,'Node.js','Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型，使其轻量又高效。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/nodejs.png','https://www.nodeapp.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(8,'Deno','Deno 是一个简单、现代且安全的 JavaScript 和 TypeScript 运行时，deno 基于 V8 引擎并使用 Rust 编程语言构建。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/deno.png','https://deno.bootcss.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(9,'Yarn','Yarn 是一个快速、可靠、安全的依赖管理工具。是 NPM 的替代品。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/yarn.png','https://yarn.bootcss.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(10,'Yarn v2','Yarn 是一个快速、可靠、安全的依赖管理工具。是 NPM 的替代品。Yarn v2 与 v1 版本有很大的不同，Yarn v2 改进了 CLI 交互、支持 workspace、PnP 等新功能。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.28/dist/img/yarn.png','https://www.yarnpkg.com.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(11,'前端学习路线','好好学习，天天敲代码','https://objtube.github.io/front-end-roadmap/#/','https://objtube.github.io/front-end-roadmap/#/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(12,'Visual Studio 2019','功能完备的集成开发环境 (IDE)，适用于 Android、iOS、Windows、Web 和云 (IDE)','https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE1Mu3b?ver=5c31','https://visualstudio.microsoft.com/zh-hans/downloads/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(13,'webpack','本质上，webpack 是一个现代 JavaScript 应用程序的静态模块打包器(module bundler)。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图(dependency graph)，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个 bundle。','1','https://www.webpackjs.com/concepts/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(14,'现代 JavaScript','以最新的 JavaScript 标准为基准。通过简单但足够详细的内容，为你讲解从基础到高阶的 JavaScript 相关知识。','https://zh.javascript.info/','https://zh.javascript.info/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(15,'Sass中文网','Sass 是一款强化 CSS 的辅助工具，它在 CSS 语法的基础上增加了变量 (variables)、嵌套 (nested rules)、混合 (mixins)、导入 (inline imports) 等高级功能，这些拓展令 CSS 更加强大与优雅。使用 Sass 以及 Sass 的样式库（如 Compass）有助于更好地组织管理样式文件，以及更高效地开发项目。','https://www.sass.hk/docs/','https://www.sass.hk/docs/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(16,'BootstrapVue','我们开始BootstrapVue之旅游，基于全球最流行的Bootstrap V4框架，构建移动优先的响应式门户，在Vue.js前端栈基础上。','http://code.z01.com/bootstrap-vue/docs/','http://code.z01.com/bootstrap-vue/docs/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(17,'前端导航站','前端内容汇总','http://jsdig.com/','http://jsdig.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(18,'Md2All排版','Markdown排版利器，支持 \"一键排版\" 、自定义css、80多种代码高亮。\n能让Markdown内容，无需作任何调整就能一键复制到微信公众号、博客园、掘金、知乎、csdn、51cto、wordpress、hexo。。。等平台。','http://md.aclickall.com/','http://md.aclickall.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(19,'VuePress','Vue 驱动的静态网站生成器','https://v0.vuepress.vuejs.org/zh/','https://v0.vuepress.vuejs.org/zh/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(20,'Blog.Core','BCVP（Blog.Core & Vue Project）是一个开箱即用的企业级权限管理应用框架。\n采用最新的前后端完全分离技术【 ASP.NET Core Api 3.x + Vue 2.x 】。','http://apk.neters.club/.doc/','http://apk.neters.club/.doc/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(21,'sqlSugar','.NET 4.+ & .NET CORE 高性能 轻量级 ORM框架，众多.NET框架中最容易使用的数据库访问技术','http://www.codeisbug.com/','http://www.codeisbug.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(22,'Avue','一个很多骚操作的前端框架\n让数据驱动视图，减去繁琐的操作，更贴近企业级的前端开发组件','https://avuejs.com/','https://avuejs.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(24,'Bootstrap ','基于 Bootstrap 样式库精心打造，并且额外增加了 50 多种常用的组件，为您快速开发项目带来非一般的感觉','https://blazor.sdgxgz.com/','https://blazor.sdgxgz.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(25,'Editor.md','\n开源在线 Markdown 编辑器','http://editor.md.ipandao.com/','http://editor.md.ipandao.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(26,'标签[c#]','','https://stackoom.com/img/logo.png','https://stackoom.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(27,'Font Aweso','世界上最流行的ICON图标字体库和CSS工具包','http://www.fontawesome.com.cn/','http://www.fontawesome.com.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(28,'Dotnet9','Donet技术论坛','https://dotnet9.com/','https://dotnet9.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(29,'vol.vue','前后端分离\n\n全自动代码生成\n\n支持前端、后台扩展的快速开发框架','http://www.volcore.xyz/','http://www.volcore.xyz/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(30,'jQuery插件库','jQuery插件库','https://www.jq22.com/','https://www.jq22.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(31,'Vue.js中文文档','渐进式\nJavaScript 框架','https://vue.docschina.org/','https://vue.docschina.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(32,'我是前端','前端学习','https://www.imqianduan.com/','https://www.imqianduan.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(33,'CSS Fonts','网络安全 CSS 字体堆栈的完整集合。','','https://www.cssfontstack.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(34,'CSS速查总表 ','','http://css.cuishifeng.cn/','http://css.cuishifeng.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(35,'爆胎','互联网长方体空间移动师','https://tvax1.sinaimg.cn/square/0084aYsLly1ggmuk8fguaj305k05kq30.jpg','https://itggg.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(36,'青找博客','我们总在生活中与「一瞬的感动」相遇。','https://tva3.sinaimg.cn/square/0084aYsLly1ggmukfjc0uj3068068dfs.jpg','https://www.linguang.me/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(37,'axios中文网','易用、简洁且高效的http库','','http://www.axios-js.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(38,'layui','由职业前端倾情打造，面向全层次的前后端开发者，低门槛开箱即用的前端 UI 解决方案','','https://www.layui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(39,'我爱斗图','在线表情包','','https://www.52doutu.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(40,'Quasar Fra','以最短时间构建高性能的VueJS用户界面','','http://www.quasarchs.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(41,'Electron','使用 JavaScript，HTML 和 CSS 构建跨平台的桌面应用程序','','https://www.electronjs.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(42,'2020年Web前端','新手入门前端，需要学习的基础内容有很多，如下。','','https://www.cnblogs.com/qianguyihao/p/8776837.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(43,'ZUI','一个基于 Bootstrap 深度定制开源前端实践方案，帮助你快速构建现代跨屏应用。','','https://www.openzui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(44,'Aplayer','Wow, such a beautiful HTML5 music player','','https://aplayer.js.org/#/zh-Hans/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(45,'alloyteam','','','http://www.alloyteam.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(46,'.NET万能框架','项目基于.NET 4.5构建，语法版本C#6.0，包含日常编程多数的常用封装，可以说是一个万能框架，能够用于任何基于.NET平台的项目当中。','','https://masuit.com/55',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(47,'Tailwind Grids','为 Tailwind CSS 项目轻松生成响应式网格。所有生成的类都基于 Tailwind 默认值，只需选择您的设置即可开始使用。','','https://tailwindgrids.com/#/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(48,'CSS Inspiration -- CSS灵感','这里可以让你寻找到使用或者是学习 CSS 的灵感，以分类的形式，展示不同 CSS 属性或者不同的课题使用 CSS 来解决的各种方法。','','https://csscoco.com/inspiration/#/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(49,'小游网','二次元技术宅','https://img.xiaoyou66.com/images/2020/02/20/tTSY.jpg','https://xiaoyou66.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(50,'全历史','全历史(Allhistory)以AI知识图谱为核心引擎,通过高度时空化、关联化数据的方式构造及展现数字人文内容,尤其是历史知识。','https://img.xiaoyou66.com/images/2020/02/20/tTSY.jpg','https://www.allhistory.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(51,'疯狂去水印','打开短视频APP， 选择要下载的视频，点击右下角分享按钮，在分享弹框中点击“复制链接”','https://douyin.video996.com/img/mp.jpg','https://douyin.video996.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(52,'知妖','知妖是一个开放的在线“妖怪”资料库。致力于收集、整理、介绍、分享古人文献中的“妖怪”。我们尽可能地收录古文献中的“妖怪”资料，让更多的人能够完整，系统地了解中国“妖怪”文化。','https://static.cbaigui.com/images/2020/04/loading.jpg!full','https://www.cbaigui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(53,'煎蛋','地球上没有新鲜事','http://img.jandan.net/news/2020/03/2e4024373d26ccd3888e29a6f4152076.jpg!square','http://jandan.net/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(54,'小鸡词典','查网络流行语','https://jikipedia.com/images/logo/logo_full_side.png','https://jikipedia.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(55,'网站任意门','你将被传送到完全随机的一个网站，传送到任何一个网站的概率都是相等的。','https://gate.ofo.moe/social/hero-4.jpg','https://gate.ofo.moe/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(56,'Tailwind C','Tailwind 是基于 PostCSS 开发的,通过 JavaScript 代码进行配置,这意味着你可以完全发挥真正的编程语言的能力。 Tailwind 不仅仅是一个 CSS 框架,他更是构建设计系统','','https://www.tailwindcss.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(57,'Flexbox网格','基于flex显示属性的网格系统。','','http://flexboxgrid.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(58,'purecss','一组小型的自适应CSS模块，您可以在每个Web项目中使用。','https://purecss.io/img/logo_pure@2x.png','https://purecss.io/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(59,'vue-aplayer','A beautiful HTML5 music player for Vue.js','https://aplayer.netlify.app/docs/hero.png','https://aplayer.netlify.app/docs/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(60,'林德熙','微软最具价值专家 Windows Development MVP','https://blog.lindexi.com/img/avatar.png','https://blog.lindexi.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(61,'MahApps.Me','MahApps.Metro是一个框架，使开发人员可以轻松地为自己的WPF应用程序整合Metro或Modern UI。','https://mahapps.com/assets/img/oss.png','https://mahapps.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(62,'C#入门经典教程','C# 是微软推出的一门面向对象的通用型编程语言，它除了可以开发 PC 软件、网站（借助 ASP.NET）和 APP（基于 Windows Phone），还能作为游戏脚本，编写游戏逻辑。','','http://c.biancheng.net/csharp/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(63,'.NET技术','代码改变世界','http://www.vnfan.com/lteui/dist/img/user2-160x160.jpg','http://www.vnfan.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(64,'C# 指南','官方指南','https://docs.microsoft.com/favicon.ico','https://docs.microsoft.com/zh-cn/dotnet/csharp/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(65,'Ant Design','这里是 Ant Design 的 Blazor 实现，开发和服务于企业级后台产品。','https://raw.githubusercontent.com/ant-design-blazor/ant-design-blazor/master/logo.svg','https://ant-design-blazor.gitee.io/zh-CN/docs/introduce',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(66,'mavonEdito','关于\nmavonEditor-基于Vue的markdown编辑器，支持多种个性化功能','https://raw.githubusercontent.com/ant-design-blazor/ant-design-blazor/master/logo.svg','https://github.com/hinesboy/mavonEditor',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(67,'Lodash','关于\nmavonEditor-基于Vue的markdown编辑器，支持多种个性化功能','https://www.lodashjs.com/','https://www.lodashjs.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(68,'VUE粒子','粒子背景的Vue.js组件','','https://vue-particles.netlify.app/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(69,'Element','Element，一套为开发者、设计师和产品经理准备的基于 Vue 2.0 的桌面端组件库','','https://element.eleme.cn/#/zh-CN',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(70,'outils','前端业务代码工具库','','https://www.npmjs.com/package/outils',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(71,'Anime.js','一个强大的、轻量级的用来制作动画的javascript库','','https://animejs.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(72,'Hover.css','CSS hover 悬停效果，可以应用于链接、按钮、图片等等','','http://ianlunn.github.io/Hover/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(73,'Waves','点击波纹效果','','http://fian.my.id/Waves/#examples',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(74,'Viewer.js','图片滑动切换展示效果','','https://fengyuanchen.github.io/viewerjs/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(75,'clipboard','复制粘贴插件','','https://clipboardjs.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(76,'You-need-to-know-css','作为一名Web开发者，CSS是必备技能之一，我一直以为自己对CSS的掌握已经够用了，直到读Lea Verou的《CSS揭秘》，我发现自己充其量就算个会打CS的选手，书中针对我们常见的网页设计难题从不同的角度提出了多种实用又优雅的解决方案，在这里强烈的推荐给每一位从事前端相关工作和对前端有兴趣的同学，相信你一定会有所收获','https://lhammer.cn/You-need-to-know-css/static/logo.png','https://lhammer.cn/You-need-to-know-css/#/zh-cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(77,'Shiro','Shiro，是alphardex平时所做的CSS创意作品集','','https://shiroi.netlify.app/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(78,'今日热榜','每日榜单','https://file.ipadown.com/tophub/assets/images/logo.png','https://tophub.today/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(79,'艾特网','程序员之家','https://iiter.cn/_nuxt/img/f996b71.png','https://iiter.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(80,'PostCSS','是一个用 JavaScript 工具和插件转换 CSS 代码的工具','https://www.postcss.com.cn/postcss.1b20c651.png','https://www.postcss.com.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(81,'Articles','css技巧','','https://css-tricks.com/archives/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(82,'JavaScript 秘密花园','此中文翻译由三生石上独立完成，博客园首发，转载请注明出处。','','https://bonsaiden.github.io/JavaScript-Garden/zh/#intro',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(83,'uni-app','uni-app 是一个使用 Vue.js 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、H5、以及各种小程序（微信/支付宝/百度/头条/QQ/钉钉/淘宝）、快应用等多个平台。','https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni-app-doc/7c946930-bcf2-11ea-b997-9918a5dda011.png','https://uniapp.dcloud.io/README',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(84,'前端小册子','前端学习曲线陡峭，入门容易精通难。后期有瓶颈往往是因为前期基础不扎实。学习一点，掌握一点，貌似慢，实际快。实战是好事，但理论不扎实就着急实战并非是好事。实战帮助更好地理解理论，而不是帮助学习理论。理论学明白，项目才能踏实做，否则，在实战的过程中得到的只是零碎知识点，并没有形成完善的理论体系，收效不大\n好的代码像粥一样，都是用时间熬出来的。小火柴立志要做一名前端工匠\n\n这个小册子是小火柴总结的前端知识结构，方便自己学习，也希望能够帮到更多人\n由于里面许多内容是自己的总结，可能会有错误或纰漏之处，希望不会造成误导，多多交流','https://vkceyugu.cdn.bspapp.com/VKCEYUGU-uni-app-doc/7c946930-bcf2-11ea-b997-9918a5dda011.png','https://xiaohuochai.site/introduce.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(85,'uView(uni-appUI框架)','uView UI，是uni-app生态最优秀的UI框架，全面的组件和便捷的工具会让您信手拈来，如鱼得水','https://uviewui.com/common/logo.png','https://uviewui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(86,'umy-ui','为开发者准备的基于 Vue 2.0 的桌面端组件库; 流畅渲染表格万级数据','','https://www.umyui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(87,'Element UI表单设计及代码生成器','可将生成的代码直接运行在基于Element的vue项目中；也可导出JSON表单，使用配套的解析器将JSON解析成真实的表单。','','https://jakhuang.github.io/form-generator/#/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(88,'luch-request(uni-app)','基于Promise开发的uni-app跨平台请求库','https://www.quanzhan.co/luch-request/assets/img/logo.jpg','https://www.quanzhan.co/luch-request/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(89,'Entity Framework Core API 参考','欢迎使用 .NET API 浏览器！这个一站式商店，销售 Microsoft 提供的所有基于 .NET 的 API。 在下面的框中键入字词，开始搜索任意托管 API 吧。 可以通过我们的博文详细了解 API 浏览器。','','https://docs.microsoft.com/zh-cn/dotnet/api/?view=efcore-3.1',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(90,'Furion','Furion 是 .NET 5 平台下极易入门、极速开发的 Web 应用框架。','https://monksoul.gitee.io/fur/img/logo.png','https://dotnetchina.gitee.io/furion/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(91,'Phonto','Hey There\nI''m Bruce.Au\n( σ''ω'')σ#Skr','https://cdn.toofook.com/my-blog/myfont.png','https://www.vanoc.top/about',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(92,'vue-admin-beautiful','是一款基于vue+element-ui的绝佳的中后台前端开发管理框架（基于vue/cli 4 最新版，同时支持电脑，手机，平板）,他同时是拥有100+页面的大型vue前端单页应用','','https://gitee.com/chu1204505056/vue-admin-beautiful/?hmsr=github&hmpl=&hmcu=&hmkw=&hmci=',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(93,'Animate中文网','强大的跨平台的预设css3动画库\n内置了很多典型的css3动画，兼容性好使用方便','','http://www.animate.net.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(94,'jQuery API 3.3.1 速查表','速查表','','https://www.94xh.com/index.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(95,'flv.js(播放器)','flv.js 是一个使用纯JavaScript编写的FLV(HTML5 Flash Video)播放器。','','https://www.bootcdn.cn/flv.js/1.5.0/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(96,'福利汇总','大千世界收集福利分享','','https://www.gifxu.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(97,'Animate.css','Just-add-water CSS animations','','https://animate.style/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(98,'Typecho','Typecho博客分享','https://qqdie.com/wp-content/themes/lighthouse/images/typecho.png','https://qqdie.com/links.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(99,'Umar Hansa的开发人员技巧','开发人员技巧','','https://umaar.com/dev-tips/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(100,'iconfont','阿里巴巴图形库','','https://www.iconfont.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(101,'highlight.js','Web语法突出显示','','https://highlightjs.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(102,'MakingCSS','The web tool for generating CSS3 code','','https://makingcss.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(103,'CSS生成器','','','https://www.cssportal.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(104,'LintCode 领扣','空前强大的  在线编程  训练系统  即刻启程！','','https://www.lintcode.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(105,'postcss简介','PostCSS 是一个允许使用 JS 插件转换样式的工具。 这些插件可以检查（lint）你的 CSS，支持 CSS Variables 和 Mixins， 编译尚未被浏览器广泛支持的先进的 CSS 语法，内联图片，以及其它很多优秀的功能。','','https://www.cnblogs.com/aidixie/p/12771985.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(106,'TypeScript','TypeScript是JavaScript类型的超集，它可以编译成纯JavaScript。\nTypeScript可以在任何浏览器、任何计算机和任何操作系统上运行，并且是开源的。','','https://www.tslang.cn/index.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(107,'Axios中文文档','Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。','','https://www.kancloud.cn/yunye/axios/234845',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(108,'关于ASP.NETCore的分享之路','学习路线图\nASP.NET CORE学习指南\n《基础知识掌握部分》\n《部署与组件学习部分》\n《容器化与跨平台部分》','','https://www.cnblogs.com/laozhang-is-phi/p/all-knowledge-for-netcore.html#autoid-2-1-0',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(109,'C#之Action和Func的用法','','','https://www.cnblogs.com/LipeiNet/p/4694225.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(110,'NanUI 界面组件','这是一个开放源代码的 .NET / .NET Core 窗体应用程序（WinForms）界面组件。您可以使用 HTML5 / CSS3 / Javascript 等前端技术来构建您的应用程序界面。主流的Javascript框架，比如Angular, React, Vue都是可以用来构架SPA应用的明智选择。使用 NanUI 界面组件将给您的窗体设计工作带来无限可能。','','https://www.formium.net/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(111,'让你30分钟快速掌握vue 3','经过了漫长的迭代，Vue 3.0终于在上2020-09-18发布了，带了翻天覆地的变化，使用了Typescript 进行了大规模的重构，带来了Composition API RFC版本，类似React Hook 一样的写Vue，可以自定义自己的hook ，让使用者更加的灵活，接下来总结一下vue 3.0  带来的部分新特性。\n\n作者：撒点料儿\n链接：https://juejin.im/post/6887359442354962445\n来源：掘金\n著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。','','https://juejin.im/post/6887359442354962445',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(112,'vuepress-theme-vdoing','一款简洁高效的VuePress 知识管理&博客 主题','https://doc.xugaoyi.com/vuepress-theme-vdoing-doc/','https://doc.xugaoyi.com/vuepress-theme-vdoing-doc/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(113,'软件工艺师(bibi)','视频教程','https://doc.xugaoyi.com/vuepress-theme-vdoing-doc/','https://space.bilibili.com/361469957/video',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(114,'NetModular','为中小型企业而生的基于.Net Core平台的模块化快速开发解决方案','https://docs.17mkh.com/images/logo.png','https://docs.17mkh.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(115,'秦枫鸢梦','花有重开日，人无再少年','https://q1.qlogo.cn/g?b=qq&nk=2013143650&s=100','https://blog.zwying.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(116,'Mikutap','','','https://xiabor.com/mikutap/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(117,'Typora','Typora 是一款支持实时预览的 Markdown 文本编辑器。它有 OS X、Windows、Linux 三个平台的版本，并且由于仍在测试中，是完全免费的。','12321','https://typora.io/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(118,'LtGt','LtGt是一个用于处理HTML的简约库','','https://www.ctolib.com/Tyrrrz-LtGt.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(119,'ExCSS','一个CSS3解析器C#库','','https://www.ctolib.com/ExCSS.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(120,'Everything','Everything中文版是一款功能强大，便捷实用的文件搜索软件。','','https://everything.en.softonic.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(121,'AnyDesk','远程连接到您的计算机，无论是从办公室的另一层还是世界的另一端。 AnyDesk为IT专业人员和移动用户提供安全可靠的远程桌面连接。','','https://anydesk.com/zhs',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(122,'WebStorm','WebStorm 是jetbrains公司旗下一款JavaScript 开发工具。已经被广大中国JS开发者誉为“Web前端开发神器”、“最强大的HTML5编辑器”、“最智能的JavaScript IDE”等。与IntelliJ IDEA同源，继承了IntelliJ IDEA强大的JS部分的功能。','','https://www.jetbrains.com/help/webstorm/installation-guide.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(123,'Snipaste','截图工具','','https://www.snipaste.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(124,'XMind','思如泉涌 • 成竹在图','','https://www.xmind.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(125,'Postman','API开发协作平台','','https://www.postman.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(126,'AutoHotkey','AutoHotkey 是一个自由、开源的宏生成器和自动化软件工具，它让用户能够自动执行重复性任务。AutoHotkey 可以修改任何应用程序的用户界面（例如，把默认的 Windows 按键控制命令替换为 Emacs 风格）。它是由定制的脚本语言驱动，旨在提供键盘快捷键或热键。——wikipedia','','https://www.autohotkey.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(127,'Notepad++','Notepad++ 是在微软视窗环境之下的一个免费的代码编辑器。为了产生小巧且有效率的代码编辑器,这个在GPL许可证下的自由软体开发专案采用 win32 api 和 STL 以 ...','','https://notepad-plus-plus.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(128,'字体仓库','免费字体库','','https://www.ziticangku.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(129,'You-need-to-know-css','为了以后可以更爽的复制粘贴，笔者把自己的收获和工作中常用的一些CSS小样式总结成这份文档','','https://lhammer.cn/You-need-to-know-css/#/zh-cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(130,'CSS Tricks','总结一些常用的 CSS 样式\n记录一些 CSS 的新属性和一点奇技淫巧\n在“动”部分下有些动画并不是 CSS 效果，因为没有地方放置，所以暂时寄存在这里\n尽量少说废话，代码简单易用，方便复制','','http://css-tricks.neatbang.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(131,'animista','该项目里面有各种 CSS 实现的效果，还有代码演示，方便直接复制代码，还可以复制压缩后的代码，如果你在找某个 CSS 的效果的话，可以到这里找找看。','','https://animista.net/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(132,'spinkit','汇集了实现各种加载效果的 CSS 代码片段。\n\nSpinKit 仅使用（transform 和 opacity）CSS 动画来创建平滑且易于自定义的动画。','','https://tobiasahlin.com/spinkit/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(133,'Blog.Admin','框架涵盖 VUE 开发中常见的基本知识点，不仅适合初学者入门，同时也适用于企业级别的开发。','','https://vueadmin.neters.club/.doc/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(134,'.NET Core 学习资料精选：入门','主要分享一些.NET Core比较优秀的社区资料和微软官方资料。我进行了知识点归类，让大家可以更清晰的学习.NET Core。\n\n首先感谢资料原作者的贡献。','','https://www.cnblogs.com/heyuquan/p/dotnet-basic-learning-resource.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(135,'.NET Core 学习资料精选：进阶','主要分享一些.NET Core比较优秀的社区资料和微软官方资料。我进行了知识点归类，让大家可以更清晰的学习.NET Core。\n\n首先感谢资料原作者的贡献。','','https://www.cnblogs.com/heyuquan/p/dotnet-advance-learning-resource.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(136,'ASP.NET Core on K8S 入门学习系列文章目录','K8S的入门学习放到了2019年的学习列表中，并总结了一些学习笔记和实践总结的文章并汇总在这里，希望对各位园友有帮助！','','https://www.cnblogs.com/edisonchou/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(137,'.NET Core微服务架构学习与实践系列文章目录','拥抱开源，任重而道远！','K8S的入门学习放到了2019年的学习列表中，并总结了一些学习笔记和实践总结的文章并汇总在这里，希望对各位园友有帮助！','https://www.cnblogs.com/edisonchou/p/dotnetcore_microservice_foundation_blogs_index_final.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(138,'C# 官方语言指南','提供许多有关 C# 语言学习资源、新增功能、概念、操作指南、编程指南和语言参考等。','','https://docs.microsoft.com/zh-cn/dotnet/csharp/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(139,'ASP.NET Core 教程','跨平台的高性能开源框架，用于在 Windows、Mac 或 Linux 上开发基于现代化的 Web 应用程序。','','https://docs.microsoft.com/zh-cn/aspnet/core/?view=aspnetcore-5.0',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(140,'EF Core 官方教程','Entity Framework (EF) Core 是轻量化、可扩展、开源和跨平台版的常用数据访问技术。','','https://docs.microsoft.com/zh-cn/ef/core/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(141,'Visual Studio 文档','学习使用强大功能提高开发效率，开发、生成、调试、测试、部署、版本控制、 DevOps 和性能分析','','https://docs.microsoft.com/zh-cn/visualstudio/?view=vs-2019',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(142,'.NET 微服务应用程序架构指南','本指南介绍如何使用 .NET Core 和 Docker 容器开发基于微服务的应用程序并对其进行管理。','','https://docs.microsoft.com/zh-cn/dotnet/architecture/microservices/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(143,'微软 eShopOnWeb 开源框架','基于 ASP.NET Core 构建的单体分层应用架构，使用 DDD 领域驱动设计程序体系结构和部署模型。','','https://www.cnblogs.com/MrHSR/p/10855824.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(144,'IdentityServer4中文文档','dentityServer4 是一个免费的开源 OpenID Connect 和 OAuth 2.0 身份认证与授权框架，适用于 ASP.NET Core 平台，IdentityServer4 由 Dominick Baier 和 Brock Allen 两位大神创建和维护，您可以快捷的在应用程序中集成基于令牌的身份验证，单点登录和 API 访问控制，支持非常多的协议实现和可扩展点，IdentityServer4 由 OpenID 基金会正式认证，因此符合规范且可互操作，被微软作为 .NET 基金会项目的一部分，并根据其行为准则运行，虽然这个框架也非常的好，博客也不少，但以下整理的中文文档值得推荐学习。','','https://www.xcode.me/post/6038#',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(145,'dnSpy基于.NET的反编译工具','dnSpy是一款基于.NET的反编译与调试工具，开源免费，能够讲.NET开发的Exe和Dll程序集反编译为C#代码，同时支持断点调试和代码二次编辑，如果您只有编译后的程序集，在没有源码的情况下想还原C#源码，dnSpy绝对是首选。','','https://github.com/dnSpy/dnSpy/releases',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(146,'Visual Studio 2015','软就放出了VS2015不同版本的离线安装镜像包，支持32位和64位，现在，您就可以下载并安装它','','https://www.xcode.me/post/1916',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(147,'微软官方常用系统工具合集','这些小工具原本是为了解决工程师们平常在工作上遇到的各种问题而开发的，之后他们将这些工具集合起来称为 Sysinternals，并免费提供公众下载，其中部分还开源了，一直以来都颇受 IT 界人士的好评。如果把管理员比喻成战士的话，那么 Sysinternals 就是我们手中的良兵利器。熟悉和掌握这些工具，并且对 Windows 的体系有一定的了解，将大幅提高你的电脑维护、应用技能。','','https://www.xcode.me/post/1631',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(149,'零度编程','分享编程之美','','https://www.xcode.me/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(150,'技术胖','专注前端开发,每年100集免费视频。','https://blogimages.jspang.com/blogtouxiang1.jpg','http://www.jspang.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(151,'网站(Web App)','这里包含了基于Vue.js开发的网站应用程序，包括管理工具、网页游戏、购物社交网站等。','','https://madewith.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(152,'任务协助系统','任何业务场景，您都可以找到合适的方案 PearProject 拥有丰富且灵活的产品研发管理功能，协助您释放产品研发能力，是推动研发进程的强力驱动','','https://home.vilson.xyz/?from=madewith.cn#/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(154,'NPM','NPM（node package manager）是 Node.js 世界的包管理器。NPM 可以让 JavaScript 开发者在共享代码、复用代码以及更新共享的代码上更加方便。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/npm.png','https://www.npmjs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(155,'Lerna','Lerna 是一个管理工具，用于管理包含多个软件包（package）的 JavaScript 项目。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/lernajs.png','https://lernajs.bootcss.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(156,'Vue.js','Vue.js - 是一套构建用户界面的渐进式框架。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/vuejs.png','https://vuejs.bootcss.com/guide/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(157,'Nuxt.js','Nuxt.js 是一个基于 Vue.js 的通用应用框架。通过对客户端/服务端基础架构的抽象组织，Nuxt.js 主要关注的是应用的 UI渲染。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/nuxtjs.png','https://www.nuxtjs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(158,'Parcel','Parcel - 极速、零配置的 web 应用打包工具。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/parcel.png','https://www.parceljs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(160,'Pro Git','Pro Git 中文版（第二版）是一本详细的 Git 指南，主要介绍了 Git 的使用基础和原理，让你从 Git 初学者成为 Git 专家。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/progit.png','https://www.progit.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(161,'PurgeCSS','PurgeCSS 是一个用来删除未使用的 CSS 代码的工具，能够减小 CSS 文件的体积。例如可以用来减小 Bootstrap 等前端框架的文件体积，提升加载速度。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/purgecss.png','https://www.purgecss.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(162,'Markdown','Markdown 是一种轻量级标记语言，便于人们使用易读易写的纯文本格式编写文档并添加格式元素。Markdown 是 John Gruber 于 2004 年创建的。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/markdown.png','https://www.markdown.xyz/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(163,'ESLint','ESLint 是一个插件化并且可配置的 JavaScript 语法规则和代码风格的检查工具。ESLint 能够帮你轻松写出高质量的 JavaScript 代码。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/eslint.png','https://cn.eslint.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(164,'Infima CSS 框架','Infima 是 Facebook 出品的一个 CSS 框架，专为内容驱动型网站而设计，并且内建对暗模式的支持。是 Docusaurus 的姊妹项目。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/infima.png','https://infima.bootcss.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(165,'Stylus','Stylus - 富于表现力、健壮、功能丰富的 CSS 预处理语言。','https://cdn.jsdelivr.net/npm/@bootcss/www.bootcss.com@0.0.37/dist/img/stylus.png','https://stylus.bootcss.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(166,'懒得勤快','勤于发现,乐于分享','https://git.imweb.io/ldqk/imgbed/raw/master/20190606/5dc7fc1266bfd8109d1ef5e0e7630f2c_2_3_art.png','https://masuit.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(167,'爱哔哔','视频解析','','https://www.ibilibili.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(168,'果核剥壳','工具分享','https://www.ghpym.com/wp-content/uploads/2019/12/2020logo.png','https://www.ghpym.com/category/all/pcsoft/pccode',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(169,'醉秋风','要相信一切都是最好的安排','https://blog.slomoo.cn/slomoo.png','https://blog.slomoo.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(170,'薛定喵君','scan to see more ?','http://tiaocaoer.com/images/site_icon.png','http://tiaocaoer.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(171,'舔狗日记','我们是狗,是舔狗','https://we.dog/assets/images/logo.gif','https://we.dog/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(172,'rscss','CSS样式表结构的合理系统。\n一组简单的想法可以指导您构建可维护CSS的过程。','https://we.dog/assets/images/logo.gif','https://rscss.io/index.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(173,'WEB安全色','WEB安全色','','https://www.bootcss.com/p/websafecolors/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(174,'Adobe Color ','色輪 (或「擷取主題」標籤中的影像)','','https://color.adobe.com/zh/create/color-wheel',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(175,'中国色 ','中国色 ','','http://zhongguose.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(176,'托盘式 ','利用数百万设计师的知识生成漂亮的调色板。','','https://www.palettable.io/CCCC82',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(177,'itmeo','WebGradients 是180个线性渐变的免费集合，您可以将其用作\n网站任何部分的内容背景。轻松复制CSS3跨浏览器代码\n，稍后使用！我们还为每个渐变准备了.PNG版本。\n 作为奖励，还有用于Sketch  ＆  Photoshop的软件包 。','','https://webgradients.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(178,'配色表','网页设计常用色彩搭配表','','http://tool.c7sky.com/webcolor/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(179,'avascript粒子动画引擎','avascript粒子动画引擎','','https://drawcall.github.io/Proton/#examples',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(180,'Keyframes helps you write better CSS','Dead simple visual tools to help you generate CSS for your projects.','','https://keyframes.app/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(181,'Ant Design Pro','开箱即用的中台前端/设计解决方案','','https://pro.ant.design/index-cn',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(182,'Laravel诗词博客','','','https://www.qqphp.com/article',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(183,'hexo','快速、简洁且高效的博客框架','','https://hexo.io/zh-cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(184,'Gridea',' 是一个静态博客写作客户端，帮助你更容易地构建并管理博客或任何静态站点。','','https://gridea.dev/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(185,'awesome-bookmarks','个人收藏夹','','https://panjiachen.github.io/awesome-bookmarks/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(186,'VueRequest','⚡️ 一个很酷的 Vue3 的请求库','','https://cn.attojs.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(187,'牛客网','','','https://www.nowcoder.com/profile/8768562',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(188,'TinyPNG','','','https://tinypng.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(189,'长征部落格','事 不 三 思 终 有 悔， 人 能 百 忍 自 无 忧。','','https://www.cz5h.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(190,'Zidone','莫道君行早 更有早行人','','https://www.aye.ink/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(191,'天涯社区','提供论坛、部落、博客、问答、文学、相册、个人空间等服务。拥有天涯杂谈、娱乐八卦、情感天地等人气栏目,以及关天茶舍、煮酒论史等高端人文论坛。','https://static.tianyaui.com/global/bbs/web/static/images/weixin_code.jpg','https://bbs.tianya.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(192,'胶囊日记','凌晨零点，集体失忆','http://s4.timepill.net/s/w220/topic/74toih.png','http://www.timepill.net/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(193,'码库CTOlib','收集GitHub上的实用dotnet开源项目，并进行分类。每天都有新的库和项目添加到列表中。','https://www.ctolib.com/static/img/getqrcode.jpg','https://www.ctolib.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(194,'SegmentFault','每一位开发者都在贡献和更新技术内容，共同参与社区建设，维护社区秩序。\n\n如果你和我们一样有技术理想，并愿意贡献自己的力量，欢迎加入我们。','https://cdn.segmentfault.com/r-d209f51c/static/logo-b.d865fc97.svg','https://segmentfault.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(195,'LearnKu','编程者社区','https://cdn.learnku.com/uploads/images/201901/24/1/OyBnfB2vlk.png!/both/44x44','https://learnku.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(196,'毒导航','网络资源','https://www.toxic.ltd/wp-content/uploads/2020/04/lang_logo.png','https://www.toxic.ltd/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(197,'tailblocks','tailblocks','','https://tailblocks.cc/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(198,'TailwindCSS 中文网','TailwindCSS 使用教程、TailwindCSS 中文文档及 TailwindCSS 相关资源','https://tailwindchina.com/logo.png','https://tailwindchina.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(199,'vue-tailwind.com','针对 TailwindCss 优化的 Lightview 和完全可定制的 Vue 组件集','','https://www.vue-tailwind.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(200,'emantic UI','用户界面就是 Web 的语言','','https://semantic-ui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(201,'be-a-professional-programmer','成为专业程序员路上用到的各种优秀资料、神器及框架','','http://tools.stanzhai.site/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(202,'Bulma','现代化的CSS框架','Bulma是一个免费、开源的CSS框架，它提供了易于使用的前端的组件，您可以轻松地组合这些组件来构建响应式Web界面。','https://bulma.zcopy.site/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(203,'PhotoKit','图片编辑器','https://photokit.com/images/editor.min.webp','https://photokit.com/?lang=zh',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(204,'V2EX','V2EX 是一个关于分享和探索的地方','','https://www.v2ex.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(205,'screensiz','screensiz','','https://screensiz.es/phone',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(206,'Vue Router','用 Vue + Vue Router 创建单页应用非常简单：通过 Vue.js，我们已经用组件组成了我们的应用。当加入 Vue Router 时，我们需要做的就是将我们的组件映射到路由上，让 Vue Router 知道在哪里渲染它们。','https://cdn4.buysellads.net/uu/1/3386/1525189943-38523.png','https://next.router.vuejs.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(207,'View UI','View UI®，即原先的 iView，是一套基于 Vue.js 的开源 UI 组件库，主要服务于 PC 界面的中后台产品。','https://file.iviewui.com/dist/7dcf5af41fac2e4728549fa7e73d61c5.svg','https://www.iviewui.com/docs/introduce',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(208,'it365万能解码器','it365万能解码器，能自动识别各种编码的文本文件，如：GB2312、Big5、UTF-8等。此解码器小巧，但是非常强悍。支持几十种编码，支持自动探测文件编码。一个web网页程序，就能解决文件乱码、编码转换等工作。','https://c10365.now.sh/zan/active.jpg','https://it365.gitlab.io/zh-cn/decode/?81206z',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(209,'果糖网net论坛','','https://www.donet5.com/HtmlTemplate2/com_files/logo.png','https://www.donet5.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(210,'Vue3 One Piece','下一代web开发方式，更快，更轻，易维护，更多的原生支持','https://static.vue-js.com/6280b990-ff19-11ea-85f6-6fac77c0c9b3.png','https://vue3js.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(211,'vuepress-theme-vdoing','一款简洁高效的VuePress 知识管理&博客 主题','https://cdn.jsdelivr.net/gh/xugaoyi/image_store/blog/20200409124835.png','https://doc.xugaoyi.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(212,'TailwindCSS的漂亮扩展。','Tailwind Starter Kit是免费和开源的。它不会更改或从TailwindCSS向已添加的CSS添加任何CSS 。它具有多个HTML元素，并带有ReactJS，Vue和Angular的动态组件。','','https://www.creative-tim.com/learning-lab/tailwind-starter-kit/presentation',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(213,'创造者日报','一群创造者','','https://creatorsdaily.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(214,'唧唧','','','https://www.jijidown.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(215,'OpenJudge','OpenJudge是开放的在线程序评测系统','','http://openjudge.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(216,'levy','','','http://book.levy.net.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(217,'万有导航','','','http://wanyouw.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(218,'极客阅读','','','https://jikeyuedu.cn/topic/Vue.js',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(219,'鱼塘热榜','','','https://mo.fish/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(220,'老张的哲学','','','https://www.cnblogs.com/laozhang-is-phi/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(221,'软件盒子','','','https://www.bsc1011.top/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(222,'编程导航','站长是腾讯全栈开发 & 腾讯云开发高级布道师，欢迎关注他的  微信公众号【程序员鱼皮】，或添加  微信 liyupi66  交流学习 ','','https://www.code-nav.cn/recommend',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(223,'手把手教你AspNetCore WebApi：数据验证','小明最近又遇到麻烦了，小红希望对接接口传送的数据进行验证，既然是小红要求，那小明说什么都得满足呀，这还不简单嘛。','','https://www.cnblogs.com/zcqiand/p/13795675.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(224,'缓存（MemoryCache和Redis）','这几天小明又有烦恼了，系统上线一段时间后，系统性能出现了问题，马老板很生气，叫小明一定要解决这个问题。性能问题一般用什么来解决呢？小明第一时间想到了缓存。','','https://www.cnblogs.com/zcqiand/p/13816732.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(225,'Autofac一个优秀的.NET IoC框架','Autofac与C#语言的结合非常紧密，并学习它非常的简单，也是.NET领域最为流行的IoC框架之一。','','https://www.cnblogs.com/zcqiand/p/14257650.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(226,'.net Core 使用AutoMapper','在我们的项目中慢慢的要把数据库的实体模型和视图模型进行分离，防止被人拿到我们表字段。在学校的时候自己只是有将很多数据库模型，写成一个视图模型返回到前台。','','https://www.cnblogs.com/chenxi001/p/11800943.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(227,'Autofac 框架初识与应用','AutoFac是一个开源的轻量级的依赖注入容器，也是.net下比较流行的实现依赖注入的工具之一。','','https://www.cnblogs.com/i3yuan/archive/2021/04/13/14654547.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(228,'Vue项目中实现用户登录及token验证','','','https://www.cnblogs.com/web-record/p/9876916.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(229,'asp.net core 批量依赖注入服务','看园子里netcore的文章都是简单的注入几个服务的例子,在项目中肯定不会一行一行的写注册服务的代码，参考网上，找到一些解决方案，根据自己实际需求进行更改，特记录下来。','','https://www.cnblogs.com/5jia0/archive/2021/04/14/14658642.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(230,'张鑫旭的个人主页','张鑫旭-鑫空间-鑫生活','','https://www.zhangxinxu.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(231,'colorui文档','','','https://www.kancloud.cn/m22543/colorui/1289223',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(232,'lucky-canvas','一个基于 Js + Canvas 的【大转盘 & 九宫格】抽奖，致力于为 web 前端提供一个功能强大且专业可靠的组件，只需要通过简单配置即可实现自由化定制，帮助你快速的完成产品需求','','https://100px.net/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(233,'[C#] NAudio 库的各种常见使用方式: 播放 录制 转码 音频可视化','在 NAudio 中, 常用类型有 WaveIn, WaveOut, WaveStream, WaveFileWriter, WaveFileReader, AudioFileReader 以及接口: IWaveProvider, ISampleProvider, IWaveIn, IWavePlayer','','https://www.cnblogs.com/slimenull/p/14735111.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(234,'.NET之生成数据库全流程','本文主要是回顾下从项目创建到生成数据到数据库(代码优先)的全部过程。采用EFCore作为ORM框架。','','https://www.cnblogs.com/azrng/p/14757769.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(235,'24K导航','','','https://www.24kdh.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(236,'印记中文','','','https://docschina.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(237,'NuxtJS ','NuxtJS 让你构建你的下一个 Vue.js 应用程序变得更有信心。这是一个 开源 的框架，让 web 开发变得简单而强大','','https://www.nuxtjs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(238,'Tailwind CSS文档','开始 Tailwind CSS 之旅\n用最适合您的方式学习 Tailwind','','https://www.tailwindcss.cn/docs',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(239,'outils 代码库','','','https://www.npmjs.com/package/outils',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(240,'30 seconds of code ','代码片段','','https://www.30secondsofcode.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(242,'Hover.css','','','http://ianlunn.github.io/Hover/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(243,'Pagination.js','分页控件','','http://pagination.js.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(244,'Lodash 中文文档','Lodash 是一个一致性、模块化、高性能的 JavaScript 实用工具库。','','https://www.lodashjs.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(245,'微信SDK微信SDK','','','https://sdk.weixin.senparc.com/Document',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(246,'VUE API 手册','','','https://vue3js.cn/vue-composition-api/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(247,'极客导航','','','https://geekdocs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(248,'.NET 官方文档','了解如何使用 .NET 在任何使用 C#、F# 和 Visual Basic 的平台上创建应用程序。 浏览 API 引用、代码示例、教程以及其他内容。','','https://docs.microsoft.com/zh-cn/dotnet/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(249,'开源前哨','分享热门、有趣和实用的开源项目～','','https://www.zhihu.com/column/c_1317124962785062912',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(250,'DotNet 资源大全中文版','DotNet 资源大全中文版，内容包括：编译器、压缩、应用框架、应用模板、加密、数据库、反编译、IDE、日志、风格指南等。','','https://github.com/jobbole/awesome-dotnet-cn#api',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(251,'C#/.NET/.NET Core学习视频汇总（持续更新ing）','之前有很多小伙伴在我的公众号后台留言问有没有C#/.NET/.NET Core这方面相关的视频推荐，我一般都会推荐他们去B站搜索一下。今天刚好有空收集了网上一些比较好的C#/.NET/.NET Core这方面的学习视频，希望能够帮助到有需要的小伙伴们。当然假如你有更好的资源视频推荐可以在我的文章下面留言，开篇之前我要感谢各位小伙伴对【C#/.NET/.NET Core学习、工作、面试指南','','https://www.cnblogs.com/Can-daydayup/p/15046838.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(256,'MYSQL中数据类型介绍','MySQL的数据类型','1','https://www.cnblogs.com/-xlp/p/8617760.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(287,'LBO.net','保持饥饿！保持愚蠢！ ->C#在线编辑','','https://www.cnblogs.com/lbonet/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(288,'牛客网','求职之前，先上牛客','','https://www.nowcoder.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(289,'GitHub Profile README Generator','简历生成','','https://rahuldkjain.github.io/gh-profile-readme-generator/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(290,'vue3最新学习资料集合，不断更新','vue3最新学习资料集合，不断更新','','https://learnku.com/articles/48928',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(291,'daisyUI','Tailwind CSS Components','https://daisyui.com/','https://daisyui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(292,'wangEditorV4','wangEditorV4\nTypescript 开发的 Web 富文本编辑器， 轻量、简洁、易用、开源免费','','https://www.wangeditor.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(293,'最好的uniapp入门实战教程','uniapp是Dcloud公司的产品，是一个跨端开发框架，基于vue.js技术栈。开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信/支付宝/百度/头条/QQ/钉钉/淘宝）、快应用等多个平台。这是它的功能架构图','','https://juejin.cn/post/6899642866693423111#heading-16',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(294,'EFCore之详细增删改查','EFCore之详细增删改查','','https://juejin.cn/post/6965727147189075976#heading-31',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(295,'NET Core和Blog.Core【老张的哲学】','NET Core和Blog.Core【老张的哲学】','','https://www.yuque.com/docs/share/c58f37a4-677c-4a08-b240-4f7f4088a63b#dlCt7',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(296,'Vue3+Vite工程常用工具的接入方法','Vue3+Vite工程常用工具的接入方法','','https://juejin.cn/post/6982476410279460878',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(297,'Uni-App从入门到实战-黑马程序员杭州校区出品','Uni-App从入门到实战-黑马程序员杭州校区出品','','https://www.bilibili.com/video/BV1BJ411W7pX?p=40',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(298,'dotNet全栈开发','dotNet全栈开发\n.NET Core\\xamarin爱好者、篮球狂热爱好者https://dwz.cn/ppnuFzrZ','','https://blog.csdn.net/kebi007',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(299,'什么是 Docker','Docker 最初是 dotCloud 公司创始人 Solomon Hykes (opens new window)在法国期间发起的一个公司内部项目，它是基于 dotCloud 公司多年云服务技术的一次革新，并于 2013 年 3 月以 Apache 2.0 授权协议开源 (opens new window)，主要项目代码在 GitHub (opens new window)上进行维护。Docker 项目后来还加入了 Linux 基金会，并成立推动 开放容器联盟（OCI） (opens new window)。','','https://vuepress.mirror.docker-practice.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(300,'编程之家','','','https://www.jb51.cc/netcore/index_2.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(303,'宝塔','','','http://129.204.92.64:8888/6904e070/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(304,'.NetCore中EFCore的使用整理','EntirtyFramework框架是一个轻量级的可扩展版本的流行实体框架数据访问技术.\n\n其中的.NetCore版本对应EntityFrameworkCore','','https://www.cnblogs.com/tianma3798/p/6835400.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(305,'【EFCORE笔记】添加数据的多种方案','','','https://www.cnblogs.com/lbonet/p/14599549.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(306,'ES6 入门教程','《ECMAScript 6 入门教程》是一本开源的 JavaScript 语言教程，全面介绍 ECMAScript 6 新引入的语法特性。','','https://es6.ruanyifeng.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(307,'图文','','','https://pixabay.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(308,'免费个人图床搭建gitee+PicGo','','','https://www.cnblogs.com/jiba/p/15147616.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(309,'Moment.js','JavaScript 日期处理类库','','http://momentjs.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(310,'daisyUI','Tailwind CSS Components','','https://daisyui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(311,'泽泽社长','','','https://zezeshe.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(312,'逗比表情包','','','https://www.dbbqb.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(313,'两个BT','','','https://www.bttwo.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(314,'电影蜜蜂','','','https://www.idybee.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(315,'人人影视','','','https://yyets.dmesg.app/home',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(316,'努努影视','','','https://www.nunuyy.cc/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(317,'人人美剧','','','https://www.meiju11.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(318,'pianku','','','https://www.pianku.li/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(319,'换脸','','','https://myvoiceyourface.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(320,'ECMAScript 6 入门','《ECMAScript 6 入门教程》是一本开源的 JavaScript 语言教程，全面介绍 ECMAScript 6 新引入的语法特性。','','https://es6.ruanyifeng.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(321,'Windi CSS','下一代工具类 CSS 框架','','https://cn.windicss.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(322,'wow.js','滚动时显示动画。非常Animate.css朋友 :-)\n轻松自定义动画设置：样式、延迟、长度、偏移、迭代...','https://www.delac.io/WOW/img/wow-logo.jpg','https://www.delac.io/WOW/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(323,'.Net Core + DDD基础分层 + 项目基本框架 + 个人总结','','','https://www.cnblogs.com/shijiehaiyang/p/14918544.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(324,'一文梳理CSS必会知识点','','','https://juejin.cn/post/6854573212337078285',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(325,'30个你必须熟记的CSS选择器','','','https://code.tutsplus.com/zh-hans/tutorials/the-30-css-selectors-you-must-memorize--net-16048',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(326,'深入理解 TypeScript','','','https://jkchao.github.io/typescript-book-chinese/#why',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(327,'Vue Patterns CN','有用的Vue模式，技巧，提示和技巧以及有帮助的精选链接。','','https://zyszys.github.io/vue-patterns-cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(328,'代码整洁的 JavaScript','','','https://github.com/beginor/clean-code-javascript',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(329,'JavaScript 风格指南','','','https://github.com/alivebao/clean-code-js',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(330,'typescript基础史上最强学习文章','','','https://juejin.cn/post/7018805943710253086',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(331,'CSS Icons','Open-source CSS, SVG and Figma UI Icons\nAvailable in SVG Sprite, styled-components, NPM & API','','https://css.gg/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(332,'发现导航','','','https://www.nav3.cn/#/light',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(333,'50个Vue知识点','','','https://juejin.cn/post/6984210440276410399#heading-21',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(334,'daisyUI','Tailwind CSS Components','','https://daisyui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(335,'Vue风格指南','这里是官方的 Vue 特有代码的风格指南。如果在工程中使用 Vue，为了回避错误、小纠结和反模式，该指南是份不错的参考。不过我们也不确信风格指南的所有内容对于所有的团队或工程都是理想的。所以根据过去的经验、周围的技术栈、个人价值观做出有意义的偏差是可取的。','','https://cn.vuejs.org/v2/style-guide/index.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(336,'SqlSugar','','','https://www.donet5.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(337,'使用 FluentValidation 实现数据校验、验重','','','https://www.cnblogs.com/zl33842902/p/13514929.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(338,'c# asp.net core 3.1 自动注入','','','https://www.cnblogs.com/Byboys/p/13744481.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(339,'.Net Core3.1下Autofac的使用','','','https://blog.csdn.net/sammy520/article/details/114417432',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(340,'获取windows 操作系统下的硬件或操作系统信息等','','','https://www.cnblogs.com/pilgrim/p/15115782.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(341,'pixabay','Stunning free images & royalty free stock','','https://pixabay.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(342,'学会这几招,轻松让你的github脱颖而出','','','https://juejin.cn/post/6997070653010477087',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(343,'使用模板生成网页/Pdf/Word/Png/Html的简历','','','https://github.com/liangjingkanji/Resume-Template',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(344,'ASP.NET Core定时之Quartz.NET使用','Quartz.NET 是一个功能齐全的开源作业调度系统，可用于从最小的应用程序到大型企业系统。\n\nQuartz.NET是纯净的，它是一个.Net程序集，是非常流行的Java作业调度系统Quartz的C#实现。','','https://www.cnblogs.com/LaoPaoEr/p/15129899.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(345,'C# 实现发送QQ邮箱功能','','','https://www.cnblogs.com/2002-YiZhiYu/p/15118080.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(346,'.Net Core5.0中Autofac依赖注入整合多层，项目中可直接用','','','https://www.cnblogs.com/wei325/p/15121451.html#autoid-3-0-0',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(347,'Fantastic-admin','一款开箱即用的 Vue 中后台管理系统框架','','https://hooray.gitee.io/fantastic-admin/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(348,'vue-element-admin','A magical vue admin','','https://panjiachen.gitee.io/vue-element-admin-site/zh/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(349,'wallhaven','','','https://wallhaven.cc/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(350,'基于vue3实现的vue3-seamless-scroll无缝滚动','','','https://juejin.cn/post/7001831268811800584',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(351,'在vite2和Vue3中配置Mockjs _','','','https://www.cnblogs.com/wdyyy/p/mockjs_vite2.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(352,'Vue 3.0 训练营','','','https://vue3.github.io/vue3-News/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(353,'宝塔','','','http://129.204.92.64:8888/6904e070/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(354,'Quasar ','','','https://quasar.dev/start/pick-quasar-flavour',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(355,'jstips','','','https://www.jstips.co/zh_CN/javascript/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(356,'Pinia','状态管理','','https://pinia.esm.dev/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(357,'Vue-H5-Template','使用 Vue3.0+Typescript+Vant 搭建 h5 开发基础模板，并提供通用型的解决方案。','','https://docs.xwhx.top/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(358,'片段生成器','','','https://snippet-generator.app/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(359,'Vben Admin ','一个开箱即用的前端框架','','https://vvbin.cn/doc-next/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(360,'Vue-Mastery学习笔记','','','https://www.yuque.com/nxtt7g/kompdt',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(361,'u.tools','新一代效率工具平台\n自由组合丰富插件，打造随手可取的终极神器','','https://u.tools/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(362,'VARLET','面向Vue3的Material风格移动端组件库','','https://varlet.gitee.io/varlet-ui/#/zh-CN/home',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(363,'devhints.io','Rico''s cheatsheets','','https://devhints.io/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(364,'TypeScript 4.0 使用手册','TypeScript语言用于大规模应用的JavaScript开发。 ✔️ TypeScript支持类型，是JavaScript的超集且可以编译成纯JavaScript代码。 ✔️ TypeScript兼容所有浏览器，所有宿主环境，所有操作系统。 ✔️ TypeScript是开源的。','','https://www.bookstack.cn/read/TypeScript-4.0-zh/README.md',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(365,'Apifox 使用文档','API 文档、API 调试、API Mock、API 自动化测试一体化协作平台，定位 Postman + Swagger + Mock + JMeter。通过一套系统、一份数据，解决多个系统之间的数据同步问题。只要定义好 API 文档，API 调试、API 数据 Mock、API 自动化测试就可以直接使用，无需再次定义；API 文档和 API 开发调试使用同一个工具，API 调试完成后即可保证和 API 文档定义完全一致。高效、及时、准确！','','https://www.apifox.cn/help/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(366,'Snipaste','Snipaste 不只是截图，善用贴图功能将帮助你提升工作效率','','https://docs.snipaste.com/zh-cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(367,'【TypeScript】- 一篇够用的TS总结','','','https://alexwjj.github.io/pages/cf42a74e3cc8f/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(368,'柠檬大师的空间站','','','https://leidl.top/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(369,'Loader Gallery','customize and make your own unique loader!','','https://loading.io/spinner/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(370,'程序员导航','','','https://cxy521.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(371,'Live Demo','','','https://theoxiong.github.io/vue-search-panel/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(372,'书栈网','','','https://www.bookstack.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(373,'axios','易用、简洁且高效的http库','','http://www.axios-js.com/zh-cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(374,'jQuery','','','http://hemin.cn/jq/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(375,'Linux命令大全(手册)','准确，丰富，稳定，在技术之路上为您护航！','','https://www.linuxcool.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(376,'JavaScript中的这些骚操作，你都知道吗？','','','https://juejin.cn/post/7007306019307175966',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(377,'分享32个JavaScript工作中常用的代码片段','整理一下工作中常用的JavaScript小技巧分享给大家，希望能帮助到各位小伙伴们，在工作中提升开发效率。','','https://segmentfault.com/a/1190000040637925',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(378,'Vue3的7种和Vue2的12种组件通信','','','https://juejin.cn/post/6999687348120190983',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(379,'v-md-editor','v-md-editor 是基于 Vue 开发的 markdown 编辑器组件','','https://ckang1229.gitee.io/vue-markdown-editor/zh/#%E4%BB%8B%E7%BB%8D',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(384,'前端“技师”们强推的效率开发工具汇总','各位程序员“技师”提供的小技巧的汇总。将我们平常累计的一些开发技巧分享给大家，希望能对大家有所帮助','图片链接','https://juejin.cn/post/7021320464836329502#heading-3',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(385,'Windows 快捷操作大全','快捷键只介绍能让你成为开发大佬的，类似 Ctrl+C、Ctrl+V 这种大家熟知的，一概省略，咱们只来干货。','....','https://juejin.cn/post/7020574670097219621',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(386,'一文让你30分钟快速掌握Vue3','经过了漫长的迭代，Vue 3.0 终于在上 2020-09-18 发布了，带了翻天覆地的变化，使用了 Typescript 进行了大规模的重构，带来了 Composition API RFC 版本，类似 React Hook 一样的写 Vue，可以自定义自己的 hook ，让使用者更加的灵活，接下来总结一下 vue 3.0 带来的部分新特性。','图片链接','https://mp.weixin.qq.com/s/1orWGlOXT2Wn2pJLK6VAIg',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(387,'前端进阶之道','针对前端的知识难点进行细致入微的讲解，让你的进阶之路不再崎岖！','图片链接','https://yuchengkai.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(388,'Web 控制台终极指南','一旦掌握了控制台，它将帮助我们更有条理、更快地调试并了解应用程序中发生的一切。所以我会试着用例子总结你需要知道的所有内容','图片链接','https://segmentfault.com/a/1190000040705234',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(389,'JSRUN.NET','用代码说话,一惯的风格','图片链接','http://jsrun.net/t',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(390,'vue-manage-system','','图片链接','https://github.com/lin-xin/vue-manage-system',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(391,'微信Markdown','导航简述','图片链接','https://doocs.github.io/md/#/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(392,'cssreference.io','免费的 CSS 视觉指南 通过示例学习：cssreference.io是一个免费的 CSS 视觉指南。它以最流行的属性为特色，并通过插图和动画示例对其进行了解释。','图片链接','https://cssreference.io/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(393,'css-tricks.com','可以包含（在另一个特定 HTML 元素中的特定 HTML 元素）','图片链接','https://css-tricks.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(400,'color-ui','简述','图片链接','https://www.color-ui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(402,'codemyui','简述','图片链接','https://codemyui.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(403,'学习CSS布局','本站教授的是现在广泛使用于网站布局领域的CSS基础。  我们假设你已经掌握了CSS的选择器、属性和值。并且你可能已经对布局有一定了解，即使亲自去写的话还是会很苦恼。如果你想要从头开始学习HTML和CSS，那么你可以看下这篇教程。不然的话，让我们看看我们是否可以让你在下一个项目少一些烦恼。','图片链接','https://zh.learnlayout.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(410,'CSShake','一些 CSS 类 移动你的 DOM！','图片链接','https://elrumordelaluz.github.io/csshake/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(411,'Nuxt3','使用 Vue 3 构建您的下一个应用程序，体验混合渲染、强大的数据获取和新功能。Nuxt 3 是一个开源框架，使 Web 开发变得简单而强大。','图片链接','https://v3.nuxtjs.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(412,'Day.js中文网','Day.js是一个极简的JavaScript库，可以为现代浏览器解析、验证、操作和显示日期和时间。','图片链接','https://dayjs.fenxianglu.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(413,'fenxianglu','','图片链接','https://www.fenxianglu.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(414,'Vuex','Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式 + 库。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。','图片链接','https://next.vuex.vuejs.org/zh/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(415,'Vue I18n','Vue I18n 是 Vue.js 的国际化插件','图片链接','https://kazupon.github.io/vue-i18n/zh/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(416,'Material Design 框架','Vuetify 是一个纯手工精心打造的 Material 样式的 Vue UI 组件库。 不需要任何设计技能 — 创建叹为观止的应用程序所需的一切都触手可及。','图片链接','https://vuetifyjs.com/zh-Hans/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(417,'Typora+picGo+Gitee搭建图床','Vuetify 是一个纯手工精心打造的 Material 样式的 Vue UI 组件库。 不需要任何设计技能 — 创建叹为观止的应用程序所需的一切都触手可及。','图片链接','https://juejin.cn/post/7011762633691168805',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(418,'Axios的封装思想及实践（TS版本）','','图片链接','https://juejin.cn/post/7023006049732919309',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(419,'wangEditor','开源 Web 富文本编辑器，开箱即用，配置简单  快速上手demo 演示 ','图片链接','https://juejin.cn/post/7023006049732919309',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(420,'Fect UI -Vue','@fect-ui/vue是根据 Geist-ui/vue作为设计依赖对 vue2 版本进行升级的一个Vue3UI 库。项目基于typescript,拥有更完备的类型提示和对编译器的友好支持, 相较 vue2 版本组件库进行了交互的优化。','图片链接','https://vue.miaya.art/Introduce',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(421,'CSS Layout','使用 CSS 制作的流行布局和图案','图片链接','https://csslayout.io/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(422,'vue3-progress','进度条','图片链接','https://vue3-progress-demo.netlify.app/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(423,'webPack转vite所遇到的问题','','图片链接','https://blog.csdn.net/WH_Crx/article/details/118106097',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(424,'mind-map','vue 图文','图片链接','https://github.com/jCodeLife/mind-map/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(425,'最优 图像优化','在文件尺寸和质量之间选择完美平衡，并且可获取完整在线预览。  您的图像从不会离开您的浏览器。','图片链接','https://zh.recompressor.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(426,'Vue Trend','Vue.js Live Demo 的简单、优雅的火花线','图片链接','https://cinwell.com/vue-trend/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(427,'极客猿导航','导航','图片链接','https://nav.geekape.net/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(428,'vue-fullscreen','一个用于将任意页面元素进行全屏切换的vue组件，基于 screenfull.js','图片链接','https://mirari.cc/2017/08/14/%E5%85%A8%E5%B1%8F%E5%88%87%E6%8D%A2%E7%BB%84%E4%BB%B6vue-fullscreen/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(429,'CodePen','CodePen 是一个面向前端设计人员和开发人员的社交开发环境。构建和部署网站，展示您的工作，构建测试用例以学习和调试，并寻找灵感。','图片链接','https://codepen.io/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(430,'GKA','简单的、高效的帧动画生成工具.  使用简单(仅需一行命令) 内置多种图片优化 多类生成模板，支持定制','图片链接','https://gka.js.org/#/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(431,'Sonar','\"Sonar一个Web系统，展现了静态代码扫描的结果，结果是可以自定义的 ,支持多种语言的原理是它的扩展性 \"','图片链接','http://www.sonar.org.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(432,'highcharts','数据可视化','图片链接','http://www.sonar.org.cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(433,'chartjs','图表','图片链接','https://www.chartjs.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(434,'Apache ECharts','一个基于 JavaScript 的开源可视化图表库','图片链接','https://echarts.apache.org/zh/index.html',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(435,'JavaScript Promise迷你书','本书的目的是以目前还在制定中的ECMAScript 6 Promises规范为中心，着重向各位读者介绍JavaScript中对Promise相关技术的支持情况。','图片链接','http://liubin.org/promises-book/#introduction',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(436,'EJS','嵌入式 JavaScript 模板。','图片链接','https://ejs.co/#promo',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(437,'Redux 中文官网','JS 应用的状态容器，提供可预测的状态管理','图片链接','https://cn.redux.js.org/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(438,'LOCALFORAGE','localForage 是一个 JavaScript 库，通过简单类似 localStorage API 的异步存储来改进你的 Web 应用程序的离线体验。它能存储多种类型的数据，而不仅仅是字符串。','图片链接','https://localforage.docschina.org/#api-getitem',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(439,'v-charts','在使用 echarts 生成图表时，经常需要做繁琐的数据类型转化、修改复杂的配置项，v-charts 的出现正是为了解决这个痛点。基于 Vue2.0 和 echarts 封装的 v-charts 图表组件，只需要统一提供一种对前后端都友好的数据格式设置简单的配置项，便可轻松生成常见的图表。','图片链接','https://v-charts.js.org/#/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(440,'pexels','免费图库','图片链接','https://www.pexels.com/zh-cn/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(441,'HELLOGITHUB','分享 GitHub 上 有趣、入门级的开源项目','图片链接','https://hellogithub.com/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(442,'GitHub Corners','Phew, GitHub is over ten years old now... and is unquestionably synonomous with open source. After 10 years, those GitHub ribbons are more than overdue for a cleaner, more modern alternative. This is my take.  By using SVG, these ','图片链接','https://tholman.com/github-corners/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(444,'Vuetable-2','数据表','图片链接','https://www.vuetable.com/#current-version',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(445,'v-viewer','vue的图片查看器组件，支持旋转、缩放、缩放等，基于viewer.js','图片链接','https://mirari.cc/v-viewer/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(446,'Vue 3 选框','为你的 Vue 3 应用程序制作的一个简单的动态选取框组件','图片链接','https://vue3-marquee.vercel.app/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(447,' GoGoCode','代码转换从未如此简单 全网最简单易上手，可读性最强的 AST 处理工具！','图片链接','https://gogocode.io/zh',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(448,'hammerjs','','图片链接','http://hammerjs.github.io/',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00'),
+(449,'导航标题2','导航简述','图片链接','www.xxx.com',2,4,'2021-11-04 00:00:00','2021-11-04 00:00:00');
+/*!40000 ALTER TABLE `sn_navigation` ENABLE KEYS */;
+
+-- 
+-- Definition of sn_one
+-- 
+
+DROP TABLE IF EXISTS `sn_one`;
+CREATE TABLE IF NOT EXISTS `sn_one` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
+  `text` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
+  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片',
+  `read` int(11) NOT NULL COMMENT '阅读数',
+  `give` int(11) NOT NULL COMMENT '点赞',
+  `user_id` int(11) NOT NULL COMMENT '作者',
+  `comment_id` int(11) unsigned NOT NULL COMMENT '评论',
+  `type_id` int(11) NOT NULL COMMENT '分类',
+  `time_create` date NOT NULL COMMENT '时间',
+  `time_modified` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sn_one_type` (`type_id`),
+  KEY `one_user_id` (`user_id`),
+  CONSTRAINT `one_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_one_type` (`id`),
+  CONSTRAINT `one_user_id` FOREIGN KEY (`user_id`) REFERENCES `sn_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table sn_one
+-- 
+
+/*!40000 ALTER TABLE `sn_one` DISABLE KEYS */;
+INSERT INTO `sn_one`(`id`,`title`,`text`,`img`,`read`,`give`,`user_id`,`comment_id`,`type_id`,`time_create`,`time_modified`) VALUES
+(8,'vol.001 舔狗日记','没事，你有对象不重要，你可以偶尔回一下我的信息好吗，一天一条也行，让我知道你还在。','321321',8,9,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(9,'vol.002 舔狗日记','时隔30个小时，你终于发了信息给我，你说“宝贝，我想你了。”，我很开心，我终于以为我的舔狗日子到了，可没想到信息发出来两秒都没有，你就撤回了，你说发错了，当我说准备要回没关系的时候，我看见了红色的感叹号。','321321',1,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(10,'vol.003 舔狗日记','蒋介石因为宋美龄的一句喜欢梧桐，他便种满了整个南京。而我因为你的一句不喜欢小偷，我便放过了整个上海的电动车。','321321',1,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(11,'vol.004 舔狗日记','我今天送了你一支口红，你拿到之后很开心，在他的嘴巴上亲了一下，或许他送你口红的时候，你也会在我的嘴巴上亲一下吧。','321321',4,1,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(12,'vol.005 舔狗日记','别的妹妹叫你打游戏，你让人家语音给你发了句哥哥，你就陪她打一天。我叫你打游戏，你回了我一句 70/h。','321321',6,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(13,'vol.006 舔狗日记','今天在楼上窗户上看见你和他在公园里接吻，我看见哭了出来，并打电话给你，想问问你为什么？但你说怎么了，声音是那么好听。于是我说“以后你和他接吻的时候，能不能用我送给你的口红啊？”','321321',5,1,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(14,'vol.007 舔狗日记','今天上班不是太忙，百无聊赖，又翻出了你的相片，看了又看。今天是我认识你的第302天，也是我爱你的第302天，可是这些你并不知道，也许你知道了，也不会在意吧。 此刻的我好想你！','321321',0,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(15,'vol.008 舔狗日记','你好像从来没有对我说过晚安，我在我们的聊天记录里搜索了关键字：“晚安”，你说过一次：我早晚安排人弄死你。','321321',0,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(16,'vol.009 舔狗日记','她好像从来没有主动说过爱我，我搜索了一下关键字“爱”。在我们的聊天记录里，她只说过一次：爱奇艺会员借我一下。','321321',5,0,4,0,4,'2020-12-18 00:00:00','2020-12-18 00:00:00'),
+(17,'vol.010 毒鸡汤','如果人生是一部电影，那你就是，中间弹出来的广告。','string',7,1,4,0,4,'2020-12-23 00:00:00','2020-12-18 00:00:00'),
+(20,'vol.011 舔狗日记','现在已经凌晨一点多了，我望着手机屏幕迟迟没有他的消息：你知道吗？我等了一晚上你的消息。他终于回复我了：是我让你等的？','无',5,3,4,0,4,'2020-12-23 00:00:00','2020-12-18 00:00:00'),
+(21,'vol.012 舔狗日记','今天你又来我们班看美女了，路过的时候瞥了一眼坐在第一排的我，我就知道你心里还是有我的。啊！真是美好的一天！','无',14,2,4,0,4,'2021-01-03 00:00:00','2020-12-18 00:00:00'),
+(22,'vol.013 毒鸡汤','别以为你一无所有，至少你还有丑！','无',11,0,4,0,4,'2021-01-03 00:00:00','2020-12-18 00:00:00'),
+(31,'vol.014 舔狗日记','今天打单子赚了56，给你转了52自己留了4块钱。我花两块买了两包泡面，用剩下的两块钱买了一瓶矿泉水，自己烧水泡面吃，而你用那52块钱想都没想的给你别的哥哥买了皮肤。 我太开心了，因为你用上我的钱了，以后我要赚更多的钱给你','无',11,2,4,0,4,'2021-07-20 00:00:00','2020-12-18 00:00:00'),
+(33,'vol.015 舔狗日记','今天你说了要和我打电话，我等了一天，马上十二点了才打过来，我有点不高兴就挂了，你骂了句给脸不要脸。我想了一下，哎呀你还会关心我的脸，多么善良的女孩子，我发誓还能再等一天电话','无',7,3,4,0,4,'2021-09-02 00:00:00','2020-12-18 00:00:00'),
+(34,'vol.016 舔狗日记','你好像成熟了，你学会隐忍，开始压抑自己对我的感情。这很好……可是我觉得自己被你忽略了……你好像看不见我。这不可能，对吗？','无',12,4,4,0,4,'2021-09-02 00:00:00','2020-12-18 00:00:00');
+/*!40000 ALTER TABLE `sn_one` ENABLE KEYS */;
+
+-- 
+-- Definition of sn_setblog
+-- 
+
+DROP TABLE IF EXISTS `sn_setblog`;
+CREATE TABLE IF NOT EXISTS `sn_setblog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '设置的内容名称',
+  `router_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '路由链接',
+  `isopen` tinyint(1) NOT NULL COMMENT '是否启用',
+  `type_id` int(5) NOT NULL COMMENT '分类',
+  `user_id` int(5) NOT NULL COMMENT '关联用户表',
+  PRIMARY KEY (`id`),
+  KEY `setblog_user_id` (`user_id`),
+  KEY `setblog_type_id` (`type_id`),
+  CONSTRAINT `setblog_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_setblog_type` (`id`),
+  CONSTRAINT `setblog_user_id` FOREIGN KEY (`user_id`) REFERENCES `sn_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table sn_setblog
+-- 
+
+/*!40000 ALTER TABLE `sn_setblog` DISABLE KEYS */;
+INSERT INTO `sn_setblog`(`id`,`name`,`router_url`,`isopen`,`type_id`,`user_id`) VALUES
+(1,'SetPage','df',0,1,4),
+(2,'1','5',1,0,4);
+/*!40000 ALTER TABLE `sn_setblog` ENABLE KEYS */;
+
+-- 
 -- Definition of sn_user_friends
 -- 
 
@@ -1251,13 +1287,56 @@ INSERT INTO `sn_user_talk`(`id`,`user_id`,`talk_text`,`talk_time`,`talk_read`,`t
 /*!40000 ALTER TABLE `sn_user_talk` ENABLE KEYS */;
 
 -- 
+-- Definition of sn_video
+-- 
+
+DROP TABLE IF EXISTS `sn_video`;
+CREATE TABLE IF NOT EXISTS `sn_video` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
+  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片',
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接路径',
+  `type_id` int(11) NOT NULL COMMENT '分类',
+  `user_id` int(11) NOT NULL,
+  `time_create` date NOT NULL COMMENT '时间',
+  `time_modified` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `video_type_id` (`type_id`),
+  KEY `video_user_id` (`user_id`),
+  CONSTRAINT `video_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_video_type` (`id`),
+  CONSTRAINT `video_user_id` FOREIGN KEY (`user_id`) REFERENCES `sn_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table sn_video
+-- 
+
+/*!40000 ALTER TABLE `sn_video` DISABLE KEYS */;
+INSERT INTO `sn_video`(`id`,`title`,`img`,`url`,`type_id`,`user_id`,`time_create`,`time_modified`) VALUES
+(25,'我们的故事，英雄联盟！','https://s1.ax1x.com/2020/11/11/BX2acT.png','//player.bilibili.com/player.html?aid=45028887&bvid=BV1zb411b7JK&cid=78863318&page=1',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(26,'故事开始的地方——为你的本命献上弹幕吧！','https://s1.ax1x.com/2020/11/11/BX2N90.jpg','//player.bilibili.com/player.html?aid=25180028&bvid=BV18s411j7CL&cid=42677566&page=1',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(27,'用战斗来祭奠这个世界 ！！','https://s1.ax1x.com/2020/11/11/BX2BB4.jpg','//player.bilibili.com/player.html?aid=1328701&bvid=BV1px411N7Yd&cid=2015358&page=1',1,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(28,'前方高能！让世界感受这场视觉盛宴吧！','https://s1.ax1x.com/2020/11/11/BX20uF.jpg','//player.bilibili.com/player.html?aid=50331935&bvid=BV1x441187u5&cid=92865323&page=1',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(29,'这才是忍者世界的巅峰战力！','https://s1.ax1x.com/2020/11/11/BX2U3V.jpg','//player.bilibili.com/player.html?aid=71840112&bvid=BV1HE41167kR&cid=124483833&page=1',1,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(30,'这个故事 还没有完结','https://s1.ax1x.com/2020/11/11/BX2JNn.jpg','//player.bilibili.com/player.html?aid=66382748&bvid=BV1J441117u7&cid=115130259&page=1',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(31,'感受国服配音的魅力吧！ 你的热血从未结霜！！','https://s1.ax1x.com/2020/11/11/BX2Yhq.jpg','//player.bilibili.com/player.html?aid=18767799&bvid=BV1WW411e7wq&cid=30610512&page=1',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(32,'敌人虽众，一击皆斩！','https://s1.ax1x.com/2020/11/11/BX2JNn.jpg','//player.bilibili.com/player.html?aid=22446917&bvid=BV1SW41157WM&cid=37190046&page=1',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(33,'【英雄联盟/CG/燃向】 召唤师 如果没有你们 何为英雄 何为联盟','https://s3.ax1x.com/2020/11/13/Dpmoee.jpg','//player.bilibili.com/player.html?aid=78147108&bvid=BV1fJ411v7Q6&cid=133666781&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(34,'【超燃巨作/视听盛宴】我...已被这优雅蒙蔽了双眼... 「英雄联盟系列混剪」','https://s3.ax1x.com/2020/11/13/DpnyX8.jpg','//player.bilibili.com/player.html?aid=49445129&bvid=BV1gb411j7r4&cid=86578090&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(35,'那不屈的嘶吼和永不低头的信念使我们迎难而上','https://s3.ax1x.com/2020/11/13/Dputg0.png','//player.bilibili.com/player.html?aid=49661297&bvid=BV1ib41157zQ&cid=86951456&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(36,'这就是英雄联盟的魅力！','https://s3.ax1x.com/2020/11/13/DpKDL8.jpg','//player.bilibili.com/player.html?aid=47199816&bvid=BV1nb41147HD&cid=82660090&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',2,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(37,'【火影忍者百万填词】一袋米要扛几楼','https://s3.ax1x.com/2020/11/13/DpQAN4.jpg','//player.bilibili.com/player.html?aid=56970467&bvid=BV1Px411d7em&cid=99503508&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',1,4,'2020-07-28 00:00:00','2020-07-28 00:00:00'),
+(38,'『忍び的时代真的结束了吗？』让鸡皮疙瘩和肾上腺素','https://s3.ax1x.com/2020/11/13/DpQxaD.png','//player.bilibili.com/player.html?aid=81848177&bvid=BV1HJ411j771&cid=140045131&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',1,4,'2020-07-28 00:00:00','2020-07-28 00:00:00');
+/*!40000 ALTER TABLE `sn_video` ENABLE KEYS */;
+
+-- 
 -- Definition of sn_video_type
 -- 
 
 DROP TABLE IF EXISTS `sn_video_type`;
 CREATE TABLE IF NOT EXISTS `sn_video_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -1271,46 +1350,6 @@ INSERT INTO `sn_video_type`(`id`,`name`) VALUES
 (2,'LOL');
 /*!40000 ALTER TABLE `sn_video_type` ENABLE KEYS */;
 
--- 
--- Definition of sn_video
--- 
-
-DROP TABLE IF EXISTS `sn_video`;
-CREATE TABLE IF NOT EXISTS `sn_video` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标题',
-  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片',
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接路径',
-  `type_id` int(11) NOT NULL COMMENT '分类',
-  `time_create` date NOT NULL COMMENT '时间',
-  `time_modified` date DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `video_type_id` (`type_id`),
-  CONSTRAINT `video_type_id` FOREIGN KEY (`type_id`) REFERENCES `sn_video_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table sn_video
--- 
-
-/*!40000 ALTER TABLE `sn_video` DISABLE KEYS */;
-INSERT INTO `sn_video`(`id`,`title`,`img`,`url`,`type_id`,`time_create`,`time_modified`) VALUES
-(25,'我们的故事，英雄联盟！','https://s1.ax1x.com/2020/11/11/BX2acT.png','//player.bilibili.com/player.html?aid=45028887&bvid=BV1zb411b7JK&cid=78863318&page=1',2,'2020-07-28 00:00:00',NULL),
-(26,'故事开始的地方——为你的本命献上弹幕吧！','https://s1.ax1x.com/2020/11/11/BX2N90.jpg','//player.bilibili.com/player.html?aid=25180028&bvid=BV18s411j7CL&cid=42677566&page=1',2,'2020-07-28 00:00:00',NULL),
-(27,'用战斗来祭奠这个世界 ！！','https://s1.ax1x.com/2020/11/11/BX2BB4.jpg','//player.bilibili.com/player.html?aid=1328701&bvid=BV1px411N7Yd&cid=2015358&page=1',1,'2020-07-28 00:00:00',NULL),
-(28,'前方高能！让世界感受这场视觉盛宴吧！','https://s1.ax1x.com/2020/11/11/BX20uF.jpg','//player.bilibili.com/player.html?aid=50331935&bvid=BV1x441187u5&cid=92865323&page=1',2,'2020-07-28 00:00:00',NULL),
-(29,'这才是忍者世界的巅峰战力！','https://s1.ax1x.com/2020/11/11/BX2U3V.jpg','//player.bilibili.com/player.html?aid=71840112&bvid=BV1HE41167kR&cid=124483833&page=1',1,'2020-07-28 00:00:00',NULL),
-(30,'这个故事 还没有完结','https://s1.ax1x.com/2020/11/11/BX2JNn.jpg','//player.bilibili.com/player.html?aid=66382748&bvid=BV1J441117u7&cid=115130259&page=1',2,'2020-07-28 00:00:00',NULL),
-(31,'感受国服配音的魅力吧！ 你的热血从未结霜！！','https://s1.ax1x.com/2020/11/11/BX2Yhq.jpg','//player.bilibili.com/player.html?aid=18767799&bvid=BV1WW411e7wq&cid=30610512&page=1',2,'2020-07-28 00:00:00',NULL),
-(32,'敌人虽众，一击皆斩！','https://s1.ax1x.com/2020/11/11/BX2JNn.jpg','//player.bilibili.com/player.html?aid=22446917&bvid=BV1SW41157WM&cid=37190046&page=1',2,'2020-07-28 00:00:00',NULL),
-(33,'【英雄联盟/CG/燃向】 召唤师 如果没有你们 何为英雄 何为联盟','https://s3.ax1x.com/2020/11/13/Dpmoee.jpg','//player.bilibili.com/player.html?aid=78147108&bvid=BV1fJ411v7Q6&cid=133666781&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',2,'2020-07-28 00:00:00',NULL),
-(34,'【超燃巨作/视听盛宴】我...已被这优雅蒙蔽了双眼... 「英雄联盟系列混剪」','https://s3.ax1x.com/2020/11/13/DpnyX8.jpg','//player.bilibili.com/player.html?aid=49445129&bvid=BV1gb411j7r4&cid=86578090&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',2,'2020-07-28 00:00:00',NULL),
-(35,'那不屈的嘶吼和永不低头的信念使我们迎难而上','https://s3.ax1x.com/2020/11/13/Dputg0.png','//player.bilibili.com/player.html?aid=49661297&bvid=BV1ib41157zQ&cid=86951456&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',2,'2020-07-28 00:00:00',NULL),
-(36,'这就是英雄联盟的魅力！','https://s3.ax1x.com/2020/11/13/DpKDL8.jpg','//player.bilibili.com/player.html?aid=47199816&bvid=BV1nb41147HD&cid=82660090&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',2,'2020-07-28 00:00:00',NULL),
-(37,'【火影忍者百万填词】一袋米要扛几楼','https://s3.ax1x.com/2020/11/13/DpQAN4.jpg','//player.bilibili.com/player.html?aid=56970467&bvid=BV1Px411d7em&cid=99503508&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',1,'2020-07-28 00:00:00',NULL),
-(38,'『忍び的时代真的结束了吗？』让鸡皮疙瘩和肾上腺素','https://s3.ax1x.com/2020/11/13/DpQxaD.png','//player.bilibili.com/player.html?aid=81848177&bvid=BV1HJ411j771&cid=140045131&page=1\" scrolling=\"no\" border=\"0\" frameborder=\"no\" framespacing=\"0\" allowfullscreen=\"true\"',1,'2020-07-28 00:00:00',NULL);
-/*!40000 ALTER TABLE `sn_video` ENABLE KEYS */;
-
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -1321,5 +1360,5 @@ INSERT INTO `sn_video`(`id`,`title`,`img`,`url`,`type_id`,`time_create`,`time_mo
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 
--- Dump completed on 2021-11-03 16:31:23
--- Total time: 0:0:0:0:357 (d:h:m:s:ms)
+-- Dump completed on 2021-11-04 11:07:51
+-- Total time: 0:0:0:0:236 (d:h:m:s:ms)

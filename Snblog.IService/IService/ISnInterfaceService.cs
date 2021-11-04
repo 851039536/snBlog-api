@@ -21,15 +21,16 @@ namespace Snblog.IService.IService
         Task<List<SnInterfaceDto>> GetAllAsync(bool cache);
 
         /// <summary>
-        /// 条件分页查询
+        /// 分页查询
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="type"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="isDesc"></param>
-        /// <param name="cache"></param>
+        /// <param name="identity">所有:0 || 分类:1 || 用户:2</param>
+        /// <param name="type">类别参数, identity 0 可不填</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <param name="ordering">排序条件[按id排序]</param>
         /// <returns></returns>
-        Task<List<SnInterfaceDto>> GetTypefyAsync(int userId,int type, int pageIndex, int pageSize, bool isDesc, bool cache);
+        public Task<List<SnInterfaceDto>> GetFyAsync(int identity, int type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
     }
 }
