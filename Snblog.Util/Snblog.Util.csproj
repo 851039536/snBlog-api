@@ -8,4 +8,8 @@
     <Folder Include="Log4net\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Snblog.Enties\Snblog.Enties.csproj" />
+  </ItemGroup>
+
 </Project>

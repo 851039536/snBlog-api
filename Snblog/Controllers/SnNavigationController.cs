@@ -9,9 +9,11 @@ using Snblog.IService.IService;
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
+    #region 导航内容 SnNavigationController
+
 
     /// <summary>
-    /// 导航内容-博客-文档
+    /// 导航内容
     /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
@@ -20,6 +22,7 @@ namespace Snblog.Controllers
     {
         private readonly ISnNavigationService _service; //IOC依赖注入
 
+        #region SnNavigationController
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -28,6 +31,23 @@ namespace Snblog.Controllers
         {
             _service = service;
         }
+        #endregion
+
+        #region 查询总数 GetCountAsync
+        /// <summary>
+        /// 查询总数 
+        /// </summary>
+        /// <param name="identity">所有:0 || 分类:1 || 用户:2  </param>
+        /// <param name="type">条件(identity为0则填0) </param>
+        /// <param name="cache"></param>
+        /// <returns></returns>
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync(int identity = 0, int type = 0, bool cache = false)
+        {
+            return Ok(await _service.GetCountAsync(identity, type, cache));
+        }
+        #endregion
+
         #region 查询所有GetAllAsync
         /// <summary>
         /// 查询所有
@@ -35,11 +55,28 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync(bool cache)
+        public async Task<IActionResult> GetAllAsync(bool cache =false)
         {
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
+
+        #region 模糊查询 Contains
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        /// <param name="identity">无条件:0 || 分类:1 || 用户:2</param>
+        /// <param name="type">查询条件:用户||分类</param>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetContainsAsync")]
+        public async Task<IActionResult> GetContainsAsync(int identity = 0, int type = 0, string name = "c", bool cache = false)
+        {
+            return Ok(await _service.GetContainsAsync(identity,type, name, cache));
+        }
+        #endregion
+
         #region 主键查询GetByIdAsync
         /// <summary>
         /// 主键查询
@@ -48,78 +85,12 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id,bool cache)
+        public async Task<IActionResult> GetByIdAsync(int id,bool cache =false)
         {
             return Ok(await _service.GetByIdAsync(id,cache));
         }
         #endregion
-        #region 查询总数GetCountAsync
-        /// <summary>
-        /// 查询总数
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(bool cache)
-        {
-            return Ok(await _service.GetCountAsync(cache));
-        }
-        #endregion
-        #region 条件查询总数CountTypeAsync
-        /// <summary>
-        /// 条件查询总数
-        /// </summary>
-        /// <param name="type">类别</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("CountTypeAsync")]
-        public async Task<IActionResult> CountTypeAsync(string type,bool cache)
-        {
-            return Ok(await _service.CountTypeAsync(type,cache));
-        }
 
-        #endregion
-        #region 模糊查询 GetContainsAsync
-        /// <summary>
-        /// 模糊查询
-        /// </summary>
-        /// <param name="name">查询字段</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetContainsAsync")]
-        public async Task<IActionResult> GetContainsAsync(string name, bool cache)
-        {
-            return Ok(await _service.GetContainsAsync(name, cache));
-        }
-        #endregion
-        #region 条件模糊查询 Contains
-        /// <summary>
-        /// 条件模糊查询
-        /// </summary>
-        /// <param name="type">标签</param>
-        /// <param name="name">查询字段</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetTypeContainsAsync")]
-        public async Task<IActionResult> GetTypeContainsAsync(string type, string name, bool cache)
-        {
-            return Ok(await _service.GetTypeContainsAsync(type, name, cache));
-        }
-        #endregion
-        #region 去重查询 (缓存)GetDistinct
-
-        /// <summary>
-        /// 去重查询 
-        /// </summary>
-        /// <param name="type">查询条件</param>
-        /// <returns></returns>
-        [HttpGet("GetDistinct")]
-        public async Task<IActionResult> GetDistinct(string type)
-        {
-            return Ok(await _service.GetDistinct(type));
-        }
-
-        #endregion
         #region 条件查询GetTypeOrderAsync
         /// <summary>
         /// 条件查询 
@@ -134,6 +105,9 @@ namespace Snblog.Controllers
             return Ok(await _service.GetTypeOrderAsync(type, order,cache));
         }
         #endregion
+
+
+
         #region 分页查询 GetFyAllAsync
         /// <summary>
         /// 分页查询 
@@ -149,6 +123,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetFyAllAsync(type, pageIndex, pageSize, isDesc,cache));
         }
         #endregion
+
         #region 添加数据AddAsync
         /// <summary>
         /// 添加数据 
@@ -161,6 +136,7 @@ namespace Snblog.Controllers
             return Ok(await _service.AddAsync(entity));
         }
         #endregion
+
         #region 更新数据 UpdateAsync
         /// <summary>
         /// 更新数据 
@@ -174,6 +150,7 @@ namespace Snblog.Controllers
             return Ok(await _service.UpdateAsync(entity));
         }
         #endregion
+
         #region 删除数据DeleteAsync
         /// <summary>
         /// 删除数据
@@ -187,7 +164,6 @@ namespace Snblog.Controllers
             return Ok(await _service.DeleteAsync(id));
         }
         #endregion
-       
-
     }
+    #endregion
 }

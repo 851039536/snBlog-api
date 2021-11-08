@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
 using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using Snblog.IService.IService;
 using Snblog.Repository.Repository;
+using Snblog.Util.components;
 
 namespace Snblog.Service.Service
 {
@@ -14,15 +17,16 @@ namespace Snblog.Service.Service
     {
         private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheUtil;
-        private int result_Int;
-        private List<SnLabel> result_List = null;
+        Tool<SnLabel> data = new Tool<SnLabel>();
+         Tool<SnLabelDto> datas = new Tool<SnLabelDto>();
         private readonly ILogger<SnLabelsService> _logger;
-
-        public SnLabelsService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnLabelsService> logger)
+        private readonly IMapper _mapper;
+        public SnLabelsService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnLabelsService> logger, IMapper mapper = null)
         {
             _service = coreDbContext;
             _cacheUtil = (CacheUtil)cacheUtil;
             _logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -39,18 +43,16 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<SnLabel> GetByIdAsync(int id,bool cache)
+        public async Task<SnLabelDto> GetByIdAsync(int id, bool cache)
         {
-
-            _logger.LogInformation("主键查询_SnLabels" + id+cache);
-            SnLabel labels = null;
-            labels = _cacheUtil.CacheString("GetByIdAsync_SnLabels" + id+cache, labels,cache);
-            if (labels == null)
+            _logger.LogInformation("SnLabels_主键查询=>" + id + cache);
+            datas.resultDto = _cacheUtil.CacheString("SnLabels_GetByIdAsync" + id + cache, datas.resultDto, cache);
+            if (datas.resultDto == null)
             {
-                labels = await _service.SnLabels.FindAsync(id);
-                _cacheUtil.CacheString("GetByIdAsync_SnLabels" + id+cache, labels,cache);
+                datas.resultDto= _mapper.Map<SnLabelDto>(await _service.SnLabels.FindAsync(id));
+                _cacheUtil.CacheString("SnLabels_GetByIdAsync" + id + cache, datas.resultDto, cache);
             }
-            return labels;
+            return datas.resultDto;
         }
 
         /// <summary>
@@ -74,63 +76,64 @@ namespace Snblog.Service.Service
         {
             _logger.LogInformation("更新数据_SnLabels" + entity);
             _service.SnLabels.Update(entity);
-             return await _service.SaveChangesAsync()>0;
-            
+            return await _service.SaveChangesAsync() > 0;
+
         }
 
         /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-        public async Task<List<SnLabel>> GetAllAsync(bool cache)
+        public async Task<List<SnLabelDto>> GetAllAsync(bool cache)
         {
-
             _logger.LogInformation("查询所有_SnLabels" + cache);
-            result_List = _cacheUtil.CacheString("GetAllAsync_SnLabels"+cache, result_List,cache);
-            if (result_List == null)
+            datas.resultListDto = _cacheUtil.CacheString("GetAllAsync_SnLabels" + cache, datas.resultListDto, cache);
+            if (datas.resultListDto == null)
             {
-                result_List = await _service.SnLabels.ToListAsync();
-                _cacheUtil.CacheString("GetAllAsync_SnLabels"+cache, result_List,cache);
+                datas.resultListDto = _mapper.Map<List<SnLabelDto>>(await _service.SnLabels.ToListAsync());
+                _cacheUtil.CacheString("GetAllAsync_SnLabels" + cache, datas.resultListDto, cache);
             }
-            return result_List;
+            return datas.resultListDto;
         }
 
         public async Task<int> GetCountAsync(bool cache)
         {
-            _logger.LogInformation("查询总条数_SnLabels" + cache);
-            result_Int = _cacheUtil.CacheNumber("GetCountAsync__SnLabels"+cache, result_Int,cache);
-            if (result_Int == 0)
+            _logger.LogInformation("SnLabels_查询总数" + cache);
+            data.resulInt = _cacheUtil.CacheNumber("GetCountAsync__SnLabels" + cache, data.resulInt, cache);
+            if (data.resulInt == 0)
             {
-                result_Int = await _service.SnLabels.CountAsync();
-                _cacheUtil.CacheNumber("GetCountAsync__SnLabels"+cache, result_Int, cache);
+                data.resulInt = await _service.SnLabels.CountAsync();
+                _cacheUtil.CacheNumber("GetCountAsync__SnLabels" + cache, data.resulInt, cache);
             }
-            return result_Int;
+            return data.resulInt;
         }
 
-        public async Task<List<SnLabel>> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
+        public async Task<List<SnLabelDto>> GetFyAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            _logger.LogInformation("条件分页查询_SnLabels" + pageIndex+pageSize+isDesc+cache);
+            _logger.LogInformation("SnLabels_分页查询=>" + pageIndex + pageSize + isDesc + cache);
 
-            result_List = _cacheUtil.CacheString("GetfyAllAsync_SnLabels" + pageIndex + pageSize + isDesc+cache, result_List,cache);
-            if (result_List == null)
+            datas.resultListDto = _cacheUtil.CacheString("GetfyAllAsync_SnLabels" + pageIndex + pageSize + isDesc + cache, datas.resultListDto, cache);
+            if (datas.resultListDto == null)
             {
                 await GetfyAll(pageIndex, pageSize, isDesc);
-                _cacheUtil.CacheString("GetfyAllAsync_SnLabels" + pageIndex + pageSize + isDesc+cache, result_List,cache);
+                _cacheUtil.CacheString("GetfyAllAsync_SnLabels" + pageIndex + pageSize + isDesc + cache, datas.resultListDto, cache);
             }
-            return result_List;
+            return datas.resultListDto;
 
         }
         private async Task GetfyAll(int pageIndex, int pageSize, bool isDesc)
         {
             if (isDesc)
             {
-                result_List = await _service.SnLabels.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                data.resultList = await _service.SnLabels.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                        .Take(pageSize).ToListAsync();
+                datas.resultListDto= _mapper.Map<List<SnLabelDto>>(data.resultList);
             }
             else
             {
-                result_List = await _service.SnLabels.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                data.resultList = await _service.SnLabels.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                          .Take(pageSize).ToListAsync();
+                datas.resultListDto = _mapper.Map<List<SnLabelDto>>(data.resultList);
             }
         }
     }

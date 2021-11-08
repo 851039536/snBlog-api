@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Snblog.Util.components
 {
-  static  internal class Tool
+    public class Tool<T>
     {
-
+        public T result = default;
+        public List<T> resultList = default;
+        public T resultDto = default;
+        public List<T> resultListDto = default;
+        public int resulInt;
+     
     }
 }

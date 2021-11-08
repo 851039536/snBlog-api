@@ -31,6 +31,9 @@ namespace Snblog.Controllers
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         #endregion
+
+
+        #region 查询总数 GetCountAsync
         /// <summary>
         /// 查询总数 
         /// </summary>
@@ -43,6 +46,7 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetCountAsync(identity,type,cache));
         }
+        #endregion
 
         #region 查询所有GetAllAsync
         /// <summary>
@@ -57,6 +61,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
+
         #region 模糊查询 Contains
         /// <summary>
         /// 模糊查询
@@ -71,6 +76,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetTypeContainsAsync(type,name, cache));
         }
         #endregion
+
         #region 主键查询 GetByIdAsync
         /// <summary>
         /// 主键查询 
@@ -84,6 +90,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetByIdAsync(id, cache));
         }
         #endregion
+
         #region  条件查询 GetTypeAsync
         /// <summary>
         ///条件查询 
@@ -97,6 +104,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetTypeAsync(identity,type, cache));
         }
         #endregion
+
         #region 读取[字段/阅读/点赞]总数量GetSumAsync
         /// <summary>
         /// 统计[字段/阅读/点赞]总数量-缓存
@@ -110,6 +118,7 @@ namespace Snblog.Controllers
         }
 
         #endregion
+
         #region 分页查询GetFyAsync
         /// <summary>
         /// 分页查询
@@ -128,6 +137,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetFyAsync(identity,type, pageIndex, pageSize, ordering, isDesc, cache));
         }
         #endregion
+
         #region 添加数据AddAsync
         /// <summary>
         /// 添加数据
@@ -141,6 +151,7 @@ namespace Snblog.Controllers
             return Ok(await _service.AddAsync(entity));
         }
         #endregion
+
         #region 更新数据UpdateAsync
         /// <summary>
         /// 更新数据
@@ -154,6 +165,7 @@ namespace Snblog.Controllers
             return Ok(await _service.UpdateAsync(entity));
         }
         #endregion
+
         #region 删除数据DeleteAsync
         /// <summary>
         /// 删除数据
@@ -167,6 +179,7 @@ namespace Snblog.Controllers
             return Ok(await _service.DeleteAsync(id));
         }
         #endregion
+
         #region 更新部分列[comment give read] UpdatePortionAsync
         /// <summary>
         /// 更新部分列[comment give read]

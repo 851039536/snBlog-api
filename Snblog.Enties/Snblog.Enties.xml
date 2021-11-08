@@ -19,7 +19,17 @@
             配置构造函数，用来创建关系映射
             </summary>
         </member>
+        <member name="M:Snblog.Enties.AutoMapper.SnLabelMapper.#ctor">
+            <summary>
+            配置构造函数，用来创建关系映射
+            </summary>
+        </member>
         <member name="M:Snblog.Enties.AutoMapper.SnNavigationMappe.#ctor">
+            <summary>
+            配置构造函数，用来创建关系映射
+            </summary>
+        </member>
+        <member name="M:Snblog.Enties.AutoMapper.SnSortMapper.#ctor">
             <summary>
             配置构造函数，用来创建关系映射
             </summary>

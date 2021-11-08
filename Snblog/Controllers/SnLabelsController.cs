@@ -10,16 +10,16 @@ namespace Snblog.Controllers
 {
 
     /// <summary>
-    /// 标签内容
+    /// 标签
     /// </summary>
     [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
     public class SnLabelsController : ControllerBase
     {
-
         private readonly ISnLabelsService _service; //IOC依赖注入
 
+        #region 构造函数 SnLabelsController
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -28,20 +28,22 @@ namespace Snblog.Controllers
         {
             _service = service;
         }
+        #endregion
 
-        #region 查询所有
+        #region 查询所有 GetAllAsync
         /// <summary>
         /// 查询所有
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync(bool cache)
+        public async Task<IActionResult> GetAllAsync(bool cache =false)
         {
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
-        #region 主键查询 
+
+        #region 主键查询 GetByIdAsync
         /// <summary>
         /// 主键查询
         /// </summary>
@@ -49,12 +51,26 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id,bool cache)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
         }
         #endregion
-        #region 分页查询
+
+        #region 查询总数 GetCountAsync
+        /// <summary>
+        /// 查询总数 
+        /// </summary>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync(bool cache = false)
+        {
+            return Ok(await _service.GetCountAsync(cache));
+        }
+        #endregion
+
+        #region 分页查询 GetFyAsync
         /// <summary>
         /// 分页查询 
         /// </summary>
@@ -62,25 +78,14 @@ namespace Snblog.Controllers
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetfyAllAsync")]
-        public async Task<IActionResult> GetfyAllAsync(int pageIndex, int pageSize, bool isDesc,bool cache)
+        [HttpGet("GetFyAsync")]
+        public async Task<IActionResult> GetFyAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
         {
-            return Ok(await _service.GetfyAllAsync(pageIndex, pageSize, isDesc,cache));
+            return Ok(await _service.GetFyAsync(pageIndex, pageSize, isDesc, cache));
         }
         #endregion
-        #region 查询总条数
-        /// <summary>
-        /// 查询总条数
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(bool cache)
-        {
-            return Ok(await _service.GetCountAsync(cache));
-        }
-        #endregion
-        #region 添加标签 
+
+        #region 添加 AddAsync
         /// <summary>
         /// 添加标签
         /// </summary>
@@ -93,7 +98,8 @@ namespace Snblog.Controllers
             return Ok(await _service.AddAsync(entity));
         }
         #endregion
-        #region 更新标签
+
+        #region 更新 UpdateAsync
         /// <summary>
         /// 更新标签 
         /// </summary>
@@ -107,9 +113,10 @@ namespace Snblog.Controllers
             return Ok(data);
         }
         #endregion
-        #region 删除数据
+
+        #region 删除数据 DeleteAsync
         /// <summary>
-        /// 删除数据
+        /// 删除
         /// </summary>
         /// <param name="id">标签id</param>
         [Authorize(Roles = Permissions.Name)]
