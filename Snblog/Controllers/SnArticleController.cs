@@ -32,17 +32,16 @@ namespace Snblog.Controllers
         }
         #endregion
 
-
         #region 查询总数 GetCountAsync
         /// <summary>
         /// 查询总数 
         /// </summary>
         /// <param name="identity">所有:0 || 分类:1 || 标签:2 || 用户3  </param>
-        /// <param name="type">条件(identity为0则填0) </param>
+        /// <param name="type">查询条件 </param>
         /// <param name="cache"></param>
         /// <returns></returns>
         [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(int identity=0, int type =0,bool cache=false)
+        public async Task<IActionResult> GetCountAsync(int identity=0, string type ="null",bool cache=false)
         {
             return Ok(await _service.GetCountAsync(identity,type,cache));
         }
@@ -56,7 +55,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
         [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync(bool cache)
+        public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
             return Ok(await _service.GetAllAsync(cache));
         }
@@ -66,14 +65,14 @@ namespace Snblog.Controllers
         /// <summary>
         /// 模糊查询
         /// </summary>
-        /// <param name="type">无条件:0 || 分类:1 || 标签:2</param>
+        /// <param name="identity">无条件:0 || 分类:1 || 标签:2</param>
+        /// <param name="type">查询条件</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
         [HttpGet("GetContainsAsync")]
-        public async Task<IActionResult> GetContainsAsync(int type=0, string name="c", bool cache=false)
+        public async Task<IActionResult> GetContainsAsync(int identity =0, string type="null", string name="c", bool cache=false)
         {
-            return Ok(await _service.GetTypeContainsAsync(type,name, cache));
+            return Ok(await _service.GetContainsAsync(identity,type, name, cache));
         }
         #endregion
 
@@ -99,7 +98,7 @@ namespace Snblog.Controllers
         /// <param name="type">类别</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetTypeAsync")]
-        public async Task<IActionResult> GetTypeAsync(int identity=1, int type=1, bool cache=false)
+        public async Task<IActionResult> GetTypeAsync(int identity=1, string type="null", bool cache=false)
         {
             return Ok(await _service.GetTypeAsync(identity,type, cache));
         }
@@ -132,7 +131,7 @@ namespace Snblog.Controllers
         /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
         /// <returns></returns>
         [HttpGet("GetFyAsync")]
-        public async Task<IActionResult> GetFyAsync(int  identity=0, int type=0, int pageIndex=1, int pageSize=10, string ordering="id", bool isDesc=true, bool cache=false)
+        public async Task<IActionResult> GetFyAsync(int  identity=0, string type="null", int pageIndex=1, int pageSize=10, string ordering="id", bool isDesc=true, bool cache=false)
         {
             return Ok(await _service.GetFyAsync(identity,type, pageIndex, pageSize, ordering, isDesc, cache));
         }

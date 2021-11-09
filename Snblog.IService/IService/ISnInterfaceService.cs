@@ -16,7 +16,7 @@ namespace Snblog.IService.IService
         /// <param name="users">条件:用户</param>
         /// <param name="type">条件:类别</param>
         /// <param name="cache">是否开启缓存</param>
-        Task<List<SnInterfaceDto>> GetTypeAsync(int identity, int users, int type, bool cache);
+        Task<List<SnInterfaceDto>> GetTypeAsync(int identity, string users, string type, bool cache);
 
         Task<List<SnInterfaceDto>> GetAllAsync(bool cache);
 
@@ -31,6 +31,6 @@ namespace Snblog.IService.IService
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[按id排序]</param>
         /// <returns></returns>
-        public Task<List<SnInterfaceDto>> GetFyAsync(int identity, int type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
+        public Task<List<SnInterfaceDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
     }
 }

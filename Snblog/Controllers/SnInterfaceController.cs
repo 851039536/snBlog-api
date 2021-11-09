@@ -29,7 +29,7 @@ namespace Snblog.Controllers
         /// <param name="type">条件:类别</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetTypeAsync")]
-        public async Task<IActionResult> GetTypeAsync(int identity=0, int users=0, int type=0, bool cache=false)
+        public async Task<IActionResult> GetTypeAsync(int identity=0, string users="null", string type= "null", bool cache=false)
         {
             return Ok(await _service.GetTypeAsync(identity, users, type, cache));
         }
@@ -59,7 +59,7 @@ namespace Snblog.Controllers
         /// <param name="ordering">排序条件[按id排序]</param>
         /// <returns></returns>
         [HttpGet("GetFyAsync")]
-        public async Task<IActionResult> GetFyAsync(int identity=0, int type=0, int pageIndex=1, int pageSize=10, string ordering="id", bool isDesc=true, bool cache=false)
+        public async Task<IActionResult> GetFyAsync(int identity=0, string type="null", int pageIndex=1, int pageSize=10, string ordering="id", bool isDesc=true, bool cache=false)
         {
             return Ok(await _service.GetFyAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
         }

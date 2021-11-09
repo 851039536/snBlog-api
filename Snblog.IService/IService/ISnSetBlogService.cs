@@ -11,7 +11,6 @@ namespace Snblog.IService.IService
     public interface ISnSetBlogService
     {
 
-
         /// <summary>
         /// 查询所有
         /// </summary>
@@ -49,17 +48,18 @@ namespace Snblog.IService.IService
         /// <returns></returns>
         Task<List<SnArticle>> GetTypeIdAsync(int sortId,bool cache);
 
-
         /// <summary>
-        /// 分页查询 
+        /// 分页查询
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="identity">所有:0 || 分类:1 || 用户:2</param>
+        /// <param name="type">类别参数, identity 0 可不填</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序</param>
-        ///  /// <param name="cache">是否开启缓存</param>
-        Task< List<SnSetblogDto>> GetfyAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache);
-
+        /// <param name="isDesc">是否倒序[true/false]</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <param name="ordering">排序条件[按id排序]</param>
+        /// <returns></returns>
+        Task<List<SnSetblogDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
 
         /// <summary>
         /// 按标签分页查询 
@@ -121,14 +121,11 @@ namespace Snblog.IService.IService
         /// </summary>
         Task<bool> DeleteAsync(int id);
 
-
-
         /// <summary>
         /// 异步添加数据
         /// </summary>
         /// <returns></returns>
         Task<bool> AddAsync(SnSetblogDto entity);
-
 
         /// <summary>
         /// 更新数据
@@ -145,12 +142,12 @@ namespace Snblog.IService.IService
       /// <returns></returns>
         Task<bool> UpdatePortionAsync(SnSetblogDto entity, string type);
 
-
         /// <summary>
-        /// 查询总条数
+        /// 查询总数 
         /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        Task<int> CountAsync(bool cache);
+        /// <param name="identity">所有:0 || 分类:1 || 用户2  </param>
+        /// <param name="type">条件(identity为0则填0) </param>
+        /// <param name="cache"></param>
+        Task<int> GetCountAsync(int identity, string type, bool cache);
     }
 }

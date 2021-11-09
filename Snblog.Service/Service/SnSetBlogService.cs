@@ -7,6 +7,7 @@ using Snblog.Enties.Models;
 using Snblog.Enties.ModelsDto;
 using Snblog.IService.IService;
 using Snblog.Repository.Repository;
+using Snblog.Util.components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,9 @@ namespace Snblog.Service.Service
         private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnSetBlogService> _logger;
-        private int result_Int;
-        private List<SnSetblog> result_List = default;
-        private SnSetblogDto resultDto = default;
-        private SnSetblog result = default;
-        private List<SnSetblogDto> result_ListDto = default;
+
+        Tool<SnSetblog> data = new Tool<SnSetblog>();
+        Tool<SnSetblogDto> datas = new Tool<SnSetblogDto>();
         private readonly IMapper _mapper;
         public SnSetBlogService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnSetBlogService> logger, IMapper mapper)
         {
@@ -43,16 +42,95 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<SnSetblogDto>> GetfyAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
+        public async Task<List<SnSetblogDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
-            _logger.LogInformation("分页查询_SnSetBlogDto" + type + pageIndex + pageSize + isDesc + cache);
-            result_ListDto = _cacheutil.CacheString("GetfyAsync_SnSetBlogDto" + type + pageIndex + pageSize + isDesc + cache, result_ListDto, cache);
-            if (result_ListDto == null)
-            {
-                result_ListDto = _mapper.Map<List<SnSetblogDto>>(await GetfyTest(type, pageIndex, pageSize, isDesc));
-                _cacheutil.CacheString("GetfyAsync_SnSetBlogDto" + type + pageIndex + pageSize + isDesc + cache, result_ListDto, cache);
+            _logger.LogInformation("SnSetBlogDto分页查询=>" + type + pageIndex + pageSize + isDesc + cache);
+           datas.resultListDto = _cacheutil.CacheString("GetfyAsync_SnSetBlogDto" + type + pageIndex + pageSize + isDesc + cache, datas.resultListDto, cache);
+        
+                if (datas.resultListDto == null)
+                {
+                    switch (identity) //查询条件
+                    {
+                        case 0:
+                            if (isDesc)//降序
+                            {
+                                switch (ordering) //排序
+                                {
+                                    case "id":
+                                        datas.resultListDto = _mapper.Map<List<SnSetblogDto>>(
+                                await _service.SnSetblogs
+                                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize).AsNoTracking().ToListAsync());
+                                        break;
+                                }
+                            }
+                            else //升序
+                            {
+                                switch (ordering) //排序
+                                {
+                                case "id":
+                                    datas.resultListDto = _mapper.Map<List<SnSetblogDto>>(
+                            await _service.SnSetblogs
+                            .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize).AsNoTracking().ToListAsync());
+                                    break;
+                            }
+                            }
+                            break;
+
+                        case 1:
+                            if (isDesc)//降序
+                            {
+                                switch (ordering) //排序
+                                {
+                                    case "id":
+                                        datas.resultListDto = _mapper.Map<List<SnSetblogDto>>(await _service.SnSetblogs.Where(w => w.Type.Name == type)
+                                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize).AsNoTracking().ToListAsync());
+                                        break;
+                                }
+                            }
+                            else //升序
+                            {
+                                switch (ordering) //排序
+                                {
+                                case "id":
+                                    datas.resultListDto = _mapper.Map<List<SnSetblogDto>>(await _service.SnSetblogs.Where(w => w.Type.Name == type)
+                            .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize).AsNoTracking().ToListAsync());
+                                    break;
+                            }
+                            }
+                            break;
+
+                        case 2:
+                            if (isDesc)//降序
+                            {
+                                switch (ordering) //排序
+                                {
+                                    case "id":
+                                        datas.resultListDto = _mapper.Map<List<SnSetblogDto>>(await _service.SnSetblogs.Where(w => w.User.Name == type)
+                                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize).AsNoTracking().ToListAsync());
+                                        break;
+                                }
+                            }
+                            else //升序
+                            {
+                                switch (ordering) //排序
+                                {
+                                case "id":
+                                    datas.resultListDto = _mapper.Map<List<SnSetblogDto>>(await _service.SnSetblogs.Where(w => w.User.Name == type)
+                            .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize).AsNoTracking().ToListAsync());
+                                    break;
+                            }
+                            }
+                            break;
+                }
+                _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, datas.resultListDto, cache);
             }
-            return result_ListDto;
+            return datas.resultListDto;
         }
 
         private async Task<List<SnSetblog>> GetfyTest(int label, int pageIndex, int pageSize, bool isDesc)
@@ -61,12 +139,12 @@ namespace Snblog.Service.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnSetblogs.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                   data.resultList = await _service.SnSetblogs.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).AsNoTracking().ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnSetblogs.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                   data.resultList = await _service.SnSetblogs.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize).AsNoTracking().ToListAsync();
                 }
             }
@@ -74,16 +152,16 @@ namespace Snblog.Service.Service
             {
                 if (isDesc)
                 {
-                    result_List = await _service.SnSetblogs.Where(s => s.TypeId == label).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                   data.resultList = await _service.SnSetblogs.Where(s => s.TypeId == label).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync();
                 }
                 else
                 {
-                    result_List = await _service.SnSetblogs.Where(s => s.TypeId == label).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                   data.resultList = await _service.SnSetblogs.Where(s => s.TypeId == label).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                            .Take(pageSize).AsNoTracking().ToListAsync();
                 }
             }
-            return result_List;
+            return data.resultList;
         }
 
 
@@ -141,14 +219,14 @@ namespace Snblog.Service.Service
 
         public async Task<SnSetblogDto> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation("主键查询_SnSetBlogDto" + id + cache);
-            resultDto = _cacheutil.CacheString("GetByIdAsync_SnSetBlogDto" + id + cache, resultDto, cache);
-            if (resultDto == null)
+            _logger.LogInformation("SnSetBlogDto主键查询=>" + id + cache);
+           datas.resultDto = _cacheutil.CacheString("GetByIdAsync_SnSetBlogDto" + id + cache, datas.resultDto, cache);
+            if (datas.resultDto == null)
             {
-                resultDto = _mapper.Map<SnSetblogDto>(await _service.SnSetblogs.FindAsync(id));
-                _cacheutil.CacheString("GetByIdAsync_SnSetBlogDto" + id + cache, resultDto, cache);
+                datas.resultDto = _mapper.Map<SnSetblogDto>(await _service.SnSetblogs.FindAsync(id));
+                _cacheutil.CacheString("GetByIdAsync_SnSetBlogDto" + id + cache, datas.resultDto, cache);
             }
-            return resultDto;
+            return datas.resultDto;
         }
 
         public Task<List<SnArticle>> GetTypeIdAsync(int sortId, bool cache)
@@ -186,16 +264,27 @@ namespace Snblog.Service.Service
             throw new NotImplementedException();
         }
 
-        public async Task<int> CountAsync(bool cache)
+        public async Task<int> GetCountAsync(int identity, string type, bool cache)
         {
-            _logger.LogInformation("查询总数_SnSetBlogDto" + cache);
-            result_Int = _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, result_Int, cache);
-            if (result_Int == 0)
+            _logger.LogInformation("SnSetBlogDto查询总数=>" + cache);
+            datas.resulInt = _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, datas.resulInt, cache);
+            if (datas.resulInt == 0)
             {
-                result_Int = await _service.SnSetblogs.AsNoTracking().CountAsync();
-                _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, result_Int, cache);
+                switch (identity)
+                {
+                    case 0:
+                        datas.resulInt = await _service.SnSetblogs.AsNoTracking().CountAsync();
+                        break;
+                    case 1:
+                        datas.resulInt = await _service.SnSetblogs.Where(w=>w.Type.Name== type).AsNoTracking().CountAsync();
+                        break;
+                    case 2:
+                        datas.resulInt = await _service.SnSetblogs.Where(w => w.User.Name == type).AsNoTracking().CountAsync();
+                        break;
+                }
+                _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, datas.resulInt, cache);
             }
-            return result_Int;
+            return datas.resulInt;
         }
     }
 }

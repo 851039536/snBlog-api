@@ -3,15 +3,15 @@ using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using Snblog.IService.IService;
+using Snblog.Util.components;
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-
-
     /// <summary>
-    /// 舔狗日记
+    ///日记
     /// </summary>
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
@@ -19,6 +19,7 @@ namespace Snblog.Controllers
     public class SnOneController : ControllerBase
     {
         private readonly ISnOneService _service; //IOC依赖注入
+      
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -28,57 +29,64 @@ namespace Snblog.Controllers
             _service = service;
         }
 
-        #region 查询所有
+        #region 查询总数 GetCountAsync
         /// <summary>
-        /// 查询所有
+        /// 查询总数 
+        /// </summary>
+        /// <param name="identity">所有:0 || 分类:1 || 用户2  </param>
+        /// <param name="type">条件(identity为0则填0) </param>
+        /// <param name="cache"></param>
+        /// <returns></returns>
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync(int identity = 0, string type ="null", bool cache = false)
+        {
+            return Ok(await _service.GetCountAsync(identity, type, cache));
+        }
+        #endregion
+
+        #region 查询所有 GetAllAsync
+        /// <summary>
+        /// 查询所有 
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync(bool cache)
+        public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
-        #region 主键查询
+
+        #region 模糊查询 Contains
         /// <summary>
-        /// 主键查询
+        /// 模糊查询
+        /// </summary>
+        /// <param name="identity">无条件:0 || 分类:1 || 标签:2</param>
+        /// <param name="type">分类</param>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        [HttpGet("GetContainsAsync")]
+        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type ="null", string name = "c", bool cache = false)
+        {
+            return Ok(await _service.GetContainsAsync(identity, type, name, cache));
+        }
+        #endregion
+
+        #region 主键查询 GetByIdAsync
+        /// <summary>
+        /// 主键查询 
         /// </summary>
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache =false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
         }
         #endregion
-        #region 查询总数
-        /// <summary>
-        /// / 查询总数
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("CountAsync")]
-        public async Task<IActionResult> CountAsync(bool cache)
-        {
-            return Ok(await _service.CountAsync(cache));
-        }
-        #endregion
-        #region 条件查总数
-        /// <summary>
-        /// 条件查总数
-        /// </summary>
-        /// <param name="type">分类</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("CountTypeAsync")]
-        public async Task<IActionResult> CountTypeAsync(int type,bool cache)
-        {
-            return Ok(await _service.CountTypeAsync(type,cache));
-        }
-        #endregion
-        #region 统计[字段/阅读/点赞]总数量
+
+        #region 统计[字段/阅读/点赞]总数量 GetSumAsync
 
         /// <summary>
         /// 统计[字段/阅读/点赞]总数量
@@ -92,37 +100,26 @@ namespace Snblog.Controllers
             return Ok(await _service.GetSumAsync(type,cache));
         }
         #endregion
-        #region 分页查询 
+
+        #region 分页查询GetFyAsync
         /// <summary>
-        /// 分页查询 
+        /// 分页查询
         /// </summary>
+        /// <param name="identity">所有:0 || 分类:1 || 用户:2</param>
+        /// <param name="type">类别参数, identity 0 可不填</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序-主键排序</param>
-        /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetFyAllAsync")]
-        public async Task<IActionResult> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc,bool cache)
-        {
-            return Ok(await _service.GetFyAllAsync(pageIndex, pageSize, isDesc,cache));
-        }
-        #endregion
-        #region 条件分页查询
-        /// <summary>
-        /// 条件分页查询
-        /// </summary>
-        /// <param name="type">查询条件[999查所有]-[排序条件查询所有才会生效,默认按id排序]</param>
-        /// <param name="pageIndex">当前页码[1]</param>
-        /// <param name="pageSize">每页记录条数[10]</param>
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
-        /// <param name="name">排序条件[data:时间,read:阅读,give:点赞,comment:评论]默认按id排序</param>
+        /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
         /// <returns></returns>
-        [HttpGet("GetFyTypeAsync")]
-        public async Task<IActionResult> GetFyTypeAsync(int type, int pageIndex, int pageSize, string name, bool isDesc,bool cache)
+        [HttpGet("GetFyAsync")]
+        public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
         {
-            return Ok(await _service.GetFyTypeAsync(type, pageIndex, pageSize, name, isDesc,cache));
+            return Ok(await _service.GetFyAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
         }
         #endregion
+
         #region 添加数据 
         /// <summary>
         /// 添加数据 
@@ -161,7 +158,6 @@ namespace Snblog.Controllers
             return Ok(await _service.UpdateAsync(entity));
         }
         #endregion
-
         #region 更新部分列[give read]
         /// <summary>
         /// 更新部分列[give read]

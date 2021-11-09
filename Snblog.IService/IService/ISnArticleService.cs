@@ -21,11 +21,11 @@ namespace Snblog.IService.IService
         /// <summary>
         /// 模糊查询
         /// </summary>
-        /// <param name="type">标签</param>
+        /// <param name="identity">无条件:0 || 分类:1 || 标签:2</param>
+        /// <param name="type">查询条件</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        Task<List<SnArticleDto>> GetTypeContainsAsync(int type, string name, bool cache);
+        Task<List<SnArticleDto>> GetContainsAsync(int identity,string type, string name, bool cache);
         /// <summary>
         /// 读取[字段/阅读/点赞]数量
         /// </summary>
@@ -47,7 +47,7 @@ namespace Snblog.IService.IService
         /// <param name="identity">分类:1 || 标签:2</param>
         /// <param name="type">类别</param>
         /// <param name="cache">是否开启缓存</param>
-        Task<List<SnArticleDto>> GetTypeAsync(int identity,int type, bool cache);
+        Task<List<SnArticleDto>> GetTypeAsync(int identity,string type, bool cache);
 
   
         /// <summary>
@@ -61,7 +61,7 @@ namespace Snblog.IService.IService
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
         /// <returns></returns>
-        Task<List<SnArticleDto>> GetFyAsync(int identity, int type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
+        Task<List<SnArticleDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
 
 
         /// <summary>
@@ -96,9 +96,9 @@ namespace Snblog.IService.IService
         /// 查询总数 
         /// </summary>
         /// <param name="identity">所有:0 || 分类:1 || 标签:2 || 用户3  </param>
-        /// <param name="type">条件(identity为0则填0) </param>
+        /// <param name="type">查询条件 </param>
         /// <param name="cache"></param>
         /// <returns></returns>
-        Task<int> GetCountAsync(int identity, int type, bool cache);
+        Task<int> GetCountAsync(int identity, string type, bool cache);
     }
 }

@@ -31,7 +31,7 @@ namespace Snblog.Service.Service
             _logger = logger;
         }
 
-        public async Task<List<SnInterfaceDto>> GetTypeAsync(int identity, int users, int type, bool cache)
+        public async Task<List<SnInterfaceDto>> GetTypeAsync(int identity, string users, string type, bool cache)
         {
             datas.resultListDto = _cacheutil.CacheString("GetTypeAsync_SnInterfaceDto" + identity + users + type + cache, datas.resultListDto, cache);
             if (datas.resultListDto == null)
@@ -39,13 +39,13 @@ namespace Snblog.Service.Service
                 switch (identity)
                 {
                     case 0:
-                        datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(s => s.TypeId == type && s.UserId == users).AsNoTracking().ToListAsync());
+                        datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(s => s.Type.Name == type && s.User.Name == users).AsNoTracking().ToListAsync());
                         break;
                     case 1:
-                        datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(s => s.UserId == users).AsNoTracking().ToListAsync());
+                        datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(s => s.User.Name == users).AsNoTracking().ToListAsync());
                         break;
                     case 2:
-                        datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(s => s.TypeId == type).AsNoTracking().ToListAsync());
+                        datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
                         break;
                 }
                 _cacheutil.CacheString("GetTypeAsync_SnInterfaceDto" + identity + users + type + cache, datas.resultListDto, cache);
@@ -64,7 +64,7 @@ namespace Snblog.Service.Service
             return datas.resultListDto;
         }
 
-        public async Task<List<SnInterfaceDto>> GetFyAsync(int identity, int type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
+        public async Task<List<SnInterfaceDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
             _logger.LogInformation("分页查询_SnInterfaceDto" + identity + type + pageIndex + pageSize + isDesc + cache);
             datas.resultListDto = _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + type + pageIndex + pageSize + isDesc + cache, datas.resultListDto, cache);
@@ -105,7 +105,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.TypeId == type)
+                                    datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.Type.Name == type)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -116,21 +116,20 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.TypeId == type)
+                                    datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.Type.Name == type)
                         .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                         .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
                             }
                         }
                         break;
-
                     case 2:
                         if (isDesc)//降序
                         {
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.UserId == type)
+                                    datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.User.Name == type)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -141,7 +140,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.UserId == type)
+                                    datas.resultListDto = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.User.Name == type)
                              .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
