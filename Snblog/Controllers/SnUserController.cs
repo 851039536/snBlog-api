@@ -51,7 +51,12 @@ namespace Snblog.Controllers
             jwtModel = _jwtModel.Value;
         }
 
-
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="users"></param>
+        /// <param name="pwd"></param>
+        /// <returns></returns>
         [HttpGet("Login")]
         public IActionResult Login(string users, string pwd)
         {
@@ -59,10 +64,9 @@ namespace Snblog.Controllers
             {
                 return Ok("用户密码不能为空");
             }
-            var data = from u in user
-                       where u.Name == users && u.Pwd == pwd
-                       select u.Name;
-            if (data.Count() == 0)
+            var data=  _coreDbContext.SnUsers.Where(w=>w.Name== users && w.Pwd == pwd).AsNoTracking().ToList();
+            
+            if (data.Count == 0)
             {
                 return Ok("用户或密码错误");
             }
@@ -71,9 +75,9 @@ namespace Snblog.Controllers
                 var claims = new List<Claim>();
                 claims.AddRange(new[]
                 {
-                new Claim("UserName", users),
-                new Claim(ClaimTypes.Role,users),
-                new Claim(JwtRegisteredClaimNames.Sub,users),
+                new Claim("UserName", data[0].Name),
+                new Claim(ClaimTypes.Role,data[0].Name),
+                new Claim(JwtRegisteredClaimNames.Sub,data[0].Name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             });
@@ -94,7 +98,7 @@ namespace Snblog.Controllers
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
                 );
                 string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-                return Ok(data.Count()+","+token);
+                return Ok(data[0].Name + ","+token);
             }
 
         }

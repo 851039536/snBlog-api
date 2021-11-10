@@ -80,12 +80,22 @@ namespace Snblog.Service.Service
         public async Task<bool> AddAsync(SnArticle entity)
         {
             _logger.LogInformation("SnArticle添加:" + entity);
+            entity.TimeCreate = DateTime.Now;
+            entity.TimeModified = DateTime.Now;
             await _service.SnArticles.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
         public async Task<bool> UpdateAsync(SnArticle entity)
         {
             _logger.LogInformation("SnArticle更新:" + entity);
+            entity.TimeModified = DateTime.Now; //更新时间
+            var res = await _service.SnArticles.Where(w => w.Id == entity.Id).Select(
+                s => new
+                {
+                    s.TimeCreate,
+                }
+                ).AsNoTracking().ToListAsync();
+            entity.TimeCreate = res[0].TimeCreate;  //赋值表示更新时间不变
             _service.SnArticles.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -30,7 +31,6 @@ namespace Snblog.Service.Service
         }
         public async Task<List<SnNavigationDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
-
             _logger.LogInformation("SnNavigation分页查询=>" + identity + pageIndex + pageSize + isDesc + type);
             datas.resultListDto = _cacheutil.CacheString("GetFyAllAsync_SnNavigation" + type + pageIndex + pageSize + isDesc + identity, datas.resultListDto, cache);
             if (datas.resultListDto == null)
@@ -46,13 +46,29 @@ namespace Snblog.Service.Service
                                     datas.resultListDto = _mapper.Map<List<SnNavigationDto>>(
                             await _service.SnNavigations
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize).AsNoTracking().ToListAsync());
+                            .Take(pageSize).Include(z => z.Type
+                                ).Include(z => z.User
+                                ).AsNoTracking().ToListAsync());
 
                                     break;
                                 case "data":
                                     datas.resultListDto = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations
                             .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize).AsNoTracking().ToListAsync());
+                            .Take(pageSize).Select(s =>
+                               new SnNavigationDto
+                               {
+                                   Id = s.Id,
+                                   Title = s.Title,
+                                   Describe = s.Describe,
+                                   Img = s.Img,
+                                   Url = s.Url,
+                                   TimeCreate = s.TimeCreate,
+                                   TimeModified = s.TimeModified,
+                                   Type = s.Type,
+                                   User = s.User,
+                               }
+
+                                ).AsNoTracking().ToListAsync());
                                     break;
                             }
                         }
@@ -64,13 +80,38 @@ namespace Snblog.Service.Service
                                     datas.resultListDto = _mapper.Map<List<SnNavigationDto>>(
                             await _service.SnNavigations
                             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize).AsNoTracking().ToListAsync());
-
+                            .Take(pageSize).Select(s =>
+                               new SnNavigationDto
+                               {
+                                   Id = s.Id,
+                                   Title = s.Title,
+                                   Describe = s.Describe,
+                                   Img = s.Img,
+                                   Url = s.Url,
+                                   TimeCreate = s.TimeCreate,
+                                   TimeModified = s.TimeModified,
+                                   Type = s.Type,
+                                   User = s.User,
+                               }
+                                ).AsNoTracking().ToListAsync());
                                     break;
                                 case "data":
                                     datas.resultListDto = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations
                             .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize).AsNoTracking().ToListAsync());
+                            .Take(pageSize).Select(s =>
+                               new SnNavigationDto
+                               {
+                                   Id = s.Id,
+                                   Title = s.Title,
+                                   Describe = s.Describe,
+                                   Img = s.Img,
+                                   Url = s.Url,
+                                   TimeCreate = s.TimeCreate,
+                                   TimeModified = s.TimeModified,
+                                   Type = s.Type,
+                                   User = s.User,
+                               }
+                                ).AsNoTracking().ToListAsync());
                                     break;
                             }
                         }
@@ -190,15 +231,24 @@ namespace Snblog.Service.Service
         public async Task<bool> AddAsync(SnNavigation entity)
         {
             _logger.LogInformation("SnNavigation添加数据=>" + entity);
+            entity.TimeCreate = DateTime.Now;
+            entity.TimeModified = DateTime.Now;
             await _service.SnNavigations.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
         public async Task<bool> UpdateAsync(SnNavigation entity)
         {
             _logger.LogInformation("SnNavigation修改数据=>" + entity);
+            entity.TimeModified = DateTime.Now; //更新时间
+            var res = await _service.SnNavigations.Where(w => w.Id == entity.Id).Select(
+                s => new
+                {
+                    s.TimeCreate,
+                }
+                ).AsNoTracking().ToListAsync();
+            entity.TimeCreate = res[0].TimeCreate;  //赋值表示时间不变
             _service.SnNavigations.Update(entity);
             return await _service.SaveChangesAsync() > 0;
-
         }
         public async Task<int> GetCountAsync(int identity, string type, bool cache)
         {
