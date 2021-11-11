@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using Blog.Core;
+﻿using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.Enties.Models;
 using Snblog.IService.IService;
+using System.Threading.Tasks;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -55,7 +55,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync(bool cache =false)
+        public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
             return Ok(await _service.GetAllAsync(cache));
         }
@@ -73,7 +73,7 @@ namespace Snblog.Controllers
         [HttpGet("GetContainsAsync")]
         public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
         {
-            return Ok(await _service.GetContainsAsync(identity,type, name, cache));
+            return Ok(await _service.GetContainsAsync(identity, type, name, cache));
         }
         #endregion
 
@@ -85,9 +85,9 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id,bool cache =false)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id,cache));
+            return Ok(await _service.GetByIdAsync(id, cache));
         }
         #endregion
 
@@ -117,7 +117,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间 按id排序]</param>
         [HttpGet("GetFyAsync")]
-        public async Task<IActionResult> GetFyAsync(int identity = 0, string type ="null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
+        public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
         {
             return Ok(await _service.GetFyAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
         }

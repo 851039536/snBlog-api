@@ -5,7 +5,7 @@ namespace Snblog.Cache.CacheUtil
     public class CacheUtil : ICacheUtil
     {
         //创建内存缓存对象
-        private CacheManager _cache;
+        private readonly CacheManager _cache;
 
         public CacheUtil(ICacheManager cache)
         {

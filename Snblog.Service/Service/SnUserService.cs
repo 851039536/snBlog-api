@@ -42,6 +42,7 @@ namespace Snblog.Service
 
         public async Task<List<SnUserDto>> GetAllAsync(bool cache)
         {
+           
             _logger.LogInformation("查询所有_SnUserDto" + cache);
             result_ListDto = _cacheutil.CacheString("GetAllAsync_SnUserDto" + cache, result_ListDto, cache);
             if (result_ListDto == null)

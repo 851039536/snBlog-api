@@ -41,9 +41,9 @@ namespace Snblog.Controllers
         /// <param name="cache"></param>
         /// <returns></returns>
         [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(int identity=0, string type ="null",bool cache=false)
+        public async Task<IActionResult> GetCountAsync(int identity = 0, string type = "null", bool cache = false)
         {
-            return Ok(await _service.GetCountAsync(identity,type,cache));
+            return Ok(await _service.GetCountAsync(identity, type, cache));
         }
         #endregion
 
@@ -70,9 +70,9 @@ namespace Snblog.Controllers
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetContainsAsync")]
-        public async Task<IActionResult> GetContainsAsync(int identity =0, string type="null", string name="c", bool cache=false)
+        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
         {
-            return Ok(await _service.GetContainsAsync(identity,type, name, cache));
+            return Ok(await _service.GetContainsAsync(identity, type, name, cache));
         }
         #endregion
 
@@ -84,7 +84,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache=false)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
         }
@@ -98,9 +98,9 @@ namespace Snblog.Controllers
         /// <param name="type">类别</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetTypeAsync")]
-        public async Task<IActionResult> GetTypeAsync(int identity=1, string type="null", bool cache=false)
+        public async Task<IActionResult> GetTypeAsync(int identity = 1, string type = "null", bool cache = false)
         {
-            return Ok(await _service.GetTypeAsync(identity,type, cache));
+            return Ok(await _service.GetTypeAsync(identity, type, cache));
         }
         #endregion
 
@@ -111,7 +111,7 @@ namespace Snblog.Controllers
         /// <param name="type">text-内容-read:阅读-give:点赞</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetSumAsync")]
-        public async Task<IActionResult> GetSumAsync(string type="text", bool cache=false)
+        public async Task<IActionResult> GetSumAsync(string type = "text", bool cache = false)
         {
             return Ok(await _service.GetSumAsync(type, cache));
         }
@@ -131,9 +131,9 @@ namespace Snblog.Controllers
         /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
         /// <returns></returns>
         [HttpGet("GetFyAsync")]
-        public async Task<IActionResult> GetFyAsync(int  identity=0, string type="null", int pageIndex=1, int pageSize=10, string ordering="id", bool isDesc=true, bool cache=false)
+        public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
         {
-            return Ok(await _service.GetFyAsync(identity,type, pageIndex, pageSize, ordering, isDesc, cache));
+            return Ok(await _service.GetFyAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
         }
         #endregion
 

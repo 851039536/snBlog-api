@@ -33,10 +33,9 @@ namespace Snblog.Controllers
     {
         private readonly snblogContext _coreDbContext;
         private readonly ISnUserService _service; //IOC依赖注入
-        private readonly DbSet<SnUser> user;
         private readonly JwtConfig jwtModel = null;
 
-     
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -47,9 +46,10 @@ namespace Snblog.Controllers
         {
             _service = service;
             _coreDbContext = coreDbContext;
-            user = coreDbContext.SnUsers;
             jwtModel = _jwtModel.Value;
         }
+
+
 
         /// <summary>
         /// 用户登录
@@ -64,8 +64,8 @@ namespace Snblog.Controllers
             {
                 return Ok("用户密码不能为空");
             }
-            var data=  _coreDbContext.SnUsers.Where(w=>w.Name== users && w.Pwd == pwd).AsNoTracking().ToList();
-            
+            var data = _coreDbContext.SnUsers.Where(w => w.Name == users && w.Pwd == pwd).AsNoTracking().ToList();
+
             if (data.Count == 0)
             {
                 return Ok("用户或密码错误");
@@ -98,7 +98,7 @@ namespace Snblog.Controllers
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
                 );
                 string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-                return Ok(data[0].Name + ","+token);
+                return Ok(data[0].Name + "," + token);
             }
 
         }
@@ -121,9 +121,9 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id ,bool cache)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache)
         {
-            return Ok(await _service.GetByIdAsync(id,cache));
+            return Ok(await _service.GetByIdAsync(id, cache));
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace Snblog.Controllers
         /// 添加数据
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = Permissions.Name)] 
+        [Authorize(Roles = Permissions.Name)]
         [HttpPost("AsyInsArticle")]
         public async Task<ActionResult<SnUser>> AsyInsArticle(SnUser user)
         {
@@ -184,6 +184,6 @@ namespace Snblog.Controllers
             var data = await _service.AysUpUser(user);
             return Ok(data);
         }
-        
+
     }
 }

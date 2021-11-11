@@ -25,7 +25,7 @@ namespace Snblog.IService.IService
         /// <param name="type">查询条件</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
-        Task<List<SnArticleDto>> GetContainsAsync(int identity,string type, string name, bool cache);
+        Task<List<SnArticleDto>> GetContainsAsync(int identity, string type, string name, bool cache);
         /// <summary>
         /// 读取[字段/阅读/点赞]数量
         /// </summary>
@@ -39,7 +39,7 @@ namespace Snblog.IService.IService
         /// <param name="id"></param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnArticleDto> GetByIdAsync(int id,bool cache);
+        Task<List<SnArticleDto>> GetByIdAsync(int id, bool cache);
 
         /// <summary>
         ///条件查询 
@@ -47,9 +47,9 @@ namespace Snblog.IService.IService
         /// <param name="identity">分类:1 || 标签:2</param>
         /// <param name="type">类别</param>
         /// <param name="cache">是否开启缓存</param>
-        Task<List<SnArticleDto>> GetTypeAsync(int identity,string type, bool cache);
+        Task<List<SnArticleDto>> GetTypeAsync(int identity, string type, bool cache);
 
-  
+
         /// <summary>
         /// 分页查询
         /// </summary>
