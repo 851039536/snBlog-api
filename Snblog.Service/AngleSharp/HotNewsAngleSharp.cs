@@ -38,14 +38,14 @@ namespace Snblog.Service.AngleSharp
         /// <returns></returns>
         public async Task<List<string>> GeneralCrawl(string url, string selector, string selectorall)
         {
-             List<string> resultData =new List<string>();
+            List<string> resultData = new List<string>();
             if (url == null && selector == null && selectorall == null)
             {
-               resultData.Add("内容不能为空");
+                resultData.Add("内容不能为空");
             }
             else
             {
-                  resultData = await reptile(url, selector, selectorall);
+                resultData = await reptile(url, selector, selectorall);
             }
             return resultData;
         }
@@ -55,11 +55,11 @@ namespace Snblog.Service.AngleSharp
             // 设置配置以支持文档加载
             var config = Configuration.Default.WithDefaultLoader();
             // 请求
-            var document = await  BrowsingContext.New(config).OpenAsync(@"http://183.63.20.253:8008/consume/login.php");
+            var document = await BrowsingContext.New(config).OpenAsync(@"http://183.63.20.253:8008/consume/login.php");
             // 根据css选择器获取html元素
             var doc = document.QuerySelectorAll("div");
-        //    document.GetElementById("username").ClassName = "190006";
-              //doc.getElementById("submit").click();//执行提交事件
+            //    document.GetElementById("username").ClassName = "190006";
+            //doc.getElementById("submit").click();//执行提交事件
 
             return "1";
         }
@@ -81,13 +81,12 @@ namespace Snblog.Service.AngleSharp
 
                 foreach (var item in matches)
                 {
-                   
-                    if (num<=10)
+                    if (num <= 10)
                     {
                         num++;
                         resultData.Add(item.InnerHtml + "-" + item.GetAttribute("href"));
                     }
-                    
+
                 }
             }
             else
@@ -95,14 +94,14 @@ namespace Snblog.Service.AngleSharp
                 var matches = document.QuerySelectorAll(selectorall);
                 foreach (var item in matches)
                 {
-                    
+
                     if (num <= 10)
                     {
                         num++;
                         _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
                         resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
                     }
-            
+
                 }
             }
 
@@ -136,7 +135,7 @@ namespace Snblog.Service.AngleSharp
 
         public string SqlBackups(string ip, string user, string pwd, string database)
         {
-            string constring = "server="+ ip +";user="+user+";pwd="+ pwd +";database="+ database +";";
+            string constring = "server=" + ip + ";user=" + user + ";pwd=" + pwd + ";database=" + database + ";";
             string time1 = DateTime.Now.ToString("d").Replace("/", "-");
             string file = ".//mysql/" + time1 + "_blog.sql";
             using (MySqlConnection conn = new(constring))
@@ -159,7 +158,7 @@ namespace Snblog.Service.AngleSharp
         public string SqlRestore(string ip, string user, string pwd, string database)
         {
             string constring = "server=" + ip + ";user=" + user + ";pwd=" + pwd + ";database=" + database + ";";
-            string file = ".//mysql/" +"blog.sql";
+            string file = ".//mysql/" + "blog.sql";
             using (MySqlConnection conn = new(constring))
             {
                 using (MySqlCommand cmd = new())
