@@ -1,4 +1,5 @@
 ﻿using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,13 +7,12 @@ namespace Snblog.IService
 {
     public interface ISnSortService
     {
-
         /// <summary>
         /// 查询所有
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnSort>> GetAllAsync(bool cache);
+        Task<List<SnSortDto>> GetAllAsync(bool cache);
 
         /// <summary>
         /// 异步查询
@@ -26,7 +26,7 @@ namespace Snblog.IService
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnSort> GetByIdAsync(int id, bool cache);
+        Task<SnSortDto> GetByIdAsync(int id, bool cache);
 
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Snblog.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">是否开启缓存</param>
-        Task<List<SnSort>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc, bool cache);
+        Task<List<SnSortDto>> GetFyAsync(int pageInde, int pageSize, bool isDesc, bool cache);
 
         /// <summary>
         /// 查询总数
@@ -44,23 +44,19 @@ namespace Snblog.IService
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         Task<int> GetCountAsync(bool cache);
-
-
         /// <summary>
-        /// 异步添加数据
+        /// 添加数据
         /// </summary>
         /// <returns></returns>
         Task<bool> AddAsync(SnSort entity);
-
         /// <summary>
-        /// 异步更新数据
+        /// 更新数据
         /// </summary>
         /// <param name="test"></param>
         /// <returns></returns>
         Task<bool> UpdateAsync(SnSort test);
-
         /// <summary>
-        /// 异步按id删除
+        /// 删除数据
         /// </summary>
         Task<bool> DeleteAsync(int id);
     }

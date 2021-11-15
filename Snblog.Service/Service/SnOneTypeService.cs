@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
 using Snblog.Enties.Models;
 using Snblog.IService.IService;
 using Snblog.Repository.Repository;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
 {
@@ -34,13 +34,13 @@ namespace Snblog.Service.Service
         public async Task<int> CountAsync(bool cache)
         {
             _logger.LogInformation("查询总数_SnOneType" + cache);
-            result_Int = _cacheutil.CacheNumber("CountAsync_SnOneType"+cache, result_Int,cache);
+            result_Int = _cacheutil.CacheNumber("CountAsync_SnOneType" + cache, result_Int, cache);
             if (result_Int != 0)
             {
                 return result_Int;
             }
             result_Int = await _service.SnOneTypes.CountAsync();
-            _cacheutil.CacheNumber("CountAsync_SnOneType"+cache, result_Int,cache);
+            _cacheutil.CacheNumber("CountAsync_SnOneType" + cache, result_Int, cache);
             return result_Int;
         }
 
@@ -54,14 +54,14 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnOneType>> GetAllAsync(bool cache)
         {
-            _logger.LogInformation("查询所有_SnOneType"+ cache);
-            result_List = _cacheutil.CacheString("GetAllAsync_SnOneType"+cache, result_List,cache);
+            _logger.LogInformation("查询所有_SnOneType" + cache);
+            result_List = _cacheutil.CacheString("GetAllAsync_SnOneType" + cache, result_List, cache);
             if (result_List != null)
             {
                 return result_List;
             }
             result_List = await _service.SnOneTypes.ToListAsync();
-            _cacheutil.CacheString("GetAllAsync_SnOneType"+cache, result_List,cache);
+            _cacheutil.CacheString("GetAllAsync_SnOneType" + cache, result_List, cache);
             return result_List;
         }
 
@@ -69,27 +69,27 @@ namespace Snblog.Service.Service
         {
             _logger.LogInformation("主键查询_SnOneType" + cache);
             SnOneType result = default;
-            result = _cacheutil.CacheString("GetByIdAsync_SnOneType" + id+cache, result,cache);
+            result = _cacheutil.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
             if (result != null)
             {
                 return result;
             }
             result = await _service.SnOneTypes.FindAsync(id);
-            _cacheutil.CacheString("GetByIdAsync_SnOneType" + id+cache, result,cache);
+            _cacheutil.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
             return result;
         }
 
         public async Task<SnOneType> GetTypeAsync(int type, bool cache)
         {
-            _logger.LogInformation("类别查询_SnOneType"+type+cache);
+            _logger.LogInformation("类别查询_SnOneType" + type + cache);
             SnOneType result = default;
-            result = _cacheutil.CacheString("GetTypeAsync_SnOneType" + type+cache, result,cache);
+            result = _cacheutil.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
             if (result != null)
             {
                 return result;
             }
             result = await _service.SnOneTypes.FirstAsync(s => s.Id == type);
-            _cacheutil.CacheString("GetTypeAsync_SnOneType" + type+cache, result,cache);
+            _cacheutil.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
             return result;
         }
 

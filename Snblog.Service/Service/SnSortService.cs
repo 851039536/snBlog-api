@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
 using Snblog.Enties.Models;
+using Snblog.Enties.ModelsDto;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Repository.Repository;
+using Snblog.Util.components;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
 {
@@ -15,12 +19,17 @@ namespace Snblog.Service.Service
 
         private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
-        private int result_Int;
-        private List<SnSort> result_List = default;
-        public SnSortService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, snblogContext service, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
+
+        private readonly Res<SnSort> res = new();
+        private readonly ResDto<SnSortDto> resDto = new();
+        private readonly ILogger<SnSort> _logger;
+        private readonly IMapper _mapper;
+        public SnSortService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, snblogContext service, ICacheUtil cacheutil, ILogger<SnSort> logger, IMapper mapper) : base(repositoryFactory, mydbcontext)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
+            _logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -31,7 +40,11 @@ namespace Snblog.Service.Service
         public async Task<bool> DeleteAsync(int id)
         {
             var result = await _service.SnSorts.FindAsync(id);
-            if (result == null) return false;
+            if (result == null)
+            {
+                return false;
+            }
+
             _service.SnSorts.Remove(result);
             return await _service.SaveChangesAsync() > 0;
         }
@@ -42,17 +55,17 @@ namespace Snblog.Service.Service
             return await data.GetAll().ToListAsync();
         }
 
-        public async Task<SnSort> GetByIdAsync(int id, bool cache)
+        public async Task<SnSortDto> GetByIdAsync(int id, bool cache)
         {
-            SnSort result = default;
-            result = _cacheutil.CacheString("GetByIdAsync_SnSort" + id + cache + id, result, cache);
-            if (result != null)
+            _logger.LogInformation("select SnSortDto GetByIdAsync=> id,cache:" + id + cache);
+            resDto.entity = _cacheutil.CacheString("GetByIdAsync_SnSort" + id + cache + id, resDto.entity, cache);
+            if (res.entity != null)
             {
-                return result;
+                return resDto.entity;
             }
-            result = await _service.SnSorts.FindAsync(id);
-            _cacheutil.CacheString("GetByIdAsync_SnSort" + id + cache, result, cache);
-            return result;
+            resDto.entity = _mapper.Map<SnSortDto>(await _service.SnSorts.FindAsync(id));
+            _cacheutil.CacheString("GetByIdAsync_SnSort" + id + cache, resDto.entity, cache);
+            return resDto.entity;
         }
 
         /// <summary>
@@ -73,61 +86,56 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<SnSort>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
+        public async Task<List<SnSortDto>> GetFyAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            result_List = _cacheutil.CacheString("GetFyAllAsync_SnSort" + pageIndex + pageSize + isDesc+cache, result_List,cache);
-            if (result_List != null)
+            _logger.LogInformation("select fy int pageIndex, int pageSize, bool isDesc, bool cache" + pageIndex + pageSize + isDesc + cache);
+            resDto.entityList = _cacheutil.CacheString("GetFyAllAsync_SnSort" + pageIndex + pageSize + isDesc + cache, resDto.entityList, cache);
+            if (res.entityList != null)
             {
-                return result_List;
+                return resDto.entityList;
             }
-            result_List = await GetFyAll(pageIndex, pageSize, isDesc);
-            _cacheutil.CacheString("GetFyAllAsync_SnSort" + pageIndex + pageSize + isDesc+cache, result_List,cache);
-            return result_List;
+            await GetFyAll(pageIndex, pageSize, isDesc);
+            _cacheutil.CacheString("GetFyAllAsync_SnSort" + pageIndex + pageSize + isDesc + cache, resDto.entityList, cache);
+            return resDto.entityList;
         }
 
-        private async Task<List<SnSort>> GetFyAll(int pageIndex, int pageSize, bool isDesc)
+        private async Task GetFyAll(int pageIndex, int pageSize, bool isDesc)
         {
             if (isDesc)
             {
-                result_List = await _service.SnSorts.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                resDto.entityList = _mapper.Map<List<SnSortDto>>(await _service.SnSorts.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
             }
             else
             {
-                result_List = await _service.SnSorts.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                resDto.entityList = _mapper.Map<List<SnSortDto>>(await _service.SnSorts.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
             }
-
-            return result_List;
         }
 
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<SnSort>> GetAllAsync(bool cache)
+
+        public async Task<List<SnSortDto>> GetAllAsync(bool cache)
         {
-
-            result_List = _cacheutil.CacheString("GetAllAsync_SnSort" + cache, result_List, cache);
-            if (result_List != null)
+            _logger.LogInformation("select SnSortDto= cache:", cache);
+            resDto.entityList = _cacheutil.CacheString("GetAllAsync_SnSort" + cache, resDto.entityList, cache);
+            if (resDto.entityList != null)
             {
-                return result_List;
+                return resDto.entityList;
             }
-            result_List = await _service.SnSorts.ToListAsync();
-            _cacheutil.CacheString("GetAllAsync_SnSort" + cache, result_List, cache);
-
-            return result_List;
+            resDto.entityList = _mapper.Map<List<SnSortDto>>(await _service.SnSorts.AsNoTracking().ToListAsync());
+            _cacheutil.CacheString("GetAllAsync_SnSort" + cache, resDto.entityList, cache);
+            return resDto.entityList;
         }
 
         public async Task<int> GetCountAsync(bool cache)
         {
-            result_Int = _cacheutil.CacheNumber("GetCountAsync_SnSort" + cache, result_Int, cache);
-            if (result_Int != 0)
+            _logger.LogInformation("SnSortDto查询总数=>" + cache);
+            res.entityInt = _cacheutil.CacheNumber("GetCountAsync_SnSort" + cache, res.entityInt, cache);
+            if (res.entityInt != 0)
             {
-                return result_Int;
+                return res.entityInt;
             }
-            result_Int = await _service.SnSorts.CountAsync();
-            _cacheutil.CacheNumber("GetCountAsync_SnSort" + cache, result_Int, cache);
-
-            return result_Int;
+            res.entityInt = await _service.SnSorts.AsNoTracking().CountAsync();
+            _cacheutil.CacheNumber("GetCountAsync_SnSort" + cache, res.entityInt, cache);
+            return res.entityInt;
         }
     }
 }

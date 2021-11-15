@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
 using Snblog.Enties.Models;
 using Snblog.IService.IService;
 using Snblog.Repository.Repository;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
 {
@@ -13,13 +13,13 @@ namespace Snblog.Service.Service
     {
         private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
-       // private int result_Int;
-      //  private List<SnTalk> result_List = default;
+        // private int result_Int;
+        //  private List<SnTalk> result_List = default;
 
         public SnTalkService(snblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
-            _cacheutil = (CacheUtil) cacheutil;
+            _cacheutil = (CacheUtil)cacheutil;
         }
 
         public async Task<bool> AddAsync(SnTalk entity)
@@ -41,7 +41,11 @@ namespace Snblog.Service.Service
         public async Task<bool> DeleteAsync(int id)
         {
             var todoItem = await _service.SnTalks.FindAsync(id);
-            if (todoItem == null) return false;
+            if (todoItem == null)
+            {
+                return false;
+            }
+
             _service.SnTalks.Remove(todoItem);
             return await _service.SaveChangesAsync() > 0;
         }

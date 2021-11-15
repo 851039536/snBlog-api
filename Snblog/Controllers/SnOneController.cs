@@ -19,7 +19,7 @@ namespace Snblog.Controllers
     public class SnOneController : ControllerBase
     {
         private readonly ISnOneService _service; //IOC依赖注入
-      
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -38,7 +38,7 @@ namespace Snblog.Controllers
         /// <param name="cache"></param>
         /// <returns></returns>
         [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(int identity = 0, string type ="null", bool cache = false)
+        public async Task<IActionResult> GetCountAsync(int identity = 0, string type = "null", bool cache = false)
         {
             return Ok(await _service.GetCountAsync(identity, type, cache));
         }
@@ -66,7 +66,7 @@ namespace Snblog.Controllers
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetContainsAsync")]
-        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type ="null", string name = "c", bool cache = false)
+        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
         {
             return Ok(await _service.GetContainsAsync(identity, type, name, cache));
         }
@@ -80,7 +80,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache =false)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
         }
@@ -95,9 +95,9 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetSumAsync")]
-        public async Task<IActionResult> GetSumAsync(string type,bool cache)
+        public async Task<IActionResult> GetSumAsync(string type, bool cache)
         {
-            return Ok(await _service.GetSumAsync(type,cache));
+            return Ok(await _service.GetSumAsync(type, cache));
         }
         #endregion
 

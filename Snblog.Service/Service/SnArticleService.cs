@@ -19,8 +19,8 @@ namespace Snblog.Service.Service
         private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnArticleService> _logger;
-        private readonly Tool<SnArticle> data = new();
-        private readonly Tool<SnArticleDto> datas = new();
+        private readonly Res<SnArticle> res = new();
+        private readonly ResDto<SnArticleDto> resDto = new();
         private readonly IMapper _mapper;
         public SnArticleService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnArticleService> logger, IMapper mapper)
         {
@@ -48,33 +48,33 @@ namespace Snblog.Service.Service
         public async Task<List<SnArticleDto>> GetByIdAsync(int id, bool cache)
         {
             _logger.LogInformation(message: $"SnArticleDto主键查询 =>id:{id} 缓存:{cache}");
-            datas.resultListDto = _cacheutil.CacheString("SnArticleDto_GetByIdAsync=>" + id + cache, datas.resultListDto, cache);
-            if (datas.resultListDto == null)
+            resDto.entityList = _cacheutil.CacheString("SnArticleDto_GetByIdAsync=>" + id + cache, resDto.entityList, cache);
+            if (resDto.entityList == null)
             {
-                datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Id == id).Include(i => i.User).Include(i => i.Label).Include(i => i.Sort).AsNoTracking().ToListAsync());
-                _cacheutil.CacheString("SnArticleDto_GetByIdAsync=>" + id + cache, datas.resultListDto, cache);
+                resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Id == id).Include(i => i.User).Include(i => i.Label).Include(i => i.Sort).AsNoTracking().ToListAsync());
+                _cacheutil.CacheString("SnArticleDto_GetByIdAsync=>" + id + cache, resDto.entityList, cache);
             }
-            return datas.resultListDto;
+            return resDto.entityList;
         }
 
         public async Task<List<SnArticleDto>> GetTypeAsync(int identity, string type, bool cache)
         {
             _logger.LogInformation(message: $"SnArticle条件查询=>{type} 缓存:{cache}");
-            data.resultList = _cacheutil.CacheString("GetTypeAsync_SnArticle" + type + cache, data.resultList, cache);
-            if (data.resultList == null)
+            resDto.entityList = _cacheutil.CacheString("GetTypeAsync_SnArticle" + type + cache, resDto.entityList, cache);
+            if (resDto.entityList == null)
             {
                 if (identity == 1)
                 {
-                    datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(s => s.Sort.Name == type).AsNoTracking().ToListAsync());
+                    resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(s => s.Sort.Name == type).AsNoTracking().ToListAsync());
                 }
                 else
                 {
-                    datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(s => s.Label.Name == type).AsNoTracking().ToListAsync());
+                    resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(s => s.Label.Name == type).AsNoTracking().ToListAsync());
                 }
 
-                _cacheutil.CacheString("GetTypeAsync_SnArticle" + type + cache, data.resultList, cache);
+                _cacheutil.CacheString("GetTypeAsync_SnArticle" + type + cache, resDto.entityList, cache);
             }
-            return datas.resultListDto;
+            return resDto.entityList;
         }
 
 
@@ -104,52 +104,52 @@ namespace Snblog.Service.Service
         public async Task<int> GetCountAsync(int identity, string type, bool cache)
         {
             _logger.LogInformation("SnArticle查询总数=>" + identity + cache);
-            data.resulInt = _cacheutil.CacheNumber("Count_SnArticle" + identity + cache, data.resulInt, cache);
-            if (data.resulInt == 0)
+            res.entityInt = _cacheutil.CacheNumber("Count_SnArticle" + identity + cache, res.entityInt, cache);
+            if (res.entityInt == 0)
             {
                 switch (identity)
                 {
                     case 0:
-                        data.resulInt = await _service.SnArticles.AsNoTracking().CountAsync();
+                        res.entityInt = await _service.SnArticles.AsNoTracking().CountAsync();
                         break;
                     case 1:
-                        data.resulInt = await _service.SnArticles.AsNoTracking().CountAsync(c => c.Sort.Name == type);
+                        res.entityInt = await _service.SnArticles.AsNoTracking().CountAsync(c => c.Sort.Name == type);
                         break;
                     case 2:
-                        data.resulInt = await _service.SnArticles.AsNoTracking().CountAsync(c => c.Label.Name == type);
+                        res.entityInt = await _service.SnArticles.AsNoTracking().CountAsync(c => c.Label.Name == type);
                         break;
                     case 3:
-                        data.resulInt = await _service.SnArticles.AsNoTracking().CountAsync(c => c.User.Name == type);
+                        res.entityInt = await _service.SnArticles.AsNoTracking().CountAsync(c => c.User.Name == type);
                         break;
                 }
-                _cacheutil.CacheNumber("Count_SnArticle" + identity + cache, data.resulInt, cache);
+                _cacheutil.CacheNumber("Count_SnArticle" + identity + cache, res.entityInt, cache);
             }
-            return data.resulInt;
+            return res.entityInt;
         }
 
 
         public async Task<List<SnArticleDto>> GetAllAsync(bool cache)
         {
             _logger.LogInformation("SnArticleDto查询所有=>" + cache);
-            datas.resultListDto = _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, datas.resultListDto, cache);
-            if (datas.resultListDto == null)
+            resDto.entityList = _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, resDto.entityList, cache);
+            if (resDto.entityList == null)
             {
-                datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Include(i => i.User).Include(i => i.Label).Include(i => i.Sort).AsNoTracking().ToListAsync());
-                _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, datas.resultListDto, cache);
+                resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Include(i => i.User).Include(i => i.Label).Include(i => i.Sort).AsNoTracking().ToListAsync());
+                _cacheutil.CacheString("GetAllAsync_SnArticleDto" + cache, resDto.entityList, cache);
             }
-            return datas.resultListDto;
+            return resDto.entityList;
         }
 
         public async Task<int> GetSumAsync(string type, bool cache)
         {
             _logger.LogInformation("SnArticle统计[字段/阅读/点赞]数量" + type + cache);
-            data.resulInt = _cacheutil.CacheNumber("GetSumAsync_SnArticle" + type + cache, data.resulInt, cache);
-            if (data.resulInt == 0)
+            res.entityInt = _cacheutil.CacheNumber("GetSumAsync_SnArticle" + type + cache, res.entityInt, cache);
+            if (res.entityInt == 0)
             {
-                data.resulInt = await GetSum(type);
-                _cacheutil.CacheNumber("GetSumAsync_SnArticle" + type + cache, data.resulInt, cache);
+                res.entityInt = await GetSum(type);
+                _cacheutil.CacheNumber("GetSumAsync_SnArticle" + type + cache, res.entityInt, cache);
             }
-            return data.resulInt;
+            return res.entityInt;
         }
 
         private async Task<int> GetSum(string type)
@@ -187,9 +187,9 @@ namespace Snblog.Service.Service
         public async Task<List<SnArticleDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
             _logger.LogInformation("SnArticle分页查询=>" + identity + pageIndex + pageSize + ordering + isDesc + cache);
-            datas.resultListDto = _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, datas.resultListDto, cache);
+            resDto.entityList = _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, resDto.entityList, cache);
 
-            if (datas.resultListDto == null)
+            if (resDto.entityList == null)
             {
                 switch (identity) //查询条件
                 {
@@ -205,9 +205,9 @@ namespace Snblog.Service.Service
                         await GetFyTag(type, pageIndex, pageSize, ordering, isDesc);
                         break;
                 }
-                _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, datas.resultListDto, cache);
+                _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, resDto.entityList, cache);
             }
-            return datas.resultListDto;
+            return resDto.entityList;
         }
 
         private async Task GetFyTag(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
@@ -217,7 +217,7 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
                 .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -235,7 +235,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
                .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).Select(e => new SnArticleDto
                {
@@ -253,7 +253,7 @@ namespace Snblog.Service.Service
                }).AsNoTracking().ToListAsync());
                         break;
                     case "read":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
                .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).Select(e => new SnArticleDto
                {
@@ -271,7 +271,7 @@ namespace Snblog.Service.Service
                }).AsNoTracking().ToListAsync());
                         break;
                     case "give":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
                .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).Select(e => new SnArticleDto
                {
@@ -295,7 +295,7 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
                .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).Select(e => new SnArticleDto
                {
@@ -313,7 +313,7 @@ namespace Snblog.Service.Service
                }).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
                .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).Select(e => new SnArticleDto
                {
@@ -331,7 +331,7 @@ namespace Snblog.Service.Service
                }).AsNoTracking().ToListAsync());
                         break;
                     case "read":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
                .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).Select(e => new SnArticleDto
                {
@@ -349,7 +349,7 @@ namespace Snblog.Service.Service
                }).AsNoTracking().ToListAsync());
                         break;
                     case "give":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Label.Name == type)
                .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).Select(e => new SnArticleDto
                {
@@ -377,7 +377,7 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
                 .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -395,7 +395,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
                 .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -413,7 +413,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "read":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
                 .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -431,7 +431,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "give":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
                 .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -455,7 +455,7 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
                 .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -473,7 +473,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
                 .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -491,7 +491,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "read":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
                 .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -509,7 +509,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "give":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.Sort.Name == type)
                 .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -537,7 +537,7 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(
                 await _service.SnArticles
                 .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
@@ -557,7 +557,7 @@ namespace Snblog.Service.Service
 
                         break;
                     case "data":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
                 .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -575,7 +575,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "read":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
                 .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -593,7 +593,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "give":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
                 .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -617,7 +617,7 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
                 .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -635,7 +635,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
                 .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -653,7 +653,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "read":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
                 .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -671,7 +671,7 @@ namespace Snblog.Service.Service
                 }).AsNoTracking().ToListAsync());
                         break;
                     case "give":
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles
                 .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Select(e => new SnArticleDto
                 {
@@ -721,26 +721,26 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticleDto>> GetContainsAsync(int identity, string type, string name, bool cache)
         {
-            _logger.LogInformation(message: $"SnArticleDto模糊查询=>{type}{name}{cache}");
-            datas.resultListDto = _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + type + name + cache, datas.resultListDto, cache);
-            if (datas.resultListDto == null)
+            _logger.LogInformation(message: $"SnArticleDto=>{identity}{type}{name}{cache}");
+            resDto.entityList = _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + type + name + cache, resDto.entityList, cache);
+            if (resDto.entityList == null)
             {
                 switch (identity)
                 {
                     case 0:
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(
                     await _service.SnArticles
                       .Where(l => l.Title.Contains(name))
                      .AsNoTracking().ToListAsync());
                         break;
                     case 1:
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(
                       await _service.SnArticles
                        .Where(l => l.Title.Contains(name) && l.Sort.Name == type)
                        .AsNoTracking().ToListAsync());
                         break;
                     case 2:
-                        datas.resultListDto = _mapper.Map<List<SnArticleDto>>(
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(
                        await _service.SnArticles
                          .Where(l => l.Title.Contains(name) && l.Label.Name == type)
                          .AsNoTracking().ToListAsync());
@@ -752,9 +752,9 @@ namespace Snblog.Service.Service
                      .AsNoTracking().ToListAsync());
                         break;
                 }
-                _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + type + name + cache, datas.resultListDto, cache);
+                _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + type + name + cache, resDto.entityList, cache);
             }
-            return datas.resultListDto;
+            return resDto.entityList;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetUserTalk(int id)
         {
-            int da = await  CreateService<SnUserTalk>().DeleteAsync(id);
+            int da = await CreateService<SnUserTalk>().DeleteAsync(id);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -38,7 +38,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnUserTalk> AsyInsUserTalk(SnUserTalk talk)
         {
-             return await CreateService<SnUserTalk>().AddAsync(talk);
+            return await CreateService<SnUserTalk>().AddAsync(talk);
         }
 
 
@@ -83,7 +83,7 @@ namespace Snblog.Service
 
         public async Task<List<SnUserTalk>> AsyGetTalk(int talkId)
         {
-           var data = CreateService<SnUserTalk>().Where(s => s.Id == talkId);
+            var data = CreateService<SnUserTalk>().Where(s => s.Id == talkId);
             return await data.ToListAsync();
         }
     }

@@ -39,7 +39,7 @@ namespace Snblog.Controllers
         /// <param name="type">条件(identity为0则填0) </param>
         /// <param name="cache"></param>
         [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(int identity = 0, string type ="null", bool cache = false)
+        public async Task<IActionResult> GetCountAsync(int identity = 0, string type = "null", bool cache = false)
         {
             return Ok(await _service.GetCountAsync(identity, type, cache));
         }
@@ -72,7 +72,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache=false)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
         }
@@ -84,7 +84,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-       [Authorize(Roles = Permissions.Name)]
+        [Authorize(Roles = Permissions.Name)]
         [HttpPost("AddAsync")]
         public async Task<IActionResult> AddAsync(SnSetblogDto entity)
         {
@@ -97,7 +97,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-      [Authorize(Roles = Permissions.Name)]
+        [Authorize(Roles = Permissions.Name)]
         [HttpPut("UpdateAsync")]
         public async Task<IActionResult> UpdateAsync(SnSetblogDto entity)
         {
@@ -110,7 +110,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-       [Authorize(Roles = Permissions.Name)]
+        [Authorize(Roles = Permissions.Name)]
         [HttpDelete("DeleteAsync")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

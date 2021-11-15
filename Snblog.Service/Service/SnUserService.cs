@@ -1,5 +1,4 @@
-﻿using AngleSharp.Dom;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
@@ -8,7 +7,6 @@ using Snblog.Enties.ModelsDto;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.Repository.Repository;
-using Snblog.Service.Service;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,7 +40,7 @@ namespace Snblog.Service
 
         public async Task<List<SnUserDto>> GetAllAsync(bool cache)
         {
-           
+
             _logger.LogInformation("查询所有_SnUserDto" + cache);
             result_ListDto = _cacheutil.CacheString("GetAllAsync_SnUserDto" + cache, result_ListDto, cache);
             if (result_ListDto == null)

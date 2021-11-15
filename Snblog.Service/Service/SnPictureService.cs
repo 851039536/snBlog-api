@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Snblog.Cache.CacheUtil;
 using Snblog.Enties.Models;
 using Snblog.IService.IService;
 using Snblog.Repository.Repository;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
 {
@@ -41,7 +41,7 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync()
         {
-             result_Int = _cacheutil.CacheNumber1("SnPicture_CountAsync", result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnPicture_CountAsync", result_Int);
             if (result_Int != 0)
             {
                 return result_Int;
@@ -83,13 +83,13 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnPicture>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-             result_List = _cacheutil.CacheString1("SnPicture_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+            result_List = _cacheutil.CacheString1("SnPicture_GetFyAllAsync" + pageIndex + pageSize + isDesc, result_List);
             if (result_List != null)
             {
                 return result_List;
             }
-            result_List =await GetFyAll(pageIndex, pageSize, isDesc);
-             _cacheutil.CacheString1("SnPicture_GetFyAllAsync"+pageIndex+pageSize+isDesc, result_List);
+            result_List = await GetFyAll(pageIndex, pageSize, isDesc);
+            _cacheutil.CacheString1("SnPicture_GetFyAllAsync" + pageIndex + pageSize + isDesc, result_List);
             return result_List;
         }
 
@@ -105,13 +105,13 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnPicture>> GetFyTypeAllAsync(int type, int pageIndex, int pageSize, bool isDesc)
         {
-              result_List = _cacheutil.CacheString1("SnPicture_GetFyTypeAllAsync"+pageIndex+pageSize+isDesc+type, result_List);
+            result_List = _cacheutil.CacheString1("SnPicture_GetFyTypeAllAsync" + pageIndex + pageSize + isDesc + type, result_List);
             if (result_List != null)
             {
                 return result_List;
             }
-            result_List =await GetFyType(type, pageIndex, pageSize, isDesc);
-            _cacheutil.CacheString1("SnPicture_GetFyTypeAllAsync"+pageIndex+pageSize+isDesc+type, result_List);
+            result_List = await GetFyType(type, pageIndex, pageSize, isDesc);
+            _cacheutil.CacheString1("SnPicture_GetFyTypeAllAsync" + pageIndex + pageSize + isDesc + type, result_List);
             return result_List;
         }
 
@@ -129,13 +129,13 @@ namespace Snblog.Service.Service
 
         public async Task<int> CountAsync(int type)
         {
-              result_Int = _cacheutil.CacheNumber1("SnPicture_CountAsync"+type, result_Int);
+            result_Int = _cacheutil.CacheNumber1("SnPicture_CountAsync" + type, result_Int);
             if (result_Int != 0)
             {
                 return result_Int;
             }
-            result_Int =  await _service.SnPictures.CountAsync(s=>s.TypeId==type);
-        _cacheutil.CacheNumber1("SnPicture_CountAsync"+type, result_Int);
+            result_Int = await _service.SnPictures.CountAsync(s => s.TypeId == type);
+            _cacheutil.CacheNumber1("SnPicture_CountAsync" + type, result_Int);
             return result_Int;
         }
     }

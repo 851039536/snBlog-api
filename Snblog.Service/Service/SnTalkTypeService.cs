@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Snblog.Enties.Models;
 using Snblog.IService;
+using Snblog.Repository.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Snblog.Repository.Repository;
-using Snblog.Enties.Models;
 
 namespace Snblog.Service
 {
@@ -70,7 +69,7 @@ namespace Snblog.Service
         public async Task<bool> UpdateAsync(SnTalkType Entity)
         {
             _coreDbContext.SnTalkTypes.Update(Entity);
-            return await _coreDbContext.SaveChangesAsync()>0;
+            return await _coreDbContext.SaveChangesAsync() > 0;
         }
     }
 }

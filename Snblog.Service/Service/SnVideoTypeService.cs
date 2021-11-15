@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Snblog.Enties.Models;
 using Snblog.IRepository;
 using Snblog.IService;
+using Snblog.Repository.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Snblog.Repository.Repository;
-using Snblog.Enties.Models;
 
 namespace Snblog.Service
 {
@@ -14,7 +14,7 @@ namespace Snblog.Service
         private readonly snblogContext _coreDbContext;//DB
         public SnVideoTypeService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, snblogContext coreDbContext) : base(repositoryFactory, mydbcontext)
         {
-             _coreDbContext = coreDbContext;
+            _coreDbContext = coreDbContext;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Snblog.Service
         public async Task<bool> AddAsync(SnVideoType Entity)
         {
             await _coreDbContext.SnVideoTypes.AddAsync(Entity);
-            return await _coreDbContext.SaveChangesAsync()>0;
+            return await _coreDbContext.SaveChangesAsync() > 0;
         }
 
         public async Task<List<SnVideoType>> AsyGetTest()
@@ -35,13 +35,13 @@ namespace Snblog.Service
 
         public async Task<int> CountAsync()
         {
-           return await _coreDbContext.SnVideoTypes.CountAsync();
+            return await _coreDbContext.SnVideoTypes.CountAsync();
         }
 
         public async Task<bool> DeleteAsync(SnVideoType Entity)
         {
-             _coreDbContext.SnVideoTypes.Remove(Entity);
-            return await _coreDbContext.SaveChangesAsync()>0;
+            _coreDbContext.SnVideoTypes.Remove(Entity);
+            return await _coreDbContext.SaveChangesAsync() > 0;
         }
 
         public async Task<List<SnVideoType>> GetAllAsync(int id)
@@ -49,13 +49,13 @@ namespace Snblog.Service
             //var data = from s in _coreDbContext.SnVideoType
             //           where s.VId == id
             //           select s;
-           return await _coreDbContext.SnVideoTypes.Where(s => s.Id == id).ToListAsync();
+            return await _coreDbContext.SnVideoTypes.Where(s => s.Id == id).ToListAsync();
         }
 
         public async Task<bool> UpdateAsync(SnVideoType Entity)
         {
-             _coreDbContext.SnVideoTypes.Update(Entity);
-            return await _coreDbContext.SaveChangesAsync()>0;
+            _coreDbContext.SnVideoTypes.Update(Entity);
+            return await _coreDbContext.SaveChangesAsync() > 0;
         }
     }
 }

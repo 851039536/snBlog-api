@@ -27,6 +27,18 @@ namespace Snblog.Controllers
         {
             _service = service;
         }
+        #region 查询总数
+        /// <summary>
+        /// 查询总数
+        /// </summary>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
+        [HttpGet("GetCountAsync")]
+        public async Task<IActionResult> GetCountAsync(bool cache = false)
+        {
+            return Ok(await _service.GetCountAsync(cache));
+        }
+        #endregion
         #region 查询所有
         /// <summary>
         /// 查询所有
@@ -34,7 +46,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync(bool cache)
+        public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
             return Ok(await _service.GetAllAsync(cache));
         }
@@ -48,21 +60,9 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache)
+        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
-        }
-        #endregion
-        #region 查询总数
-        /// <summary>
-        /// 查询总数
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(bool cache)
-        {
-            return Ok(await _service.GetCountAsync(cache));
         }
         #endregion
 
@@ -74,10 +74,10 @@ namespace Snblog.Controllers
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetFyAllAsync")]
-        public async Task<IActionResult> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
+        [HttpGet("GetFyAsync")]
+        public async Task<IActionResult> GetFyAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
         {
-            return Ok(await _service.GetFyAllAsync(pageIndex, pageSize, isDesc, cache));
+            return Ok(await _service.GetFyAsync(pageIndex, pageSize, isDesc, cache));
         }
         #endregion
 
