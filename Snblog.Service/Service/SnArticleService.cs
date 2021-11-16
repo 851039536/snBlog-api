@@ -43,8 +43,6 @@ namespace Snblog.Service.Service
             _service.Remove(reslult);//直接在context上Remove()方法传入model，它会判断类型
             return await _service.SaveChangesAsync() > 0;
         }
-
-
         public async Task<List<SnArticleDto>> GetByIdAsync(int id, bool cache)
         {
             _logger.LogInformation(message: $"SnArticleDto主键查询 =>id:{id} 缓存:{cache}");
@@ -56,11 +54,10 @@ namespace Snblog.Service.Service
             }
             return resDto.entityList;
         }
-
         public async Task<List<SnArticleDto>> GetTypeAsync(int identity, string type, bool cache)
         {
             _logger.LogInformation(message: $"SnArticle条件查询=>{type} 缓存:{cache}");
-            resDto.entityList = _cacheutil.CacheString("GetTypeAsync_SnArticle" + type + cache, resDto.entityList, cache);
+            resDto.entityList = _cacheutil.CacheString("GetTypeAsync_SnArticle" + identity + type + cache, resDto.entityList, cache);
             if (resDto.entityList == null)
             {
                 if (identity == 1)
@@ -72,7 +69,7 @@ namespace Snblog.Service.Service
                     resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(s => s.Label.Name == type).AsNoTracking().ToListAsync());
                 }
 
-                _cacheutil.CacheString("GetTypeAsync_SnArticle" + type + cache, resDto.entityList, cache);
+                _cacheutil.CacheString("GetTypeAsync_SnArticle" + identity + type + cache, resDto.entityList, cache);
             }
             return resDto.entityList;
         }
@@ -104,7 +101,7 @@ namespace Snblog.Service.Service
         public async Task<int> GetCountAsync(int identity, string type, bool cache)
         {
             _logger.LogInformation("SnArticle查询总数=>" + identity + cache);
-            res.entityInt = _cacheutil.CacheNumber("Count_SnArticle" + identity + cache, res.entityInt, cache);
+            res.entityInt = _cacheutil.CacheNumber("Count_SnArticle" + identity + type + cache, res.entityInt, cache);
             if (res.entityInt == 0)
             {
                 switch (identity)
@@ -122,12 +119,10 @@ namespace Snblog.Service.Service
                         res.entityInt = await _service.SnArticles.AsNoTracking().CountAsync(c => c.User.Name == type);
                         break;
                 }
-                _cacheutil.CacheNumber("Count_SnArticle" + identity + cache, res.entityInt, cache);
+                _cacheutil.CacheNumber("Count_SnArticle" + identity + type + cache, res.entityInt, cache);
             }
             return res.entityInt;
         }
-
-
         public async Task<List<SnArticleDto>> GetAllAsync(bool cache)
         {
             _logger.LogInformation("SnArticleDto查询所有=>" + cache);
@@ -140,39 +135,141 @@ namespace Snblog.Service.Service
             return resDto.entityList;
         }
 
-        public async Task<int> GetSumAsync(string type, bool cache)
+        public async Task<int> GetSumAsync(int identity, int type, string name, bool cache)
         {
-            _logger.LogInformation("SnArticle统计[字段/阅读/点赞]数量" + type + cache);
-            res.entityInt = _cacheutil.CacheNumber("GetSumAsync_SnArticle" + type + cache, res.entityInt, cache);
+            _logger.LogInformation("SnArticle统计" + identity + type + cache);
+            res.entityInt = _cacheutil.CacheNumber("GetSumAsync_SnArticle" + identity + type + name + cache, res.entityInt, cache);
             if (res.entityInt == 0)
             {
-                res.entityInt = await GetSum(type);
-                _cacheutil.CacheNumber("GetSumAsync_SnArticle" + type + cache, res.entityInt, cache);
+                switch (identity)
+                {
+                    case 0:
+                        res.entityInt = await GetSum(type);
+                        break;
+                    case 1:
+                        res.entityInt = await GetTypeSum(type, name);
+                        break;
+                    case 2:
+                        res.entityInt = await GetTagSum(type, name);
+                        break;
+                    case 3:
+                        res.entityInt = await GetUserSum(type, name);
+                        break;
+                }
+                _cacheutil.CacheNumber("GetSumAsync_SnArticle" + identity + type + name + cache, res.entityInt, cache);
             }
             return res.entityInt;
         }
-
-        private async Task<int> GetSum(string type)
+        private async Task<int> GetUserSum(int type, string name)
         {
-            _logger.LogInformation("读取总字数：" + type);
             int num = 0;
             switch (type) //按类型查询
             {
-                case "read":
+                case 2:
+                    List<short> read = await _service.SnArticles.Where(w => w.User.Name == name).Select(c => c.Read).ToListAsync();
+                    foreach (short i in read)
+                    {
+                        num += i;
+                    }
+                    break;
+                case 1:
+                    List<string> text = await _service.SnArticles.Where(w => w.User.Name == name).Select(c => c.Text).ToListAsync();
+                    for (int i = 0; i < text.Count; i++)
+                    {
+                        num += text[i].Length;
+                    }
+                    break;
+                case 3:
+                    List<short> give = await _service.SnArticles.Where(w => w.User.Name == name).Select(c => c.Give).ToListAsync();
+                    foreach (short i in give)
+                    {
+                        num += i;
+                    }
+                    break;
+            }
+
+            return num;
+        }
+        private async Task<int> GetTagSum(int type, string name)
+        {
+            int num = 0;
+            switch (type) //按类型查询
+            {
+                case 2:
+                    List<short> read = await _service.SnArticles.Where(w => w.Label.Name == name).Select(c => c.Read).ToListAsync();
+                    foreach (short i in read)
+                    {
+                        num += i;
+                    }
+                    break;
+                case 1:
+                    List<string> text = await _service.SnArticles.Where(w => w.Label.Name == name).Select(c => c.Text).ToListAsync();
+                    for (int i = 0; i < text.Count; i++)
+                    {
+                        num += text[i].Length;
+                    }
+                    break;
+                case 3:
+                    List<short> give = await _service.SnArticles.Where(w => w.Label.Name == name).Select(c => c.Give).ToListAsync();
+                    foreach (short i in give)
+                    {
+                        num += i;
+                    }
+                    break;
+            }
+
+            return num;
+        }
+        private async Task<int> GetTypeSum(int type, string name)
+        {
+            int num = 0;
+            switch (type) //按类型查询
+            {
+                case 2:
+                    List<short> read = await _service.SnArticles.Where(w => w.Sort.Name == name).Select(c => c.Read).ToListAsync();
+                    foreach (short i in read)
+                    {
+                        num += i;
+                    }
+                    break;
+                case 1:
+                    List<string> text = await _service.SnArticles.Where(w => w.Sort.Name == name).Select(c => c.Text).ToListAsync();
+                    for (int i = 0; i < text.Count; i++)
+                    {
+                        num += text[i].Length;
+                    }
+                    break;
+                case 3:
+                    List<short> give = await _service.SnArticles.Where(w => w.Sort.Name == name).Select(c => c.Give).ToListAsync();
+                    foreach (short i in give)
+                    {
+                        num += i;
+                    }
+                    break;
+            }
+
+            return num;
+        }
+        private async Task<int> GetSum(int type)
+        {
+            int num = 0;
+            switch (type) //按类型查询
+            {
+                case 2:
                     List<short> read = await _service.SnArticles.Select(c => c.Read).ToListAsync();
                     foreach (short i in read)
                     {
                         num += i;
                     }
                     break;
-                case "text":
+                case 1:
                     List<string> text = await _service.SnArticles.Select(c => c.Text).ToListAsync();
                     for (int i = 0; i < text.Count; i++)
                     {
                         num += text[i].Length;
                     }
                     break;
-                case "give":
+                case 3:
                     List<short> give = await _service.SnArticles.Select(c => c.Give).ToListAsync();
                     foreach (short i in give)
                     {
@@ -187,7 +284,7 @@ namespace Snblog.Service.Service
         public async Task<List<SnArticleDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
             _logger.LogInformation("SnArticle分页查询=>" + identity + pageIndex + pageSize + ordering + isDesc + cache);
-            resDto.entityList = _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, resDto.entityList, cache);
+            resDto.entityList = _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + type + pageIndex + pageSize + ordering + isDesc + cache, resDto.entityList, cache);
 
             if (resDto.entityList == null)
             {
@@ -205,7 +302,7 @@ namespace Snblog.Service.Service
                         await GetFyTag(type, pageIndex, pageSize, ordering, isDesc);
                         break;
                 }
-                _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, resDto.entityList, cache);
+                _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + type + pageIndex + pageSize + ordering + isDesc + cache, resDto.entityList, cache);
             }
             return resDto.entityList;
         }
@@ -722,7 +819,7 @@ namespace Snblog.Service.Service
         public async Task<List<SnArticleDto>> GetContainsAsync(int identity, string type, string name, bool cache)
         {
             _logger.LogInformation(message: $"SnArticleDto=>{identity}{type}{name}{cache}");
-            resDto.entityList = _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + type + name + cache, resDto.entityList, cache);
+            resDto.entityList = _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + identity + type + name + cache, resDto.entityList, cache);
             if (resDto.entityList == null)
             {
                 switch (identity)
@@ -752,7 +849,7 @@ namespace Snblog.Service.Service
                      .AsNoTracking().ToListAsync());
                         break;
                 }
-                _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + type + name + cache, resDto.entityList, cache);
+                _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + identity + type + name + cache, resDto.entityList, cache);
             }
             return resDto.entityList;
         }

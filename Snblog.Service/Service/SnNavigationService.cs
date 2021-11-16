@@ -235,8 +235,8 @@ namespace Snblog.Service.Service
         public async Task<int> GetCountAsync(int identity, string type, bool cache)
         {
 
-            _logger.LogInformation("SnNavigation查询总数=>" + cache);
-            res.entityInt = _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + cache, res.entityInt, cache);
+            _logger.LogInformation("SnNavigation查询总数=>" + identity + type + cache);
+            res.entityInt = _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + identity + type + cache, res.entityInt, cache);
             if (res.entityInt == 0)
             {
                 switch (identity)
@@ -251,7 +251,7 @@ namespace Snblog.Service.Service
                         res.entityInt = await _service.SnNavigations.Where(w => w.User.Name == type).AsNoTracking().CountAsync();
                         break;
                 }
-                _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + cache, res.entityInt, cache);
+                _cacheutil.CacheNumber("GetCountAsync_SnNavigation" + identity + type + cache, res.entityInt, cache);
             }
             return res.entityInt;
         }

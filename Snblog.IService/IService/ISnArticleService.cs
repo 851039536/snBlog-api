@@ -27,12 +27,13 @@ namespace Snblog.IService.IService
         /// <param name="cache">是否开启缓存</param>
         Task<List<SnArticleDto>> GetContainsAsync(int identity, string type, string name, bool cache);
         /// <summary>
-        /// 读取[字段/阅读/点赞]数量
+        /// 读取字段长度 GetSumAsync
         /// </summary>
-        /// <param name="type">条件</param>
+        /// <param name="identity">0:所有: 分类:1 || 标签:2 || 用户:3</param>
+        /// <param name="type">1-内容-2:阅读-3:点赞</param>
+        /// <param name="name">查询参数</param>
         /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        Task<int> GetSumAsync(string type, bool cache);
+        Task<int> GetSumAsync(int identity, int type, string name, bool cache);
         /// <summary>
         /// 主键查询
         /// </summary>

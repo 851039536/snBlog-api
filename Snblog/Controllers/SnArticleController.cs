@@ -104,16 +104,18 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 读取[字段/阅读/点赞]总数量GetSumAsync
+        #region 读取字段长度 GetSumAsync
         /// <summary>
-        /// 统计[字段/阅读/点赞]总数量-缓存
+        /// 读取字段长度 GetSumAsync
         /// </summary>
-        /// <param name="type">text-内容-read:阅读-give:点赞</param>
+        /// <param name="identity">0:所有: 分类:1 || 标签:2 || 用户:3</param>
+        /// <param name="type">1-内容-2:阅读-3:点赞</param>
+        /// <param name="name">查询参数</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("GetSumAsync")]
-        public async Task<IActionResult> GetSumAsync(string type = "text", bool cache = false)
+        public async Task<IActionResult> GetSumAsync(int identity = 0, int type = 1, string name = "null", bool cache = false)
         {
-            return Ok(await _service.GetSumAsync(type, cache));
+            return Ok(await _service.GetSumAsync(identity, type, name, cache));
         }
 
         #endregion
