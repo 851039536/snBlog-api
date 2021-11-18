@@ -283,7 +283,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnArticleDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
-            _logger.LogInformation("SnArticle分页查询=>" + identity + pageIndex + pageSize + ordering + isDesc + cache);
+            _logger.LogInformation("SnArticle分页查询=>" + identity + type + pageIndex + pageSize + ordering + isDesc + cache);
             resDto.entityList = _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + type + pageIndex + pageSize + ordering + isDesc + cache, resDto.entityList, cache);
 
             if (resDto.entityList == null)
@@ -301,12 +301,173 @@ namespace Snblog.Service.Service
                     case 2:
                         await GetFyTag(type, pageIndex, pageSize, ordering, isDesc);
                         break;
+                    case 3:
+                        await GetFyUser(type, pageIndex, pageSize, ordering, isDesc);
+                        break;
                 }
                 _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + type + pageIndex + pageSize + ordering + isDesc + cache, resDto.entityList, cache);
             }
             return resDto.entityList;
         }
-
+        private async Task GetFyUser(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
+        {
+            if (isDesc)//降序
+            {
+                switch (ordering) //排序
+                {
+                    case "id":
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.User.Name == type)
+                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize).Select(e => new SnArticleDto
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Sketch = e.Sketch,
+                    Give = e.Give,
+                    Read = e.Read,
+                    Img = e.Img,
+                    TimeCreate = e.TimeCreate,
+                    TimeModified = e.TimeModified,
+                    User = e.User,
+                    Sort = e.Sort,
+                    Label = e.Label
+                }).AsNoTracking().ToListAsync());
+                        break;
+                    case "data":
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.User.Name == type)
+               .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize).Select(e => new SnArticleDto
+               {
+                   Id = e.Id,
+                   Title = e.Title,
+                   Sketch = e.Sketch,
+                   Give = e.Give,
+                   Read = e.Read,
+                   Img = e.Img,
+                   TimeCreate = e.TimeCreate,
+                   TimeModified = e.TimeModified,
+                   User = e.User,
+                   Sort = e.Sort,
+                   Label = e.Label
+               }).AsNoTracking().ToListAsync());
+                        break;
+                    case "read":
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.User.Name == type)
+               .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize).Select(e => new SnArticleDto
+               {
+                   Id = e.Id,
+                   Title = e.Title,
+                   Sketch = e.Sketch,
+                   Give = e.Give,
+                   Read = e.Read,
+                   Img = e.Img,
+                   TimeCreate = e.TimeCreate,
+                   TimeModified = e.TimeModified,
+                   User = e.User,
+                   Sort = e.Sort,
+                   Label = e.Label
+               }).AsNoTracking().ToListAsync());
+                        break;
+                    case "give":
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.User.Name == type)
+               .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize).Select(e => new SnArticleDto
+               {
+                   Id = e.Id,
+                   Title = e.Title,
+                   Sketch = e.Sketch,
+                   Give = e.Give,
+                   Read = e.Read,
+                   Img = e.Img,
+                   TimeCreate = e.TimeCreate,
+                   TimeModified = e.TimeModified,
+                   User = e.User,
+                   Sort = e.Sort,
+                   Label = e.Label
+               }).AsNoTracking().ToListAsync());
+                        break;
+                }
+            }
+            else //升序
+            {
+                switch (ordering) //排序
+                {
+                    case "id":
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.User.Name == type)
+               .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize).Select(e => new SnArticleDto
+               {
+                   Id = e.Id,
+                   Title = e.Title,
+                   Sketch = e.Sketch,
+                   Give = e.Give,
+                   Read = e.Read,
+                   Img = e.Img,
+                   TimeCreate = e.TimeCreate,
+                   TimeModified = e.TimeModified,
+                   User = e.User,
+                   Sort = e.Sort,
+                   Label = e.Label
+               }).AsNoTracking().ToListAsync());
+                        break;
+                    case "data":
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.User.Name == type)
+               .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize).Select(e => new SnArticleDto
+               {
+                   Id = e.Id,
+                   Title = e.Title,
+                   Sketch = e.Sketch,
+                   Give = e.Give,
+                   Read = e.Read,
+                   Img = e.Img,
+                   TimeCreate = e.TimeCreate,
+                   TimeModified = e.TimeModified,
+                   User = e.User,
+                   Sort = e.Sort,
+                   Label = e.Label
+               }).AsNoTracking().ToListAsync());
+                        break;
+                    case "read":
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.User.Name == type)
+               .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize).Select(e => new SnArticleDto
+               {
+                   Id = e.Id,
+                   Title = e.Title,
+                   Sketch = e.Sketch,
+                   Give = e.Give,
+                   Read = e.Read,
+                   Img = e.Img,
+                   TimeCreate = e.TimeCreate,
+                   TimeModified = e.TimeModified,
+                   User = e.User,
+                   Sort = e.Sort,
+                   Label = e.Label
+               }).AsNoTracking().ToListAsync());
+                        break;
+                    case "give":
+                        resDto.entityList = _mapper.Map<List<SnArticleDto>>(await _service.SnArticles.Where(w => w.User.Name == type)
+               .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
+               .Take(pageSize).Select(e => new SnArticleDto
+               {
+                   Id = e.Id,
+                   Title = e.Title,
+                   Sketch = e.Sketch,
+                   Give = e.Give,
+                   Read = e.Read,
+                   Img = e.Img,
+                   TimeCreate = e.TimeCreate,
+                   TimeModified = e.TimeModified,
+                   User = e.User,
+                   Sort = e.Sort,
+                   Label = e.Label
+               }).AsNoTracking().ToListAsync());
+                        break;
+                }
+            }
+        }
         private async Task GetFyTag(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
         {
             if (isDesc)//降序
@@ -466,7 +627,6 @@ namespace Snblog.Service.Service
                 }
             }
         }
-
         private async Task GetFyType(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
         {
             if (isDesc)//降序
@@ -788,7 +948,6 @@ namespace Snblog.Service.Service
                 }
             }
         }
-
         public async Task<bool> UpdatePortionAsync(SnArticle snArticle, string type)
         {
             _logger.LogInformation("SnArticle更新部分参数");
@@ -814,8 +973,6 @@ namespace Snblog.Service.Service
             //执行数据库操作
             return await _service.SaveChangesAsync() > 0;
         }
-
-
         public async Task<List<SnArticleDto>> GetContainsAsync(int identity, string type, string name, bool cache)
         {
             _logger.LogInformation(message: $"SnArticleDto=>{identity}{type}{name}{cache}");

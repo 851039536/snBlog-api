@@ -98,7 +98,7 @@ namespace Snblog.Controllers
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
                 );
                 string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-                return Ok(data[0].Nickname + "," + token + "," + data[0].Id);
+                return Ok(data[0].Nickname + "," + token + "," + data[0].Id + "," + data[0].Name);
             }
 
         }
