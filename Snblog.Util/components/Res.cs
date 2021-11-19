@@ -12,6 +12,7 @@ namespace Snblog.Util.components
     {
         public T entity = default;
         public List<T> entityList = default;
+        public string[] name = default;
     }
 
 

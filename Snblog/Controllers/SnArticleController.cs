@@ -65,10 +65,10 @@ namespace Snblog.Controllers
         /// <summary>
         /// 模糊查询
         /// </summary>
-        /// <param name="identity">无条件:0 || 分类:1 || 标签:2</param>
-        /// <param name="type">查询条件</param>
+        /// <param name="identity">所有:0 || 分类:1 || 标签:2 || 用户:3 || 标签,用户:4</param>
+        /// <param name="type">查询参数-(多条件,分割)</param>
         /// <param name="name">查询字段</param>
-        /// <param name="cache">是否开启缓存</param>
+        /// <param name="cache">缓存</param>
         [HttpGet("GetContainsAsync")]
         public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
         {
@@ -124,14 +124,13 @@ namespace Snblog.Controllers
         /// <summary>
         /// 分页查询
         /// </summary>
-        /// <param name="identity">所有:0 || 分类:1 || 标签:2 || 用户:3</param>
-        /// <param name="type">查询参数</param>
+        /// <param name="identity">所有:0 || 分类:1 || 标签:2 || 用户:3 || 标签,用户: 4</param>
+        /// <param name="type">查询参数-(多条件,分割)</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序[true/false]</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
-        /// <returns></returns>
+        /// <param name="cache">缓存</param>
+        /// <param name="ordering">排序[data:时间 read:阅读 give:点赞 id:主键]</param>
         [HttpGet("GetFyAsync")]
         public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
         {
