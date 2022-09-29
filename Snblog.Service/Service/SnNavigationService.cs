@@ -290,20 +290,22 @@ namespace Snblog.Service.Service
                     case 0:
                         resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                   await _service.SnNavigations
-                 .Where(l => l.Title.Contains(name))
-                 .AsNoTracking().ToListAsync());
+                 .Where(l => l.Title.Contains(name)).OrderByDescending(c => c.Id).Include(z => z.Type
+                    ).Include(i => i.User).AsNoTracking().ToListAsync());
                         break;
                     case 1:
                         resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                    await _service.SnNavigations
                  .Where(l => l.Title.Contains(name) && l.Type.Title == type)
-                 .AsNoTracking().ToListAsync());
+                 .OrderByDescending(c => c.Id).Include(z => z.Type
+                    ).Include(i => i.User).AsNoTracking().ToListAsync());
                         break;
                     case 2:
                         resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                   await _service.SnNavigations
                  .Where(l => l.Title.Contains(name) && l.User.Name == type)
-                 .AsNoTracking().ToListAsync());
+                 .OrderByDescending(c => c.Id).Include(z => z.Type
+                    ).Include(i => i.User).AsNoTracking().ToListAsync());
                         break;
                 }
                 _cacheutil.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, resDto.entityList, cache);

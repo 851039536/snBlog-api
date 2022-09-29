@@ -103,6 +103,58 @@ namespace Snblog.Controllers
 
         }
 
+
+        /// <summary>
+        /// 用户登录2
+        /// </summary>
+        /// <param name="users"></param>
+        /// <param name="pwd"></param>
+        /// <returns></returns>
+        [HttpPost("Login2")]
+        public IActionResult Login2(string users, string pwd)
+        {
+            if (string.IsNullOrEmpty(users) && string.IsNullOrEmpty(pwd))
+            {
+                return Ok("用户密码不能为空");
+            }
+            var data = _coreDbContext.SnUsers.Where(w => w.Name == users && w.Pwd == pwd).AsNoTracking().ToList();
+            if (data.Count == 0)
+            {
+                return Ok("用户或密码错误");
+            }
+            else
+            {
+                var claims = new List<Claim>();
+                claims.AddRange(new[]
+                {
+                new Claim("UserName", data[0].Name),
+                new Claim(ClaimTypes.Role,data[0].Name),
+                new Claim(JwtRegisteredClaimNames.Sub,data[0].Name),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+            });
+                DateTime now = DateTime.UtcNow;
+
+                //生成token
+                var jwtSecurityToken = new JwtSecurityToken(
+                    //签发者
+                    issuer: jwtModel.Issuer,
+                    //生成token
+                    audience: jwtModel.Audience,
+                    //jwt令牌数据体
+                    claims: claims,
+                    notBefore: now,
+                    //令牌过期时间
+                    expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)),
+                    //为数字签名定义SecurityKey
+                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
+                );
+                string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+                data[0].Ip = token;
+                return Ok(data[0]);
+            }
+        }
+
         /// <summary>
         /// 查询所有
         /// </summary>

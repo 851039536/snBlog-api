@@ -51,10 +51,17 @@
 
   <ItemGroup>
     <Folder Include="LogFiles\" />
+    <Folder Include="mysql\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MechTE">
+      <HintPath>bin\Debug\net5.0\MECH\MechTE.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

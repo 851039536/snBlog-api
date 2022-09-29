@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>F:\Test\netCore\Snblog\Snblog.Enties\Snblog.Enties.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>

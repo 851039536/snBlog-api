@@ -121,7 +121,6 @@ namespace Snblog.Service.AngleSharp
             var container = document.QuerySelector("#popular-pinned-projects");
             var matches = container.QuerySelectorAll("div.header > a");
 
-
             // We are only interested in the text - select it with LINQ
             foreach (var item in matches)
             {
@@ -132,12 +131,26 @@ namespace Snblog.Service.AngleSharp
         }
 
 
+        /// <summary>
+        /// 数据备份
+        /// </summary>
+        /// <param name="path">备份路径默认null</param>
+        /// <returns></returns>
 
-        public static string SqlBackups(string ip, string user, string pwd, string database)
+        public static string SqlBackups(string path)
         {
-            string constring = "server=" + ip + ";user=" + user + ";pwd=" + pwd + ";database=" + database + ";";
+            //string constring = "server=" + ip + ";user=" + user + ";pwd=" + pwd + ";database=" + database + ";";
+            string constring = "server=localhost;user= root;pwd= woshishui;database=snblog;";
             string time1 = DateTime.Now.ToString("d").Replace("/", "-");
-            string file = ".//mysql/" + time1 + "_blog.sql";
+            string file = default;
+            if (path=="null")
+            {
+                  file = ".//mysql/" + time1 + "_blog.sql";
+            }
+            else
+            {
+                file = path;
+            }
             using (MySqlConnection conn = new(constring))
             {
                 using MySqlCommand cmd = new();
@@ -147,8 +160,7 @@ namespace Snblog.Service.AngleSharp
                 mb.ExportToFile(file);
                 conn.Close();
             }
-
-            return "已备份";
+            return "true";
         }
 
         public static string SqlRestore(string ip, string user, string pwd, string database)
@@ -165,7 +177,7 @@ namespace Snblog.Service.AngleSharp
                 conn.Close();
             }
 
-            return "还原";
+            return "true";
         }
     }
 }

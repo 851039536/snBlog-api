@@ -54,7 +54,7 @@ namespace Snblog.Service.Service
             resDto.entityList = _cacheutil.CacheString("GetAllAsync_SnInterface", resDto.entityList, cache);
             if (resDto.entityList == null)
             {
-                resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.AsNoTracking().ToListAsync());
+                resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Include(i => i.Type).Include(i => i.User).AsNoTracking().ToListAsync());
                 _cacheutil.CacheString("GetAllAsync_SnInterface", resDto.entityList, cache);
             }
             return resDto.entityList;
@@ -75,7 +75,7 @@ namespace Snblog.Service.Service
                             {
                                 case "id":
                                     resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(
-                            await _service.SnInterfaces.Where(s => true)
+                            await _service.SnInterfaces.Where(s => true).Include(i => i.Type).Include(i => i.User)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -87,7 +87,7 @@ namespace Snblog.Service.Service
                             {
                                 case "id":
                                     resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(
-                            await _service.SnInterfaces.Where(s => true)
+                            await _service.SnInterfaces.Where(s => true).Include(i => i.Type).Include(i => i.User)
                             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -101,7 +101,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.Type.Name == type)
+                                    resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.Type.Name == type).Include(i => i.Type).Include(i => i.User)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -112,7 +112,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.Type.Name == type)
+                                    resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.Type.Name == type).Include(i => i.Type).Include(i => i.User)
                         .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                         .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -125,7 +125,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.User.Name == type)
+                                    resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -136,7 +136,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.User.Name == type)
+                                    resDto.entityList = _mapper.Map<List<SnInterfaceDto>>(await _service.SnInterfaces.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
                              .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;

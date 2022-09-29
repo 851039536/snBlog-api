@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +12,6 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Snblog.Cache.Cache;
 using Snblog.Cache.CacheUtil;
-using Snblog.Controllers;
-using Snblog.Enties.AutoMapper;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.IService.IReService;
@@ -204,7 +201,6 @@ namespace Snblog
             services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
 
             #endregion
-
 
             #region  µÃÂ”≥…‰
 

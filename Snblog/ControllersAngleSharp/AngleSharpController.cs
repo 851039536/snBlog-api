@@ -1,7 +1,13 @@
 ﻿using Blog.Core;
+using MechTE.TFile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.Service.AngleSharp;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 
 //默认的约定集将应用于程序集中的所有操作：
@@ -59,22 +65,19 @@ namespace Snblog.ControllersAngleSharp
             return Ok(await _angle.GiteeItem());
         }
         [HttpGet("Daka")]
-        public  async Task<IActionResult> Daka()
+        public async Task<IActionResult> Daka()
         {
             return Ok(await HotNewsAngleSharp.Daka());
         }
         /// <summary>
-        ///  数据备份
+        /// 数据备份
         /// </summary>
-        /// <param name="ip">ip</param>
-        /// <param name="user">用户</param>
-        /// <param name="pwd">密码</param>
-        /// <param name="database">数据库</param>
+        /// <param name="path">备份路径默认null</param>
         /// <returns></returns>
         [HttpGet("SqlBackups")]
-        public  ActionResult SqlBackups(string ip= "localhost", string user= "root", string pwd= "woshishui", string database= "snblog")
+        public ActionResult SqlBackups(string path)
         {
-            return Ok(HotNewsAngleSharp.SqlBackups(ip,user,pwd,database));
+            return Ok(HotNewsAngleSharp.SqlBackups(path));
         }
         /// <summary>
         /// 还原数据
@@ -90,12 +93,102 @@ namespace Snblog.ControllersAngleSharp
             return Ok(HotNewsAngleSharp.SqlRestore(ip, user, pwd, database));
         }
 
-     
+        /// <summary>
+        /// 测试TOKEN是否存在
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("TOKEN")]
-         [Authorize(Roles = Permissions.Name)]
+        [Authorize(Roles = Permissions.Name)]
         public ActionResult TOKEN()
         {
             return Ok();
         }
+
+
+        [HttpPost("FilePaths")]
+        public ActionResult FilePaths(string filePathByForeach = "D:\\TE-Test")
+        {
+            var jx = new List<string>();
+            var cx = new List<string>();
+            string url = default;
+            try
+            {
+                DirectoryInfo theFolder = new DirectoryInfo(filePathByForeach);
+                DirectoryInfo[] dirInfo = theFolder.GetDirectories();//获取所在目录的文件夹
+
+                //遍历文件夹
+                foreach (DirectoryInfo NextFolder in dirInfo)
+                {
+                    if (!NextFolder.FullName.Contains("$RECYCLE"))
+                    {
+                        var result = $"{filePathByForeach}\\{NextFolder.Name}";
+                        theFolder = new DirectoryInfo(result);
+                        GetFiles(theFolder, "*.exe*", ref cx, false);
+                        foreach (var item in cx)
+                        {
+                            url = item.ToString();
+                        }
+                        jx.Add(NextFolder.Name.ToString() + "," + $"{filePathByForeach}\\{NextFolder.Name}\\{url}");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return Ok(jx);
+        }
+
+ 
+        [HttpPost("StartPath")]
+        public ActionResult StartPath(string path)
+        {
+            TFile.TOpenFile(@"D:\sw\netCore\Snblog\Snblog\bin\Debug\net5.0\MECH",1);
+            return Ok();
+        }
+
+        /// <summary>
+        /// 查找指定文件夹下指定后缀名的文件
+        /// </summary>
+        /// <param name="directory">文件路径</param>
+        /// <param name="pattern">匹配值</param>
+        /// <param name="fileList">返回值</param>
+        /// <param name="sign">是否返回当前目录的子目录</param>
+        public static void GetFiles(DirectoryInfo directory, string pattern, ref List<string> fileList, bool sign)
+        {
+            if (directory.Exists || pattern.Trim() != string.Empty)
+            {
+                try
+                {
+                    foreach (DirectoryInfo info in directory.GetDirectories())
+                    {
+                        if (!info.FullName.Contains("$RECYCLE"))
+                        {
+                            fileList.Add(info.Name.ToString());
+                        }
+                    }
+                    foreach (FileInfo info in directory.GetFiles(pattern))
+                    {
+                        fileList.Add(info.Name.ToString());
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                if (sign)
+                {
+                    foreach (DirectoryInfo info in directory.GetDirectories())//获取文件夹下的子文件夹
+                    {
+                        GetFiles(info, pattern, ref fileList, sign);//递归调用该函数，获取子文件夹下的文件
+                    }
+                }
+
+            }
+        }
     }
+
+
+
 }
