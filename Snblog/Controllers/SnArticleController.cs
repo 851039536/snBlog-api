@@ -185,7 +185,7 @@ namespace Snblog.Controllers
         /// 更新部分列[comment give read]
         /// </summary>
         /// <param name="entity">对象</param>
-        /// <param name="type">更新字段</param>
+        /// <param name="type">Read | Give | Comment</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
         public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type)

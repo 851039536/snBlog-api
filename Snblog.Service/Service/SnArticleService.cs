@@ -1119,26 +1119,23 @@ namespace Snblog.Service.Service
                 }
             }
         }
-        public async Task<bool> UpdatePortionAsync(SnArticle snArticle, string type)
+        public async Task<bool> UpdatePortionAsync(SnArticle entity, string type)
         {
             _logger.LogInformation("SnArticle更新部分参数");
-            SnArticle resulet = await _service.SnArticles.FindAsync(snArticle.Id);
-            if (resulet == null)
-            {
-                return false;
-            }
+            SnArticle resulet = await _service.SnArticles.FindAsync(entity.Id);
+            if (resulet == null) return false;
 
             switch (type)
             {    //指定字段进行更新操作
                 case "Read":
                     //修改属性，被追踪的league状态属性就会变为Modify
-                    resulet.Read = snArticle.Read;
+                    resulet.Read = entity.Read;
                     break;
                 case "Give":
-                    resulet.Give = snArticle.Give;
+                    resulet.Give = entity.Give;
                     break;
                 case "Comment":
-                    resulet.CommentId = snArticle.CommentId;
+                    resulet.CommentId = entity.CommentId;
                     break;
             }
             //执行数据库操作
@@ -1156,26 +1153,75 @@ namespace Snblog.Service.Service
                     case 0:
                         resDto.entityList = _mapper.Map<List<SnArticleDto>>(
                     await _service.SnArticles
-                      .Where(l => l.Title.Contains(name))
-                     .AsNoTracking().ToListAsync());
+                      .Where(l => l.Title.Contains(name)).Select(e => new SnArticleDto
+                      {
+                          Id = e.Id,
+                          Title = e.Title,
+                          Sketch = e.Sketch,
+                          Give = e.Give,
+                          Read = e.Read,
+                          Img = e.Img,
+                          TimeCreate = e.TimeCreate,
+                          TimeModified = e.TimeModified,
+                          User = e.User,
+                          Sort = e.Sort,
+                          Label = e.Label
+                      }).AsNoTracking().ToListAsync());
+               
                         break;
                     case 1:
                         resDto.entityList = _mapper.Map<List<SnArticleDto>>(
                       await _service.SnArticles
-                       .Where(l => l.Title.Contains(name) && l.Sort.Name == type)
-                       .AsNoTracking().ToListAsync());
+                       .Where(l => l.Title.Contains(name) && l.Sort.Name == type).Select(e => new SnArticleDto
+                       {
+                           Id = e.Id,
+                           Title = e.Title,
+                           Sketch = e.Sketch,
+                           Give = e.Give,
+                           Read = e.Read,
+                           Img = e.Img,
+                           TimeCreate = e.TimeCreate,
+                           TimeModified = e.TimeModified,
+                           User = e.User,
+                           Sort = e.Sort,
+                           Label = e.Label
+                       }).AsNoTracking().ToListAsync());
                         break;
                     case 2:
                         resDto.entityList = _mapper.Map<List<SnArticleDto>>(
                        await _service.SnArticles
-                         .Where(l => l.Title.Contains(name) && l.Label.Name == type)
-                         .AsNoTracking().ToListAsync());
+                         .Where(l => l.Title.Contains(name) && l.Label.Name == type).Select(e => new SnArticleDto
+                         {
+                             Id = e.Id,
+                             Title = e.Title,
+                             Sketch = e.Sketch,
+                             Give = e.Give,
+                             Read = e.Read,
+                             Img = e.Img,
+                             TimeCreate = e.TimeCreate,
+                             TimeModified = e.TimeModified,
+                             User = e.User,
+                             Sort = e.Sort,
+                             Label = e.Label
+                         }).AsNoTracking().ToListAsync());
                         break;
                     default:
                         _mapper.Map<List<SnArticleDto>>(
                     await _service.SnArticles
-                      .Where(l => l.Title.Contains(name))
-                     .AsNoTracking().ToListAsync());
+                      .Where(l => l.Title.Contains(name)).Select(e => new SnArticleDto
+                      {
+                          Id = e.Id,
+                          Title = e.Title,
+                          Sketch = e.Sketch,
+                          Give = e.Give,
+                          Read = e.Read,
+                          Img = e.Img,
+                          TimeCreate = e.TimeCreate,
+                          TimeModified = e.TimeModified,
+                          User = e.User,
+                          Sort = e.Sort,
+                          Label = e.Label
+                      }).AsNoTracking().ToListAsync());
                         break;
                 }
                 _cacheutil.CacheString("GetContainsAsync_SnArticleDto" + identity + type + name + cache, resDto.entityList, cache);

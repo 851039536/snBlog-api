@@ -89,7 +89,7 @@ namespace Snblog.IService.IService
         /// <param name="snArticle"></param>
         /// <param name="type">更新的字段</param>
         /// <returns></returns>
-        Task<bool> UpdatePortionAsync(SnArticle snArticle, string type);
+        Task<bool> UpdatePortionAsync(SnArticle entity, string type);
 
 
         /// <summary>
