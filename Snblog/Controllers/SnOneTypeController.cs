@@ -98,7 +98,7 @@ namespace Snblog.Controllers
         /// 删除数据 
         /// </summary>
         /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {

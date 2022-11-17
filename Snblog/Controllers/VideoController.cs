@@ -13,48 +13,47 @@ namespace Snblog.Controllers
 {
 
     /// <summary>
-    /// 视频内容
+    /// 视频
     /// </summary>
-    [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
-
+    [ApiExplorerSettings(GroupName = "V1")] 
     [ApiController]
-    public class SnVideoController : Controller
+    [Route("video")]
+    public class VideoController : ControllerBase
     {
-        private readonly ISnVideoService _service; //IOC依赖注入
-        public SnVideoController(ISnVideoService service)
+        private readonly IVideoService _service; //IOC依赖注入
+        public VideoController(IVideoService service)
         {
             _service = service;
         }
 
-        #region 查询总数 GetCountAsync
+        #region 查询总数
         /// <summary>
         /// 查询总数 
         /// </summary>
         /// <param name="identity">所有:0 || 分类:1 || 用户:2 </param>
-        /// <param name="type">查询条件 </param>
-        /// <param name="cache"></param>
+        /// <param name="type">查询条件</param>
+        /// <param name="cache">缓存</param>
         /// <returns></returns>
-        [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(int identity = 0, string type = "null", bool cache = false)
+        [HttpGet("sum")]
+        public async Task<IActionResult> GetSumAsync(int identity = 0, string type = "null", bool cache = false)
         {
-            return Ok(await _service.GetCountAsync(identity, type, cache));
+            return Ok(await _service.GetSumAsync(identity, type, cache));
         }
         #endregion
-        #region 查询所有GetAllAsync
+        #region 查询所有
         /// <summary>
         /// 查询所有 
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        // [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
+         [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
-        #region 模糊查询 Contains
+        #region 模糊查询
         /// <summary>
         /// 模糊查询
         /// </summary>
@@ -62,39 +61,38 @@ namespace Snblog.Controllers
         /// <param name="type">查询条件</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetContainsAsync")]
+        [HttpGet("contains")]
         public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
         {
             return Ok(await _service.GetContainsAsync(identity, type, name, cache));
         }
         #endregion
-        #region 主键查询 GetByIdAsync
+        #region 主键查询
         /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id">主键</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetByIdAsync")]
+        /// <param name="cache">缓存</param>
+        [HttpGet("byid")]
         public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
         }
         #endregion
-        #region  条件查询 GetTypeAsync
+        #region  条件查询
         /// <summary>
         ///条件查询 
         /// </summary>
         /// <param name="identity">分类:1 || 用户:2</param>
         /// <param name="type">类别</param>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetTypeAsync")]
+        [HttpGet("type")]
         public async Task<IActionResult> GetTypeAsync(int identity = 1, string type = "null", bool cache = false)
         {
             return Ok(await _service.GetTypeAsync(identity, type, cache));
         }
         #endregion
-        #region 分页查询GetFyAsync
+        #region 分页查询
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -106,7 +104,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间  按id排序]</param>
         /// <returns></returns>
-        [HttpGet("GetFyAsync")]
+        [HttpGet("paging")]
         public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
         {
             return Ok(await _service.GetFyAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
@@ -126,21 +124,19 @@ namespace Snblog.Controllers
         #endregion
 
         /// <summary>
-        /// 添加数据 
+        /// 添加
         /// </summary>
-        /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<ActionResult<SnVideo>> AddAsync(SnVideo entity)
+        public async Task<ActionResult<Video>> AddAsync(Video entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
         /// <summary>
-        /// 删除视频 
+        /// 删除
         /// </summary>
-        /// <param name="id">视频id</param>
-        /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        /// <param name="id">主键</param>
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
@@ -149,13 +145,12 @@ namespace Snblog.Controllers
 
 
         /// <summary>
-        /// 更新视频 
+        /// 更新
         /// </summary>
         /// <param name="entity"></param>
-        /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnVideo entity)
+        public async Task<IActionResult> UpdateAsync(Video entity)
         {
             var data = await _service.UpdateAsync(entity);
             return Ok(data);

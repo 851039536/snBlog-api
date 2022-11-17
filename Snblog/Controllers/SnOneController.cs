@@ -37,7 +37,7 @@ namespace Snblog.Controllers
         /// <param name="type">条件(identity为0则填0) </param>
         /// <param name="cache"></param>
         /// <returns></returns>
-        [HttpGet("GetCountAsync")]
+        [HttpGet("GetSunAsync")]
         public async Task<IActionResult> GetCountAsync(int identity = 0, string type = "null", bool cache = false)
         {
             return Ok(await _service.GetCountAsync(identity, type, cache));
@@ -138,7 +138,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {

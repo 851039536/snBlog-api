@@ -16,7 +16,6 @@ namespace Snblog.Controllers
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    //[Authorize]
     public class SnArticleController : ControllerBase
     {
         private readonly ISnArticleService _service; //IOC依赖注入
@@ -32,7 +31,7 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 查询总数 GetCountAsync
+        #region 查询总数
         /// <summary>
         /// 查询总数 
         /// </summary>
@@ -40,10 +39,10 @@ namespace Snblog.Controllers
         /// <param name="type">查询条件 </param>
         /// <param name="cache"></param>
         /// <returns></returns>
-        [HttpGet("GetCountAsync")]
-        public async Task<IActionResult> GetCountAsync(int identity = 0, string type = "null", bool cache = false)
+        [HttpGet]
+        public async Task<IActionResult> GetSumAsync(int identity = 0, string type = "null", bool cache = false)
         {
-            return Ok(await _service.GetCountAsync(identity, type, cache));
+            return Ok(await _service.GetSumAsync(identity, type, cache));
         }
         #endregion
 
@@ -138,9 +137,9 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 添加数据AddAsync
+        #region 添加AddAsync
         /// <summary>
-        /// 添加数据
+        /// 添加
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -173,7 +172,7 @@ namespace Snblog.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [Authorize(Roles = Permissions.Name)]
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));

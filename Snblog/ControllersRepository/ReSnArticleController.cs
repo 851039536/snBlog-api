@@ -196,7 +196,7 @@ namespace Snblog.ControllersRepository
         /// <param name="id"></param>
         /// <returns></returns>
        //  [Authorize(Roles = "kai")] //角色授权
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));

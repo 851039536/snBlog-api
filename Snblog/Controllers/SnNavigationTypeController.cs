@@ -101,7 +101,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id">主键</param>
         /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {

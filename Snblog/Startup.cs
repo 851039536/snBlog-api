@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Snblog.Cache.Cache;
 using Snblog.Cache.CacheUtil;
+using Snblog.Controllers;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.IService.IReService;
@@ -176,10 +178,10 @@ namespace Snblog
             services.AddScoped<ISnLabelsService, SnLabelsService>();
             services.AddScoped<ISnSortService, SnSortService>();
             services.AddScoped<ISnOneService, SnOneService>();
-            services.AddScoped<ISnVideoService, SnVideoService>();
+            services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
             services.AddScoped<ISnUserTalkService, SnUserTalkService>();
-            services.AddScoped<ISnUserService, SnUserService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISnOneTypeService, SnOneTypeService>();
             services.AddScoped<ISnPictureService, SnPictureService>();
             services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
@@ -201,7 +203,6 @@ namespace Snblog
             services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
 
             #endregion
-
             #region  µÃÂ”≥…‰
 
             //services.AddAutoMapper(typeof(MappingProfile));
@@ -213,7 +214,6 @@ namespace Snblog
                    .ToArray()
            );
             #endregion
-
             services.AddControllers();
 
         }
