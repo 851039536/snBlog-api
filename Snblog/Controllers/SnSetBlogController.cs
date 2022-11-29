@@ -57,7 +57,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[id排序]</param>
         /// <returns></returns>
-        [HttpGet("GetFyAsync")]
+        [HttpGet("GetPagingAsync")]
         public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
         {
             return Ok(await _service.GetFyAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));

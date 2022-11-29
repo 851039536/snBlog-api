@@ -116,7 +116,7 @@ namespace Snblog.Controllers
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间 按id排序]</param>
-        [HttpGet("GetFyAsync")]
+        [HttpGet("GetPagingAsync")]
         public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
         {
             return Ok(await _service.GetFyAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));

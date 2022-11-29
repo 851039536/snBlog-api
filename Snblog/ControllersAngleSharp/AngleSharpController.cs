@@ -75,7 +75,7 @@ namespace Snblog.ControllersAngleSharp
         /// <param name="path">备份路径默认null</param>
         /// <returns></returns>
         [HttpGet("SqlBackups")]
-        public ActionResult SqlBackups(string path)
+        public ActionResult SqlBackups(string path ="null")
         {
             return Ok(HotNewsAngleSharp.SqlBackups(path));
         }

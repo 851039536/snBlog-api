@@ -26,10 +26,6 @@ namespace Snblog.Controllers
     /// <summary>
     /// 用户
     /// </summary>
-    //[Route("api/[controller]")]
-    //[ApiController]
-    //[Authorize]  Controller ControllerBase
-
     [ApiController]
     [Route("user")]
     public class UserController : ControllerBase
@@ -52,14 +48,14 @@ namespace Snblog.Controllers
             jwtModel = _jwtModel.Value;
         }
 
-    
 
+        #region 登录
         /// <summary>
         /// 登录
         /// </summary>
         /// <param name="user">用户</param>
         /// <param name="pwd">密码</param>
-        /// <returns>string</returns>
+        /// <returns>Nickname,token,id,name</returns>
         [HttpGet("login")]
         public IActionResult Login(string user, string pwd)
         {
@@ -93,9 +89,9 @@ namespace Snblog.Controllers
         /// <summary>
         /// 登录2
         /// </summary>
-        /// <param name="user"></param>
-        /// <param name="pwd"></param>
-        /// <returns></returns>
+        /// <param name="user">用户</param>
+        /// <param name="pwd">密码</param>
+        /// <returns>token</returns>
         [HttpPost("login2")]
         public IActionResult Login2(string user, string pwd)
         {
@@ -125,18 +121,20 @@ namespace Snblog.Controllers
             res[0].Ip = token;
             return Ok(res[0]);
         }
+        #endregion
 
+        #region 主键查询
         /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id">主键</param>
         /// <param name="cache">缓存</param>
         [HttpGet("byid")]
-        public async Task<IActionResult> GetByIdAsync(int id=0, bool cache=false)
+        public async Task<IActionResult> GetByIdAsync(int id = 0, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
         }
-
+        #endregion
 
         #region 模糊查询
         /// <summary>
@@ -145,7 +143,7 @@ namespace Snblog.Controllers
         /// <param name="name">查询字段</param>
         /// <param name="cache">缓存</param>
         [HttpGet("contains")]
-        public async Task<IActionResult> GetContainsAsync( string name = "c", bool cache = false)
+        public async Task<IActionResult> GetContainsAsync(string name = "c", bool cache = false)
         {
             return Ok(await _service.GetContainsAsync(name, cache));
         }
@@ -157,7 +155,7 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns></returns>
         [HttpGet("sum")]
-        public async Task<IActionResult> GetSumAsync(bool cache=false)
+        public async Task<IActionResult> GetSumAsync(bool cache = false)
         {
             return Ok(await _service.GetSumAsync(cache));
         }
@@ -168,7 +166,7 @@ namespace Snblog.Controllers
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">记录条数</param>
         [HttpGet("paging")]
-        public IActionResult GetPagingAsync(int pageIndex=1, int pageSize = 10)
+        public IActionResult GetPagingAsync(int pageIndex = 1, int pageSize = 10)
         {
             return Ok(_service.GetPagingAsync(pageIndex, pageSize));
         }
@@ -181,6 +179,8 @@ namespace Snblog.Controllers
         [HttpPost("add")]
         public async Task<ActionResult<User>> Add(User entity)
         {
+            entity.TimeCreate = DateTime.Now;
+            entity.TimeModified = DateTime.Now;
             return Ok(await _service.AddAsync(entity));
         }
 
@@ -205,6 +205,7 @@ namespace Snblog.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> UpdateAsync(UserDto user)
         {
+            user.TimeModified = DateTime.Now;
             var data = await _service.UpdateAsync(user);
             return Ok(data);
         }

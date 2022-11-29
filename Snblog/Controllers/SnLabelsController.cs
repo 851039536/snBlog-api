@@ -78,7 +78,7 @@ namespace Snblog.Controllers
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetFyAsync")]
+        [HttpGet("GetPagingAsync")]
         public async Task<IActionResult> GetFyAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
         {
             return Ok(await _service.GetFyAsync(pageIndex, pageSize, isDesc, cache));

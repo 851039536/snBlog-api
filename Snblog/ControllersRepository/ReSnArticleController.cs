@@ -87,7 +87,7 @@ namespace Snblog.ControllersRepository
         /// 读取[字段/阅读/点赞]总数量-缓存
         /// </summary>
         /// <param name="type">text-内容-read:阅读-give:点赞</param>
-        [HttpGet("GetSumAsync")]
+        [HttpGet("GetStrSumAsync")]
         public async Task<IActionResult> GetSumAsync(string type)
         {
             return Ok(await _service.GetSumAsync(type));
@@ -158,7 +158,7 @@ namespace Snblog.ControllersRepository
         /// <returns></returns>
         //[Authorize(Roles = "kai")] //角色授权
         [HttpPost("AddAsync")]
-        public async Task<ActionResult<SnArticle>> AddAsync(SnArticle entity)
+        public async Task<ActionResult<Article>> AddAsync(Article entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
@@ -170,7 +170,7 @@ namespace Snblog.ControllersRepository
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        public async Task<IActionResult> UpdateAsync(SnArticle entity)
+        public async Task<IActionResult> UpdateAsync(Article entity)
         {
             var data = await _service.UpdateAsync(entity);
             return Ok(data);
@@ -184,7 +184,7 @@ namespace Snblog.ControllersRepository
         /// <param name="type">更新字段</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
-        public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type)
+        public async Task<IActionResult> UpdatePortionAsync(Article entity, string type)
         {
             return Ok(await _service.UpdatePortionAsync(entity, type));
         }

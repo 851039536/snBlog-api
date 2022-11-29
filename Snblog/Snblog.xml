@@ -68,7 +68,7 @@
             <param name="labelId">标签id</param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnArticleController.AsyInsArticle(Snblog.Models.SnArticle)">
+        <member name="M:Snblog.Controllers.SnArticleController.AsyInsArticle(Snblog.Models.Article)">
             <summary>
             添加数据
             </summary>
@@ -81,7 +81,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Snblog.Controllers.SnArticleController.AysUpArticle(Snblog.Models.SnArticle)">
+        <member name="M:Snblog.Controllers.SnArticleController.AysUpArticle(Snblog.Models.Article)">
             <summary>
             更新数据
             </summary>

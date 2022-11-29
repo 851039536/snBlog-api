@@ -11,19 +11,19 @@ namespace Snblog.Controllers
 {
 
     /// <summary>
-    /// 文章分类
+    /// 片段标签
     /// </summary>
-    [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    public class SnSortController : ControllerBase
+    [Route("snippetTag")]
+    public class SnippeTagController : ControllerBase
     {
-        private readonly ISnSortService _service; //IOC依赖注入
+        private readonly ISnippetTagService _service; //IOC依赖注入
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
-        public SnSortController(ISnSortService service)
+        public SnippeTagController(ISnippetTagService service)
         {
             _service = service;
         }
@@ -31,35 +31,36 @@ namespace Snblog.Controllers
         /// <summary>
         /// 查询总数
         /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetSunAsync")]
-        public async Task<IActionResult> GetCountAsync(bool cache = false)
+        /// <param name="cache">缓存</param>
+        /// <returns>int</returns>
+        [HttpGet("sum")]
+        public async Task<IActionResult> GetSumAsync(bool cache = false)
         {
-            return Ok(await _service.GetCountAsync(cache));
+            return Ok(await _service.GetSumAsync(cache));
         }
         #endregion
+
         #region 查询所有
         /// <summary>
         /// 查询所有
         /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetAllAsync")]
+        /// <param name="cache">缓存</param>
+        /// <returns>list-entity</returns>
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
             return Ok(await _service.GetAllAsync(cache));
         }
-
         #endregion
+
         #region 主键查询
         /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id">主键</param>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetByIdAsync")]
+        /// <param name="cache">缓存</param>
+        /// <returns>entity</returns>
+        [HttpGet("byId")]
         public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
@@ -67,53 +68,55 @@ namespace Snblog.Controllers
         #endregion
 
         #region 分页查询 
-        /// <summary>
-        /// 分页查询 
-        /// </summary>
-        /// <param name="pageIndex">当前页码</param>
-        /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序</param>
-        /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetPagingAsync")]
+            /// <summary>
+            /// 分页查询 
+            /// </summary>
+            /// <param name="pageIndex">当前页码</param>
+            /// <param name="pageSize">每页记录条数</param>
+            /// <param name="isDesc">是否倒序</param>
+            /// <param name="cache">缓存</param>
+            /// <returns>list-entity</returns>
+        [HttpGet("paging")]
         public async Task<IActionResult> GetFyAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
         {
-            return Ok(await _service.GetFyAsync(pageIndex, pageSize, isDesc, cache));
+            return Ok(await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache));
         }
         #endregion
 
-        #region 添加数据 
+        #region 添加
         /// <summary>
-        ///  添加数据 
+        ///  添加 
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        [HttpPost("AddAsync")]
+        /// <param name="entity">实体</param>
+        /// <returns>bool</returns>
+        [HttpPost("add")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<ActionResult<SnSort>> AddAsync(SnSort entity)
+        public async Task<IActionResult> AddAsync(SnippetTag entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
         #endregion
         #region 更新数据
         /// <summary>
-        /// 更新数据 
+        /// 更新
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        [HttpPut("UpdateAsync")]
+        /// <param name="entity">实体</param>
+        /// <returns>bool</returns>
+        [HttpPut("update")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnSort entity)
+        public async Task<IActionResult> UpdateAsync(SnippetTag entity)
         {
             return Ok(await _service.UpdateAsync(entity));
         }
         #endregion
-        #region 删除数据 
+
+        #region 删除
         /// <summary>
-        /// 删除数据 
+        /// 删除
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpDelete("DelAsync")]
+        /// <param name="id">主键</param>
+        /// <returns>bool</returns>
+        [HttpDelete("del")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {

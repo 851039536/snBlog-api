@@ -115,7 +115,7 @@ namespace Snblog.Controllers
         /// 统计标题字数
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetSumAsync")]
+        [HttpGet("GetStrSumAsync")]
         public async Task<IActionResult> GetSumAsync(bool cache)
         {
             return Ok(await _service.GetSumAsync(cache));
