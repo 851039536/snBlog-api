@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
+using Snblog.Enties.Models;
 using Snblog.Enties.ModelsDto;
 using Snblog.IService.IService;
 using Snblog.Repository.Repository;
@@ -18,7 +19,7 @@ namespace Snblog.Service.Service
         private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly IMapper _mapper;
-        private readonly ResDto<SnInterfaceDto> resDto = new();
+        private readonly Dto<SnInterfaceDto> resDto = new();
         public SnInterfaceService(snblogContext service, ICacheUtil cacheutil, IMapper mapper, ILogger<SnInterfaceService> logger = null)
         {
             _service = service;
@@ -147,6 +148,36 @@ namespace Snblog.Service.Service
                 _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + type + pageIndex + pageSize + isDesc + cache, resDto.entityList, cache);
             }
             return resDto.entityList;
+        }
+
+        public async Task<bool> AddAsync(SnInterface entity)
+        {
+            await  _service.AddAsync(entity);
+            return await _service.SaveChangesAsync() > 0;
+        }
+        public async Task<bool> UpdateAsync(SnInterface entity)
+        {
+            _service.SnInterfaces.Update(entity);
+            return await _service.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var reslult = await _service.SnInterfaces.FindAsync(id);
+            if (reslult == null) return false;
+            _service.SnInterfaces.Remove(reslult);//删除单个
+            _service.Remove(reslult);//直接在context上Remove()方法传入model，它会判断类型
+            return await _service.SaveChangesAsync() > 0;
+        }
+
+
+        public async Task<SnInterfaceDto> GetByIdAsync(int id, bool cache)
+        {
+            resDto.entity = _cacheutil.CacheString("SnInterfaceDto_GetByIdAsync=>" + id + cache, resDto.entity, cache);
+            if (resDto.entity == null)
+                resDto.entity = _mapper.Map<SnInterfaceDto>(await _service.SnInterfaces.FindAsync(id));
+                _cacheutil.CacheString("SnInterfaceDto_GetByIdAsync=>" + id + cache, resDto.entity, cache);
+            return resDto.entity;
         }
     }
 }

@@ -16,6 +16,6 @@ namespace Snblog.Enties.ModelsDto
         public bool Identity { get; set; }
 
         public virtual SnInterfaceType Type { get; set; }
-        public virtual SnUser User { get; set; }
+        public virtual User User { get; set; }
     }
 }

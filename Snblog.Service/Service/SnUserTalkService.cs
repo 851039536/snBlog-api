@@ -20,7 +20,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetUserTalk(int id)
         {
-            int da = await CreateService<SnUserTalk>().DeleteAsync(id);
+            int da = await CreateService<SnUserTalk>().DelAsync(id);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -57,7 +57,7 @@ namespace Snblog.Service
 
         public List<SnUserTalk> GetPagingUserTalk(int label, int pageIndex, int pageSize, out int count, bool isDesc)
         {
-            var data = CreateService<SnUserTalk>().Wherepage(s => true, c => c.TalkTime, pageIndex, pageSize, out count, isDesc);
+            var data = CreateService<SnUserTalk>().WherePage(s => true, c => c.TalkTime, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
         }
 

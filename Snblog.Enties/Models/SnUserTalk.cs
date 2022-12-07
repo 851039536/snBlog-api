@@ -15,6 +15,6 @@ namespace Snblog.Enties.Models
         public int? TalkGive { get; set; }
         public int? CommentId { get; set; }
 
-        public virtual SnUser User { get; set; }
+        public virtual User User { get; set; }
     }
 }

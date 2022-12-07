@@ -14,14 +14,14 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
-{
+    {
     public class SnSetBlogService : ISnSetBlogService
     {
         private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnSetBlogService> _logger;
         readonly Res<SnSetblog> res = new();
-        readonly ResDto<SnSetblogDto> resDto = new();
+        readonly Dto<SnSetblogDto> resDto = new();
         private readonly IMapper _mapper;
         public SnSetBlogService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnSetBlogService> logger, IMapper mapper)
         {
@@ -175,7 +175,7 @@ namespace Snblog.Service.Service
             throw new NotImplementedException();
         }
 
-        public Task<List<SnArticleDto>> GetContainsAsync(string name, bool cache)
+        public Task<List<ArticleDto>> GetContainsAsync(string name, bool cache)
         {
             throw new NotImplementedException();
         }
@@ -197,27 +197,27 @@ namespace Snblog.Service.Service
             return resDto.entity;
         }
 
-        public Task<List<SnArticle>> GetTypeIdAsync(int sortId, bool cache)
+        public Task<List<Article>> GetTypeIdAsync(int sortId, bool cache)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<SnArticle>> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
+        public Task<List<Article>> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<SnArticle>> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc, bool cache)
+        public Task<List<Article>> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc, bool cache)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
+        public Task<List<Article>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<SnArticle>> GetTagAsync(int tag, bool isDesc, bool cache)
+        public Task<List<Article>> GetTagAsync(int tag, bool isDesc, bool cache)
         {
             throw new NotImplementedException();
         }

@@ -18,7 +18,7 @@ namespace Snblog.Service.Service
         private readonly CacheUtil _cacheutil;
         private readonly snblogContext _service;//DB
         readonly Res<SnOne> res = new();
-        readonly ResDto<SnOneDto> resDto = new();
+        readonly Dto<SnOneDto> resDto = new();
         private readonly ILogger<SnOneService> _logger;
 
         private readonly IMapper _mapper;

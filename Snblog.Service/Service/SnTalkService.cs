@@ -13,7 +13,7 @@ namespace Snblog.Service.Service
     {
         private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
-        // private int result_Int;
+        // private int rInt;
         //  private List<SnTalk> result_List = default;
 
         public SnTalkService(snblogContext service, ICacheUtil cacheutil)

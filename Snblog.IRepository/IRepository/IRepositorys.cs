@@ -106,7 +106,7 @@ namespace Snblog.IRepository.IRepository
         /// 删除 - 通过主键ID删除
         /// </summary>
         /// <param name="id">主键ID</param>
-        Task<int> DeleteAsync(object id);
+        Task<int> DelAsync(object id);
         int Delete(object id);
         /// <summary>
         /// 批量删除 - 通过条件删除
@@ -230,10 +230,19 @@ namespace Snblog.IRepository.IRepository
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="count">返回总条数</param>
         /// <param name="isDesc">是否倒序</param>
+        IEnumerable<T> WherePage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TOrder">排序约束</typeparam>
+        /// <param name="where">过滤条件</param>
+        /// <param name="order">排序条件</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
         /// <returns></returns>
-        IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc);
 
-        Task<IEnumerable<T>> WherepageAsync<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, bool isDesc);
+        Task<IEnumerable<T>> WherePageAsync<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, bool isDesc);
 
         /// <summary>
         /// 条件分页查询 - 支持排序

@@ -13,6 +13,6 @@ namespace Snblog.Enties.Models
         public DateTime TimeCreate { get; set; }
         public DateTime TimeModified { get; set; }
 
-        public virtual SnUser User { get; set; }
+        public virtual User User { get; set; }
     }
 }

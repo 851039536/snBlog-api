@@ -139,8 +139,8 @@ namespace Snblog.Service.AngleSharp
 
         public static string SqlBackups(string path)
         {
-            //string constring = "server=" + ip + ";user=" + user + ";pwd=" + pwd + ";database=" + database + ";";
-            string constring = "server=localhost;user= root;pwd= woshishui;database=snblog;";
+            //string constring = "server=" + ip + ";User=" + User + ";pwd=" + pwd + ";database=" + database + ";";
+            string constring = "server=localhost;User= root;pwd= woshishui;database=snblog;";
             string time1 = DateTime.Now.ToString("d").Replace("/", "-");
             string file = default;
             if (path=="null")
@@ -165,7 +165,7 @@ namespace Snblog.Service.AngleSharp
 
         public static string SqlRestore(string ip, string user, string pwd, string database)
         {
-            string constring = "server=" + ip + ";user=" + user + ";pwd=" + pwd + ";database=" + database + ";";
+            string constring = "server=" + ip + ";User=" + user + ";pwd=" + pwd + ";database=" + database + ";";
             string file = ".//mysql/" + "blog.sql";
             using (MySqlConnection conn = new(constring))
             {

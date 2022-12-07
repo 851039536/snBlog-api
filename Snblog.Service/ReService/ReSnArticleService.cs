@@ -13,7 +13,7 @@ namespace Snblog.Service.ReService
     {
         private readonly CacheUtil _cacheutil;
         private int result_Int;
-        private List<SnArticle> result_List = null;
+        private List<Article> result_List = null;
 
         public ReSnArticleService(ICacheUtil cacheUtil, IRepositoryFactory repositoryFactory, IConcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
         {
@@ -25,7 +25,7 @@ namespace Snblog.Service.ReService
             result_Int = _cacheutil.CacheNumber1("CountAsync", result_Int);
             if (result_Int == 0)
             {
-                result_Int = await CreateService<SnArticle>().CountAsync();
+                result_Int = await CreateService<Article>().CountAsync();
                 _cacheutil.CacheNumber1("CountAsync", result_Int);
             }
             return result_Int;
@@ -37,36 +37,36 @@ namespace Snblog.Service.ReService
             result_Int = _cacheutil.CacheNumber1("CountAsync" + type, result_Int);
             if (result_Int == 0)
             {
-                result_Int = await CreateService<SnArticle>().CountAsync(c => c.LabelId == type);//获取数据值
+                result_Int = await CreateService<Article>().CountAsync(c => c.TypeId == type);//获取数据值
                 _cacheutil.CacheNumber1("CountAsync" + type, result_Int);//设置缓存值
             }
             return result_Int;
         }
 
-        public async Task<List<SnArticle>> GetAllAsync()
+        public async Task<List<Article>> GetAllAsync()
         {
             result_List = _cacheutil.CacheString1("GetAllSnArticleAsync", result_List);
             if (result_List == null)
             {
-                result_List = await CreateService<SnArticle>().GetAllAsync();
+                result_List = await CreateService<Article>().GetAllAsync();
                 _cacheutil.CacheString1("GetAllSnArticleAsync", result_List);
             }
             return result_List;
         }
 
-        public async Task<SnArticle> GetByIdAsync(int id)
+        public async Task<Article> GetByIdAsync(int id)
         {
-            SnArticle result = null;
+            Article result = null;
             result = _cacheutil.CacheString1("GetByIdAsync" + id, result);
             if (result == null)
             {
-                result = await CreateService<SnArticle>().GetByIdAsync(id);
+                result = await CreateService<Article>().GetByIdAsync(id);
                 _cacheutil.CacheString1("GetByIdAsync" + id, result);
             }
             return result;
         }
 
-        public async Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc)
+        public async Task<List<Article>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc)
         {
             result_List = _cacheutil.CacheString1("ReGetFyTitleAsync" + pageIndex + pageSize + isDesc, result_List); //设置缓存
             if (result_List == null)
@@ -84,12 +84,12 @@ namespace Snblog.Service.ReService
         /// <param name="pageSize"></param>
         /// <param name="isDesc"></param>
         /// <returns></returns>
-        private async Task<List<SnArticle>> GetFyTitle(int pageIndex, int pageSize, bool isDesc)
+        private async Task<List<Article>> GetFyTitle(int pageIndex, int pageSize, bool isDesc)
         {
-            var data = await Task.Run(() => CreateService<SnArticle>().Wherepage(s => true, c => c.Id, pageIndex, pageSize, out _, isDesc).Select(s => new
+            var data = await Task.Run(() => CreateService<Article>().WherePage(s => true, c => c.Id, pageIndex, pageSize, out _, isDesc).Select(s => new
             {
                 s.Id,
-                s.Title,
+                s.Name,
                 s.CommentId,
                 s.Give,
                 s.Read,
@@ -98,13 +98,13 @@ namespace Snblog.Service.ReService
                 s.UserId
             }).ToList());
             //解决方案二：foreach遍历
-            var list = new List<SnArticle>();
+            var list = new List<Article>();
             foreach (var t in data)
             {
-                var s = new SnArticle
+                var s = new Article
                 {
                     Id = t.Id,
-                    Title = t.Title,
+                    Name = t.Name,
                     CommentId = t.CommentId,
                     Give = t.Give,
                     Read = t.Read,
@@ -117,12 +117,12 @@ namespace Snblog.Service.ReService
             return list;
         }
 
-        public async Task<List<SnArticle>> GetLabelAllAsync(int id)
+        public async Task<List<Article>> GetLabelAllAsync(int id)
         {
             result_List = _cacheutil.CacheString1("GetLabelAllAsync" + id, result_List);
             if (result_List == null)
             {
-                result_List = await CreateService<SnArticle>().Where(s => s.LabelId == id).ToListAsync();
+                result_List = await CreateService<Article>().Where(s => s.TypeId == id).ToListAsync();
                 _cacheutil.CacheString1("GetLabelAllAsync" + id, result_List);
             }
             return result_List;
@@ -151,7 +151,7 @@ namespace Snblog.Service.ReService
             {
                 case "read":
 
-                    var read = await CreateService<SnArticle>().Where(s => true).Select(c => c.Read).ToListAsync();
+                    var read = await CreateService<Article>().Where(s => true).Select(c => c.Read).ToListAsync();
                     foreach (var i in read)
                     {
                             var item = i;
@@ -159,14 +159,14 @@ namespace Snblog.Service.ReService
                     }
                     break;
                 case "text":
-                    var text = await CreateService<SnArticle>().Where(s => true).Select(c => c.Text).ToListAsync();
+                    var text = await CreateService<Article>().Where(s => true).Select(c => c.Text).ToListAsync();
                     for (int i = 0; i < text.Count; i++)
                     {
                         num += text[i].Length;
                     }
                     break;
                 case "give":
-                    var give = await CreateService<SnArticle>().Where(s => true).Select(c => c.Give).ToListAsync();
+                    var give = await CreateService<Article>().Where(s => true).Select(c => c.Give).ToListAsync();
                     foreach (var i in give)
                     {
                             var item = i;
@@ -178,7 +178,7 @@ namespace Snblog.Service.ReService
             return num;
         }
 
-        public async Task<List<SnArticle>> GetTypeFyTextAsync(int type, int pageIndex, int pageSize, bool isDesc)
+        public async Task<List<Article>> GetTypeFyTextAsync(int type, int pageIndex, int pageSize, bool isDesc)
         {
             result_List = _cacheutil.CacheString1("ReGetTypeFyTextAsync" + type + pageIndex + isDesc, result_List);
             if (result_List == null)
@@ -190,21 +190,21 @@ namespace Snblog.Service.ReService
 
         }
 
-        private async Task<List<SnArticle>> GetTypeFy(int type, int pageIndex, int pageSize, bool isDesc)
+        private async Task<List<Article>> GetTypeFy(int type, int pageIndex, int pageSize, bool isDesc)
         {
             if (type == 00)
             {
-                var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<Article>().WherePageAsync(s => true, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
             else
             {
-                var data = await CreateService<SnArticle>().WherepageAsync(s => s.LabelId == type, c => c.Id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<Article>().WherePageAsync(s => s.TypeId == type, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
         }
 
-        public async Task<List<SnArticle>> GetFyTypeorderAsync(int type, int pageIndex, int pageSize, string order, bool isDesc)
+        public async Task<List<Article>> GetFyTypeorderAsync(int type, int pageIndex, int pageSize, string order, bool isDesc)
         {
             result_List = _cacheutil.CacheString1("ReGetFyTypeorderAsync" + type + pageIndex + pageSize + order + isDesc, result_List);
             if (result_List == null)
@@ -216,37 +216,37 @@ namespace Snblog.Service.ReService
 
         }
 
-        private async Task<List<SnArticle>> GetFyTypeorder(int type, int pageIndex, int pageSize, string order, bool isDesc)
+        private async Task<List<Article>> GetFyTypeorder(int type, int pageIndex, int pageSize, string order, bool isDesc)
         {
             if (type == 00)//表示查所有
             {
                 switch (order)
                 {
                     case "read":
-                        var data = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Read, pageIndex, pageSize, isDesc);
+                        var data = await CreateService<Article>().WherePageAsync(s => true, c => c.Read, pageIndex, pageSize, isDesc);
                         return data.ToList();
                     case "data":
-                        var data1 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.TimeCreate, pageIndex, pageSize, isDesc);
+                        var data1 = await CreateService<Article>().WherePageAsync(s => true, c => c.TimeCreate, pageIndex, pageSize, isDesc);
                         return data1.ToList();
                     case "give":
-                        var data2 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Give, pageIndex, pageSize, isDesc);
+                        var data2 = await CreateService<Article>().WherePageAsync(s => true, c => c.Give, pageIndex, pageSize, isDesc);
                         return data2.ToList();
                     case "comment":
-                        var data4 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.CommentId, pageIndex, pageSize, isDesc);
+                        var data4 = await CreateService<Article>().WherePageAsync(s => true, c => c.CommentId, pageIndex, pageSize, isDesc);
                         return data4.ToList();
                     default:
-                        var data5 = await CreateService<SnArticle>().WherepageAsync(s => true, c => c.Id, pageIndex, pageSize, isDesc);
+                        var data5 = await CreateService<Article>().WherePageAsync(s => true, c => c.Id, pageIndex, pageSize, isDesc);
                         return data5.ToList();
                 }
             }
             else
             {
-                var data = await CreateService<SnArticle>().WherepageAsync(s => s.SortId == type, c => c.Id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<Article>().WherePageAsync(s => s.TypeId == type, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
         }
 
-        public async Task<List<SnArticle>> GetTagtextAsync(int tag, bool isDesc)
+        public async Task<List<Article>> GetTagtextAsync(int tag, bool isDesc)
         {
             result_List = _cacheutil.CacheString1("ReGetTagtextAsync" + tag + isDesc, result_List); //设置缓存
             if (result_List == null)
@@ -257,24 +257,24 @@ namespace Snblog.Service.ReService
             return result_List;
         }
 
-        private async Task<List<SnArticle>> GetTagtext(int tag, bool isDesc)
+        private async Task<List<Article>> GetTagtext(int tag, bool isDesc)
         {
-            var data = await CreateService<SnArticle>().Where(s => s.LabelId == tag, c => c.Id, isDesc).Select(s => new
+            var data = await CreateService<Article>().Where(s => s.TypeId == tag, c => c.Id, isDesc).Select(s => new
             {
                 s.Id,
-                s.Title,
+                s.Name,
                 s.Sketch,
                 s.TimeCreate,
                 s.Give,
                 s.Read
             }).ToListAsync();
-            var list = new List<SnArticle>();
+            var list = new List<Article>();
             foreach (var t in data)
             {
-                var s = new SnArticle
+                var s = new Article
                 {
                     Id = t.Id,
-                    Title = t.Title,
+                    Name = t.Name,
                     Sketch = t.Sketch,
                     TimeCreate = t.TimeCreate,
                     Give = t.Give,
@@ -286,14 +286,14 @@ namespace Snblog.Service.ReService
 
         }
 
-        public async Task<SnArticle> AddAsync(SnArticle entity)
+        public async Task<Article> AddAsync(Article entity)
         {
-            return await CreateService<SnArticle>().AddAsync(entity);
+            return await CreateService<Article>().AddAsync(entity);
         }
 
-        public async Task<string> UpdateAsync(SnArticle entity)
+        public async Task<string> UpdateAsync(Article entity)
         {
-            int result = await CreateService<SnArticle>().UpdateAsync(entity);
+            int result = await CreateService<Article>().UpdateAsync(entity);
 
             static string Func(int data) => data == 1 ? "更新成功" : "更新失败";
             return Func(result);
@@ -301,14 +301,14 @@ namespace Snblog.Service.ReService
 
         public async Task<string> DeleteAsync(int id)
         {
-            int resultId = await Task.Run(() => CreateService<SnArticle>().DeleteAsync(id));
+            int resultId = await Task.Run(() => CreateService<Article>().DelAsync(id));
             string result = resultId == 1 ? "删除成功" : "删除失败";
             return result;
         }
 
-        public async Task<bool> UpdatePortionAsync(SnArticle snArticle, string name)
+        public async Task<bool> UpdatePortionAsync(Article Article, string name)
         {
-            var date = await CreateService<SnArticle>().UpdateAsync1(snArticle, true, name);
+            var date = await CreateService<Article>().UpdateAsync1(Article, true, name);
 
             return date;
         }

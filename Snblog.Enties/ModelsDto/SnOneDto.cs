@@ -21,6 +21,6 @@ namespace Snblog.Enties.ModelsDto
         public DateTime TimeModified { get; set; }
 
         public virtual SnOneType Type { get; set; }
-        public virtual SnUser User { get; set; }
+        public virtual User User { get; set; }
     }
 }

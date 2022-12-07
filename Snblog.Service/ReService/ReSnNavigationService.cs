@@ -32,7 +32,7 @@ namespace Snblog.Service.ReService
         }
 
         /// <summary>
-        /// 主键查询
+        /// BYID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -48,7 +48,7 @@ namespace Snblog.Service.ReService
         }
 
         /// <summary>
-        /// 查询总数
+        /// SUM
         /// </summary>
         /// <returns></returns>
         public async Task<int> GetCountAsync()
@@ -155,19 +155,19 @@ namespace Snblog.Service.ReService
         /// </summary>
         public async Task<bool> DeleteAsync(int id)
         {
-            return  await CreateService<SnNavigation>().DeleteAsync(id)>0;
+            return  await CreateService<SnNavigation>().DelAsync(id)>0;
         }
 
         private async Task<List<SnNavigation>> FyAll(string type, int pageIndex, int pageSize, bool isDesc)
         {
             if (type == "all")
             {
-                var data = await CreateService<SnNavigation>().WherepageAsync(s => s.Type.Title != null, c => c.Id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnNavigation>().WherePageAsync(s => s.Type.Title != null, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
             else
             {
-                var data = await CreateService<SnNavigation>().WherepageAsync(s => s.Type.Title == type, c => c.Id, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnNavigation>().WherePageAsync(s => s.Type.Title == type, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
         }

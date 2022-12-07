@@ -175,8 +175,8 @@ namespace Snblog
             services.AddScoped<IConcardContext, snblogContext>();//db
             services.AddScoped<IArticleService, ArticleService>();//ioc
             services.AddScoped<ISnNavigationService, SnNavigationService>();
-            services.AddScoped<ISnLabelsService, SnLabelsService>();
-            services.AddScoped<ISnSortService, SnSortService>();
+            services.AddScoped<IArticleTagService,ArticleTagService>();
+            services.AddScoped<IArticleTypeService, ArticleTypeService>();
             services.AddScoped<ISnOneService, SnOneService>();
             services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
@@ -195,11 +195,13 @@ namespace Snblog
             services.AddScoped<ISnSetBlogService, SnSetBlogService>();
             services.AddScoped<ISnippetService, SnippetService>();
             services.AddScoped<ISnippetTagService,SnippetTagService>();
+            services.AddScoped<ISnippetTypeService,SnippetTypeService>();
+            services.AddScoped<ISnippetLabelService,SnippetLabelService>();
             //缓存-整个应用程序生命周期以内只创建一个实例 
             services.AddSingleton<ICacheManager, CacheManager>();
 
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
-            services.AddScoped<IReSnLabelsService, ReSnLabelsService>();
+            //services.AddScoped<IService.IReService.IArticleTagService,ReSnLabelsService>();
             services.AddScoped<IReSnNavigationService, ReSnNavigationService>();
             services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
 

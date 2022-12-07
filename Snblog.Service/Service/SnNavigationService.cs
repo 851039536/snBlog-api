@@ -19,7 +19,7 @@ namespace Snblog.Service.Service
         private readonly snblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private readonly Res<SnNavigation> res = new();
-        private readonly ResDto<SnNavigationDto> resDto = new();
+        private readonly Dto<SnNavigationDto> resDto = new();
         private readonly ILogger<SnNavigationService> _logger;
         private readonly IMapper _mapper;
         public SnNavigationService(snblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger, IMapper mapper)
@@ -170,7 +170,7 @@ namespace Snblog.Service.Service
         }
 
         /// <summary>
-        /// 删除
+        /// DEL
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

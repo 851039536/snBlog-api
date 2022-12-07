@@ -4,7 +4,7 @@ using Snblog.Enties.Models;
 using Snblog.Enties.ModelsDto;
 
 namespace Snblog.IService.IService
-{
+    {
     /// <summary>
     /// 业务类接口
     /// </summary>
@@ -24,7 +24,7 @@ namespace Snblog.IService.IService
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否缓存</param>
         /// <returns></returns>
-        Task<List<SnArticleDto>> GetContainsAsync(string name, bool cache);
+        Task<List<ArticleDto>> GetContainsAsync(string name, bool cache);
         /// <summary>
         /// 读取[字段/阅读/点赞]数量
         /// </summary>
@@ -46,7 +46,7 @@ namespace Snblog.IService.IService
         /// <param name="sortId"></param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnArticle>> GetTypeIdAsync(int sortId,bool cache);
+        Task<List<Article>> GetTypeIdAsync(int sortId,bool cache);
 
         /// <summary>
         /// 分页查询
@@ -69,7 +69,7 @@ namespace Snblog.IService.IService
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">是否倒序</param>
         /// /// <param name="cache">是否开启缓存</param>
-        Task< List<SnArticle>> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache);
+        Task< List<Article>> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc,bool cache);
         /// <summary>
         /// 条件分页查询
         /// </summary>
@@ -80,7 +80,7 @@ namespace Snblog.IService.IService
         /// <param name="name">排序条件</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnArticle>> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc,bool cache);
+        Task<List<Article>> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc,bool cache);
 
         /// <summary>
         /// 查询文章(无文章内容 缓存)
@@ -90,7 +90,7 @@ namespace Snblog.IService.IService
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnArticle>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc,bool cache);
+        Task<List<Article>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc,bool cache);
 
         /// <summary>
         /// 按标签id查询
@@ -99,7 +99,7 @@ namespace Snblog.IService.IService
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnArticle>> GetTagAsync(int tag,bool isDesc,bool cache);
+        Task<List<Article>> GetTagAsync(int tag,bool isDesc,bool cache);
 
         /// <summary>
         /// 查询分类总数
@@ -137,7 +137,7 @@ namespace Snblog.IService.IService
       /// <summary>
       /// 更新部分列[comment give read]
       /// </summary>
-      /// <param name="snArticle"></param>
+      /// <param name="Article"></param>
       /// <param name="type">更新的字段</param>
       /// <returns></returns>
         Task<bool> UpdatePortionAsync(SnSetblogDto entity, string type);

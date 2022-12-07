@@ -9,12 +9,12 @@ namespace Snblog.Enties.Models
     {
         public SnVideoType()
         {
-            SnVideos = new HashSet<SnVideo>();
+            Videos = new HashSet<Video>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<SnVideo> SnVideos { get; set; }
+        public virtual ICollection<Video> Videos { get; set; }
     }
 }

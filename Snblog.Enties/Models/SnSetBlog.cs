@@ -15,6 +15,6 @@ namespace Snblog.Enties.Models
         public int UserId { get; set; }
 
         public virtual SnSetblogType Type { get; set; }
-        public virtual SnUser User { get; set; }
+        public virtual User User { get; set; }
     }
 }
