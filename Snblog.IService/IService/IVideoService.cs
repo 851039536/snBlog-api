@@ -83,7 +83,7 @@ namespace Snblog.IService
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间  按id排序]</param>
         /// <returns></returns>
-        Task<List<VideoDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
+        Task<List<VideoDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,  bool isDesc, bool cache);
 
         /// <summary>
         /// 读取[字段/阅读/点赞]数量

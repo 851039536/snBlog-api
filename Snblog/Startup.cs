@@ -169,7 +169,6 @@ namespace Snblog
             #region DI依赖注入配置。
 
 
-
             // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();//泛型工厂
             services.AddScoped<IConcardContext, snblogContext>();//db
