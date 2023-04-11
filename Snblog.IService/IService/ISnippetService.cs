@@ -18,8 +18,10 @@ namespace Snblog.IService.IService
         /// <param name="type">查询参数(多条件以','分割)</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">缓存</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
         /// <returns>list-entity</returns>
-        Task<List<SnippetDto>> GetContainsAsync(int identity,string type,string name,bool cache);
+        Task<List<SnippetDto>> GetContainsAsync(int identity,string type,string name,bool cache,int pageIndex,int pageSize);
         /// <summary>
         /// 内容统计
         /// </summary>

@@ -11,7 +11,7 @@ namespace Snblog.Enties.Models
         public User()
         {
             Articles = new HashSet<Article>();
-            SnInterfaces = new HashSet<SnInterface>();
+            Interfaces = new HashSet<Interface>();
             SnLeaves = new HashSet<SnLeave>();
             SnNavigations = new HashSet<SnNavigation>();
             SnOnes = new HashSet<SnOne>();
@@ -35,7 +35,7 @@ namespace Snblog.Enties.Models
         public string Brief { get; set; }
 
         public virtual ICollection<Article> Articles { get; set; }
-        public virtual ICollection<SnInterface> SnInterfaces { get; set; }
+        public virtual ICollection<Interface> Interfaces { get; set; }
         public virtual ICollection<SnLeave> SnLeaves { get; set; }
         public virtual ICollection<SnNavigation> SnNavigations { get; set; }
         public virtual ICollection<SnOne> SnOnes { get; set; }

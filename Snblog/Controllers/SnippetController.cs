@@ -54,12 +54,14 @@ namespace Snblog.Controllers
         /// <param name="type">查询参数(多条件以','分割)</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">缓存</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
         /// <returns>list-entity</returns>
         [HttpGet("contains")]
-        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
+        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false,int pageIndex =1,int pageSize = 10)
         {
-            if (name == null) return null;
-            return Ok(await _service.GetContainsAsync(identity, type, name, cache));
+            if (name == null || name.Length==1) return Ok(new { message = "请输入正确值" }); ;
+            return Ok(await _service.GetContainsAsync(identity, type, name, cache, pageIndex, pageSize));
         }
         #endregion
 

@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 namespace Snblog.ControllersAngleSharp
     {
 
-    /// <summary>
-    /// AngleSharp
-    /// </summary>
-    [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "AngleSharp")] //版本控制
+    //[Route("api/[controller]")]
+    //[ApiExplorerSettings(GroupName = "AngleSharp")] //版本控制
+    //[ApiController]
+    [ApiExplorerSettings(GroupName = "AngleSharp")] 
     [ApiController]
+    [Route("angleSharp")]
     public class AngleSharpController : ControllerBase
     {
         private readonly HotNewsAngleSharp _angle; //IOC依赖注入
@@ -40,7 +40,11 @@ namespace Snblog.ControllersAngleSharp
         /// <param name="selectorall">selectorall：div.post-item-text > a</param>
         /// <returns></returns>
         [HttpGet("GeneralCrawl")]
-        public async Task<IActionResult> GeneralCrawl(string url, string selector, string selectorall) => Ok(await _angle.GeneralCrawl(url, selector, selectorall));
+        public async Task<IActionResult> GeneralCrawl(string url,string selector,string selectorall)
+        {
+            return Ok(await _angle.GeneralCrawl(url,selector,selectorall));
+        }
+
         /// <summary>
         /// 读取博客园最新内容（如选项为空读取默认值）此项为参考示例
         /// </summary>
@@ -48,10 +52,10 @@ namespace Snblog.ControllersAngleSharp
         /// <param name="selector">selector：#post_list</param>
         /// <param name="selectorall">selectorall：div.post-item-text > a</param>
         /// <returns></returns>
-        [HttpGet("Cnblogs")]
-        public async Task<IActionResult> Cnblogs(string url, string selector, string selectorall)
+        [HttpGet("GetCnblogs")]
+        public async Task<IActionResult>GetCnblogs(string url, string selector, string selectorall)
         {
-            return Ok(await _angle.Cnblogs(url, selector, selectorall));
+            return Ok(await _angle.GetCnblogs(url, selector, selectorall));
         }
         /// <summary>
         /// 读取项目名称
@@ -72,7 +76,7 @@ namespace Snblog.ControllersAngleSharp
         /// </summary>
         /// <param name="path">备份路径默认null</param>
         /// <returns></returns>
-        [HttpGet("SqlBackups")]
+        [HttpPost("SqlBackups")]
         public ActionResult SqlBackups(string path ="null")
         {
             return Ok(HotNewsAngleSharp.SqlBackups(path));
@@ -85,7 +89,7 @@ namespace Snblog.ControllersAngleSharp
         /// <param name="pwd"></param>
         /// <param name="database"></param>
         /// <returns></returns>
-        [HttpGet("SqlRestore")]
+        [HttpPost("SqlRestore")]
         public ActionResult SqlRestore(string ip = "localhost", string user = "root", string pwd = "woshishui", string database = "snblog")
         {
             return Ok(HotNewsAngleSharp.SqlRestore(ip, user, pwd, database));

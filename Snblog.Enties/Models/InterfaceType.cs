@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace Snblog.Enties.Models
 {
-    public partial class SnInterfaceType
+    public partial class InterfaceType
     {
-        public SnInterfaceType()
+        public InterfaceType()
         {
-            SnInterfaces = new HashSet<SnInterface>();
+            Interfaces = new HashSet<Interface>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<SnInterface> SnInterfaces { get; set; }
+        public virtual ICollection<Interface> Interfaces { get; set; }
     }
 }

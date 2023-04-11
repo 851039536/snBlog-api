@@ -1,30 +1,28 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Snblog.Enties.Models;
 using Snblog.IRepository;
 
 #nullable disable
 
 namespace Snblog.Repository.Repository
-    {
+{
     public partial class snblogContext : DbContext, IConcardContext
-        {
+    {
         public snblogContext()
-            {
-            }
+        {
+        }
 
         public snblogContext(DbContextOptions<snblogContext> options)
             : base(options)
-            {
-            }
+        {
+        }
 
         public virtual DbSet<Article> Articles { get; set; }
         public virtual DbSet<ArticleTag> ArticleTags { get; set; }
         public virtual DbSet<ArticleType> ArticleTypes { get; set; }
+        public virtual DbSet<Interface> Interfaces { get; set; }
+        public virtual DbSet<InterfaceType> InterfaceTypes { get; set; }
         public virtual DbSet<SnComment> SnComments { get; set; }
-        public virtual DbSet<SnInterface> SnInterfaces { get; set; }
-        public virtual DbSet<SnInterfaceType> SnInterfaceTypes { get; set; }
         public virtual DbSet<SnLeave> SnLeaves { get; set; }
         public virtual DbSet<SnNavigation> SnNavigations { get; set; }
         public virtual DbSet<SnNavigationType> SnNavigationTypes { get; set; }
@@ -48,10 +46,10 @@ namespace Snblog.Repository.Repository
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
 
-    
+   
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-            {
+        {
             modelBuilder.HasCharSet("utf8")
                 .UseCollation("utf8_general_ci");
 
@@ -191,6 +189,69 @@ namespace Snblog.Repository.Repository
                     .HasComment("分类名称");
             });
 
+            modelBuilder.Entity<Interface>(entity => {
+                entity.ToTable("interface");
+
+                entity.HasIndex(e => e.TypeId,"type_id");
+
+                entity.HasIndex(e => e.UserId,"user_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Identity)
+                    .HasColumnName("identity")
+                    .HasComment("显示隐藏");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("name")
+                    .HasComment("标题");
+
+                entity.Property(e => e.Path)
+                    .IsRequired()
+                    .HasMaxLength(80)
+                    .HasColumnName("path")
+                    .HasComment("路径");
+
+                entity.Property(e => e.TypeId)
+                    .HasColumnType("int(5)")
+                    .HasColumnName("type_id")
+                    .HasComment("类别");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnType("int(5)")
+                    .HasColumnName("user_id")
+                    .HasComment("用户");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.Interfaces)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("type");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Interfaces)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("interface_ibfk_2");
+            });
+
+            modelBuilder.Entity<InterfaceType>(entity => {
+                entity.ToTable("interface_type");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
+            });
+
             modelBuilder.Entity<SnComment>(entity => {
                 entity.ToTable("sn_comments");
 
@@ -224,69 +285,6 @@ namespace Snblog.Repository.Repository
                     .HasColumnType("int(11)")
                     .HasColumnName("user_id")
                     .HasComment("用户id");
-            });
-
-            modelBuilder.Entity<SnInterface>(entity => {
-                entity.ToTable("sn_interface");
-
-                entity.HasIndex(e => e.TypeId,"type_id");
-
-                entity.HasIndex(e => e.UserId,"user_id");
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id");
-
-                entity.Property(e => e.Identity)
-                    .HasColumnName("identity")
-                    .HasComment("显示隐藏");
-
-                entity.Property(e => e.Path)
-                    .IsRequired()
-                    .HasMaxLength(80)
-                    .HasColumnName("path")
-                    .HasComment("路径");
-
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("title")
-                    .HasComment("标题");
-
-                entity.Property(e => e.TypeId)
-                    .HasColumnType("int(5)")
-                    .HasColumnName("type_id")
-                    .HasComment("类别");
-
-                entity.Property(e => e.UserId)
-                    .HasColumnType("int(5)")
-                    .HasColumnName("user_id")
-                    .HasComment("用户");
-
-                entity.HasOne(d => d.Type)
-                    .WithMany(p => p.SnInterfaces)
-                    .HasForeignKey(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("type");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.SnInterfaces)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("sn_interface_ibfk_2");
-            });
-
-            modelBuilder.Entity<SnInterfaceType>(entity => {
-                entity.ToTable("sn_interface_type");
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<SnLeave>(entity => {
@@ -365,7 +363,7 @@ namespace Snblog.Repository.Repository
                     .HasComment("导航标题");
 
                 entity.Property(e => e.TypeId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("int(3)")
                     .HasColumnName("type_id")
                     .HasComment("分类");
 
@@ -376,7 +374,7 @@ namespace Snblog.Repository.Repository
                     .HasComment("链接路径");
 
                 entity.Property(e => e.UserId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("int(3)")
                     .HasColumnName("user_id")
                     .HasComment("用户");
 
@@ -912,6 +910,9 @@ namespace Snblog.Repository.Repository
             modelBuilder.Entity<SnippetLabel>(entity => {
                 entity.ToTable("snippet_label");
 
+                entity.HasIndex(e => e.Name,"name")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .ValueGeneratedNever()
@@ -1073,8 +1074,8 @@ namespace Snblog.Repository.Repository
             });
 
             OnModelCreatingPartial(modelBuilder);
-            }
+        }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-        }
     }
+}

@@ -15,18 +15,15 @@ namespace Snblog.Service.AngleSharp
             _logger = logger;
         }
 
-        public async Task<List<string>> Cnblogs(string url, string selector, string selectorall)
+        public async Task<List<string>> GetCnblogs(string url,string selector,string selectorall)
         {
-            if (url == null && selector == null && selectorall == null)
-            {
+            if (url == null && selector == null && selectorall == null) {
                 url = "https://www.cnblogs.com/";
                 selector = "#post_list";
                 selectorall = "div.post-item-text > a";
-                _logger.LogInformation("Cnblogs 默认赋值");
-
+                _logger.LogInformation("GetCnblogs 默认赋值");
             }
-            List<string> resultData = await Reptile(url, selector, selectorall);
-            return resultData;
+            return await Reptile(url,selector,selectorall);
         }
 
         /// <summary>
@@ -36,16 +33,13 @@ namespace Snblog.Service.AngleSharp
         /// <param name="selector">信息头</param>
         /// <param name="selectorall">信息具体内容</param>
         /// <returns></returns>
-        public async Task<List<string>> GeneralCrawl(string url, string selector, string selectorall)
+        public async Task<List<string>> GeneralCrawl(string url,string selector,string selectorall)
         {
             List<string> resultData = new();
-            if (url == null && selector == null && selectorall == null)
-            {
+            if (url == null && selector == null && selectorall == null) {
                 resultData.Add("内容不能为空");
-            }
-            else
-            {
-                resultData = await Reptile(url, selector, selectorall);
+            } else {
+                resultData = await Reptile(url,selector,selectorall);
             }
             return resultData;
         }
@@ -63,49 +57,38 @@ namespace Snblog.Service.AngleSharp
 
             return "1";
         }
-        private async Task<List<string>> Reptile(string url, string selector, string selectorall)
+        private async Task<List<string>> Reptile(string url,string selector,string selectorall)
         {
             int num = 1;
-            List<string> resultData = new();
-            // 设置配置以支持文档加载
+            List<string> rData = new();
+            // 设置配置以支持文档加载 //// 建立 Browser 的配置
             var config = Configuration.Default.WithDefaultLoader();
             // 地址
             var urls = url;
             // 请求
             var document = await BrowsingContext.New(config).OpenAsync(urls);
-            if (selector != null)
-            {
+            if (selector != null) {
                 // 根据css选择器获取html元素
                 var container = document.QuerySelector(selector);
                 var matches = container.QuerySelectorAll(selectorall);
 
-                foreach (var item in matches)
-                {
-                    if (num <= 10)
-                    {
+                foreach (var item in matches) {
+                    if (num <= 10) {
                         num++;
-                        resultData.Add(item.InnerHtml + "-" + item.GetAttribute("href"));
+                        rData.Add(item.InnerHtml + "-" + item.GetAttribute("href"));
                     }
-
                 }
-            }
-            else
-            {
+            } else {
                 var matches = document.QuerySelectorAll(selectorall);
-                foreach (var item in matches)
-                {
-
-                    if (num <= 10)
-                    {
+                foreach (var item in matches) {
+                    if (num <= 10) {
                         num++;
                         _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
-                        resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
+                        rData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
                     }
-
                 }
             }
-
-            return resultData;
+            return rData;
         }
 
         public async Task<List<string>> GiteeItem()
@@ -122,8 +105,7 @@ namespace Snblog.Service.AngleSharp
             var matches = container.QuerySelectorAll("div.header > a");
 
             // We are only interested in the text - select it with LINQ
-            foreach (var item in matches)
-            {
+            foreach (var item in matches) {
                 _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
                 resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
             }
@@ -141,34 +123,29 @@ namespace Snblog.Service.AngleSharp
         {
             //string constring = "server=" + ip + ";User=" + User + ";pwd=" + pwd + ";database=" + database + ";";
             string constring = "server=localhost;User= root;pwd= woshishui;database=snblog;";
-            string time1 = DateTime.Now.ToString("d").Replace("/", "-");
-            string file = default;
-            if (path=="null")
-            {
-                  file = ".//mysql/" + time1 + "_blog.sql";
-            }
-            else
-            {
+            string time = DateTime.Now.ToString("d").Replace("/","-");
+            string file;
+
+            if (path == "null") {
+                file = ".//mysql/" + time + "_blog.sql";
+            } else {
                 file = path;
             }
-            using (MySqlConnection conn = new(constring))
-            {
-                using MySqlCommand cmd = new();
-                using MySqlBackup mb = new(cmd);
-                cmd.Connection = conn;
-                conn.Open();
-                mb.ExportToFile(file);
-                conn.Close();
-            }
+            using MySqlConnection conn = new(constring);
+            using MySqlCommand cmd = new();
+            using MySqlBackup mb = new(cmd);
+            cmd.Connection = conn;
+            conn.Open();
+            mb.ExportToFile(file);
+            conn.Close();
             return "true";
         }
 
-        public static string SqlRestore(string ip, string user, string pwd, string database)
+        public static string SqlRestore(string ip,string user,string pwd,string database)
         {
             string constring = "server=" + ip + ";User=" + user + ";pwd=" + pwd + ";database=" + database + ";";
             string file = ".//mysql/" + "blog.sql";
-            using (MySqlConnection conn = new(constring))
-            {
+            using (MySqlConnection conn = new(constring)) {
                 using MySqlCommand cmd = new();
                 using MySqlBackup mb = new(cmd);
                 cmd.Connection = conn;

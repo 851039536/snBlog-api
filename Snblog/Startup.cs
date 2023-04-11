@@ -190,7 +190,7 @@ namespace Snblog
             services.AddScoped<ISnleaveService, SnleaveService>();
             services.AddScoped<ICacheUtil, CacheUtil>();
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
-            services.AddScoped<ISnInterfaceService, SnInterfaceService>();
+            services.AddScoped<IInterfaceService, InterfaceService>();
             services.AddScoped<ISnSetBlogService, SnSetBlogService>();
             services.AddScoped<ISnippetService, SnippetService>();
             services.AddScoped<ISnippetTagService,SnippetTagService>();
@@ -200,9 +200,10 @@ namespace Snblog
             services.AddSingleton<ICacheManager, CacheManager>();
 
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
-            //services.AddScoped<IService.IReService.IArticleTagService,ReSnLabelsService>();
             services.AddScoped<IReSnNavigationService, ReSnNavigationService>();
             services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
+
+
 
             #endregion
             #region  µÃÂ”≥…‰
