@@ -1,33 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>567db4e4-11fb-473f-8644-35d99d13ce20</UserSecretsId>
-   <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
-   <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Users\CH190006\Desktop\Test\netCore\Snblog\Snblog\Snblog.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
     <WarningLevel>5</WarningLevel>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Models\**" />
     <Content Remove="Models\**" />
     <EmbeddedResource Remove="Models\**" />
     <None Remove="Models\**" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="index.html" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="index.html" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11" />
@@ -36,6 +30,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.International.Converters.PinYinConverter" Version="1.0.0" />
+    <PackageReference Include="Microsoft.ML" Version="1.7.1" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="1.7.1" />
+    <PackageReference Include="Microsoft.ML.Recommender" Version="0.19.1" />
+    <PackageReference Include="Microsoft.ML.TimeSeries" Version="1.7.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.8" />
@@ -47,7 +45,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.3" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Snblog.Enties\Snblog.Enties.csproj" />
     <ProjectReference Include="..\Snblog.IRepository\Snblog.IRepository.csproj" />
@@ -56,22 +53,30 @@
     <ProjectReference Include="..\Snblog.Service\Snblog.Service.csproj" />
     <ProjectReference Include="..\Snblog.Util\Snblog.Util.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="LogFiles\" />
     <Folder Include="mysql\" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="MechTE">
       <HintPath>bin\Debug\net5.0\MECH\MechTE.dll</HintPath>
     </Reference>
   </ItemGroup>
-
+  <ItemGroup Label="TextMLModel">
+    <None Include="TextMLModel.consumption.cs">
+      <DependentUpon>TextMLModel.mbconfig</DependentUpon>
+    </None>
+    <None Include="TextMLModel.training.cs">
+      <DependentUpon>TextMLModel.mbconfig</DependentUpon>
+    </None>
+    <None Include="TextMLModel.zip">
+      <DependentUpon>TextMLModel.mbconfig</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>Preserve</TypeScriptJSXEmit>
@@ -87,10 +92,9 @@
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
-
-
-
-
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties appsettings_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

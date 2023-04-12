@@ -65,7 +65,21 @@ namespace Snblog.Controllers
         /// <returns>list-entity</returns>
         [HttpGet("contains")]
         public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false) {
+
+
             return Ok(await _service.GetContainsAsync(identity,type,name,cache));
+        }
+
+        [HttpGet("ml")]
+        public async Task<IActionResult> GetMLTest(string name)
+        {
+            //Load sample data
+            var sampleData = new TextMLModel.ModelInput() {
+                 Title = @name,
+            };
+            //Load model and predict output
+            var result = TextMLModel.Predict(sampleData);
+            return Ok(result.PredictedLabel);
         }
         #endregion
 
