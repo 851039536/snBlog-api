@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 #nullable disable
 
 namespace Snblog.Enties.Models
-    {
+{
     public partial class ArticleType
         {
         public ArticleType()

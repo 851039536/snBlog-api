@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 
 #nullable disable
 
 namespace Snblog.Enties.Models
     {
+
+    [Index(nameof(Name))]
     public partial class Article
         {
         public int Id { get; set; }
