@@ -50,12 +50,12 @@ namespace Snblog.Service
         public async Task<List<VideoDto>> GetAllAsync(bool cache)
             {
             _logger.LogInformation("查询所有SnVideo=>" + cache);
-            rDto.eList = _cacheutil.CacheString("GetAllAsync_SnVideo",rDto.eList,cache);
-            if (rDto.eList == null) {
-                rDto.eList = _mapper.Map<List<VideoDto>>(await _service.Videos.AsNoTracking().ToListAsync());
-                _cacheutil.CacheString("GetAllAsync_SnVideo",rDto.eList,cache);
+            rDto.entityList = _cacheutil.CacheString("GetAllAsync_SnVideo",rDto.entityList,cache);
+            if (rDto.entityList == null) {
+                rDto.entityList = _mapper.Map<List<VideoDto>>(await _service.Videos.AsNoTracking().ToListAsync());
+                _cacheutil.CacheString("GetAllAsync_SnVideo",rDto.entityList,cache);
                 }
-            return rDto.eList;
+            return rDto.entityList;
             }
 
         public async Task<List<Video>> GetFyAsync(int type,int pageIndex,int pageSize,bool isDesc,bool cache)
@@ -188,56 +188,56 @@ namespace Snblog.Service
         public async Task<List<VideoDto>> GetContainsAsync(int identity,string type,string name,bool cache)
             {
             _logger.LogInformation(message: $"{VIDEO}{模糊查询}{identity}{type}{name}{cache}");
-            rDto.eList = _cacheutil.CacheString($"{VIDEO}{模糊查询}{identity}{type}{name}{cache}",rDto.eList,cache);
-            if (rDto.eList == null) {
+            rDto.entityList = _cacheutil.CacheString($"{VIDEO}{模糊查询}{identity}{type}{name}{cache}",rDto.entityList,cache);
+            if (rDto.entityList == null) {
                 switch (identity) {
                     case 0:
-                        rDto.eList = _mapper.Map<List<VideoDto>>(
+                        rDto.entityList = _mapper.Map<List<VideoDto>>(
                     await _service.Videos
                       .Where(l => l.Name.Contains(name))
                      .AsNoTracking().ToListAsync());
                         break;
                     case 1:
-                        rDto.eList = _mapper.Map<List<VideoDto>>(
+                        rDto.entityList = _mapper.Map<List<VideoDto>>(
                       await _service.Videos
                        .Where(l => l.Name.Contains(name) && l.Type.Name == type)
                        .AsNoTracking().ToListAsync());
                         break;
                     case 2:
-                        rDto.eList = _mapper.Map<List<VideoDto>>(
+                        rDto.entityList = _mapper.Map<List<VideoDto>>(
                        await _service.Videos
                          .Where(l => l.Name.Contains(name) && l.User.Name == type)
                          .AsNoTracking().ToListAsync());
                         break;
                     }
-                _cacheutil.CacheString($"{VIDEO}{模糊查询}{type}{name}{cache}",rDto.eList,cache);
+                _cacheutil.CacheString($"{VIDEO}{模糊查询}{type}{name}{cache}",rDto.entityList,cache);
                 }
-            return rDto.eList;
+            return rDto.entityList;
             }
 
         public async Task<List<VideoDto>> GetTypeAsync(int identity,string type,bool cache)
             {
             _logger.LogInformation(message: $"SnVideoDto条件查询=>{identity}{type}{cache}");
-            rDto.eList = _cacheutil.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache,rDto.eList,cache);
-            if (rDto.eList == null) {
+            rDto.entityList = _cacheutil.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache,rDto.entityList,cache);
+            if (rDto.entityList == null) {
                 switch (identity) {
                     case 1:
-                        rDto.eList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
+                        rDto.entityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
                         break;
                     case 2:
-                        rDto.eList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(s => s.User.Name == type).AsNoTracking().ToListAsync());
+                        rDto.entityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(s => s.User.Name == type).AsNoTracking().ToListAsync());
                         break;
                     }
-                _cacheutil.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache,rDto.eList,cache);
+                _cacheutil.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache,rDto.entityList,cache);
                 }
-            return rDto.eList;
+            return rDto.entityList;
             }
 
         public async Task<List<VideoDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,bool isDesc,bool cache)
             {
             _logger.LogInformation($"{VIDEO}{分页查询}{identity}{pageIndex}{pageSize}{isDesc}{cache}");
-            rDto.eList = _cacheutil.CacheString($"{VIDEO}{分页查询}{identity}{pageIndex}{pageSize}{isDesc}{cache}",rDto.eList,cache);
-            if (rDto.eList == null) {
+            rDto.entityList = _cacheutil.CacheString($"{VIDEO}{分页查询}{identity}{pageIndex}{pageSize}{isDesc}{cache}",rDto.entityList,cache);
+            if (rDto.entityList == null) {
                 switch (identity) //查询条件
                 {
                     case 0:
@@ -250,16 +250,16 @@ namespace Snblog.Service
                         await GetUser(type,pageIndex,pageSize,isDesc);
                         break;
                     }
-                _cacheutil.CacheString($"{VIDEO}{分页查询}{identity}{pageIndex}{pageSize}{isDesc}{cache}",rDto.eList,cache);
+                _cacheutil.CacheString($"{VIDEO}{分页查询}{identity}{pageIndex}{pageSize}{isDesc}{cache}",rDto.entityList,cache);
                 }
-            return rDto.eList;
+            return rDto.entityList;
             }
 
         private async Task GetUser(string type,int pageIndex,int pageSize,bool isDesc)
             {
             if (isDesc)//降序
             {
-                rDto.eList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.User.Name == type)
+                rDto.entityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.User.Name == type)
         .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
         .Take(pageSize).Select(e => new VideoDto {
             Id = e.Id,
@@ -275,7 +275,7 @@ namespace Snblog.Service
                 } else //升序
                   {
 
-                rDto.eList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.User.Name == type)
+                rDto.entityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.User.Name == type)
 .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
 .Take(pageSize).Select(e => new VideoDto {
     Id = e.Id,
@@ -295,7 +295,7 @@ namespace Snblog.Service
             {
             if (isDesc)//降序
             {
-                rDto.eList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.Type.Name == type)
+                rDto.entityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.Type.Name == type)
         .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
         .Take(pageSize).Select(e => new VideoDto {
             Id = e.Id,
@@ -311,7 +311,7 @@ namespace Snblog.Service
                 } else //升序
                   {
 
-                rDto.eList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.Type.Name == type)
+                rDto.entityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.Type.Name == type)
            .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
            .Take(pageSize).Select(e => new VideoDto {
                Id = e.Id,
@@ -331,7 +331,7 @@ namespace Snblog.Service
             {
             if (isDesc)//降序
             {
-                rDto.eList = _mapper.Map<List<VideoDto>>(
+                rDto.entityList = _mapper.Map<List<VideoDto>>(
         await _service.Videos
         .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
         .Take(pageSize).Select(e => new VideoDto {
@@ -347,7 +347,7 @@ namespace Snblog.Service
 
             } else //升序
                   {
-                rDto.eList = _mapper.Map<List<VideoDto>>(
+                rDto.entityList = _mapper.Map<List<VideoDto>>(
        await _service.Videos
        .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
        .Take(pageSize).Select(e => new VideoDto {

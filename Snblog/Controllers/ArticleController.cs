@@ -17,7 +17,8 @@ namespace Snblog.Controllers
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
     [Route("article")]
-    public class ArticleController : ControllerBase {
+    public class ArticleController : ControllerBase
+    {
         private readonly IArticleService _service; //IOC依赖注入
 
         #region 构造函数
@@ -25,11 +26,13 @@ namespace Snblog.Controllers
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
-        public ArticleController(IArticleService service) {
+        public ArticleController(IArticleService service)
+        {
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         #endregion
 
+        #region 查询总数
         /// <summary>
         /// 查询总数 
         /// </summary>
@@ -38,9 +41,12 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns>int</returns>
         [HttpGet("sum")]
-        public async Task<IActionResult> GetSumAsync(int identity = 0,string type = "null",bool cache = false) {
-            return Ok(await _service.GetSumAsync(identity,type,cache));
+        public async Task<ActionResult<int>> GetSumAsync(int identity = 0,string type = null,bool cache = false)
+        {
+            int sum = await _service.GetSumAsync(identity,type,cache);
+            return Ok(sum);
         }
+        #endregion
 
         #region 查询所有
         /// <summary>
@@ -50,10 +56,12 @@ namespace Snblog.Controllers
         /// <returns>list-entity</returns>
         [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllAsync(bool cache = false) {
+        public async Task<IActionResult> GetAllAsync(bool cache = false)
+        {
             return Ok(await _service.GetAllAsync(cache));
         }
         #endregion
+
         #region 模糊查询
         /// <summary>
         /// 模糊查询
@@ -64,22 +72,21 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns>list-entity</returns>
         [HttpGet("contains")]
-        public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false) {
-
-
+        public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false)
+        {
             return Ok(await _service.GetContainsAsync(identity,type,name,cache));
         }
 
         [HttpGet("ml")]
-        public async Task<IActionResult> GetMLTest(string name)
+        public IActionResult GetMLTest(string name)
         {
             //Load sample data
             var sampleData = new TextMLModel.ModelInput() {
-                 Title = @name,
+                Title = @name,
             };
             //Load model and predict output
-            var result = TextMLModel.Predict(sampleData);
-            return Ok(result.PredictedLabel);
+            var result =  TextMLModel.Predict(sampleData);
+            return Ok(  result.PredictedLabel);
         }
         #endregion
 
@@ -91,7 +98,8 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns>entity</returns>
         [HttpGet("byid")]
-        public async Task<IActionResult> GetByIdAsync(int id,bool cache = false) {
+        public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
+        {
             return Ok(await _service.GetByIdAsync(id,cache));
         }
         #endregion
@@ -104,7 +112,8 @@ namespace Snblog.Controllers
         /// <param name="type">类别</param>
         /// <param name="cache">缓存</param>
         [HttpGet("type")]
-        public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false) {
+        public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false)
+        {
             return Ok(await _service.GetTypeAsync(identity,type,cache));
         }
         #endregion
@@ -119,7 +128,8 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns>int</returns>
         [HttpGet("strSum")]
-        public async Task<IActionResult> GetStrSumAsync(int identity = 0,int type = 1,string name = "null",bool cache = false) {
+        public async Task<IActionResult> GetStrSumAsync(int identity = 0,int type = 1,string name = "null",bool cache = false)
+        {
             return Ok(await _service.GetStrSumAsync(identity,type,name,cache));
         }
 
@@ -138,7 +148,8 @@ namespace Snblog.Controllers
         /// <param name="ordering">排序规则 data:时间|read:阅读|give:点赞|id:主键</param>
         /// <returns>list-entity</returns>
         [HttpGet("paging")]
-        public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false) {
+        public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false)
+        {
             return Ok(await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache));
         }
         #endregion
@@ -151,7 +162,8 @@ namespace Snblog.Controllers
         /// <returns>bool</returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpPost("add")]
-        public async Task<IActionResult> AddAsync(Article entity) {
+        public async Task<IActionResult> AddAsync(Article entity)
+        {
             return Ok(await _service.AddAsync(entity));
         }
         #endregion
@@ -164,7 +176,8 @@ namespace Snblog.Controllers
         /// <returns>bool</returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpPut("edit")]
-        public async Task<IActionResult> UpdateAsync(Article entity) {
+        public async Task<IActionResult> UpdateAsync(Article entity)
+        {
             return Ok(await _service.UpdateAsync(entity));
         }
         #endregion
@@ -177,7 +190,8 @@ namespace Snblog.Controllers
         /// <returns>bool</returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpDelete("del")]
-        public async Task<IActionResult> DeleteAsync(int id) {
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
             return Ok(await _service.DeleteAsync(id));
         }
         #endregion
@@ -190,7 +204,8 @@ namespace Snblog.Controllers
         /// <param name="type">更新字段: Read | Give | Comment</param>
         /// <returns>bool</returns>
         [HttpPut("upPortion")]
-        public async Task<IActionResult> UpdatePortionAsync(Article entity,string type) {
+        public async Task<IActionResult> UpdatePortionAsync(Article entity,string type)
+        {
             return Ok(await _service.UpdatePortionAsync(entity,type));
         }
         #endregion

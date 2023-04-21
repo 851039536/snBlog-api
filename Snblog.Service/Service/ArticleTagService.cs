@@ -107,30 +107,30 @@ namespace Snblog.Service.Service
         public async Task<List<ArticleTagDto>> GetPagingAsync(int pageIndex,int pageSize,bool isDesc,bool cache)
             {
             _logger.LogInformation($"{NAME}{PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}");
-            rDto.eList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}",rDto.eList,cache);
-            if (res.entityList != null) return rDto.eList;
+            rDto.entityList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}",rDto.entityList,cache);
+            if (res.entityList != null) return rDto.entityList;
             await QPaging(pageIndex,pageSize,isDesc);
-            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}",rDto.eList,cache);
-            return rDto.eList;
+            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}",rDto.entityList,cache);
+            return rDto.entityList;
             }
 
         private async Task QPaging(int pageIndex,int pageSize,bool isDesc)
             {
             if (isDesc) {
-                rDto.eList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize).Take(pageSize).ToListAsync());
+                rDto.entityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize).Take(pageSize).ToListAsync());
                 } else {
-                rDto.eList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize).Take(pageSize).ToListAsync());
+                rDto.entityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize).Take(pageSize).ToListAsync());
                 }
             }
 
         public async Task<List<ArticleTagDto>> GetAllAsync(bool cache)
             {
             _logger.LogInformation($"{NAME}{ALL}",cache);
-            rDto.eList = _cacheutil.CacheString($"{NAME}{SUM}{cache}",rDto.eList,cache);
-            if (rDto.eList != null) return rDto.eList;
-            rDto.eList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.AsNoTracking().ToListAsync());
-            _cacheutil.CacheString($"{NAME}{SUM}{cache}",rDto.eList,cache);
-            return rDto.eList;
+            rDto.entityList = _cacheutil.CacheString($"{NAME}{SUM}{cache}",rDto.entityList,cache);
+            if (rDto.entityList != null) return rDto.entityList;
+            rDto.entityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.AsNoTracking().ToListAsync());
+            _cacheutil.CacheString($"{NAME}{SUM}{cache}",rDto.entityList,cache);
+            return rDto.entityList;
             }
         /// <summary>
         /// 查询总数

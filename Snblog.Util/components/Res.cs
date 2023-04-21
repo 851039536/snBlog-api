@@ -11,7 +11,7 @@ namespace Snblog.Util.components
     public class Dto<T>
     {
         public T entity = default;
-        public List<T> eList = default;
+        public List<T> entityList = default;
         public string[] name = default;
     }
 

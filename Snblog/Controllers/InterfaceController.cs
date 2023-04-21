@@ -54,11 +54,6 @@ namespace Snblog.Controllers
         #endregion
 
         #region  查询所有
-        /// <summary>
-        /// 查询所有
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
         //[HttpGet("GetAllAsync")]
         //public async Task<IActionResult> GetAllAsync(bool cache=false)
         //{

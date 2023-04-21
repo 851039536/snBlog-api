@@ -32,8 +32,8 @@ namespace Snblog.Service.Service
         public async Task<List<SnNavigationDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
             _logger.LogInformation("SnNavigation分页查询=>" + identity + pageIndex + pageSize + isDesc + type);
-            resDto.eList = _cacheutil.CacheString("GetFyAllAsync_SnNavigation" + type + pageIndex + pageSize + isDesc + identity, resDto.eList, cache);
-            if (resDto.eList == null)
+            resDto.entityList = _cacheutil.CacheString("GetFyAllAsync_SnNavigation" + type + pageIndex + pageSize + isDesc + identity, resDto.entityList, cache);
+            if (resDto.entityList == null)
             {
                 switch (identity) //查询条件
                 {
@@ -51,7 +51,7 @@ namespace Snblog.Service.Service
                 }
                 res.entityList = _cacheutil.CacheString("GetFyAllAsync_SnNavigation" + type + pageIndex + pageSize + isDesc + identity, res.entityList, cache);
             }
-            return resDto.eList;
+            return resDto.entityList;
         }
 
         private async Task GetFyUser(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
@@ -61,12 +61,12 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
                 .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
                .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).AsNoTracking().ToListAsync());
                         break;
@@ -77,12 +77,12 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
                 .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
                .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                .Take(pageSize).AsNoTracking().ToListAsync());
                         break;
@@ -96,12 +96,12 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type).Include(i => i.Type).Include(i => i.User)
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type).Include(i => i.Type).Include(i => i.User)
                 .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type)
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type)
                 .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).AsNoTracking().ToListAsync());
                         break;
@@ -112,12 +112,12 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type).Include(i => i.Type).Include(i => i.User)
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type).Include(i => i.Type).Include(i => i.User)
               .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
               .Take(pageSize).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type).Include(i => i.Type).Include(i => i.User)
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type).Include(i => i.Type).Include(i => i.User)
             .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
             .Take(pageSize).AsNoTracking().ToListAsync());
                         break;
@@ -131,7 +131,7 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                 await _service.SnNavigations
                 .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).Include(z => z.Type
@@ -139,7 +139,7 @@ namespace Snblog.Service.Service
 
                         break;
                     case "data":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                  await _service.SnNavigations
                  .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                  .Take(pageSize).Include(z => z.Type
@@ -152,14 +152,14 @@ namespace Snblog.Service.Service
                 switch (ordering) //排序
                 {
                     case "id":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                      await _service.SnNavigations
                      .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                      .Take(pageSize).Include(z => z.Type
                          ).Include(i => i.User).AsNoTracking().ToListAsync());
                         break;
                     case "data":
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                  await _service.SnNavigations
                  .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
                  .Take(pageSize).Include(z => z.Type
@@ -189,21 +189,21 @@ namespace Snblog.Service.Service
         public async Task<List<SnNavigationDto>> GetTypeAsync(int identity, string type, bool cache)
         {
             _logger.LogInformation("SnNavigation条件查询=>" + type + identity + cache);
-            resDto.eList = _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + identity + cache, resDto.eList, cache);
-            if (resDto.eList == null)
+            resDto.entityList = _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + identity + cache, resDto.entityList, cache);
+            if (resDto.entityList == null)
             {
                 switch (identity)
                 {
                     case 1:
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type).AsNoTracking().ToListAsync());
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.Type.Title == type).AsNoTracking().ToListAsync());
                         break;
                     case 2:
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).AsNoTracking().ToListAsync());
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.Where(w => w.User.Name == type).AsNoTracking().ToListAsync());
                         break;
                 }
-                _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + identity + cache, resDto.eList, cache);
+                _cacheutil.CacheString("GetTypeOrderAsync_SnNavigation" + type + identity + cache, resDto.entityList, cache);
             }
-            return resDto.eList;
+            return resDto.entityList;
         }
         /// <summary>
         /// 添加数据
@@ -258,13 +258,13 @@ namespace Snblog.Service.Service
         public async Task<List<SnNavigationDto>> GetAllAsync(bool cache)
         {
             _logger.LogInformation("SnNavigation查询所有=>" + cache);
-            resDto.eList = _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, resDto.eList, cache);
-            if (resDto.eList == null)
+            resDto.entityList = _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, resDto.entityList, cache);
+            if (resDto.entityList == null)
             {
-                resDto.eList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.ToListAsync());
-                _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, resDto.eList, cache);
+                resDto.entityList = _mapper.Map<List<SnNavigationDto>>(await _service.SnNavigations.ToListAsync());
+                _cacheutil.CacheString("GetAllAsync_SnNavigation" + cache, resDto.entityList, cache);
             }
-            return resDto.eList;
+            return resDto.entityList;
         }
         public async Task<SnNavigationDto> GetByIdAsync(int id, bool cache)
         {
@@ -282,35 +282,35 @@ namespace Snblog.Service.Service
 
             _logger.LogInformation(message: $"SnNavigationDto模糊查询=>{type}{name}{cache}");
 
-            resDto.eList = _cacheutil.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, resDto.eList, cache);
-            if (resDto.eList == null)
+            resDto.entityList = _cacheutil.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, resDto.entityList, cache);
+            if (resDto.entityList == null)
             {
                 switch (identity)
                 {
                     case 0:
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                   await _service.SnNavigations
                  .Where(l => l.Title.Contains(name)).OrderByDescending(c => c.Id).Include(z => z.Type
                     ).Include(i => i.User).AsNoTracking().ToListAsync());
                         break;
                     case 1:
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                    await _service.SnNavigations
                  .Where(l => l.Title.Contains(name) && l.Type.Title == type)
                  .OrderByDescending(c => c.Id).Include(z => z.Type
                     ).Include(i => i.User).AsNoTracking().ToListAsync());
                         break;
                     case 2:
-                        resDto.eList = _mapper.Map<List<SnNavigationDto>>(
+                        resDto.entityList = _mapper.Map<List<SnNavigationDto>>(
                   await _service.SnNavigations
                  .Where(l => l.Title.Contains(name) && l.User.Name == type)
                  .OrderByDescending(c => c.Id).Include(z => z.Type
                     ).Include(i => i.User).AsNoTracking().ToListAsync());
                         break;
                 }
-                _cacheutil.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, resDto.eList, cache);
+                _cacheutil.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, resDto.entityList, cache);
             }
-            return resDto.eList;
+            return resDto.entityList;
         }
 
     }

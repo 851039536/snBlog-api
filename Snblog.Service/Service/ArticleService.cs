@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Snblog.Cache.CacheUtil;
@@ -10,10 +11,12 @@ using Snblog.Util.components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Snblog.Service.Service
-    {
+{
     public class ArticleService : IArticleService
     {
         private readonly snblogContext _service;
@@ -23,7 +26,7 @@ namespace Snblog.Service.Service
         private readonly Dto<ArticleDto> resDto = new();
         private readonly IMapper _mapper;
 
-
+        string cacheKey;
         const string NAME = "article_";
         const string BYID = "BYID_";
         const string SUM = "SUM_";
@@ -33,7 +36,7 @@ namespace Snblog.Service.Service
         const string DEL = "DEL_";
         const string ADD = "ADD_";
         const string UP = "UP_";
-        public ArticleService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<ArticleService> logger, IMapper mapper)
+        public ArticleService(ICacheUtil cacheUtil,snblogContext coreDbContext,ILogger<ArticleService> logger,IMapper mapper)
         {
             _service = coreDbContext;
             _cacheutil = (CacheUtil)cacheUtil;
@@ -45,1191 +48,369 @@ namespace Snblog.Service.Service
         {
             _logger.LogInformation($"{NAME}{DEL}{id}");
             Article reslult = await _service.Articles.FindAsync(id);
-            if (reslult == null)return false;
+            if (reslult == null) return false;
             _service.Articles.Remove(reslult);//删除单个
             _service.Remove(reslult);//直接在context上Remove()方法传入model，它会判断类型
             return await _service.SaveChangesAsync() > 0;
         }
-        public async Task<ArticleDto> GetByIdAsync(int id, bool cache)
+        public async Task<ArticleDto> GetByIdAsync(int id,bool cache)
         {
-            _logger.LogInformation($"{NAME}{BYID}{id}_{cache}");
-            resDto.eList = _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}", resDto.eList, cache);
-            if (resDto.eList == null)
-            {
-                resDto.entity = _mapper.Map<ArticleDto>(await _service.Articles.Include(i => i.User).Include(i => i.Type).Include(i => i.Tag).AsNoTracking().SingleOrDefaultAsync(b => b.Id == id));
-                _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}", resDto.entity, cache);
+            cacheKey = $"{NAME}{BYID}{id}_{cache}";
+            _logger.LogInformation(cacheKey);
+            resDto.entity = _cacheutil.CacheString(cacheKey,resDto.entity,cache);
+
+            if (resDto.entity != null) {
+                return resDto.entity;
             }
+            resDto.entity = _mapper.Map<ArticleDto>(
+                await _service.Articles
+                .Include(i => i.User)
+                .Include(i => i.Type)
+                .Include(i => i.Tag)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(b => b.Id == id));
+            _cacheutil.CacheString(cacheKey,resDto.entity,cache);
             return resDto.entity;
         }
-        public async Task<List<ArticleDto>> GetTypeAsync(int identity, string type, bool cache)
+        public async Task<List<ArticleDto>> GetTypeAsync(int identity,string type,bool cache)
         {
-            _logger.LogInformation(message: $"Article条件查询=>{type} 缓存:{cache}");
-            resDto.eList = _cacheutil.CacheString("GetTypeAsync_SnArticle" + identity + type + cache, resDto.eList, cache);
-            if (resDto.eList == null)
-            {
-                if (identity == 1)
-                {
-                    resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
-                }
-                else
-                {
-                    resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(s => s.Tag.Name == type).AsNoTracking().ToListAsync());
-                }
+            cacheKey = $"{NAME}{identity}{type}{cache}";
+            _logger.LogInformation(cacheKey);
+            resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
 
-                _cacheutil.CacheString("GetTypeAsync_SnArticle" + identity + type + cache, resDto.eList, cache);
+            if (resDto.entityList != null) {
+                return resDto.entityList;
             }
-            return resDto.eList;
-        }
 
+            if (identity == 1) { //分类
+                resDto.entityList = _mapper.Map<List<ArticleDto>>(
+                    await _service.Articles.Where(s => s.Type.Name == type)
+                    .AsNoTracking()
+                    .ToListAsync());
+            } else { //2 标签
+                resDto.entityList = _mapper.Map<List<ArticleDto>>(
+                    await _service.Articles.Where(s => s.Tag.Name == type)
+                    .AsNoTracking()
+                    .ToListAsync());
+            }
+
+            _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
+            return resDto.entityList;
+        }
 
         public async Task<bool> AddAsync(Article entity)
         {
-            _logger.LogInformation($"{NAME}{ADD}{entity}");
-            entity.TimeCreate = DateTime.Now;
-            entity.TimeModified = DateTime.Now;
-            await _service.Articles.AddAsync(entity);
+            cacheKey = $"{NAME}{ADD}{entity}";
+            _logger.LogInformation(cacheKey);
+
+            entity.TimeCreate = entity.TimeModified = DateTime.Now;
+            //AddAsync 方法中的异步添加改为同步添加，因为 SaveChangesAsync 方法已经是异步的，不需要再使用异步添加
+            _service.Articles.Add(entity);
             return await _service.SaveChangesAsync() > 0;
         }
         public async Task<bool> UpdateAsync(Article entity)
         {
             _logger.LogInformation($"{NAME}{UP}{entity}");
             entity.TimeModified = DateTime.Now; //更新时间
+
             var res = await _service.Articles.Where(w => w.Id == entity.Id).Select(
-                s => new
-                {
+                s => new {
                     s.TimeCreate,
                 }
                 ).AsNoTracking().ToListAsync();
+
             entity.TimeCreate = res[0].TimeCreate;  //赋值表示更新时间不变
             _service.Articles.Update(entity);
             return await _service.SaveChangesAsync() > 0;
+
+            //待更新此优化
+            //var res = await _service.Articles.Where(w => w.Id == entity.Id)
+            //                     .Select(s => s.TimeCreate)
+            //                     .FirstOrDefaultAsync();
+            //entity.TimeCreate = res;  //赋值表示更新时间不变
+            //_service.Articles.Update(entity);
+            //return await _service.SaveChangesAsync() > 0;
+            // 优化说明：
+            // 1. 将查询 TimeCreate 的代码简化为只查询一个字段。
+            // 2. 使用 FirstOrDefaultAsync 方法代替 ToListAsync 方法，因为只需要查询一个字段。
         }
 
-        public async Task<int> GetSumAsync(int identity, string type, bool cache)
+        public async Task<int> GetSumAsync(int identity,string type,bool cache)
         {
-            _logger.LogInformation($"{NAME}{SUM}{identity}_{cache}");
-            res.entityInt = _cacheutil.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}", res.entityInt, cache);
-            //通过 res.entityInt 值是否为 0 判断结果是否被缓存
-            if (res.entityInt == 0)
-            {
-                switch (identity)
-                {
-                    case 0:
-                    // 读取文章数量，无需筛选条件
-                    return await _service.Articles.AsNoTracking().CountAsync();
-                    case 1:
-                        return await _service.Articles.AsNoTracking().CountAsync(c => c.Type.Name == type);
-                    case 2:
-                        return await _service.Articles.AsNoTracking().CountAsync(c => c.Tag.Name == type);
-                    case 3:
-                        return await _service.Articles.AsNoTracking().CountAsync(c => c.User.Name == type);
-                }
-                _cacheutil.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}", res.entityInt, cache);
+            cacheKey = $"{NAME}{SUM}{identity}{type}{cache}";
+            _logger.LogInformation(cacheKey);
+            //cache缓存
+            int entityInt = _cacheutil.CacheNumber(cacheKey,res.entityInt,cache);
+
+            if (entityInt != 0) {  //通过entityInt 值是否为 0 判断结果是否被缓存
+                return entityInt;
             }
-            return -1;
+
+            return identity switch { // case 
+                0 => await GetArticleCountAsync(),// 读取文章数量，无需筛选条件
+                1 => await GetArticleCountAsync(c => c.Type.Name == type),
+                2 => await GetArticleCountAsync(c => c.Tag.Name == type),
+                3 => await GetArticleCountAsync(c => c.User.Name == type),
+                _ => -1, //default
+            };
+        }
+
+
+        /// <summary>
+        /// 获取文章的数量
+        /// </summary>
+        /// <param name="predicate">筛选文章的条件</param>
+        /// <returns>返回文章的数量</returns>
+        private async Task<int> GetArticleCountAsync(Expression<Func<Article,bool>> predicate = null)
+        {
+            IQueryable<Article> query = _service.Articles.AsNoTracking();
+
+            if (predicate != null) { //如果有筛选条件
+                query = query.Where(predicate);
+            }
+            int count = await query.CountAsync();
+            _cacheutil.CacheNumber(cacheKey,count,true); //设置缓存
+            return count;
         }
 
         public async Task<List<ArticleDto>> GetAllAsync(bool cache)
         {
-            _logger.LogInformation($"{NAME}{ALL}{cache}");
-            resDto.eList = _cacheutil.CacheString($"{NAME}{ALL}{cache}", resDto.eList, cache);
-            if (resDto.eList == null)
-            {
-                resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Include(i => i.User).Include(i => i.Tag).Include(i => i.Type).AsNoTracking().ToListAsync());
-                _cacheutil.CacheString($"{NAME}{ALL}{cache}", resDto.eList, cache);
+            cacheKey = $"{NAME}{ALL}{cache}";
+            _logger.LogInformation(cacheKey);
+
+            resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
+            if (resDto.entityList != null) {
+                return resDto.entityList;
             }
-            return resDto.eList;
+
+            resDto.entityList = _mapper.Map<List<ArticleDto>>(
+                await _service.Articles.Include(i => i.User)
+                .Include(i => i.Tag)
+                .Include(i => i.Type)
+                .AsNoTracking().ToListAsync());
+            _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
+
+            return resDto.entityList;
         }
 
-        public async Task<int> GetStrSumAsync(int identity, int type, string name, bool cache)
+        /// <summary>
+        /// 内容统计
+        /// </summary>
+        /// <param name="identity">所有:0|分类:1|标签:2|用户:3</param>
+        /// <param name="type">内容:1|阅读:2|点赞:3</param>
+        /// <param name="name">查询参数</param>
+        /// <param name="cache">缓存</param>
+        /// <returns>int</returns>
+        public async Task<int> GetStrSumAsync(int identity,int type,string name,bool cache)
         {
-            _logger.LogInformation($"Article统计{identity}_{type}_{cache}");
-            res.entityInt = _cacheutil.CacheNumber($"GetStrSumAsync{identity}_{type}_{name}_{cache}", res.entityInt, cache);
-            if (res.entityInt == 0)
-            {
-                switch (identity)
-                {
-                    case 0:
-                        res.entityInt = await GetSum(type);
-                        break;
-                    case 1:
-                        res.entityInt = await GetTypeSum(type, name);
-                        break;
-                    case 2:
-                        res.entityInt = await GetTagSum(type, name);
-                        break;
-                    case 3:
-                        res.entityInt = await GetUserSum(type, name);
-                        break;
-                }
-                _cacheutil.CacheNumber($"GetStrSumAsync{identity}_{type}_{name}_{cache}", res.entityInt, cache);
+            cacheKey = $"{NAME}统计{identity}_{type}_{name}_{cache}";
+            _logger.LogInformation(cacheKey);
+            res.entityInt = _cacheutil.CacheNumber(cacheKey,res.entityInt,cache);
+
+            if (res.entityInt != 0) {
+                return res.entityInt;
             }
+            switch (identity) {
+                case 0:
+                res.entityInt = await GetStatistic(type);
+
+                break;
+                case 1:
+                res.entityInt = await GetStatistic(type,c => c.Type.Name == name);
+
+                break;
+                case 2:
+                res.entityInt = await GetStatistic(type,c => c.Tag.Name == name);
+
+                break;
+                case 3:
+                res.entityInt = await GetStatistic(type,c => c.User.Name == name);
+                break;
+            }
+            _cacheutil.CacheNumber(cacheKey,res.entityInt,cache);
             return res.entityInt;
         }
-        private async Task<int> GetUserSum(int type, string name)
+
+
+
+
+        /// <summary>
+        /// 读取内容数量
+        /// </summary>
+        /// <param name="type">内容:1|阅读:2|点赞:3</param>
+        /// <returns></returns>
+        private async Task<int> GetStatistic(int type,Expression<Func<Article,bool>> predicate = null)
         {
-            int num = 0;
-            switch (type) //按类型查询
-            {
-                case 2:
-                    List<short> read = await _service.Articles.Where(w => w.User.Name == name).Select(c => c.Read).ToListAsync();
-                    foreach (short i in read)
-                    {
-                        num += i;
-                    }
-                    break;
+            IQueryable<Article> query = _service.Articles;
+
+            if (predicate != null) {
+                query = query.Where(predicate);
+            }
+
+            return type switch {
+                1 => await query.SumAsync(c => c.Text.Length),
+                2 => await query.SumAsync(c => c.Read),
+                3 => await query.SumAsync(c => c.Give),
+                _ => 0,
+            };
+        }
+
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="identity">所有:0|分类:1|标签:2|用户:3|标签+用户:4</param>
+        /// <param name="type">查询参数(多条件以','分割)</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">排序</param>
+        /// <param name="cache">缓存</param>
+        /// <param name="ordering">排序规则 data:时间|read:阅读|give:点赞|id:主键</param>
+        public async Task<List<ArticleDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,string ordering,bool isDesc,bool cache)
+        {
+            cacheKey = $"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
+            _logger.LogInformation(cacheKey);
+            resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
+
+            if (resDto.entityList != null) {
+                return resDto.entityList;
+            }
+
+            switch (identity) {
+                case 0:
+                return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc);
+
                 case 1:
-                    List<string> text = await _service.Articles.Where(w => w.User.Name == name).Select(c => c.Text).ToListAsync();
-                    for (int i = 0; i < text.Count; i++)
-                    {
-                        num += text[i].Length;
-                    }
-                    break;
-                case 3:
-                    List<short> give = await _service.Articles.Where(w => w.User.Name == name).Select(c => c.Give).ToListAsync();
-                    foreach (short i in give)
-                    {
-                        num += i;
-                    }
-                    break;
-            }
+                return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc,w => w.Type.Name == type);
 
-            return num;
-        }
-        private async Task<int> GetTagSum(int type, string name)
-        {
-            int num = 0;
-            switch (type) //按类型查询
-            {
                 case 2:
-                    List<short> read = await _service.Articles.Where(w => w.Tag.Name == name).Select(c => c.Read).ToListAsync();
-                    foreach (short i in read)
-                    {
-                        num += i;
-                    }
-                    break;
-                case 1:
-                    List<string> text = await _service.Articles.Where(w => w.Tag.Name == name).Select(c => c.Text).ToListAsync();
-                    for (int i = 0; i < text.Count; i++)
-                    {
-                        num += text[i].Length;
-                    }
-                    break;
+                return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc,w => w.Tag.Name == type);
                 case 3:
-                    List<short> give = await _service.Articles.Where(w => w.Tag.Name == name).Select(c => c.Give).ToListAsync();
-                    foreach (short i in give)
-                    {
-                        num += i;
-                    }
-                    break;
-            }
 
-            return num;
-        }
-        private async Task<int> GetTypeSum(int type, string name)
-        {
-            int num = 0;
-            switch (type) //按类型查询
-            {
-                case 2:
-                    List<short> read = await _service.Articles.Where(w => w.Type.Name == name).Select(c => c.Read).ToListAsync();
-                    foreach (short i in read)
-                    {
-                        num += i;
-                    }
-                    break;
-                case 1:
-                    List<string> text = await _service.Articles.Where(w => w.Type.Name == name).Select(c => c.Text).ToListAsync();
-                    for (int i = 0; i < text.Count; i++)
-                    {
-                        num += text[i].Length;
-                    }
-                    break;
-                case 3:
-                    List<short> give = await _service.Articles.Where(w => w.Type.Name == name).Select(c => c.Give).ToListAsync();
-                    foreach (short i in give)
-                    {
-                        num += i;
-                    }
-                    break;
-            }
+                return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc,w => w.User.Name == type);
+                case 4:
+                resDto.name = type.Split(',');
+                return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc,w => w.Tag.Name == resDto.name[0]
+                    && w.User.Name == resDto.name[1]);
 
-            return num;
-        }
-        private async Task<int> GetSum(int type)
-        {
-            int num = 0;
-            switch (type) 
-            {
-                case 2:
-                    List<short> read = await _service.Articles.Select(c => c.Read).ToListAsync();
-                    foreach (short i in read)
-                    {
-                        num += i;
-                    }
-                    break;
-                case 1:
-                    List<string> text = await _service.Articles.Select(c => c.Text).ToListAsync();
-                    for (int i = 0; i < text.Count; i++)
-                    {
-                        num += text[i].Length;
-                    }
-                    break;
-                case 3:
-                    List<short> give = await _service.Articles.Select(c => c.Give).ToListAsync();
-                    foreach (short i in give)
-                    {
-                        num += i;
-                    }
-                    break;
-            }
-            return num;
-        }
+                default:
+                return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc);
 
-        public async Task<List<ArticleDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
-        {
-            _logger.LogInformation($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
-            resDto.eList = _cacheutil.CacheString($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}", resDto.eList, cache);
-            if (resDto.eList == null)
-            {
-                switch (identity)
-                {
-                    case 0:
-                        await GetFyAll(pageIndex, pageSize, ordering, isDesc);
-                        break;
-
-                    case 1:
-                        await GetFyType(type, pageIndex, pageSize, ordering, isDesc);
-                        break;
-
-                    case 2:
-                        await GetFyTag(type, pageIndex, pageSize, ordering, isDesc);
-                        break;
-                    case 3:
-                        await GetFyUser(type, pageIndex, pageSize, ordering, isDesc);
-                        break;
-                    case 4:
-                        await GetFyUserTag(type, pageIndex, pageSize, ordering, isDesc);
-                        break;
-                }
-                _cacheutil.CacheString($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}", resDto.eList, cache);
-            }
-            return resDto.eList;
-        }
-        private async Task GetFyUserTag(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
-        {
-            resDto.name = type.Split(',');
-            if (isDesc)//降序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == resDto.name[0]
-                        && w.User.Name == resDto.name[1])
-                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == resDto.name[0]
-                       && w.User.Name == resDto.name[1])
-              .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == resDto.name[0]
-                      && w.User.Name == resDto.name[1])
-             .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == resDto.name[0]
-                       && w.User.Name == resDto.name[1])
-              .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                }
-            }
-            else //升序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == resDto.name[0]
-                      && w.User.Name == resDto.name[1])
-             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == resDto.name[0]
-                      && w.User.Name == resDto.name[1])
-             .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == resDto.name[0]
-                      && w.User.Name == resDto.name[1])
-             .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == resDto.name[0]
-                      && w.User.Name == resDto.name[1])
-             .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                }
-            }
-        }
-        private async Task GetFyUser(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
-        {
-            if (isDesc)//降序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.User.Name == type)
-                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.User.Name == type)
-               .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.User.Name == type)
-               .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.User.Name == type)
-               .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                }
-            }
-            else //升序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.User.Name == type)
-               .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.User.Name == type)
-               .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.User.Name == type)
-               .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.User.Name == type)
-               .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                }
-            }
-        }
-        private async Task GetFyTag(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
-        {
-            if (isDesc)//降序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == type)
-                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == type)
-               .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == type)
-               .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == type)
-               .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                }
-            }
-            else //升序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == type)
-               .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == type)
-               .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == type)
-               .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Tag.Name == type)
-               .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
-               .Take(pageSize).Select(e => new ArticleDto
-               {
-                   Id = e.Id,
-                   Name = e.Name,
-                   Sketch = e.Sketch,
-                   Give = e.Give,
-                   Read = e.Read,
-                   Img = e.Img,
-                   TimeCreate = e.TimeCreate,
-                   TimeModified = e.TimeModified,
-                   User = e.User,
-                   Type = e.Type,
-                   Tag = e.Tag
-               }).AsNoTracking().ToListAsync());
-                        break;
-                }
-            }
-        }
-        private async Task GetFyType(string type, int pageIndex, int pageSize, string ordering, bool isDesc)
-        {
-            if (isDesc)//降序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Type.Name == type)
-                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Type.Name == type)
-                .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Type.Name == type)
-                .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Type.Name == type)
-                .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                }
-            }
-            else //升序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Type.Name == type)
-                .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Type.Name == type)
-                .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Type.Name == type)
-                .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles.Where(w => w.Type.Name == type)
-                .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                }
             }
         }
 
-        private async Task GetFyAll(int pageIndex, int pageSize, string ordering, bool isDesc)
+        private async Task<List<ArticleDto>> GetArticlePaging(int pageIndex,int pageSize,string ordering,bool isDesc,Expression<Func<Article,bool>> predicate = null)
         {
-            if (isDesc)//降序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(
-                await _service.Articles
-                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
+            IQueryable<Article> articles = _service.Articles.AsQueryable();
 
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles
-                .OrderByDescending(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles
-                .OrderByDescending(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles
-                .OrderByDescending(c => c.Give).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                }
+            if (predicate != null) {
+                articles = articles.Where(predicate);
             }
-            else //升序
-            {
-                switch (ordering) //排序
-                {
-                    case "id":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles
-                .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "data":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles
-                .OrderBy(c => c.TimeCreate).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "read":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles
-                .OrderBy(c => c.Read).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                    case "give":
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(await _service.Articles
-                .OrderBy(c => c.Give).Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize).Select(e => new ArticleDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Sketch = e.Sketch,
-                    Give = e.Give,
-                    Read = e.Read,
-                    Img = e.Img,
-                    TimeCreate = e.TimeCreate,
-                    TimeModified = e.TimeModified,
-                    User = e.User,
-                    Type = e.Type,
-                    Tag = e.Tag
-                }).AsNoTracking().ToListAsync());
-                        break;
-                }
+            switch (ordering) {
+                case "id":
+                articles = isDesc ? articles.OrderByDescending(c => c.Id) : articles.OrderBy(c => c.Id);
+                break;
+                case "data":
+                articles = isDesc ? articles.OrderByDescending(c => c.TimeCreate) : articles.OrderBy(c => c.TimeCreate);
+                break;
+                case "read":
+                articles = isDesc ? articles.OrderByDescending(c => c.Read) : articles.OrderBy(c => c.Read);
+                break;
+                case "give":
+                articles = isDesc ? articles.OrderByDescending(c => c.Give) : articles.OrderBy(c => c.Give);
+                break;
             }
+            var articleDtos = await articles.Skip(( pageIndex - 1 ) * pageSize).Take(pageSize)
+            .Select(e => new ArticleDto {
+                Id = e.Id,
+                Name = e.Name,
+                Sketch = e.Sketch,
+                Give = e.Give,
+                Read = e.Read,
+                Img = e.Img,
+                TimeCreate = e.TimeCreate,
+                TimeModified = e.TimeModified,
+                User = e.User,
+                Type = e.Type,
+                Tag = e.Tag
+            }).AsNoTracking().ToListAsync();
+            resDto.entityList = _mapper.Map<List<ArticleDto>>(articleDtos);
+            _cacheutil.CacheString(cacheKey,resDto.entityList,true);
+            return resDto.entityList;
         }
-        public async Task<bool> UpdatePortionAsync(Article entity, string type)
-        {
-            _logger.LogInformation("SnArticle更新部分参数");
-            Article resulet = await _service.Articles.FindAsync(entity.Id);
-            if (resulet == null) return false;
 
-            switch (type)
-            {    //指定字段进行更新操作
+
+        public async Task<bool> UpdatePortionAsync(Article entity,string type)
+        {
+            _logger.LogInformation("Article更新部分参数");
+            var result = await _service.Articles.FindAsync(entity.Id);
+            if (result == null) return false;
+
+            switch (type) {    //指定字段进行更新操作
                 case "Read":
-                    //修改属性，被追踪的league状态属性就会变为Modify
-                    resulet.Read = entity.Read;
-                    break;
+                //修改属性，被追踪的league状态属性就会变为Modify
+                result.Read = entity.Read;
+                break;
                 case "Give":
-                    resulet.Give = entity.Give;
-                    break;
+                result.Give = entity.Give;
+                break;
                 case "Comment":
-                    resulet.CommentId = entity.CommentId;
-                    break;
+                result.CommentId = entity.CommentId;
+                break;
+                default:
+                return false;
             }
             //执行数据库操作
-            return await _service.SaveChangesAsync() > 0;
+            await _service.SaveChangesAsync();
+             //await _service.SaveChangesAsync() > 0;
+            return true;
         }
-        public async Task<List<ArticleDto>> GetContainsAsync(int identity, string type, string name, bool cache)
+        public async Task<List<ArticleDto>> GetContainsAsync(int identity,string type,string name,bool cache)
         {
-            _logger.LogInformation($"{NAME}{CONTAINS}{identity}_{type}_{name}_{cache}");
-            resDto.eList = _cacheutil.CacheString($"{NAME}{CONTAINS}{identity}{type}{name}{cache}", resDto.eList, cache);
-            if (resDto.eList == null)
-            {
-                switch (identity)
-                {
-                    case 0:
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(
-                    await _service.Articles
-                      .Where(l => l.Name.Contains(name)).Select(e => new ArticleDto
-                      {
-                          Id = e.Id,
-                          Name = e.Name,
-                          Sketch = e.Sketch,
-                          Give = e.Give,
-                          Read = e.Read,
-                          Img = e.Img,
-                          TimeCreate = e.TimeCreate,
-                          TimeModified = e.TimeModified,
-                          User = e.User,
-                          Type = e.Type,
-                          Tag = e.Tag
-                          }).AsNoTracking().ToListAsync());
+            cacheKey = $"{NAME}{CONTAINS}{identity}{type}{name}{cache}";
+            _logger.LogInformation(cacheKey);
+            resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
 
-                        break;
-                    case 1:
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(
-                      await _service.Articles
-                       .Where(l => l.Name.Contains(name) && l.Type.Name == type).Select(e => new ArticleDto
-                       {
-                           Id = e.Id,
-                           Name = e.Name,
-                           Sketch = e.Sketch,
-                           Give = e.Give,
-                           Read = e.Read,
-                           Img = e.Img,
-                           TimeCreate = e.TimeCreate,
-                           TimeModified = e.TimeModified,
-                           User = e.User,
-                           Type = e.Type,
-                           Tag = e.Tag
-                           }).AsNoTracking().ToListAsync());
-                        break;
-                    case 2:
-                        resDto.eList = _mapper.Map<List<ArticleDto>>(
-                       await _service.Articles
-                         .Where(l => l.Name.Contains(name) && l.Tag.Name == type).Select(e => new ArticleDto
-                         {
-                             Id = e.Id,
-                             Name = e.Name,
-                             Sketch = e.Sketch,
-                             Give = e.Give,
-                             Read = e.Read,
-                             Img = e.Img,
-                             TimeCreate = e.TimeCreate,
-                             TimeModified = e.TimeModified,
-                             User = e.User,
-                             Type = e.Type,
-                             Tag = e.Tag
-                         }).AsNoTracking().ToListAsync());
-                        break;
-                    default:
-                        _mapper.Map<List<ArticleDto>>(
-                    await _service.Articles
-                      .Where(l => l.Name.Contains(name)).Select(e => new ArticleDto
-                      {
-                          Id = e.Id,
-                          Name = e.Name,
-                          Sketch = e.Sketch,
-                          Give = e.Give,
-                          Read = e.Read,
-                          Img = e.Img,
-                          TimeCreate = e.TimeCreate,
-                          TimeModified = e.TimeModified,
-                          User = e.User,
-                          Type = e.Type,
-                          Tag = e.Tag
-                      }).AsNoTracking().ToListAsync());
-                        break;
-                }
-                _cacheutil.CacheString($"{NAME}{CONTAINS}{identity}{type}{name}{cache}", resDto.eList, cache);
+            if (resDto.entityList != null) {
+                return resDto.entityList;
             }
-            return resDto.eList;
+            return identity switch {
+                0 => await GetArticleContainsAsync(l => l.Name.Contains(name)),
+                1 => await GetArticleContainsAsync(l => l.Name.Contains(name) && l.Type.Name == type),
+                2 => await GetArticleContainsAsync(l => l.Name.Contains(name) && l.Tag.Name == type),
+                _ => await GetArticleContainsAsync(l => l.Name.Contains(name)),
+            };
         }
+
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        /// <param name="predicate">筛选文章的条件</param>
+        /// <returns>返回文章的数量</returns>
+        private async Task<List<ArticleDto>> GetArticleContainsAsync(Expression<Func<Article,bool>> predicate = null)
+        {
+            IQueryable<Article> query = _service.Articles.AsNoTracking();
+
+            if (predicate != null) {
+
+                query.Where(predicate).Select(e => new ArticleDto {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Sketch = e.Sketch,
+                    Give = e.Give,
+                    Read = e.Read,
+                    Img = e.Img,
+                    TimeCreate = e.TimeCreate,
+                    TimeModified = e.TimeModified,
+                    User = e.User,
+                    Type = e.Type,
+                    Tag = e.Tag
+                });
+            }
+            resDto.entityList = _mapper.Map<List<ArticleDto>>(await query.ToListAsync());
+            _cacheutil.CacheNumber(cacheKey,resDto.entityList,true); //设置缓存
+            return resDto.entityList;
+        }
+
     }
 }

@@ -109,16 +109,16 @@ namespace Snblog.Service.Service
         public async Task<List<SnippetTypeDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
             _logger.LogInformation($"{NAME}{PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}");
-            rDto.eList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.eList, cache);
-            if (res.entityList != null) return rDto.eList;
+            rDto.entityList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.entityList, cache);
+            if (res.entityList != null) return rDto.entityList;
             //await QPaging(pageIndex, pageSize, isDesc);
             if (isDesc) {
-               rDto.eList = _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
+               rDto.entityList = _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
                 } else {
-               rDto.eList = _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
+               rDto.entityList = _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
                 }
-            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.eList, cache);
-            return rDto.eList;
+            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.entityList, cache);
+            return rDto.entityList;
         }
 
         /// <summary>
@@ -129,11 +129,11 @@ namespace Snblog.Service.Service
         public async Task<List<SnippetTypeDto>> GetAllAsync(bool cache)
         {
             _logger.LogInformation($"{NAME}{ALL}", cache);
-            rDto.eList = _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.eList, cache);
-            if (rDto.eList != null) return rDto.eList;
-            rDto.eList = _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes.AsNoTracking().ToListAsync());
-            _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.eList, cache);
-            return rDto.eList;
+            rDto.entityList = _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.entityList, cache);
+            if (rDto.entityList != null) return rDto.entityList;
+            rDto.entityList = _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes.AsNoTracking().ToListAsync());
+            _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.entityList, cache);
+            return rDto.entityList;
         }
         /// <summary>
         /// 查询总数
