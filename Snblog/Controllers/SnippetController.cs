@@ -5,6 +5,7 @@ using Snblog.Enties.Models;
 using Snblog.IService.IService;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
@@ -58,9 +59,12 @@ namespace Snblog.Controllers
         /// <param name="pageSize">每页记录条数</param>
         /// <returns>list-entity</returns>
         [HttpGet("contains")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false,int pageIndex =1,int pageSize = 10)
         {
-            if (name == null || name.Length==1) return Ok(new { message = "请输入正确值" }); ;
+            if (name == null ) return NotFound(); 
             return Ok(await _service.GetContainsAsync(identity, type, name, cache, pageIndex, pageSize));
         }
         #endregion

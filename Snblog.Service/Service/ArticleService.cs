@@ -8,6 +8,7 @@ using Snblog.Enties.ModelsDto;
 using Snblog.IService.IService;
 using Snblog.Repository.Repository;
 using Snblog.Util.components;
+using Snblog.Util.verification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -233,7 +234,6 @@ namespace Snblog.Service.Service
 
 
 
-
         /// <summary>
         /// 读取内容数量
         /// </summary>
@@ -365,8 +365,12 @@ namespace Snblog.Service.Service
              //await _service.SaveChangesAsync() > 0;
             return true;
         }
+
         public async Task<List<ArticleDto>> GetContainsAsync(int identity,string type,string name,bool cache)
         {
+            if (!verification.IsNotNull(name)) return null;
+
+            var upNames = name.ToUpper();
             cacheKey = $"{NAME}{CONTAINS}{identity}{type}{name}{cache}";
             _logger.LogInformation(cacheKey);
             resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
@@ -375,13 +379,14 @@ namespace Snblog.Service.Service
                 return resDto.entityList;
             }
             return identity switch {
-                0 => await GetArticleContainsAsync(l => l.Name.Contains(name)),
-                1 => await GetArticleContainsAsync(l => l.Name.Contains(name) && l.Type.Name == type),
-                2 => await GetArticleContainsAsync(l => l.Name.Contains(name) && l.Tag.Name == type),
-                _ => await GetArticleContainsAsync(l => l.Name.Contains(name)),
+                0 => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
+                1 => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Type.Name == type),
+                2 => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Tag.Name == type),
+                _ => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
             };
         }
 
+    
         /// <summary>
         /// 模糊查询
         /// </summary>
@@ -390,10 +395,8 @@ namespace Snblog.Service.Service
         private async Task<List<ArticleDto>> GetArticleContainsAsync(Expression<Func<Article,bool>> predicate = null)
         {
             IQueryable<Article> query = _service.Articles.AsNoTracking();
-
             if (predicate != null) {
-
-                query.Where(predicate).Select(e => new ArticleDto {
+                resDto.entityList = await   query.Where(predicate).Select(e => new ArticleDto {
                     Id = e.Id,
                     Name = e.Name,
                     Sketch = e.Sketch,
@@ -405,12 +408,11 @@ namespace Snblog.Service.Service
                     User = e.User,
                     Type = e.Type,
                     Tag = e.Tag
-                });
+                }).ToListAsync();
+                _cacheutil.CacheNumber(cacheKey,resDto.entityList,true); //设置缓存
             }
-            resDto.entityList = _mapper.Map<List<ArticleDto>>(await query.ToListAsync());
-            _cacheutil.CacheNumber(cacheKey,resDto.entityList,true); //设置缓存
             return resDto.entityList;
         }
-
+         
     }
 }

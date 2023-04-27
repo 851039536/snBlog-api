@@ -72,7 +72,7 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns>list-entity</returns>
         [HttpGet("contains")]
-        public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false)
+        public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "winfrom",bool cache = false)
         {
             return Ok(await _service.GetContainsAsync(identity,type,name,cache));
         }

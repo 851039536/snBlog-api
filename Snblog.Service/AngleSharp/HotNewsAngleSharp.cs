@@ -117,23 +117,19 @@ namespace Snblog.Service.AngleSharp
         /// 数据备份
         /// </summary>
         /// <param name="path">备份路径默认null</param>
-        /// <returns></returns>
+        /// <returns>备份结果</returns>
 
         public static string SqlBackups(string path)
         {
             //string constring = "server=" + ip + ";User=" + User + ";pwd=" + pwd + ";database=" + database + ";";
             string constring = "server=localhost;User= root;pwd= woshishui;database=snblog;";
             string time = DateTime.Now.ToString("d").Replace("/","-");
-            string file;
+            string file = path ?? $".//mysql/{time}_blog.sql";
 
-            if (path == "null") {
-                file = ".//mysql/" + time + "_blog.sql";
-            } else {
-                file = path;
-            }
             using MySqlConnection conn = new(constring);
             using MySqlCommand cmd = new();
             using MySqlBackup mb = new(cmd);
+
             cmd.Connection = conn;
             conn.Open();
             mb.ExportToFile(file);

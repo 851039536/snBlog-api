@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Snblog.Enties.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Snblog.Util.components
 {
@@ -7,6 +9,8 @@ namespace Snblog.Util.components
         public T entity = default;
         public List<T> entityList = default;
         public int entityInt;
+
+   
     }
     public class Dto<T>
     {
