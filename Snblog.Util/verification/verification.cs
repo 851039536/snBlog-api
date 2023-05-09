@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Snblog.Util.verification
 {
-   public static class verification
+   public static class Verification
     {
         public static bool IsNotNull(string obj)
         {

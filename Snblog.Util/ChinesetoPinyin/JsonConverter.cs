@@ -14,7 +14,7 @@ namespace Snblog.Util.ChinesetoPinyin {
             foreach (char c in value) {
                 if (ChineseChar.IsValidChar(c)) {
                     ChineseChar chineseChar = new(c); // 创建中文字符对象
-                    output += chineseChar.Pinyins[0].Substring(0,chineseChar.Pinyins[0].Length - 1) + " ";
+                    output += string.Concat(chineseChar.Pinyins[0].AsSpan(0,chineseChar.Pinyins[0].Length - 1)," ");
                 } else {
                     output += c + " ";
                 }

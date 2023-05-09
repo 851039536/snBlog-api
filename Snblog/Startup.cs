@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Snblog.Cache.Cache;
 using Snblog.Cache.CacheUtil;
 using Snblog.Controllers;
+using Snblog.Enties.Models;
 using Snblog.IRepository;
 using Snblog.IService;
 using Snblog.IService.IReService;
@@ -176,19 +177,19 @@ namespace Snblog
             services.AddScoped<ISnNavigationService, SnNavigationService>();
             services.AddScoped<IArticleTagService,ArticleTagService>();
             services.AddScoped<IArticleTypeService, ArticleTypeService>();
-            services.AddScoped<ISnOneService, SnOneService>();
+            services.AddScoped<IDiaryService, DiaryService>();
             services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
             services.AddScoped<ISnUserTalkService, SnUserTalkService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ISnOneTypeService, SnOneTypeService>();
+            services.AddScoped<IDiaryTypeService, DiaryTypeService>();
             services.AddScoped<ISnPictureService, SnPictureService>();
             services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
             services.AddScoped<ISnTalkService, SnTalkService>();
             services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<ISnleaveService, SnleaveService>();
-            services.AddScoped<ICacheUtil, CacheUtil>();
+          
             services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
             services.AddScoped<IInterfaceService, InterfaceService>();
             services.AddScoped<ISnSetBlogService, SnSetBlogService>();
@@ -198,12 +199,10 @@ namespace Snblog
             services.AddScoped<ISnippetLabelService,SnippetLabelService>();
             //缓存-整个应用程序生命周期以内只创建一个实例 
             services.AddSingleton<ICacheManager, CacheManager>();
-
+            services.AddScoped<ICacheUtil,CacheUtil>();
             services.AddScoped<IReSnArticleService, ReSnArticleService>();
             services.AddScoped<IReSnNavigationService, ReSnNavigationService>();
             services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
-
-
 
             #endregion
             #region 实体映射

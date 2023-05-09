@@ -59,10 +59,7 @@ namespace Snblog.Repository.Repository
 
         public void Rollback()
         {
-            if (_dbContext.Database.CurrentTransaction != null)
-            {
-                _dbContext.Database.CurrentTransaction.Rollback();
-            }
+            _dbContext.Database.CurrentTransaction?.Rollback();
         }
 
         public int SaveChanges()
@@ -425,7 +422,7 @@ namespace Snblog.Repository.Repository
 
         public void Dispose()
         {
-            this._dbContext.Dispose();
+            _dbContext.Dispose();
         }
 
 

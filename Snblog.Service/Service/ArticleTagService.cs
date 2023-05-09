@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
-    {
+{
     public class ArticleTagService : BaseService, IArticleTagService
         {
 

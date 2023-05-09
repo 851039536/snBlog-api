@@ -4,14 +4,14 @@ using Snblog.Enties.Models;
 
 namespace Snblog.IService.IService
 {
-    public interface ISnOneTypeService
+    public interface IDiaryTypeService
     {
         /// <summary>
         /// 查询所有
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<List<SnOneType>> GetAllAsync(bool cache);
+        Task<List<DiaryType>> GetAllAsync(bool cache);
 
         /// <summary>
         /// 主键查询
@@ -19,7 +19,7 @@ namespace Snblog.IService.IService
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnOneType> GetByIdAsync(int id, bool cache);
+        Task<DiaryType> GetByIdAsync(int id, bool cache);
 
         /// <summary>
         /// 类别查询
@@ -27,7 +27,7 @@ namespace Snblog.IService.IService
         /// <param name="type">分类</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnOneType> GetTypeAsync(int type, bool cache);
+        Task<DiaryType> GetTypeAsync(int type, bool cache);
 
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Snblog.IService.IService
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> AddAsync(SnOneType entity);
+        Task<bool> AddAsync(DiaryType entity);
 
         /// <summary>
         /// 删除数据
@@ -55,7 +55,7 @@ namespace Snblog.IService.IService
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool>UpdateAsync(SnOneType entity);
+        Task<bool>UpdateAsync(DiaryType entity);
 
 
     }

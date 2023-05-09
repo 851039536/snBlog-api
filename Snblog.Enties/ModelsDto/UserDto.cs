@@ -20,7 +20,7 @@ namespace Snblog.Enties.ModelsDto
             Interfaces = new HashSet<Interface>();
             SnLeaves = new HashSet<SnLeave>();
             SnNavigations = new HashSet<SnNavigation>();
-            SnOnes = new HashSet<SnOne>();
+            Diaries = new HashSet<Diary>();
             SnPictures = new HashSet<SnPicture>();
             SnSetblogs = new HashSet<SnSetblog>();
             SnTalks = new HashSet<SnTalk>();
@@ -73,7 +73,7 @@ namespace Snblog.Enties.ModelsDto
         public virtual ICollection<Interface> Interfaces { get; set; }
         public virtual ICollection<SnLeave> SnLeaves { get; set; }
         public virtual ICollection<SnNavigation> SnNavigations { get; set; }
-        public virtual ICollection<SnOne> SnOnes { get; set; }
+        public virtual ICollection<Diary> Diaries { get; set; }
         public virtual ICollection<SnPicture> SnPictures { get; set; }
         public virtual ICollection<SnSetblog> SnSetblogs { get; set; }
         public virtual ICollection<SnTalk> SnTalks { get; set; }

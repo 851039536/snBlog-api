@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Snblog.Enties.AutoMapper
     {
+    /// <summary>
+    /// ArticleMapper
+    /// </summary>
     public class ArticleMapper : Profile
     {
         /// <summary>

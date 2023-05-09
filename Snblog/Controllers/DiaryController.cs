@@ -13,51 +13,38 @@ namespace Snblog.Controllers
     /// <summary>
     ///日记
     /// </summary>
-    [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    public class SnOneController : ControllerBase
+    [Route("diary")]
+    public class DiaryController : ControllerBase
     {
-        private readonly ISnOneService _service; //IOC依赖注入
+        private readonly IDiaryService _service; 
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
-        public SnOneController(ISnOneService service)
+        public DiaryController(IDiaryService service)
         {
             _service = service;
         }
 
-        #region 查询总数 GetCountAsync
+        #region 查询总数
         /// <summary>
         /// 查询总数 
         /// </summary>
         /// <param name="identity">所有:0 || 分类:1 || 用户2  </param>
-        /// <param name="type">条件(identity为0则填0) </param>
+        /// <param name="type">条件(identity为0则null) </param>
         /// <param name="cache"></param>
-        /// <returns></returns>
-        [HttpGet("GetSunAsync")]
-        public async Task<IActionResult> GetCountAsync(int identity = 0, string type = "null", bool cache = false)
+        /// <returns>int</returns>
+        [HttpGet("sum")]
+        public async Task<IActionResult> GetSumAsync(int identity = 0, string type = "null", bool cache = false)
         {
-            return Ok(await _service.GetCountAsync(identity, type, cache));
+            return Ok(await _service.GetSumAsync(identity, type, cache));
         }
         #endregion
 
-        #region 查询所有 GetAllAsync
-        /// <summary>
-        /// 查询所有 
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync(bool cache = false)
-        {
-            return Ok(await _service.GetAllAsync(cache));
-        }
-        #endregion
-
-        #region 模糊查询 Contains
+        #region 模糊查询
         /// <summary>
         /// 模糊查询
         /// </summary>
@@ -65,7 +52,7 @@ namespace Snblog.Controllers
         /// <param name="type">分类</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetContainsAsync")]
+        [HttpGet("contains")]
         public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
         {
             return Ok(await _service.GetContainsAsync(identity, type, name, cache));
@@ -79,7 +66,7 @@ namespace Snblog.Controllers
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("GetByIdAsync")]
+        [HttpGet("byid")]
         public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             return Ok(await _service.GetByIdAsync(id, cache));
@@ -127,7 +114,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<ActionResult<SnOne>> AddAsync(SnOne entity)
+        public async Task<ActionResult<Diary>> AddAsync(Diary entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
@@ -153,7 +140,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnOne entity)
+        public async Task<IActionResult> UpdateAsync(Diary entity)
         {
             return Ok(await _service.UpdateAsync(entity));
         }
@@ -166,7 +153,7 @@ namespace Snblog.Controllers
         /// <param name="type">更新字段</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
-        public async Task<IActionResult> UpdatePortionAsync(SnOne entity, string type)
+        public async Task<IActionResult> UpdatePortionAsync(Diary entity, string type)
         {
             return Ok(await _service.UpdatePortionAsync(entity, type));
         }

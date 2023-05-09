@@ -5,15 +5,9 @@ using System.Threading.Tasks;
 
 namespace Snblog.IService.IService
 {
-    public interface ISnOneService
+    public interface IDiaryService
     {
 
-       /// <summary>
-       /// 查询所有
-       /// </summary>
-       /// <param name="cache"></param>
-       /// <returns></returns>
-         Task<List<SnOneDto>> GetAllAsync(bool cache);
 
         /// <summary>
         /// 模糊查询
@@ -22,15 +16,15 @@ namespace Snblog.IService.IService
         /// <param name="type">分类</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
-        Task<List<SnOneDto>> GetContainsAsync(int identity, string type, string name, bool cache);
+        Task<List<DiaryDto>> GetContainsAsync(int identity, string type, string name, bool cache);
         /// <summary>
         /// 查询总数 
         /// </summary>
         /// <param name="identity">所有:0 || 分类:1 || 用户2  </param>
-        /// <param name="type">条件(identity为0则填0) </param>
+        /// <param name="type">条件(identity为0则null) </param>
         /// <param name="cache"></param>
-        /// <returns></returns>
-        Task<int> GetCountAsync(int identity, string type, bool cache);
+        /// <returns>int</returns>
+        Task<int> GetSumAsync(int identity, string type, bool cache);
 
         /// <summary>
         /// 条件查询总数量
@@ -46,7 +40,7 @@ namespace Snblog.IService.IService
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnOneDto> GetByIdAsync(int id,bool cache);
+        Task<DiaryDto> GetByIdAsync(int id,bool cache);
 
 
         /// <summary>
@@ -68,7 +62,7 @@ namespace Snblog.IService.IService
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
         /// <returns></returns>
-        Task<List<SnOneDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
+        Task<List<DiaryDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
 
 
         /// <summary>
@@ -80,21 +74,21 @@ namespace Snblog.IService.IService
         /// 添加
         /// </summary>
         /// <returns></returns>
-        Task<bool> AddAsync(SnOne one);
+        Task<bool> AddAsync(Diary diary);
 
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="one"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnOne one);
+        Task<bool> UpdateAsync(Diary diary);
 
         /// <summary>
         /// 更新点赞[ give ]
         /// </summary>
-        /// <param name="snOne"></param>
+        /// <param name="Diary"></param>
         /// <param name="type">更新的字段</param>
         /// <returns></returns>
-        Task<bool> UpdatePortionAsync(SnOne snOne, string type);
+        Task<bool> UpdatePortionAsync(Diary diary, string type);
     }
 }

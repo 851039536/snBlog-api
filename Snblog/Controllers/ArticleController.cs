@@ -1,10 +1,14 @@
-﻿using Blog.Core;
+﻿using AngleSharp.Dom;
+using Blog.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI.Common;
 using Snblog.Enties.Models;
 using Snblog.IService.IService;
 using System;
+using System.Drawing.Printing;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -13,13 +17,13 @@ namespace Snblog.Controllers
     /// <summary>
     /// 文章内容
     /// </summary>
-   //[Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
     [Route("article")]
-    public class ArticleController : ControllerBase
+    public class ArticleController : BaseController
     {
-        private readonly IArticleService _service; //IOC依赖注入
+        //IOC依赖注入
+        private readonly IArticleService _service; 
 
         #region 构造函数
         /// <summary>
@@ -41,10 +45,10 @@ namespace Snblog.Controllers
         /// <param name="cache">缓存</param>
         /// <returns>int</returns>
         [HttpGet("sum")]
-        public async Task<ActionResult<int>> GetSumAsync(int identity = 0,string type = null,bool cache = false)
+        public async Task<IActionResult> GetSumAsync(int identity = 0,string type = null,bool cache = false)
         {
             int sum = await _service.GetSumAsync(identity,type,cache);
-            return Ok(sum);
+            return ApiResponse(cache:cache, data:sum);
         }
         #endregion
 
@@ -54,11 +58,11 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns>list-entity</returns>
-        [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
+        //[ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
-            return Ok(await _service.GetAllAsync(cache));
+            return ApiResponse(data: await _service.GetAllAsync(cache));
         }
         #endregion
 
@@ -74,7 +78,7 @@ namespace Snblog.Controllers
         [HttpGet("contains")]
         public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "winfrom",bool cache = false)
         {
-            return Ok(await _service.GetContainsAsync(identity,type,name,cache));
+            return ApiResponse(cache: cache,data: await _service.GetContainsAsync(identity,type,name,cache));
         }
 
         [HttpGet("ml")]
@@ -86,7 +90,8 @@ namespace Snblog.Controllers
             };
             //Load model and predict output
             var result =  TextMLModel.Predict(sampleData);
-            return Ok(  result.PredictedLabel);
+
+            return ApiResponse( data: result.PredictedLabel);
         }
         #endregion
 
@@ -100,7 +105,7 @@ namespace Snblog.Controllers
         [HttpGet("byid")]
         public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id,cache));
+            return ApiResponse(cache:cache, data: await _service.GetByIdAsync(id,cache));
         }
         #endregion
 
@@ -114,7 +119,7 @@ namespace Snblog.Controllers
         [HttpGet("type")]
         public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false)
         {
-            return Ok(await _service.GetTypeAsync(identity,type,cache));
+            return ApiResponse(cache: cache,data: await _service.GetTypeAsync(identity,type,cache));
         }
         #endregion
 
@@ -130,9 +135,8 @@ namespace Snblog.Controllers
         [HttpGet("strSum")]
         public async Task<IActionResult> GetStrSumAsync(int identity = 0,int type = 1,string name = "null",bool cache = false)
         {
-            return Ok(await _service.GetStrSumAsync(identity,type,name,cache));
+            return ApiResponse(cache: cache,data: await _service.GetStrSumAsync(identity,type,name,cache));
         }
-
         #endregion
 
         #region 分页查询
@@ -150,7 +154,7 @@ namespace Snblog.Controllers
         [HttpGet("paging")]
         public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false)
         {
-            return Ok(await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache));
+            return ApiResponse(cache: cache,data: await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache));
         }
         #endregion
 
@@ -164,7 +168,7 @@ namespace Snblog.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync(Article entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            return ApiResponse(data:await _service.AddAsync(entity));
         }
         #endregion
 
@@ -178,7 +182,7 @@ namespace Snblog.Controllers
         [HttpPut("edit")]
         public async Task<IActionResult> UpdateAsync(Article entity)
         {
-            return Ok(await _service.UpdateAsync(entity));
+            return ApiResponse(data: await _service.UpdateAsync(entity));
         }
         #endregion
 
@@ -192,7 +196,7 @@ namespace Snblog.Controllers
         [HttpDelete("del")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            return ApiResponse(data: await _service.DeleteAsync(id));
         }
         #endregion
 
@@ -206,7 +210,7 @@ namespace Snblog.Controllers
         [HttpPut("upPortion")]
         public async Task<IActionResult> UpdatePortionAsync(Article entity,string type)
         {
-            return Ok(await _service.UpdatePortionAsync(entity,type));
+            return ApiResponse(data: await _service.UpdatePortionAsync(entity,type));
         }
         #endregion
 

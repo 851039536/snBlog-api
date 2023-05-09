@@ -15,16 +15,16 @@ namespace Snblog.Controllers
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    public class SnOneTypeController : ControllerBase
+    public class DiaryTypeController : ControllerBase
     {
 
-        private readonly ISnOneTypeService _service; //IOC依赖注入
+        private readonly IDiaryTypeService _service; //IOC依赖注入
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
-        public SnOneTypeController(ISnOneTypeService service)
+        public DiaryTypeController(IDiaryTypeService service)
         {
             _service = service;
         }
@@ -88,7 +88,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> AddAsync(SnOneType entity)
+        public async Task<IActionResult> AddAsync(DiaryType entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
@@ -113,7 +113,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnOneType entity)
+        public async Task<IActionResult> UpdateAsync(DiaryType entity)
         {
             return Ok(await _service.UpdateAsync(entity));
         }

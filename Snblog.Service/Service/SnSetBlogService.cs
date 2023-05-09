@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
-    {
+{
     public class SnSetBlogService : ISnSetBlogService
     {
         private readonly snblogContext _service;

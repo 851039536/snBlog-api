@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Snblog.Service
-    {
+{
     public class VideoService : IVideoService
         {
         private readonly snblogContext _service;

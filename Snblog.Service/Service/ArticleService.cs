@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using MySqlX.XDevAPI.Common;
 using Snblog.Cache.CacheUtil;
 using Snblog.Enties.Models;
 using Snblog.Enties.ModelsDto;
@@ -21,7 +24,7 @@ namespace Snblog.Service.Service
     public class ArticleService : IArticleService
     {
         private readonly snblogContext _service;
-        private readonly CacheUtil _cacheutil;
+        private readonly CacheUtil _cache;
         private readonly ILogger<ArticleService> _logger;
         private readonly Res<Article> res = new();
         private readonly Dto<ArticleDto> resDto = new();
@@ -37,10 +40,10 @@ namespace Snblog.Service.Service
         const string DEL = "DEL_";
         const string ADD = "ADD_";
         const string UP = "UP_";
-        public ArticleService(ICacheUtil cacheUtil,snblogContext coreDbContext,ILogger<ArticleService> logger,IMapper mapper)
+        public ArticleService(ICacheUtil cache,snblogContext coreDbContext,ILogger<ArticleService> logger,IMapper mapper)
         {
             _service = coreDbContext;
-            _cacheutil = (CacheUtil)cacheUtil;
+            _cache = (CacheUtil)cache;
             _logger = logger;
             _mapper = mapper;
         }
@@ -58,11 +61,12 @@ namespace Snblog.Service.Service
         {
             cacheKey = $"{NAME}{BYID}{id}_{cache}";
             _logger.LogInformation(cacheKey);
-            resDto.entity = _cacheutil.CacheString(cacheKey,resDto.entity,cache);
 
-            if (resDto.entity != null) {
-                return resDto.entity;
+            if (cache) {
+                resDto.entity = _cache.GetValue(cacheKey,resDto.entity);
+                if (resDto.entity != null) return resDto.entity;
             }
+          
             resDto.entity = _mapper.Map<ArticleDto>(
                 await _service.Articles
                 .Include(i => i.User)
@@ -70,17 +74,19 @@ namespace Snblog.Service.Service
                 .Include(i => i.Tag)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(b => b.Id == id));
-            _cacheutil.CacheString(cacheKey,resDto.entity,cache);
+            _cache.SetValue(cacheKey,resDto.entity);
             return resDto.entity;
         }
         public async Task<List<ArticleDto>> GetTypeAsync(int identity,string type,bool cache)
         {
             cacheKey = $"{NAME}{identity}{type}{cache}";
             _logger.LogInformation(cacheKey);
-            resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
 
-            if (resDto.entityList != null) {
-                return resDto.entityList;
+            if (cache) {
+                resDto.entityList = _cache.GetValue(cacheKey,resDto.entityList);
+                if (resDto.entityList != null) {
+                    return resDto.entityList;
+                }
             }
 
             if (identity == 1) { //分类
@@ -94,8 +100,7 @@ namespace Snblog.Service.Service
                     .AsNoTracking()
                     .ToListAsync());
             }
-
-            _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
+            _cache.SetValue(cacheKey,resDto.entityList);
             return resDto.entityList;
         }
 
@@ -135,16 +140,17 @@ namespace Snblog.Service.Service
             // 1. 将查询 TimeCreate 的代码简化为只查询一个字段。
             // 2. 使用 FirstOrDefaultAsync 方法代替 ToListAsync 方法，因为只需要查询一个字段。
         }
-
         public async Task<int> GetSumAsync(int identity,string type,bool cache)
         {
             cacheKey = $"{NAME}{SUM}{identity}{type}{cache}";
             _logger.LogInformation(cacheKey);
-            //cache缓存
-            int entityInt = _cacheutil.CacheNumber(cacheKey,res.entityInt,cache);
 
-            if (entityInt != 0) {  //通过entityInt 值是否为 0 判断结果是否被缓存
-                return entityInt;
+            
+            if (cache) {
+                int sum = _cache.GetValue(cacheKey,0);
+                if (sum != 0) {  //通过entityInt 值是否为 0 判断结果是否被缓存
+                    return sum;
+                }
             }
 
             return identity switch { // case 
@@ -166,11 +172,11 @@ namespace Snblog.Service.Service
         {
             IQueryable<Article> query = _service.Articles.AsNoTracking();
 
-            if (predicate != null) { //如果有筛选条件
-                query = query.Where(predicate);
-            }
+            //如果有筛选条件
+            if (predicate != null) query = query.Where(predicate);
+
             int count = await query.CountAsync();
-            _cacheutil.CacheNumber(cacheKey,count,true); //设置缓存
+            _cache.SetValue(cacheKey,count); //设置缓存
             return count;
         }
 
@@ -179,9 +185,9 @@ namespace Snblog.Service.Service
             cacheKey = $"{NAME}{ALL}{cache}";
             _logger.LogInformation(cacheKey);
 
-            resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
-            if (resDto.entityList != null) {
-                return resDto.entityList;
+            if (cache) {
+                resDto.entityList = _cache.GetValue(cacheKey,resDto.entityList);
+                if (resDto.entityList != null) return resDto.entityList;
             }
 
             resDto.entityList = _mapper.Map<List<ArticleDto>>(
@@ -189,7 +195,7 @@ namespace Snblog.Service.Service
                 .Include(i => i.Tag)
                 .Include(i => i.Type)
                 .AsNoTracking().ToListAsync());
-            _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
+            _cache.SetValue(cacheKey,resDto.entityList);
 
             return resDto.entityList;
         }
@@ -206,11 +212,14 @@ namespace Snblog.Service.Service
         {
             cacheKey = $"{NAME}统计{identity}_{type}_{name}_{cache}";
             _logger.LogInformation(cacheKey);
-            res.entityInt = _cacheutil.CacheNumber(cacheKey,res.entityInt,cache);
 
-            if (res.entityInt != 0) {
-                return res.entityInt;
+            if (cache) {
+                res.entityInt = _cache.GetValue(cacheKey,res.entityInt);
+                if (res.entityInt != 0) {
+                    return res.entityInt;
+                }
             }
+
             switch (identity) {
                 case 0:
                 res.entityInt = await GetStatistic(type);
@@ -228,7 +237,7 @@ namespace Snblog.Service.Service
                 res.entityInt = await GetStatistic(type,c => c.User.Name == name);
                 break;
             }
-            _cacheutil.CacheNumber(cacheKey,res.entityInt,cache);
+            _cache.SetValue(cacheKey,res.entityInt);
             return res.entityInt;
         }
 
@@ -270,11 +279,14 @@ namespace Snblog.Service.Service
         {
             cacheKey = $"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
             _logger.LogInformation(cacheKey);
-            resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
 
-            if (resDto.entityList != null) {
-                return resDto.entityList;
+            if (cache) {
+                resDto.entityList = _cache.GetValue(cacheKey,resDto.entityList);
+                if (resDto.entityList != null) {
+                    return resDto.entityList;
+                }
             }
+         
 
             switch (identity) {
                 case 0:
@@ -335,7 +347,7 @@ namespace Snblog.Service.Service
                 Tag = e.Tag
             }).AsNoTracking().ToListAsync();
             resDto.entityList = _mapper.Map<List<ArticleDto>>(articleDtos);
-            _cacheutil.CacheString(cacheKey,resDto.entityList,true);
+            _cache.SetValue(cacheKey,resDto.entityList);
             return resDto.entityList;
         }
 
@@ -368,16 +380,17 @@ namespace Snblog.Service.Service
 
         public async Task<List<ArticleDto>> GetContainsAsync(int identity,string type,string name,bool cache)
         {
-            if (!verification.IsNotNull(name)) return null;
-
             var upNames = name.ToUpper();
             cacheKey = $"{NAME}{CONTAINS}{identity}{type}{name}{cache}";
             _logger.LogInformation(cacheKey);
-            resDto.entityList = _cacheutil.CacheString(cacheKey,resDto.entityList,cache);
 
-            if (resDto.entityList != null) {
-                return resDto.entityList;
+            if (cache) {
+                resDto.entityList = _cache.GetValue(cacheKey,resDto.entityList);
+                if (resDto.entityList != null) {
+                    return resDto.entityList;
+                }
             }
+           
             return identity switch {
                 0 => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
                 1 => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Type.Name == type),
@@ -385,13 +398,11 @@ namespace Snblog.Service.Service
                 _ => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
             };
         }
-
     
         /// <summary>
         /// 模糊查询
         /// </summary>
         /// <param name="predicate">筛选文章的条件</param>
-        /// <returns>返回文章的数量</returns>
         private async Task<List<ArticleDto>> GetArticleContainsAsync(Expression<Func<Article,bool>> predicate = null)
         {
             IQueryable<Article> query = _service.Articles.AsNoTracking();
@@ -409,7 +420,7 @@ namespace Snblog.Service.Service
                     Type = e.Type,
                     Tag = e.Tag
                 }).ToListAsync();
-                _cacheutil.CacheNumber(cacheKey,resDto.entityList,true); //设置缓存
+                _cache.SetValue(cacheKey,resDto.entityList); //设置缓存
             }
             return resDto.entityList;
         }

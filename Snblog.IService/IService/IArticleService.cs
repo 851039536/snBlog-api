@@ -64,7 +64,6 @@ namespace Snblog.IService.IService
         /// <param name="ordering">排序规则 data:时间|read:阅读|give:点赞|id:主键</param>
         Task<List<ArticleDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
 
-
         /// <summary>
         /// 删除
         /// </summary>
@@ -102,6 +101,6 @@ namespace Snblog.IService.IService
         /// <param name="type">条件</param>
         /// <param name="cache">缓存</param>
         /// <returns>int</returns>
-        Task<int> GetSumAsync(int identity, string type, bool cache);
+        Task<int> GetSumAsync(int identity, string type, bool cache); 
     }
 }

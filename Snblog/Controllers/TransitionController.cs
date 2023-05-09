@@ -19,7 +19,7 @@ namespace Snblog.Controllers {
 
         [HttpGet("pinyin")]
         public IActionResult ChinesetoPinyin(string value) {
-            JsonSerializerOptions options = new JsonSerializerOptions();
+            JsonSerializerOptions options = new();
             options.Converters.Add(new PinYinConverter());
             string output = JsonSerializer.Serialize(value,options);
             Console.WriteLine(output); //输出： "hàn zì zhuǎn pīn yīn"

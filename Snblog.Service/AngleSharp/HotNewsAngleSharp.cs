@@ -141,14 +141,13 @@ namespace Snblog.Service.AngleSharp
         {
             string constring = "server=" + ip + ";User=" + user + ";pwd=" + pwd + ";database=" + database + ";";
             string file = ".//mysql/" + "blog.sql";
-            using (MySqlConnection conn = new(constring)) {
-                using MySqlCommand cmd = new();
-                using MySqlBackup mb = new(cmd);
-                cmd.Connection = conn;
-                conn.Open();
-                mb.ImportFromFile(file);
-                conn.Close();
-            }
+            using MySqlConnection conn = new(constring);
+            using MySqlCommand cmd = new();
+            using MySqlBackup mb = new(cmd);
+            cmd.Connection = conn;
+            conn.Open();
+            mb.ImportFromFile(file);
+            conn.Close();
 
             return "true";
         }
