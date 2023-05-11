@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using AngleSharp;
 using Microsoft.Extensions.Logging;
@@ -122,9 +124,12 @@ namespace Snblog.Service.AngleSharp
         public static string SqlBackups(string path)
         {
             //string constring = "server=" + ip + ";User=" + User + ";pwd=" + pwd + ";database=" + database + ";";
+
             string constring = "server=localhost;User= root;pwd= woshishui;database=snblog;";
             string time = DateTime.Now.ToString("d").Replace("/","-");
-            string file = path ?? $".//mysql/{time}_blog.sql";
+             //path = Assembly.GetEntryAssembly().Location;
+             path = Directory.GetCurrentDirectory();
+            string file = path + $"/mysql/{time}_blog.sql";
 
             using MySqlConnection conn = new(constring);
             using MySqlCommand cmd = new();
