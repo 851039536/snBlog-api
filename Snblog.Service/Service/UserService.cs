@@ -43,13 +43,13 @@ namespace Snblog.Service
 
         public async Task<int> DelAsync(int id)
         {
-            _logger.LogInformation($"{NAME}{DEL}{id}");
+            Log.Information($"{NAME}{DEL}{id}");
             return await CreateService<User>().DelAsync(id);
         }
 
         public async Task<UserDto> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation($"{NAME}{BYID}{id}_{cache}");
+            Log.Information($"{NAME}{BYID}{id}_{cache}");
             rDto = _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}", rDto, cache);
             if (rDto == null)
             {
@@ -61,14 +61,14 @@ namespace Snblog.Service
 
         public async Task<int> AddAsync(User entity)
         {
-            _logger.LogInformation($"{NAME}{ADD}{entity}");
+            Log.Information($"{NAME}{ADD}{entity}");
             await _service.Users.AddAsync(entity);
             return await _service.SaveChangesAsync();
         }
 
         public async Task<int> UpdateAsync(UserDto entity)
         {
-            _logger.LogInformation($"{NAME}{UPDATE}{entity}");
+            Log.Information($"{NAME}{UPDATE}{entity}");
             var model = _mapper.Map<User>(entity);
             return await CreateService<User>().UpdateAsync(model);
         }
@@ -86,7 +86,7 @@ namespace Snblog.Service
 
         public async Task<int> GetSumAsync(bool cache)
         {
-            _logger.LogInformation($"{NAME}{SUM}{cache}");
+            Log.Information($"{NAME}{SUM}{cache}");
             rInt = _cacheutil.CacheString($"{NAME}{SUM}{cache}", rInt, cache);
             if (rInt == 0)
             {
@@ -98,7 +98,7 @@ namespace Snblog.Service
 
         public async Task<List<UserDto>> GetContainsAsync(string name, bool cache)
         {
-            _logger.LogInformation(message: $"{NAME}{CONTAINS}{name}{cache}");
+            Log.Information( $"{NAME}{CONTAINS}{name}{cache}");
             rListDto = _cacheutil.CacheString($"{NAME}{CONTAINS}{name}{cache}", rListDto, cache);
             if (rListDto == null)
             {

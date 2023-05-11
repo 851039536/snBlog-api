@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Snblog.Enties.Models;
-using Snblog.Enties.ModelsDto;
-namespace Snblog.Enties.AutoMapper
+﻿namespace Snblog.Enties.AutoMapper
 {
     public class InterfaceMapper : Profile
     {

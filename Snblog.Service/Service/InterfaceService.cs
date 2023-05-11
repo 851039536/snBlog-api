@@ -19,7 +19,7 @@ namespace Snblog.Service.Service
         private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly IMapper _mapper;
-        private readonly Dto<InterfaceDto> resDto = new();
+        private readonly EntityDataDto<InterfaceDto> resDto = new();
         const string NAME = "Interface_";
         const string BYID = "BYID_";
         const string Condition = "Condition";
@@ -47,25 +47,25 @@ namespace Snblog.Service.Service
         /// <param name="cache">缓存</param>
         public async Task<List<InterfaceDto>> GetConditionAsync(int identity, string userName, string type, bool cache)
         {
-            _logger.LogInformation($"{NAME}{Condition}{identity}_{userName}_{type}_{cache}");
-            resDto.entityList = _cacheutil.CacheString($"{NAME}{Condition}{identity}_{userName}_{type}_{cache}", resDto.entityList, cache);
-            if (resDto.entityList == null)
+            Log.Information($"{NAME}{Condition}{identity}_{userName}_{type}_{cache}");
+            resDto.EntityList = _cacheutil.CacheString($"{NAME}{Condition}{identity}_{userName}_{type}_{cache}", resDto.EntityList, cache);
+            if (resDto.EntityList == null)
             {
                 switch (identity)
                 {
                     case 0:
-                        resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(s => s.Type.Name == type && s.User.Name == userName).AsNoTracking().ToListAsync());
+                        resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(s => s.Type.Name == type && s.User.Name == userName).AsNoTracking().ToListAsync());
                         break;
                     case 1:
-                        resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(s => s.User.Name == userName).AsNoTracking().ToListAsync());
+                        resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(s => s.User.Name == userName).AsNoTracking().ToListAsync());
                         break;
                     case 2:
-                        resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
+                        resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
                         break;
                 }
-                _cacheutil.CacheString($"{NAME}{Condition}{identity}_{userName}_{type}_{cache}", resDto.entityList, cache);
+                _cacheutil.CacheString($"{NAME}{Condition}{identity}_{userName}_{type}_{cache}", resDto.EntityList, cache);
             }
-            return resDto.entityList;
+            return resDto.EntityList;
         }
 
         //public async Task<List<InterfaceDto>> GetAllAsync(bool cache)
@@ -92,9 +92,9 @@ namespace Snblog.Service.Service
         /// <returns>list-entity</returns>
         public async Task<List<InterfaceDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
         {
-            _logger.LogInformation($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
-            resDto.entityList = _cacheutil.CacheString($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}", resDto.entityList, cache);
-            if (resDto.entityList == null)
+            Log.Information($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
+            resDto.EntityList = _cacheutil.CacheString($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}", resDto.EntityList, cache);
+            if (resDto.EntityList == null)
             {
                 switch (identity) //查询条件
                 {
@@ -104,7 +104,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<InterfaceDto>>(
+                                    resDto.EntityList = _mapper.Map<List<InterfaceDto>>(
                             await _service.Interfaces.Where(s => true).Include(i => i.Type).Include(i => i.User)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
@@ -116,7 +116,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<InterfaceDto>>(
+                                    resDto.EntityList = _mapper.Map<List<InterfaceDto>>(
                             await _service.Interfaces.Where(s => true).Include(i => i.Type).Include(i => i.User)
                             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
@@ -131,7 +131,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.Type.Name == type).Include(i => i.Type).Include(i => i.User)
+                                    resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.Type.Name == type).Include(i => i.Type).Include(i => i.User)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -142,7 +142,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.Type.Name == type).Include(i => i.Type).Include(i => i.User)
+                                    resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.Type.Name == type).Include(i => i.Type).Include(i => i.User)
                         .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                         .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -155,7 +155,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
+                                    resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -166,7 +166,7 @@ namespace Snblog.Service.Service
                             switch (ordering) //排序
                             {
                                 case "id":
-                                    resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
+                                    resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.User.Name == type).Include(i => i.Type).Include(i => i.User)
                              .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                              .Take(pageSize).AsNoTracking().ToListAsync());
                                     break;
@@ -182,7 +182,7 @@ namespace Snblog.Service.Service
                         switch (ordering) //排序
                         {
                             case "id":
-                            resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.User.Name == sName[0] && w.Type.Name == sName[1]).Include(i => i.Type).Include(i => i.User)
+                            resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.User.Name == sName[0] && w.Type.Name == sName[1]).Include(i => i.Type).Include(i => i.User)
                     .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                     .Take(pageSize).AsNoTracking().ToListAsync());
                             break;
@@ -192,7 +192,7 @@ namespace Snblog.Service.Service
                         switch (ordering) //排序
                         {
                             case "id":
-                            resDto.entityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.User.Name == sName[0] && w.Type.Name == sName[1]).Include(i => i.Type).Include(i => i.User)
+                            resDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces.Where(w => w.User.Name == sName[0] && w.Type.Name == sName[1]).Include(i => i.Type).Include(i => i.User)
                      .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                      .Take(pageSize).AsNoTracking().ToListAsync());
                             break;
@@ -200,27 +200,27 @@ namespace Snblog.Service.Service
                     }
                     break;
                 }
-                _cacheutil.CacheString($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}", resDto.entityList, cache);
+                _cacheutil.CacheString($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}", resDto.EntityList, cache);
             }
-            return resDto.entityList;
+            return resDto.EntityList;
         }
 
         public async Task<bool> AddAsync(Interface entity)
         {
-            _logger.LogInformation($"{NAME}{ADD}");
+            Log.Information($"{NAME}{ADD}");
             await  _service.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
         public async Task<bool> UpdateAsync(Interface entity)
         {
-            _logger.LogInformation($"{NAME}{UP}_{entity}");
+            Log.Information($"{NAME}{UP}_{entity}");
             _service.Interfaces.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            _logger.LogInformation($"{NAME}{DEL}_{id}");
+            Log.Information($"{NAME}{DEL}_{id}");
             var reslult = await _service.Interfaces.FindAsync(id);
             if (reslult == null) return false;
             _service.Interfaces.Remove(reslult);//删除单个
@@ -237,12 +237,12 @@ namespace Snblog.Service.Service
         /// <returns>entity</returns>
         public async Task<InterfaceDto> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation($"{NAME}{BYID}{id}_{cache}");
-            resDto.entity = _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}", resDto.entity, cache);
-            if (resDto.entity == null)
-                resDto.entity = _mapper.Map<InterfaceDto>(await _service.Interfaces.FindAsync(id));
-                _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}", resDto.entity, cache);
-            return resDto.entity;
+            Log.Information($"{NAME}{BYID}{id}_{cache}");
+            resDto.Entity = _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}", resDto.Entity, cache);
+            if (resDto.Entity == null)
+                resDto.Entity = _mapper.Map<InterfaceDto>(await _service.Interfaces.FindAsync(id));
+                _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}", resDto.Entity, cache);
+            return resDto.Entity;
         }
     }
 }

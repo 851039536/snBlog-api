@@ -1,9 +1,4 @@
-﻿using Snblog.Enties.Models;
-using Snblog.Enties.ModelsDto;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Snblog.IService.IService
+﻿namespace Snblog.IService.IService
 {
     public interface IDiaryService
     {
@@ -61,14 +56,13 @@ namespace Snblog.IService.IService
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
-        /// <returns></returns>
-        Task<List<DiaryDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
+        Task<List<DiaryDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
 
 
         /// <summary>
         /// 删除
         /// </summary>
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DelAsync(int id);
 
         /// <summary>
         /// 添加

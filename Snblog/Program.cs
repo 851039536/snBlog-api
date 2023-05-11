@@ -1,9 +1,7 @@
-using System;
-using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 
 namespace Snblog
 {
@@ -12,42 +10,31 @@ namespace Snblog
     /// </summary>
     public class Program
     {
-
-        /// <summary>
-        /// Configuration
-        /// </summary>
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-       .SetBasePath(Directory.GetCurrentDirectory())
-       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-       .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-       .AddEnvironmentVariables()
-       .Build();
-
+     
         /// <summary>
         /// Main
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            // 读取 appsettings.json 配置文件
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            // 配置 Serilog
             Log.Logger = new LoggerConfiguration()
-         .ReadFrom.Configuration(Configuration)
-         .Enrich.FromLogContext()
-         .CreateLogger();
-            try
-            {
-                Log.Information("启动主机");
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
+            try {
+                Log.Information("Starting web host");
                 CreateHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "主机意外终止");
-            }
-            finally
-            {
+            } catch (Exception ex) {
+                Log.Fatal(ex,"Host terminated unexpectedly");
+            } finally {
                 Log.CloseAndFlush();
             }
-
-            //CreateHostBuilder(args).Build().Run();
         }
 
         /// <summary>
@@ -57,7 +44,7 @@ namespace Snblog
         /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-             .UseSerilog() // <-添加此行
+             .UseSerilog()  // 使用 Serilog 作为日志提供程序
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

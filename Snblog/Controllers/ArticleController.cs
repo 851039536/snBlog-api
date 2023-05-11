@@ -1,38 +1,27 @@
-﻿using AngleSharp.Dom;
-using Blog.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using MySqlX.XDevAPI.Common;
-using Snblog.Enties.Models;
-using Snblog.IService.IService;
-using System;
-using System.Drawing.Printing;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using FluentValidation;
 
-//默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
     /// <summary>
-    /// 文章内容
+    /// 文章路由
     /// </summary>
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
-    [ApiController]
+    [ApiController] //控制路由
     [Route("article")]
     public class ArticleController : BaseController
     {
-        //IOC依赖注入
-        private readonly IArticleService _service; 
-
+        //服务
+        private readonly IArticleService _service;
+        private readonly IValidator<Article> _validator;
         #region 构造函数
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
-        public ArticleController(IArticleService service)
+        public ArticleController(IServiceProvider service)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _service = service.GetRequiredService<IArticleService>();
+            _validator = service.GetRequiredService<IValidator<Article>>();
         }
         #endregion
 
@@ -47,8 +36,8 @@ namespace Snblog.Controllers
         [HttpGet("sum")]
         public async Task<IActionResult> GetSumAsync(int identity = 0,string type = null,bool cache = false)
         {
-            int sum = await _service.GetSumAsync(identity,type,cache);
-            return ApiResponse(cache:cache, data:sum);
+            int data = await _service.GetSumAsync(identity,type,cache);
+            return ApiResponse(cache:cache, data:data);
         }
         #endregion
 
@@ -62,7 +51,8 @@ namespace Snblog.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
-            return ApiResponse(data: await _service.GetAllAsync(cache));
+            var data = await _service.GetAllAsync(cache);
+            return ApiResponse(data: data);
         }
         #endregion
 
@@ -78,7 +68,8 @@ namespace Snblog.Controllers
         [HttpGet("contains")]
         public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "winfrom",bool cache = false)
         {
-            return ApiResponse(cache: cache,data: await _service.GetContainsAsync(identity,type,name,cache));
+            var data = await _service.GetContainsAsync(identity, type,name,cache);
+            return ApiResponse(cache: cache,data: data);
         }
 
         [HttpGet("ml")]
@@ -105,7 +96,8 @@ namespace Snblog.Controllers
         [HttpGet("byid")]
         public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
         {
-            return ApiResponse(cache:cache, data: await _service.GetByIdAsync(id,cache));
+            var data = await _service.GetByIdAsync(id, cache);
+            return ApiResponse(cache:cache, data: data);
         }
         #endregion
 
@@ -119,7 +111,8 @@ namespace Snblog.Controllers
         [HttpGet("type")]
         public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false)
         {
-            return ApiResponse(cache: cache,data: await _service.GetTypeAsync(identity,type,cache));
+            var data = await _service.GetTypeAsync(identity, type,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
 
@@ -135,7 +128,8 @@ namespace Snblog.Controllers
         [HttpGet("strSum")]
         public async Task<IActionResult> GetStrSumAsync(int identity = 0,int type = 1,string name = "null",bool cache = false)
         {
-            return ApiResponse(cache: cache,data: await _service.GetStrSumAsync(identity,type,name,cache));
+            var data = await _service.GetStrSumAsync(identity,type,name,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
 
@@ -154,7 +148,8 @@ namespace Snblog.Controllers
         [HttpGet("paging")]
         public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false)
         {
-            return ApiResponse(cache: cache,data: await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache));
+            var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache);
+            return ApiResponse(cache: cache,data:data );
         }
         #endregion
 
@@ -164,11 +159,17 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="entity">实体</param>
         /// <returns>bool</returns>
-        [Authorize(Roles = Permissions.Name)]
+       [Authorize(Roles = Permissions.Name)]
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync(Article entity)
         {
-            return ApiResponse(data:await _service.AddAsync(entity));
+            var result = _validator.Validate(entity);
+            if (!result.IsValid) {
+                return ApiResponse(statusCode: 404,message: result.Errors[0].ErrorMessage,data: entity);
+            }
+
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data:data);
         }
         #endregion
 
@@ -182,7 +183,8 @@ namespace Snblog.Controllers
         [HttpPut("edit")]
         public async Task<IActionResult> UpdateAsync(Article entity)
         {
-            return ApiResponse(data: await _service.UpdateAsync(entity));
+            var data = await _service.UpdateAsync(entity);
+            return ApiResponse(data:data );
         }
         #endregion
 
@@ -196,7 +198,8 @@ namespace Snblog.Controllers
         [HttpDelete("del")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return ApiResponse(data: await _service.DeleteAsync(id));
+            var data = await _service.DelAsync(id);
+            return ApiResponse(data: data);
         }
         #endregion
 
@@ -210,7 +213,8 @@ namespace Snblog.Controllers
         [HttpPut("upPortion")]
         public async Task<IActionResult> UpdatePortionAsync(Article entity,string type)
         {
-            return ApiResponse(data: await _service.UpdatePortionAsync(entity,type));
+            var data = await _service.UpdatePortionAsync(entity,type);
+            return ApiResponse(data: data);
         }
         #endregion
 

@@ -28,14 +28,14 @@ namespace Snblog.Service.Service
         public async Task<bool> AddAsync(SnNavigationType entity)
         {
 
-            _logger.LogInformation("添加数据_SnNavigationType" + entity);
+            Log.Information("添加数据_SnNavigationType" + entity);
             await _service.SnNavigationTypes.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<int> CountAsync(bool cache)
         {
-            _logger.LogInformation("查询总数_SnNavigationType" + cache);
+            Log.Information("查询总数_SnNavigationType" + cache);
             result_Int = _cacheutil.CacheNumber("CountAsync_SnNavigationType" + cache, result_Int, cache);
             if (result_Int == 0)
             {
@@ -48,7 +48,7 @@ namespace Snblog.Service.Service
         public async Task<bool> DeleteAsync(int id)
         {
 
-            _logger.LogInformation("删除数据_SnNavigationType" + id);
+            Log.Information("删除数据_SnNavigationType" + id);
             var todoItem = await _service.SnNavigationTypes.FindAsync(id);
             _service.SnNavigationTypes.Remove(todoItem);
             return await _service.SaveChangesAsync() > 0;
@@ -56,7 +56,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnNavigationType>> GetAllAsync(bool cache)
         {
-            _logger.LogInformation("查询所有_SnNavigationType" + cache);
+            Log.Information("查询所有_SnNavigationType" + cache);
             result_List = _cacheutil.CacheString("查询所有_SnNavigationType" + cache, result_List, cache);
             if (result_List == null)
             {
@@ -68,7 +68,7 @@ namespace Snblog.Service.Service
 
         public async Task<SnNavigationType> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation("主键查询_SnNavigationType" + id + cache);
+            Log.Information("主键查询_SnNavigationType" + id + cache);
             SnNavigationType result = default;
             result = _cacheutil.CacheString("GetByIdAsync" + id + cache, result, cache);
             if (result == null)
@@ -81,7 +81,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<SnNavigationType>> GetFyTypeAllAsync(string type, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            _logger.LogInformation("条件分页查询_SnNavigationType" + type + pageIndex + pageSize + isDesc, cache);
+            Log.Information("条件分页查询_SnNavigationType" + type + pageIndex + pageSize + isDesc, cache);
             result_List = _cacheutil.CacheString("GetFyTypeAllAsync_SnNavigationType" + type + pageIndex + pageSize + isDesc + cache, result_List, cache);
             if (result_List == null)
             {
@@ -119,7 +119,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> UpdateAsync(SnNavigationType entity)
         {
-            _logger.LogInformation("更新数据_SnNavigationType" + entity);
+            Log.Information("更新数据_SnNavigationType" + entity);
             _service.SnNavigationTypes.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }

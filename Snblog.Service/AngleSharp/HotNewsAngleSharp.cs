@@ -21,7 +21,7 @@ namespace Snblog.Service.AngleSharp
                 url = "https://www.cnblogs.com/";
                 selector = "#post_list";
                 selectorall = "div.post-item-text > a";
-                _logger.LogInformation("GetCnblogs 默认赋值");
+                Log.Information("GetCnblogs 默认赋值");
             }
             return await Reptile(url,selector,selectorall);
         }
@@ -83,7 +83,7 @@ namespace Snblog.Service.AngleSharp
                 foreach (var item in matches) {
                     if (num <= 10) {
                         num++;
-                        _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
+                        Log.Information(item.InnerHtml + "," + item.GetAttribute("href"));
                         rData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
                     }
                 }
@@ -106,7 +106,7 @@ namespace Snblog.Service.AngleSharp
 
             // We are only interested in the text - select it with LINQ
             foreach (var item in matches) {
-                _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
+                Log.Information(item.InnerHtml + "," + item.GetAttribute("href"));
                 resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
             }
             return resultData;

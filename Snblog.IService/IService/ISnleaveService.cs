@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Snblog.Enties.Models;
-
-namespace Snblog.IService.IService
+﻿namespace Snblog.IService.IService
 {
     public interface ISnleaveService
     {

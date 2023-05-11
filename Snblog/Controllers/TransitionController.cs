@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Snblog.Util.ChinesetoPinyin;
-using System;
-using System.IO;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 //默认的约定集将应用于程序集中的所有操作：
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
-namespace Snblog.Controllers {
+namespace Snblog.Controllers
+{
     /// <summary>
     /// 转换
     /// </summary>

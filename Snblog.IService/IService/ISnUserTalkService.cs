@@ -1,8 +1,4 @@
-﻿using Snblog.Enties.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Snblog.IService
+﻿namespace Snblog.IService
 {
     /// <summary>
     /// 业务类接口

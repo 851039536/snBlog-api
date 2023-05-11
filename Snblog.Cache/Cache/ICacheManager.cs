@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Snblog.Cache.Cache
+﻿namespace Snblog.Cache.Cache
 {
     public interface ICacheManager
     {

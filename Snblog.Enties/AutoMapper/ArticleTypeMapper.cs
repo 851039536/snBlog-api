@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Snblog.Enties.Models;
-using Snblog.Enties.ModelsDto;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Snblog.Enties.AutoMapper
+﻿namespace Snblog.Enties.AutoMapper
 {
     public class ArticleTypeMapper : Profile
     {

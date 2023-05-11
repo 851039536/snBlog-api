@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Snblog.Enties.Models;
-
+﻿
 namespace Snblog.IService.IReService
 {
     public interface IReSnArticleService

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Snblog.Enties.Models;
 using Snblog.IRepository;
-
+using Z.EntityFramework.Extensions;
 
 namespace Snblog.Repository.Repository
 {
@@ -9,6 +9,7 @@ namespace Snblog.Repository.Repository
     {
         public snblogContext()
         {
+
         }
 
         public snblogContext(DbContextOptions<snblogContext> options)
@@ -45,13 +46,10 @@ namespace Snblog.Repository.Repository
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured) {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none",ServerVersion.Parse("8.0.33-mysql"));
-//            }
-//        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -10,8 +10,8 @@ namespace Snblog.Service
         private readonly IConcardContext _mydbcontext;
         public BaseService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext)
         {
-            this._repositoryFactory = repositoryFactory;
-            this._mydbcontext = mydbcontext;
+            _repositoryFactory = repositoryFactory;
+            _mydbcontext = mydbcontext;
         }
 
         public IRepositorys<T> CreateService<T>() where T : class, new()

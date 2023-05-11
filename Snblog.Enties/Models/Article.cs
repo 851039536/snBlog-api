@@ -1,13 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Security.Policy;
-
-#nullable disable
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Snblog.Enties.Models
     {
-
     [Index(nameof(Name))]
     public partial class Article
         {

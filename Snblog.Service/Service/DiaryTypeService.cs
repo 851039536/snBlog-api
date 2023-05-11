@@ -26,14 +26,14 @@ namespace Snblog.Service.Service
 
         public async Task<bool> AddAsync(DiaryType entity)
         {
-            _logger.LogInformation("添加数据_SnOneType" + entity);
+            Log.Information("添加数据_SnOneType" + entity);
             await _service.DiaryTypes.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<int> CountAsync(bool cache)
         {
-            _logger.LogInformation("查询总数_SnOneType" + cache);
+            Log.Information("查询总数_SnOneType" + cache);
             result_Int = _cacheutil.CacheNumber("CountAsync_SnOneType" + cache, result_Int, cache);
             if (result_Int != 0)
             {
@@ -46,7 +46,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            _logger.LogInformation("删除数据_SnOneType" + id);
+            Log.Information("删除数据_SnOneType" + id);
             var result = await _service.DiaryTypes.FindAsync(id);
             _service.DiaryTypes.Remove(result);
             return await _service.SaveChangesAsync() > 0;
@@ -54,7 +54,7 @@ namespace Snblog.Service.Service
 
         public async Task<List<DiaryType>> GetAllAsync(bool cache)
         {
-            _logger.LogInformation("查询所有_SnOneType" + cache);
+            Log.Information("查询所有_SnOneType" + cache);
             result_List = _cacheutil.CacheString("GetAllAsync_SnOneType" + cache, result_List, cache);
             if (result_List != null)
             {
@@ -67,7 +67,7 @@ namespace Snblog.Service.Service
 
         public async Task<DiaryType> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation("主键查询_SnOneType" + cache);
+            Log.Information("主键查询_SnOneType" + cache);
             DiaryType result = default;
             result = _cacheutil.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
             if (result != null)
@@ -81,7 +81,7 @@ namespace Snblog.Service.Service
 
         public async Task<DiaryType> GetTypeAsync(int type, bool cache)
         {
-            _logger.LogInformation("类别查询_SnOneType" + type + cache);
+            Log.Information("类别查询_SnOneType" + type + cache);
             DiaryType result = default;
             result = _cacheutil.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
             if (result != null)
@@ -95,7 +95,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> UpdateAsync(DiaryType entity)
         {
-            _logger.LogInformation("更新数据_SnOneType" + entity);
+            Log.Information("更新数据_SnOneType" + entity);
             _service.DiaryTypes.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }

@@ -19,8 +19,8 @@ namespace Snblog.Service.Service
         private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnippetService> _logger;
-        private readonly Res<Snippet> res = new();
-        private readonly Dto<SnippetDto> rDto = new();
+        private readonly EntityData<Snippet> res = new();
+        private readonly EntityDataDto<SnippetDto> rDto = new();
         private readonly IMapper _mapper;
 
 
@@ -43,7 +43,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            _logger.LogInformation($"{NAME}{DEL}{id}");
+            Log.Information($"{NAME}{DEL}{id}");
             Snippet reslult = await _service.Snippets.FindAsync(id);
             if (reslult == null) return false;
             _service.Snippets.Remove(reslult);//删除单个
@@ -59,10 +59,10 @@ namespace Snblog.Service.Service
         /// <returns>entity</returns>
         public async Task<SnippetDto> GetByIdAsync(int id,bool cache)
         {
-            _logger.LogInformation($"{NAME}{BYID}{id}_{cache}");
-            rDto.entityList = _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}",rDto.entityList,cache);
-            if (rDto.entityList == null) {
-                rDto.entity = _mapper.Map<SnippetDto>(await _service.Snippets.Select(e => new SnippetDto {
+            Log.Information($"{NAME}{BYID}{id}_{cache}");
+            rDto.EntityList = _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}",rDto.EntityList,cache);
+            if (rDto.EntityList == null) {
+                rDto.Entity = _mapper.Map<SnippetDto>(await _service.Snippets.Select(e => new SnippetDto {
                     Id = e.Id,
                     Name = e.Name,
                     Text = e.Text,
@@ -71,15 +71,15 @@ namespace Snblog.Service.Service
                     Type = e.Type,
                     Label = e.Label,
                 }).AsNoTracking().SingleOrDefaultAsync(b => b.Id == id));
-                _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}",rDto.entity,cache);
+                _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}",rDto.Entity,cache);
             }
-            return rDto.entity;
+            return rDto.Entity;
         }
 
 
         public async Task<bool> AddAsync(Snippet entity)
         {
-            _logger.LogInformation($"{NAME}{ADD}{entity}");
+            Log.Information($"{NAME}{ADD}{entity}");
             //entity.TimeCreate = DateTime.Now;
             //entity.TimeModified = DateTime.Now;
             await _service.Snippets.AddAsync(entity);
@@ -87,7 +87,7 @@ namespace Snblog.Service.Service
         }
         public async Task<bool> UpdateAsync(Snippet entity)
         {
-            _logger.LogInformation($"{NAME}{UP}{entity}");
+            Log.Information($"{NAME}{UP}{entity}");
             //entity.TimeModified = DateTime.Now; //更新时间
             _service.Snippets.Update(entity);
             return await _service.SaveChangesAsync() > 0;
@@ -95,26 +95,26 @@ namespace Snblog.Service.Service
 
         public async Task<int> GetSumAsync(int identity,string type,bool cache)
         {
-            _logger.LogInformation($"{NAME}{SUM}{identity}_{cache}");
-            res.entityInt = _cacheutil.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}",res.entityInt,cache);
-            if (res.entityInt == 0) {
+            Log.Information($"{NAME}{SUM}{identity}_{cache}");
+            res.EntityCount = _cacheutil.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}",res.EntityCount,cache);
+            if (res.EntityCount == 0) {
                 switch (identity) {
                     case 0:
-                    res.entityInt = await _service.Snippets.AsNoTracking().CountAsync();
+                    res.EntityCount = await _service.Snippets.AsNoTracking().CountAsync();
                     break;
                     case 1:
-                    res.entityInt = await _service.Snippets.AsNoTracking().CountAsync(c => c.Type.Name == type);
+                    res.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.Type.Name == type);
                     break;
                     case 2:
-                    res.entityInt = await _service.Snippets.AsNoTracking().CountAsync(c => c.Tag.Name == type);
+                    res.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.Tag.Name == type);
                     break;
                     case 3:
-                    res.entityInt = await _service.Snippets.AsNoTracking().CountAsync(c => c.User.Name == type);
+                    res.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.User.Name == type);
                     break;
                 }
-                _cacheutil.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}",res.entityInt,cache);
+                _cacheutil.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}",res.EntityCount,cache);
             }
-            return res.entityInt;
+            return res.EntityCount;
         }
 
         /// <summary>
@@ -126,35 +126,35 @@ namespace Snblog.Service.Service
         /// <returns>int</returns>
         public async Task<int> GetStrSumAsync(int identity,string name,bool cache)
         {
-            _logger.LogInformation($"{NAME}统计_{identity}_{cache}");
-            res.entityInt = _cacheutil.CacheNumber($"{NAME}GetStrSumAsync{identity}{name}{cache}",res.entityInt,cache);
-            if (res.entityInt == 0) {
+            Log.Information($"{NAME}统计_{identity}_{cache}");
+            res.EntityCount = _cacheutil.CacheNumber($"{NAME}GetStrSumAsync{identity}{name}{cache}",res.EntityCount,cache);
+            if (res.EntityCount == 0) {
                 int num = 0;
                 switch (identity) {
                     case 0:
                     List<string> text = await _service.Snippets.Select(c => c.Text).ToListAsync();
                     for (int i = 0 ; i < text.Count ; i++) num += text[i].Length;
-                    res.entityInt = num;
+                    res.EntityCount = num;
                     break;
                     case 1:
                     List<string> ttext = await _service.Snippets.Where(w => w.Type.Name == name).Select(c => c.Text).ToListAsync();
                     for (int i = 0 ; i < ttext.Count ; i++) num += ttext[i].Length;
-                    res.entityInt = num;
+                    res.EntityCount = num;
                     break;
                     case 2:
                     List<string> tagtext = await _service.Snippets.Where(w => w.Tag.Name == name).Select(c => c.Text).ToListAsync();
                     for (int i = 0 ; i < tagtext.Count ; i++) num += tagtext[i].Length;
-                    res.entityInt = num;
+                    res.EntityCount = num;
                     break;
                     case 3:
                     List<string> utext = await _service.Snippets.Where(w => w.User.Name == name).Select(c => c.Text).ToListAsync();
                     for (int i = 0 ; i < utext.Count ; i++) num += utext[i].Length;
-                    res.entityInt = num;
+                    res.EntityCount = num;
                     break;
                 }
-                _cacheutil.CacheNumber($"{NAME}GetStrSumAsync{identity}{name}{cache}",res.entityInt,cache);
+                _cacheutil.CacheNumber($"{NAME}GetStrSumAsync{identity}{name}{cache}",res.EntityCount,cache);
             }
-            return res.entityInt;
+            return res.EntityCount;
         }
 
         /// <summary>
@@ -169,16 +169,16 @@ namespace Snblog.Service.Service
         /// <returns>list-entity</returns>
         public async Task<List<SnippetDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,bool isDesc,bool cache)
         {
-            _logger.LogInformation($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
-            rDto.entityList = _cacheutil.CacheString($"{NAME}{PAGING}{identity}{type}{pageIndex}{pageSize}{isDesc}{cache}",rDto.entityList,cache);
-            if (rDto.entityList == null) {
+            Log.Information($"{NAME}{PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
+            rDto.EntityList = _cacheutil.CacheString($"{NAME}{PAGING}{identity}{type}{pageIndex}{pageSize}{isDesc}{cache}",rDto.EntityList,cache);
+            if (rDto.EntityList == null) {
                 switch (identity) {
                     case 0:
                     await GetPaging(pageIndex,pageSize,isDesc);
                     break;
                     case 1:
                     if (isDesc) {
-                        rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Type.Name == type)
+                        rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Type.Name == type)
                    .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                     .Take(pageSize).Select(e => new SnippetDto {
                         Id = e.Id,
@@ -190,7 +190,7 @@ namespace Snblog.Service.Service
                         Type = e.Type
                     }).AsNoTracking().ToListAsync());
                     } else {
-                        rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Type.Name == type)
+                        rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Type.Name == type)
                      .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                      .Take(pageSize).Select(e => new SnippetDto {
                          Id = e.Id,
@@ -211,7 +211,7 @@ namespace Snblog.Service.Service
                     break;
                     case 4:
                     if (isDesc) {
-                        rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Label.Name == type)
+                        rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Label.Name == type)
                    .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                     .Take(pageSize).Select(e => new SnippetDto {
                         Id = e.Id,
@@ -223,7 +223,7 @@ namespace Snblog.Service.Service
                         Type = e.Type
                     }).AsNoTracking().ToListAsync());
                     } else {
-                        rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Label.Name == type)
+                        rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Label.Name == type)
                      .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                      .Take(pageSize).Select(e => new SnippetDto {
                          Id = e.Id,
@@ -237,14 +237,14 @@ namespace Snblog.Service.Service
                     }
                     break;
                 }
-                _cacheutil.CacheString($"{NAME}{PAGING}{identity}{type}{pageIndex}{pageSize}{isDesc}{cache}",rDto.entityList,cache);
+                _cacheutil.CacheString($"{NAME}{PAGING}{identity}{type}{pageIndex}{pageSize}{isDesc}{cache}",rDto.EntityList,cache);
             }
-            return rDto.entityList;
+            return rDto.EntityList;
         }
         private async Task GetPagingUser(string type,int pageIndex,int pageSize,bool isDesc)
         {
             if (isDesc) {
-                rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.User.Name == type)
+                rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.User.Name == type)
                .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                .Take(pageSize).Select(e => new SnippetDto {
                    Id = e.Id,
@@ -256,7 +256,7 @@ namespace Snblog.Service.Service
                    Type = e.Type
                }).AsNoTracking().ToListAsync());
             } else {
-                rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.User.Name == type)
+                rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.User.Name == type)
               .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
               .Take(pageSize).Select(e => new SnippetDto {
                   Id = e.Id,
@@ -272,7 +272,7 @@ namespace Snblog.Service.Service
         private async Task GetPagingTag(string type,int pageIndex,int pageSize,bool isDesc)
         {
             if (isDesc) {
-                rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Tag.Name == type)
+                rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Tag.Name == type)
                .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                .Take(pageSize).Select(e => new SnippetDto {
                    Id = e.Id,
@@ -284,7 +284,7 @@ namespace Snblog.Service.Service
                    Type = e.Type
                }).AsNoTracking().ToListAsync());
             } else {
-                rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Tag.Name == type)
+                rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.Where(w => w.Tag.Name == type)
                 .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
                 .Take(pageSize).Select(e => new SnippetDto {
                     Id = e.Id,
@@ -300,7 +300,7 @@ namespace Snblog.Service.Service
         private async Task GetPaging(int pageIndex,int pageSize,bool isDesc)
         {
             if (isDesc) {
-                rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
+                rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets.OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
         .Take(pageSize).Select(e => new SnippetDto {
             Id = e.Id,
             Name = e.Name,
@@ -311,7 +311,7 @@ namespace Snblog.Service.Service
             Type = e.Type
         }).AsNoTracking().ToListAsync());
             } else {
-                rDto.entityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets
+                rDto.EntityList = _mapper.Map<List<SnippetDto>>(await _service.Snippets
         .OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
         .Take(pageSize).Select(e => new SnippetDto {
             Id = e.Id,
@@ -326,7 +326,7 @@ namespace Snblog.Service.Service
         }
         public async Task<bool> UpdatePortionAsync(Snippet entity,string type)
         {
-            //_logger.LogInformation("SnArticle更新部分参数");
+            //Log.Information("SnArticle更新部分参数");
             Snippet resulet = await _service.Snippets.FindAsync(entity.Id);
             if (resulet == null) return false;
             switch (type) {    //指定字段进行更新操作
@@ -355,12 +355,12 @@ namespace Snblog.Service.Service
         {
             //将字符串转换为大写字母的操作移到查询之前进行，以减少每个查询条件的计算量；对多个查询条件之间的关系进行优化，避免重复计算
             var uppercaseName = name.ToUpper();
-            _logger.LogInformation($"{NAME}{CONTAINS}{identity}_{type}_{name}_{cache}");
-            rDto.entityList = _cacheutil.CacheString($"{NAME}{CONTAINS}{identity}{type}{name}{cache}",rDto.entityList,cache);
-            if (rDto.entityList == null) {
+            Log.Information($"{NAME}{CONTAINS}{identity}_{type}_{name}_{cache}");
+            rDto.EntityList = _cacheutil.CacheString($"{NAME}{CONTAINS}{identity}{type}{name}{cache}",rDto.EntityList,cache);
+            if (rDto.EntityList == null) {
                 switch (identity) {
                     case 0: //所有 查分类,标题,内容
-                    rDto.entityList = _mapper.Map<List<SnippetDto>>(
+                    rDto.EntityList = _mapper.Map<List<SnippetDto>>(
                     await _service.Snippets
                     .Where(w => w.Name.ToUpper().Contains(uppercaseName) || w.Label.Name.ToUpper().Contains(uppercaseName) || w.Text.ToUpper().Contains(uppercaseName))
                      .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
@@ -377,7 +377,7 @@ namespace Snblog.Service.Service
                 );
                     break;
                     case 1:
-                    rDto.entityList = _mapper.Map<List<SnippetDto>>(
+                    rDto.EntityList = _mapper.Map<List<SnippetDto>>(
                   await _service.Snippets
                    .Where(l => l.Name.ToUpper().Contains(uppercaseName) && l.Type.Name == type)
                         .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
@@ -393,7 +393,7 @@ namespace Snblog.Service.Service
                    }).AsNoTracking().ToListAsync());
                     break;
                     case 2:
-                    rDto.entityList = _mapper.Map<List<SnippetDto>>(
+                    rDto.EntityList = _mapper.Map<List<SnippetDto>>(
                    await _service.Snippets
                      .Where(l => l.Name.ToUpper().Contains(uppercaseName) && l.Tag.Name == type)
                      .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
@@ -409,7 +409,7 @@ namespace Snblog.Service.Service
                      }).AsNoTracking().ToListAsync());
                     break;
                     case 3:
-                    rDto.entityList = _mapper.Map<List<SnippetDto>>(
+                    rDto.EntityList = _mapper.Map<List<SnippetDto>>(
                    await _service.Snippets
                      .Where(l => l.Name.ToUpper().Contains(uppercaseName) && l.User.Name == type)
                      .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
@@ -425,7 +425,7 @@ namespace Snblog.Service.Service
                      }).AsNoTracking().ToListAsync());
                     break;
                     case 4:
-                    rDto.entityList = _mapper.Map<List<SnippetDto>>(
+                    rDto.EntityList = _mapper.Map<List<SnippetDto>>(
                    await _service.Snippets
                      .Where(l => l.Text.ToUpper().Contains(uppercaseName))
                     .OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize)
@@ -443,9 +443,9 @@ namespace Snblog.Service.Service
                     default:
                     return null;
                 }
-                _cacheutil.CacheString($"{NAME}{CONTAINS}{identity}{type}{name}{cache}",rDto.entityList,cache);
+                _cacheutil.CacheString($"{NAME}{CONTAINS}{identity}{type}{name}{cache}",rDto.EntityList,cache);
             }
-            return rDto.entityList;
+            return rDto.EntityList;
         }
     }
 }

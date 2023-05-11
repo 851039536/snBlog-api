@@ -20,8 +20,8 @@ namespace Snblog.Service.Service
         private readonly snblogContext _service;
         private readonly CacheUtil _cacheutil;
 
-        private readonly Res<SnippetTag> res = new();
-        private readonly Dto<SnippetTagDto> rDto = new();
+        private readonly EntityData<SnippetTag> res = new();
+        private readonly EntityDataDto<SnippetTagDto> rDto = new();
         private readonly ILogger<SnippetTag> _logger;
         private readonly IMapper _mapper;
 
@@ -69,12 +69,12 @@ namespace Snblog.Service.Service
         /// <returns>entity</returns>
         public async Task<SnippetTagDto> GetByIdAsync(int id, bool cache)
         {
-            _logger.LogInformation($"{NAME}{BYID}{id}_{cache}");
-            rDto.entity = _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}{id}", rDto.entity, cache);
-            if (res.entity != null) return rDto.entity;
-            rDto.entity = _mapper.Map<SnippetTagDto>(await _service.SnippetTags.FindAsync(id));
-            _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}", rDto.entity, cache);
-            return rDto.entity;
+            Log.Information($"{NAME}{BYID}{id}_{cache}");
+            rDto.Entity = _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}{id}", rDto.Entity, cache);
+            if (res.Entity != null) return rDto.Entity;
+            rDto.Entity = _mapper.Map<SnippetTagDto>(await _service.SnippetTags.FindAsync(id));
+            _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}", rDto.Entity, cache);
+            return rDto.Entity;
         }
 
         /// <summary>
@@ -108,17 +108,17 @@ namespace Snblog.Service.Service
         /// <returns>list-entity</returns>
         public async Task<List<SnippetTagDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            _logger.LogInformation($"{NAME}{PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}");
-            rDto.entityList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.entityList, cache);
-            if (res.entityList != null) return rDto.entityList;
+            Log.Information($"{NAME}{PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}");
+            rDto.EntityList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.EntityList, cache);
+            if (res.EntityList != null) return rDto.EntityList;
             //await QPaging(pageIndex, pageSize, isDesc);
             if (isDesc) {
-               rDto.entityList = _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
+               rDto.EntityList = _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
                 } else {
-               rDto.entityList = _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
+               rDto.EntityList = _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
                 }
-            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.entityList, cache);
-            return rDto.entityList;
+            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.EntityList, cache);
+            return rDto.EntityList;
         }
 
         /// <summary>
@@ -128,12 +128,12 @@ namespace Snblog.Service.Service
         /// <returns>list-entity</returns>
         public async Task<List<SnippetTagDto>> GetAllAsync(bool cache)
         {
-            _logger.LogInformation($"{NAME}{ALL}", cache);
-            rDto.entityList = _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.entityList, cache);
-            if (rDto.entityList != null) return rDto.entityList;
-            rDto.entityList = _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags.AsNoTracking().ToListAsync());
-            _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.entityList, cache);
-            return rDto.entityList;
+            Log.Information($"{NAME}{ALL}", cache);
+            rDto.EntityList = _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.EntityList, cache);
+            if (rDto.EntityList != null) return rDto.EntityList;
+            rDto.EntityList = _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags.AsNoTracking().ToListAsync());
+            _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.EntityList, cache);
+            return rDto.EntityList;
         }
         /// <summary>
         /// 查询总数
@@ -142,12 +142,12 @@ namespace Snblog.Service.Service
         /// <returns>int</returns>
         public async Task<int> GetSumAsync(bool cache)
         {
-            _logger.LogInformation($"{NAME}{SUM}{cache}");
-            res.entityInt = _cacheutil.CacheNumber($"{NAME}{SUM}{cache}", res.entityInt, cache);
-            if (res.entityInt != 0) return res.entityInt;
-            res.entityInt = await _service.SnippetTags.AsNoTracking().CountAsync();
-            _cacheutil.CacheNumber($"{NAME}{SUM}{cache}", res.entityInt, cache);
-            return res.entityInt;
+            Log.Information($"{NAME}{SUM}{cache}");
+            res.EntityCount = _cacheutil.CacheNumber($"{NAME}{SUM}{cache}", res.EntityCount, cache);
+            if (res.EntityCount != 0) return res.EntityCount;
+            res.EntityCount = await _service.SnippetTags.AsNoTracking().CountAsync();
+            _cacheutil.CacheNumber($"{NAME}{SUM}{cache}", res.EntityCount, cache);
+            return res.EntityCount;
         }
     }
 }

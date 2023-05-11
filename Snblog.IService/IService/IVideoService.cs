@@ -1,9 +1,4 @@
-﻿using Snblog.Enties.Models;
-using Snblog.Enties.ModelsDto;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Snblog.IService
+﻿namespace Snblog.IService
 {
     public interface IVideoService
     {
