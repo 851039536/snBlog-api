@@ -1,5 +1,4 @@
 ﻿using Blog.Core;
-using MechTE.TFile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snblog.Service.AngleSharp;
@@ -146,7 +145,7 @@ namespace Snblog.ControllersAngleSharp
         [HttpPost("StartPath")]
         public ActionResult StartPath(string path)
         {
-            TFile.TOpenFile(@"D:\sw\netCore\Snblog\Snblog\bin\Debug\net5.0\MECH",1);
+            //TFile.TOpenFile(@"D:\sw\netCore\Snblog\Snblog\bin\Debug\net5.0\MECH",1);
             return Ok();
         }
 
