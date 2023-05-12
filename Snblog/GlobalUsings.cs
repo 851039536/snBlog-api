@@ -15,6 +15,8 @@ global using Z.EntityFramework.Plus;
 global using Blog.Core;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
+global using FluentValidation;
+global using Snblog.IService;
 
 //startup
 global using System.IO;

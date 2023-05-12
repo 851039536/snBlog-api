@@ -1,9 +1,7 @@
-﻿using FluentValidation;
-
-namespace Snblog.Controllers
+﻿namespace Snblog.Controllers
 {
     /// <summary>
-    /// 文章路由
+    /// 文章
     /// </summary>
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController] //控制路由
@@ -13,6 +11,7 @@ namespace Snblog.Controllers
         //服务
         private readonly IArticleService _service;
         private readonly IValidator<Article> _validator;
+
         #region 构造函数
         /// <summary>
         /// 构造函数

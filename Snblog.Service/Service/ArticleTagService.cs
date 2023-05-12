@@ -1,87 +1,70 @@
-﻿using Microsoft.Extensions.Logging;
-using Snblog.IRepository;
-using Snblog.IService;
+﻿using Snblog.IService;
 
 namespace Snblog.Service.Service
 {
-    public class ArticleTagService : BaseService, IArticleTagService
+    public class ArticleTagService : IArticleTagService
     {
-        private readonly snblogContext _service;
-        private readonly CacheUtil _cacheutil;
+        const string NAME = "articleTag_";
+        /// <summary>
+        /// 缓存Key
+        /// </summary>
+        private string cacheKey;
+
         private readonly EntityData<ArticleTag> res = new();
         private readonly EntityDataDto<ArticleTagDto> rDto = new();
-        private readonly ILogger<ArticleTag> _logger;
+
+        private readonly snblogContext _service;
+        private readonly CacheUtil _cache;
         private readonly IMapper _mapper;
 
-        // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
-        const string NAME = "ArticleTag_";
-        const string BYID = "BYID_";
-        const string SUM = "SUM_";
-        const string CONTAINS = "CONTAINS_";
-        const string PAGING = "PAGING_";
-        const string ALL = "ALL_";
-        const string DEL = "DEL_";
-        const string ADD = "ADD_";
-        const string UP = "UP_";
 
-        public ArticleTagService(IRepositoryFactory repositoryFactory,IConcardContext mydbcontext,snblogContext service,ICacheUtil cacheutil,ILogger<ArticleTag> logger,IMapper mapper) : base(repositoryFactory,mydbcontext)
+        public ArticleTagService(snblogContext service,ICacheUtil cacheutil,IMapper mapper) 
         {
             _service = service;
-            _cacheutil = (CacheUtil)cacheutil;
-            _logger = logger;
+            _cache = (CacheUtil)cacheutil;
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// 删除数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+
         public async Task<bool> DeleteAsync(int id)
         {
-            var result = await _service.ArticleTags.FindAsync(id);
-            if (result == null) {
-                return false;
-            }
+            cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            Log.Information(cacheKey);
+
+            ArticleTag result = await _service.ArticleTags.FindAsync(id);
+            if (result == null) return false;
+
             _service.ArticleTags.Remove(result);
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<ArticleType>> AsyGetSort()
-        {
-            var data = CreateService<ArticleType>();
-            return await data.GetAll().ToListAsync();
-        }
-
-        /// <summary>
-        /// 主键查询
-        /// </summary>
-        /// <param name="id">主键</param>
-        /// <param name="cache">缓存</param>
-        /// <returns>entity</returns>
         public async Task<ArticleTagDto> GetByIdAsync(int id,bool cache)
         {
-            Log.Information($"{NAME}{BYID}{id}{cache}");
-            rDto.Entity = _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}{id}",rDto.Entity,cache);
-            if (res.Entity != null) return rDto.Entity;
+            cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
+            Log.Information($"{NAME}{ConstantString.BYID}{id}{cache}");
+
+            if (cache) {
+                rDto.Entity = _cache.GetValue(cacheKey,rDto.Entity);
+                if (res.Entity != null) return rDto.Entity;
+            }
+
             rDto.Entity = _mapper.Map<ArticleTagDto>(await _service.ArticleTags.FindAsync(id));
-            _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}",rDto.Entity,cache);
+            _cache.SetValue(cacheKey,rDto.Entity);
             return rDto.Entity;
         }
 
-        /// <summary>
-        ///  添加
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns>bool</returns>
         public async Task<bool> AddAsync(ArticleTag entity)
         {
-            await _service.ArticleTags.AddAsync(entity);
+            Log.Information(cacheKey);
+
+             _service.ArticleTags.Add(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateAsync(ArticleTag entity)
         {
+            Log.Information($"{NAME}{ConstantString.UP}{entity}");
+
             _service.ArticleTags.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
@@ -96,11 +79,16 @@ namespace Snblog.Service.Service
         /// <returns>list-entity</returns>
         public async Task<List<ArticleTagDto>> GetPagingAsync(int pageIndex,int pageSize,bool isDesc,bool cache)
         {
-            Log.Information($"{NAME}{PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}");
-            rDto.EntityList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}",rDto.EntityList,cache);
-            if (res.EntityList != null) return rDto.EntityList;
+            cacheKey = $"{NAME}{ConstantString.PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}";
+            Log.Information(cacheKey);
+
+            if (cache) {
+                rDto.EntityList = _cache.GetValue(cacheKey,rDto.EntityList);
+                if (res.EntityList != null) return rDto.EntityList;
+            }
+
             await QPaging(pageIndex,pageSize,isDesc);
-            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}",rDto.EntityList,cache);
+            _cache.SetValue(cacheKey,rDto.EntityList);
             return rDto.EntityList;
         }
 
@@ -113,27 +101,19 @@ namespace Snblog.Service.Service
             }
         }
 
-        public async Task<List<ArticleTagDto>> GetAllAsync(bool cache)
-        {
-            Log.Information($"{NAME}{ALL}",cache);
-            rDto.EntityList = _cacheutil.CacheString($"{NAME}{SUM}{cache}",rDto.EntityList,cache);
-            if (rDto.EntityList != null) return rDto.EntityList;
-            rDto.EntityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.AsNoTracking().ToListAsync());
-            _cacheutil.CacheString($"{NAME}{SUM}{cache}",rDto.EntityList,cache);
-            return rDto.EntityList;
-        }
-        /// <summary>
-        /// 查询总数
-        /// </summary>
-        /// <param name="cache">缓存</param>
-        /// <returns>int</returns>
+
         public async Task<int> GetSumAsync(bool cache)
         {
-            Log.Information($"{NAME}{SUM}" + cache);
-            res.EntityCount = _cacheutil.CacheNumber($"{NAME}{SUM}{cache}",res.EntityCount,cache);
-            if (res.EntityCount != 0) return res.EntityCount;
+            cacheKey = $"{NAME}{ConstantString.SUM}{cache}";
+            Log.Information(cacheKey);
+
+            if (cache) {
+                res.EntityCount = _cache.GetValue(cacheKey,res.EntityCount);
+                if (res.EntityCount != 0) return res.EntityCount;
+            }
+
             res.EntityCount = await _service.ArticleTags.AsNoTracking().CountAsync();
-            _cacheutil.CacheNumber($"{NAME}{SUM}{cache}",res.EntityCount,cache);
+            _cache.SetValue(cacheKey,res.EntityCount);
             return res.EntityCount;
         }
     }

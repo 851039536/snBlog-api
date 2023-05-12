@@ -5,7 +5,6 @@
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-
     /// <summary>
     /// 视频
     /// </summary>

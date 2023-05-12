@@ -16,3 +16,4 @@ global using System.Linq;
 global using System.Linq.Expressions;
 global using System.Threading.Tasks;
 global using Z.EntityFramework.Plus;
+global using FluentValidation;

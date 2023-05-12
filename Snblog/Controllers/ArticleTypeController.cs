@@ -1,22 +1,15 @@
-﻿using Blog.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
-
-//默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
-namespace Snblog.Controllers
+﻿namespace Snblog.Controllers
 {
-
     /// <summary>
     /// 文章分类
     /// </summary>
     [ApiExplorerSettings(GroupName = "V1")] 
     [ApiController]
     [Route("articleType")]
-    public class ArticleTypeController : ControllerBase
+    public class ArticleTypeController : BaseController
     {
-        private readonly IArticleTypeService _service; //IOC依赖注入
+        private readonly IArticleTypeService _service; 
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -34,9 +27,11 @@ namespace Snblog.Controllers
         [HttpGet("sum")]
         public async Task<IActionResult> GetSumAsync(bool cache = false)
         {
-            return Ok(await _service.GetSumAsync(cache));
+            var data = await _service.GetSumAsync(cache);
+            return ApiResponse(cache: cache, data: data);
         }
         #endregion
+
         #region 查询所有
         /// <summary>
         /// 查询所有

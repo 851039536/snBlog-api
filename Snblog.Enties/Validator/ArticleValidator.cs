@@ -2,6 +2,9 @@
 
 namespace Snblog.Enties.Validator
 {
+    /// <summary>
+    /// 数据校验
+    /// </summary>
     public class ArticleValidator :AbstractValidator<Article>
     {
         public ArticleValidator()

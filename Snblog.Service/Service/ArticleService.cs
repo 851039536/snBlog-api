@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Snblog.Service.Service
+﻿namespace Snblog.Service.Service
 {
     public class ArticleService : IArticleService
     {
@@ -90,9 +88,7 @@ namespace Snblog.Service.Service
 
         public async Task<bool> AddAsync(Article entity)
         {
-  
-            cacheKey = $"{NAME}{ConstantString.ADD}{entity}";
-            Log.Information(cacheKey);
+            Log.Information($"{NAME}{ConstantString.ADD}{entity}");
 
             entity.TimeCreate = entity.TimeModified = DateTime.Now;
             //此方法中的异步添加改为同步添加，因为 SaveChangesAsync 方法已经是异步的，不需要再使用异步添加
@@ -101,6 +97,7 @@ namespace Snblog.Service.Service
         }
         public async Task<bool> UpdateAsync(Article entity)
         {
+
             Log.Information($"{NAME}{ConstantString.UP}{entity}");
 
             entity.TimeModified = DateTime.Now; //更新时间
