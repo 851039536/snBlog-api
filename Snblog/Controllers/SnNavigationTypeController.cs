@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService.IService;
-using System.Threading.Tasks;
-using Blog.Core;
-using Snblog.Enties.Models;
-
-namespace Snblog.Controllers
+﻿namespace Snblog.Controllers
 {
 
     /// <summary>

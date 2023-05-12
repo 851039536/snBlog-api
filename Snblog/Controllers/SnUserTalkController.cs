@@ -1,16 +1,4 @@
-﻿using System.Threading.Tasks;
-using Blog.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Snblog.Enties.Models;
-using Snblog.IService;
-using Snblog.Jwt;
-using Snblog.Repository.Repository;
-
-//默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
-namespace Snblog.Controllers
+﻿namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制

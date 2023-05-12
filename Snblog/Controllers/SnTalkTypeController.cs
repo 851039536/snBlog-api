@@ -1,14 +1,4 @@
-﻿using Blog.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.Enties.Models;
-using Snblog.IService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Snblog.Controllers
+﻿namespace Snblog.Controllers
 {
     /// <summary>
     /// SnTalkTypeController

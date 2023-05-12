@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Snblog.Util.ChinesetoPinyin;
+﻿using Snblog.Util.ChinesetoPinyin;
 using System.Text.Json;
 
 //默认的约定集将应用于程序集中的所有操作：

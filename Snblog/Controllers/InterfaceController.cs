@@ -1,14 +1,4 @@
-﻿using Blog.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.Enties.Models;
-using Snblog.Enties.ModelsDto;
-using Snblog.IService.IService;
-using System;
-using System.Threading.Tasks;
-
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
-namespace Snblog.Controllers
+﻿namespace Snblog.Controllers
 {
     [ApiExplorerSettings(GroupName = "V1")] 
     [ApiController]
