@@ -41,10 +41,12 @@
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
-            return Ok(await _service.GetAllAsync(cache));
+            var data = await _service.GetAllAsync(cache);
+            return ApiResponse(cache: cache, data: data);
         }
 
         #endregion
+
         #region 主键查询
         /// <summary>
         /// 主键查询
@@ -55,7 +57,8 @@
         [HttpGet("byId")]
         public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id, cache));
+            var data = await _service.GetByIdAsync(id, cache);
+            return ApiResponse(data: data,cache:cache);
         }
         #endregion
 
@@ -71,7 +74,8 @@
         [HttpGet("paging")]
         public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
         {
-            return Ok(await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache));
+            var data = await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache);
+            return ApiResponse(data: data, cache: cache);
         }
         #endregion
 
@@ -83,11 +87,13 @@
         /// <returns>bool</returns>
         [HttpPost("add")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<ActionResult<ArticleType>> AddAsync(ArticleType entity)
+        public async Task<IActionResult> AddAsync(ArticleType entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
+
         #region 更新
         /// <summary>
         /// 更新
@@ -98,9 +104,11 @@
         //[Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(ArticleType entity)
         {
-            return Ok(await _service.UpdateAsync(entity));
+            var data = await _service.UpdateAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
+
         #region 删除
         /// <summary>
         /// 删除
@@ -111,7 +119,8 @@
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            var data = await _service.DeleteAsync(id);
+            return ApiResponse(data: data);
         }
         #endregion
     }
