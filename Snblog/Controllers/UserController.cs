@@ -5,12 +5,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Snblog.Jwt;
 
-
-//默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-
     /// <summary>
     /// 用户
     /// </summary>
