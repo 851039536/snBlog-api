@@ -1,15 +1,14 @@
 ﻿namespace Snblog.Controllers
 {
     /// <summary>
-    /// SnOneTypeController
+    /// 日记分类
     /// </summary>
-    [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    public class DiaryTypeController : ControllerBase
+    [Route("diaryType")]
+    public class DiaryTypeController : BaseController
     {
-
-        private readonly IDiaryTypeService _service; //IOC依赖注入
+        private readonly IDiaryTypeService _service; 
 
         /// <summary>
         /// 构造函数
@@ -26,12 +25,14 @@
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("GetAllAsync")]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync(bool cache)
         {
-            return Ok(await _service.GetAllAsync(cache));
+            var data = await _service.GetAllAsync(cache);
+            return ApiResponse(cache:cache, data: data);
         }
         #endregion
+
         #region 主键查询
         /// <summary>
         /// 主键查询
@@ -39,12 +40,14 @@
         /// <param name="id"></param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("GetByIdAsync")]
+        [HttpGet("byId")]
         public async Task<IActionResult> GetByIdAsync(int id,bool cache)
         {
-            return Ok(await _service.GetByIdAsync(id,cache));
+            var data = await _service.GetByIdAsync(id,cache);
+            return ApiResponse(data: data,cache:cache);
         }
         #endregion
+
         #region 类别查询
         /// <summary>
         /// 类别查询
@@ -52,61 +55,70 @@
         /// <param name="type">分类</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("GetTypeAsync")]
+        [HttpGet("type")]
         public async Task<IActionResult> GetTypeAsync(int type,bool cache)
         {
-            return Ok(await _service.GetTypeAsync(type,cache));
+            var data = await _service.GetTypeAsync(type,cache);
+            return ApiResponse(data: data,cache:cache);
         }
         #endregion
+
         #region 查询总数
         /// <summary>
         /// 查询总数
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("CountAsync")]
+        [HttpGet("sum")]
 
         public async Task<IActionResult> CountAsync(bool cache)
         {
-            return Ok(await _service.CountAsync(cache));
+            var data =await _service.CountAsync(cache);
+            return ApiResponse(data: data,cache:cache);
         }
         #endregion
-        #region 添加数据
+        
+        #region 添加
         /// <summary>
-        /// 添加数据 
+        /// 添加
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        [HttpPost("AddAsync")]
+        [HttpPost("add")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(DiaryType entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
-        #region 删除数据
+        
+        #region 删除
          /// <summary>
-        /// 删除数据 
+        /// 删除
         /// </summary>
         /// <returns></returns>
-        [HttpDelete("DelAsync")]
+        [HttpDelete("del")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            var data = await _service.DeleteAsync(id);
+            return ApiResponse(data:data);
         }
         #endregion
-         #region 更新数据 
+
+         #region 更新
         /// <summary>
-        /// 更新数据
+        /// 更新
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">实体</param>
         /// <returns></returns>
-        [HttpPut("UpdateAsync")]
+        [HttpPut("update")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(DiaryType entity)
         {
-            return Ok(await _service.UpdateAsync(entity));
+            var data = await _service.UpdateAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
     }

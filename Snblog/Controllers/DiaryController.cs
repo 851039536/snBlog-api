@@ -1,7 +1,7 @@
 ﻿namespace Snblog.Controllers
 {
     /// <summary>
-    ///日记路由
+    ///日记
     /// </summary>
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]

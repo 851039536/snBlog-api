@@ -1,7 +1,7 @@
 ﻿namespace Snblog.Controllers
 {
     /// <summary>
-    /// 1文章分类
+    /// 文章分类
     /// </summary>
     [ApiExplorerSettings(GroupName = "V1")] 
     [ApiController]
