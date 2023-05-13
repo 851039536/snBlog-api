@@ -9,3 +9,5 @@ global using System.Threading.Tasks;
 global using Microsoft.EntityFrameworkCore;
 global using Snblog.IRepository;
 global using Snblog.IRepository.IRepository;
+global using Snblog.Enties.Models;
+

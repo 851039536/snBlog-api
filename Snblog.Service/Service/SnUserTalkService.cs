@@ -1,12 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.Enties.Models;
-using Snblog.IRepository;
-using Snblog.IService;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Snblog.Service
+﻿namespace Snblog.Service
 {
     public class SnUserTalkService : BaseService, ISnUserTalkService
     {

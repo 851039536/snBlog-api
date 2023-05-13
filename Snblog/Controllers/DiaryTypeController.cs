@@ -3,7 +3,7 @@
     /// <summary>
     /// 日记分类
     /// </summary>
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    [ApiExplorerSettings(GroupName = "V1")] 
     [ApiController]
     [Route("diaryType")]
     public class DiaryTypeController : BaseController

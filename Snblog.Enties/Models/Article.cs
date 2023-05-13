@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Snblog.Enties.Models
+﻿namespace Snblog.Enties.Models
     {
     [Index(nameof(Name))]
     public partial class Article

@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.Enties.Models;
-using Snblog.IRepository;
-using Z.EntityFramework.Extensions;
-
-namespace Snblog.Repository.Repository
+﻿namespace Snblog.Repository.Repository
 {
     public partial class snblogContext : DbContext, IConcardContext
     {

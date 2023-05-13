@@ -3,10 +3,10 @@
     [ApiExplorerSettings(GroupName = "V1")] 
     [ApiController]
     [Route("Interface")]
-    public class InterfaceController : ControllerBase
+    public class InterfaceController : BaseController
     {    
-        //IOC依赖注入
         private readonly IInterfaceService _service; 
+
         #region 构造函数
         public InterfaceController(IInterfaceService service)
         {

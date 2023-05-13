@@ -1,6 +1,4 @@
-﻿using Snblog.IService;
-
-namespace Snblog.Service.Service
+﻿namespace Snblog.Service.Service
 {
     public class ArticleTagService : IArticleTagService
     {

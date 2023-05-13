@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.Cache.CacheUtil;
-using Snblog.Enties.Models;
-using Snblog.IRepository;
-using Snblog.IService.IReService;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Snblog.IService.IReService;
 
 namespace Snblog.Service.ReService
 {

@@ -17,3 +17,5 @@ global using System.Linq.Expressions;
 global using System.Threading.Tasks;
 global using Z.EntityFramework.Plus;
 global using FluentValidation;
+global using Snblog.IRepository;
+global using Snblog.IService;

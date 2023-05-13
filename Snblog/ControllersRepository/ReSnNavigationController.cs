@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.Enties.Models;
-using Snblog.IService.IReService;
+﻿using Snblog.IService.IReService;
 
 namespace Snblog.ControllersRepository
 {

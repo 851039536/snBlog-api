@@ -1,16 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Snblog.Cache.CacheUtil;
-using Snblog.Enties.Models;
-using Snblog.Enties.ModelsDto;
-using Snblog.IRepository;
+﻿using Microsoft.Extensions.Logging;
 using Snblog.IService;
-using Snblog.Repository.Repository;
-using Snblog.Util.components;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Snblog.Service.Service
 {

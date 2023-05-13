@@ -1,12 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Snblog.Cache.CacheUtil;
-using Snblog.Enties.Models;
-using Snblog.IService.IService;
-using Snblog.Repository.Repository;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Snblog.Service.Service
 {

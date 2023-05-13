@@ -1,7 +1,4 @@
-﻿using Snblog.IRepository;
-using Snblog.IRepository.IRepository;
-
-namespace Snblog.Repository.Repository
+﻿namespace Snblog.Repository.Repository
 {
     public class RepositoryFactory : IRepositoryFactory
     {

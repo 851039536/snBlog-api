@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.IO;
 using AngleSharp;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;

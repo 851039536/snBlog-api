@@ -1,13 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.Cache.CacheUtil;
-using Snblog.Enties.Models;
-using Snblog.IService.IService;
-using Snblog.Repository.Repository;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Snblog.Service.Service
+﻿namespace Snblog.Service.Service
 {
     public class SnPictureService : ISnPictureService
     {

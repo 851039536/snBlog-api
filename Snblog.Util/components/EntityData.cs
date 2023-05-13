@@ -1,8 +1,4 @@
-﻿using Snblog.Enties.Models;
-using System;
-using System.Collections.Generic;
-
-namespace Snblog.Util.components
+﻿namespace Snblog.Util.components
 {
 
     /// <summary>

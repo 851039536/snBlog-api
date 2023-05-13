@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using System.Collections;
-using System.Reflection;
-
-namespace Snblog.Cache.Cache
+﻿namespace Snblog.Cache.Cache
 {
  public class CacheManager:ICacheManager
     {
