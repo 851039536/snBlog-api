@@ -16,14 +16,19 @@
         /// </summary>
         public bool Cache { get; set; }
         /// <summary>
+        /// 数量
+        /// </summary>
+        public int? Total { get; set; }
+        /// <summary>
         /// 数据
         /// </summary>
         public T Data { get; set; }
 
-        public ApiResponse(int statusCode =200, bool cache=false,string message = "null",T data = default(T))
+        public ApiResponse(int statusCode =200, bool cache=false,int total = 0,string message = "null",T data = default(T))
         {
             StatusCode = statusCode;
             Cache = cache;
+            Total = total;
             Message = message;
             Data = data; 
         }
