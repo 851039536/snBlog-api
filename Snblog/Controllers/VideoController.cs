@@ -3,10 +3,10 @@
     /// <summary>
     /// 视频
     /// </summary>
-    [ApiExplorerSettings(GroupName = "V1")] 
+    [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
     [Route("video")]
-    public class VideoController : ControllerBase
+    public class VideoController : BaseController
     {
         private readonly IVideoService _service; //IOC依赖注入
         public VideoController(IVideoService service)
@@ -23,24 +23,28 @@
         /// <param name="cache">缓存</param>
         /// <returns></returns>
         [HttpGet("sum")]
-        public async Task<IActionResult> GetSumAsync(int identity = 0, string type = "null", bool cache = false)
+        public async Task<IActionResult> GetSumAsync(int identity = 0,string type = "null",bool cache = false)
         {
-            return Ok(await _service.GetSumAsync(identity, type, cache));
+            var data = await _service.GetSumAsync(identity,type,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
+
         #region 查询所有
         /// <summary>
-        /// 查询所有 
+        /// 查询所有
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-         [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
+        [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
-            return Ok(await _service.GetAllAsync(cache));
+            var data = await _service.GetAllAsync(cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
+
         #region 模糊查询
         /// <summary>
         /// 模糊查询
@@ -50,11 +54,13 @@
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("contains")]
-        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
+        public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false)
         {
-            return Ok(await _service.GetContainsAsync(identity, type, name, cache));
+            var data = await _service.GetContainsAsync(identity,type,name,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
+
         #region 主键查询
         /// <summary>
         /// 主键查询
@@ -62,11 +68,13 @@
         /// <param name="id">主键</param>
         /// <param name="cache">缓存</param>
         [HttpGet("byid")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
+        public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id, cache));
+            var data = await _service.GetByIdAsync(id,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
+
         #region  条件查询
         /// <summary>
         ///条件查询 
@@ -75,11 +83,13 @@
         /// <param name="type">类别</param>
         /// <param name="cache">是否开启缓存</param>
         [HttpGet("type")]
-        public async Task<IActionResult> GetTypeAsync(int identity = 1, string type = "null", bool cache = false)
+        public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false)
         {
-            return Ok(await _service.GetTypeAsync(identity, type, cache));
+            var data = await _service.GetTypeAsync(identity,type,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
+
         #region 分页查询
         /// <summary>
         /// 分页查询
@@ -92,42 +102,47 @@
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [HttpGet("paging")]
-        public async Task<IActionResult> GetPagingAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10,bool isDesc = true, bool cache = false)
+        public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
         {
-            return Ok(await _service.GetPagingAsync(identity, type, pageIndex, pageSize,  isDesc, cache));
+            var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,isDesc,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
+
         #region 读取[字段/阅读/点赞]总数量
         /// <summary>
         /// 统计标题字数
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetStrSumAsync")]
+        [HttpGet("strSum")]
         public async Task<IActionResult> GetSumAsync(bool cache)
         {
-            return Ok(await _service.GetSumAsync(cache));
+            var data = await _service.GetSumAsync(cache);
+            return ApiResponse(cache: cache,data: data);
         }
-
         #endregion
 
         /// <summary>
         /// 添加
         /// </summary>
-        [HttpPost("AddAsync")]
+        [HttpPost("add")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<ActionResult<Video>> AddAsync(Video entity)
+        public async Task<IActionResult> AddAsync(Video entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data: data);
         }
+
         /// <summary>
         /// 删除
         /// </summary>
         /// <param name="id">主键</param>
-        [HttpDelete("DelAsync")]
+        [HttpDelete("del")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            var data = await _service.DeleteAsync(id);
+            return ApiResponse(data: data);
         }
 
 
@@ -135,12 +150,12 @@
         /// 更新
         /// </summary>
         /// <param name="entity"></param>
-        [HttpPut("UpdateAsync")]
+        [HttpPut("update")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(Video entity)
         {
             var data = await _service.UpdateAsync(entity);
-            return Ok(data);
+            return ApiResponse(data:data);
         }
     }
 }
