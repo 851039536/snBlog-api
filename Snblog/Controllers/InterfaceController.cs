@@ -1,13 +1,21 @@
 ﻿namespace Snblog.Controllers
 {
-    [ApiExplorerSettings(GroupName = "V1")] 
+    /// <summary>
+    /// InterfaceController
+    /// </summary>
+    [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
     [Route("Interface")]
     public class InterfaceController : BaseController
-    {    
-        private readonly IInterfaceService _service; 
+    {
+        private readonly IInterfaceService _service;
 
         #region 构造函数
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public InterfaceController(IInterfaceService service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
@@ -22,9 +30,10 @@
         /// <param name="cache">启缓存</param>
         /// <returns></returns>
         [HttpGet("byid")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
+        public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id, cache));
+            var data = await _service.GetByIdAsync(id,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
 
@@ -37,18 +46,11 @@
         /// <param name="type">类别</param>
         /// <param name="cache">缓存</param>
         [HttpGet("condition")]
-        public async Task<IActionResult> GetConditionAsync(int identity=0, string userName = "null", string type= "null", bool cache=false)
+        public async Task<IActionResult> GetConditionAsync(int identity = 0,string userName = "null",string type = "null",bool cache = false)
         {
-            return Ok(await _service.GetConditionAsync(identity,userName, type, cache));
+            var data = await _service.GetConditionAsync(identity,userName,type,cache);
+            return ApiResponse(data: data,cache: cache);
         }
-        #endregion
-
-        #region  查询所有
-        //[HttpGet("GetAllAsync")]
-        //public async Task<IActionResult> GetAllAsync(bool cache=false)
-        //{
-        //    return Ok(await _service.GetAllAsync(cache));
-        //}
         #endregion
 
         #region 分页查询 
@@ -64,9 +66,10 @@
         /// <param name="ordering">排序条件[按id排序]</param>
         /// <returns>list-entity</returns>
         [HttpGet("paging")]
-        public async Task<IActionResult> GetPagingAsync(int identity=0, string type="null", int pageIndex=1, int pageSize=10, string ordering="id", bool isDesc=true, bool cache=false)
+        public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false)
         {
-            return Ok(await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
+            var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
 
@@ -79,26 +82,28 @@
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync(Interface entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data: data);
         }
 
-        #region 更新数据
+        #region 更新
         /// <summary>
-        /// 更新数据
+        /// 更新
         /// </summary>
         /// <param name="entity">实体</param>
         /// <returns></returns>
         [Authorize(Roles = Permissions.Name)]
-        [HttpPut("edit")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateAsync(Interface entity)
         {
-            return Ok(await _service.UpdateAsync(entity));
+            var data = await _service.UpdateAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
 
-        #region 删除数据DeleteAsync
+        #region 删除
         /// <summary>
-        /// 删除数据
+        /// 删除
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -106,9 +111,11 @@
         [HttpDelete("del")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            var data = await _service.DeleteAsync(id);
+            return ApiResponse(data: data);
         }
         #endregion
+
     }
 
 }

@@ -1,7 +1,7 @@
 ﻿namespace Snblog.IService.IService
     {
     /// <summary>
-    /// 业务类接口
+    /// 代码片段接口
     /// </summary>
     public interface ISnippetService
         {

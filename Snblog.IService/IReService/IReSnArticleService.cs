@@ -1,5 +1,4 @@
-﻿
-namespace Snblog.IService.IReService
+﻿namespace Snblog.IService.IReService
 {
     public interface IReSnArticleService
     {

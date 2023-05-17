@@ -1,8 +1,8 @@
 ﻿namespace Snblog.Service.Extensions
 {
     /// <summary>
-    /// 扩展EF Core以便在多个地方重复使用相同的代码
     /// 封装Select返回ArticleDto实体
+    /// 扩展EF Core以便在多个地方重复使用相同的代码
     /// 使用AsNoTracking方法来禁用跟踪
     /// </summary>
     public static class ArticleExtensions

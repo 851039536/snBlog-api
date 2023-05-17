@@ -1,5 +1,8 @@
 ﻿namespace Snblog.IService
 {
+    /// <summary>
+    /// 文章分类接口
+    /// </summary>
     public interface IArticleTypeService
     {
         /// <summary>

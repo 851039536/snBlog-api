@@ -1,9 +1,10 @@
 ﻿namespace Snblog.IService.IService
 {
+    /// <summary>
+    /// 日记接口
+    /// </summary>
     public interface IDiaryService
     {
-
-
         /// <summary>
         /// 模糊查询
         /// </summary>

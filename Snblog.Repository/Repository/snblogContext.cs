@@ -6,7 +6,6 @@
         {
 
         }
-
         public snblogContext(DbContextOptions<snblogContext> options)
             : base(options)
         {

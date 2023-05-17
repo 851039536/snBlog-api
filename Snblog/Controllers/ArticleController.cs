@@ -71,6 +71,11 @@
             return ApiResponse(cache: cache,data: data);
         }
 
+        /// <summary>
+        /// ml
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet("ml")]
         public IActionResult GetMLTest(string name)
         {
@@ -172,14 +177,14 @@
         }
         #endregion
 
-        #region 更新数据
+        #region 更新
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="entity">实体</param>
         /// <returns>bool</returns>
         [Authorize(Roles = Permissions.Name)]
-        [HttpPut("edit")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateAsync(Article entity)
         {
             var data = await _service.UpdateAsync(entity);

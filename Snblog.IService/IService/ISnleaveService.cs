@@ -2,15 +2,11 @@
 {
     public interface ISnleaveService
     {
-
-      
         /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
         Task<List<SnLeave>> GetAllAsync();
-      
-
 
         /// <summary>
         /// 主键查询
@@ -18,7 +14,7 @@
         /// <param name="id"></param>
         /// <returns></returns>
         Task<SnLeave> GetByIdAsync(int id);
-        Task<List<SnLeave>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc);
+        Task<List<SnLeave>> GetFyAllAsync(int pageIndex,int pageSize,bool isDesc);
         /// <summary>
         /// 查询总数
         /// </summary>

@@ -3,12 +3,12 @@
     /// <summary>
     /// 片段标签
     /// </summary>
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    [ApiExplorerSettings(GroupName = "V1")] 
     [ApiController]
     [Route("snippetLabel")]
-    public class SnippeLabelController : ControllerBase
+    public class SnippeLabelController : BaseController
     {
-        private readonly ISnippetLabelService _service; //IOC依赖注入
+        private readonly ISnippetLabelService _service; 
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -26,7 +26,8 @@
         [HttpGet("sum")]
         public async Task<IActionResult> GetSumAsync(bool cache = false)
         {
-            return Ok(await _service.GetSumAsync(cache));
+            var data = await _service.GetSumAsync(cache);
+            return ApiResponse(cache: cache, data: data);
         }
         #endregion
 
@@ -39,7 +40,8 @@
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
-            return Ok(await _service.GetAllAsync(cache));
+            var data = await _service.GetAllAsync(cache);
+            return ApiResponse(cache: cache, data: data);
         }
         #endregion
 
@@ -53,7 +55,8 @@
         [HttpGet("byId")]
         public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id, cache));
+            var data = await _service.GetByIdAsync(id, cache);
+            return ApiResponse(cache: cache, data: data);
         }
         #endregion
 
@@ -69,7 +72,8 @@
         [HttpGet("paging")]
         public async Task<IActionResult> GetFyAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
         {
-            return Ok(await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache));
+            var data = await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache);
+            return ApiResponse(cache: cache, data: data);
         }
         #endregion
 
@@ -83,9 +87,11 @@
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnippetLabel entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
+
         #region 更新数据
         /// <summary>
         /// 更新
@@ -96,7 +102,8 @@
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnippetLabel entity)
         {
-            return Ok(await _service.UpdateAsync(entity));
+            var data = await _service.UpdateAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
 
@@ -110,7 +117,8 @@
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            var data = await _service.DeleteAsync(id);
+            return ApiResponse(data: data);
         }
         #endregion
     }

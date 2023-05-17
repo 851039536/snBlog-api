@@ -1,5 +1,8 @@
 ﻿namespace Snblog.IService
 {
+    /// <summary>
+    /// 文章标签接口
+    /// </summary>
     public interface IArticleTagService
         {
         /// <summary>

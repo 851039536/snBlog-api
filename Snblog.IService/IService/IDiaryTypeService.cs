@@ -1,5 +1,8 @@
 ﻿namespace Snblog.IService.IService
 {
+    /// <summary>
+    /// 日记分类接口
+    /// </summary>
     public interface IDiaryTypeService
     {
         /// <summary>
