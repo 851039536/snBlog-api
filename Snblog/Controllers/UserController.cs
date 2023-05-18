@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Snblog.Jwt;
+using Microsoft.AspNetCore.Http;
 
 namespace Snblog.Controllers
 {
@@ -12,12 +13,11 @@ namespace Snblog.Controllers
     /// </summary>
     [ApiController]
     [Route("user")]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly snblogContext _coreDbContext;
         private readonly IUserService _service; //IOC依赖注入
         private readonly JwtConfig jwtModel = null;
-
 
         /// <summary>
         /// 构造函数
@@ -25,13 +25,12 @@ namespace Snblog.Controllers
         /// <param name="service"></param>
         /// <param name="coreDbContext"></param>
         /// <param name="_jwtModel"></param>
-        public UserController(IUserService service, snblogContext coreDbContext, IOptions<JwtConfig> _jwtModel)
+        public UserController(IUserService service,snblogContext coreDbContext,IOptions<JwtConfig> _jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;
             jwtModel = _jwtModel.Value;
         }
-
 
         #region 登录
         /// <summary>
@@ -41,20 +40,37 @@ namespace Snblog.Controllers
         /// <param name="pwd">密码</param>
         /// <returns>Nickname,token,id,name</returns>
         [HttpGet("login")]
-        public IActionResult Login(string user, string pwd)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public IActionResult Login(string user,string pwd)
         {
+            // 如果用户名和密码为空，则返回错误信息
             if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
-            var res = _coreDbContext.Users.Where(w => w.Name == user && w.Pwd == pwd).AsNoTracking().ToList();
-            if (res.Count == 0) return Ok("用户或密码错误");
+            // 查询用户信息
+            var res = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
+            if (res == null) return BadRequest("用户或密码错误");
+
+            // 生成token
+            string token = GenerateToken(res);
+            // 返回用户信息和token
+            return Ok(new { res.Nickname,Token = token,res.Id,res.Name });
+        }
+
+        private string GenerateToken(User user)
+        {
+            // 创建声明列表
             var claims = new List<Claim>();
+            // 添加声明
             claims.AddRange(new[]
             {
-                new Claim("UserName", res[0].Name),
-                new Claim(ClaimTypes.Role,res[0].Name),
-                new Claim(JwtRegisteredClaimNames.Sub,res[0].Name),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+              new Claim("UserName", user.Name),
+              new Claim(ClaimTypes.Role,user.Name),
+               new Claim(JwtRegisteredClaimNames.Sub,user.Name),
+               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
-            });
+              });
+            // 获取当前时间
             DateTime now = DateTime.UtcNow;
             //生成token
             var jwtSecurityToken = new JwtSecurityToken(
@@ -63,12 +79,15 @@ namespace Snblog.Controllers
                 claims: claims, //jwt令牌数据体
                 notBefore: now,
                 expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)),//令牌过期时间
-                                                                            //为数字签名定义SecurityKey
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
+                                                                            //为数字签名定义SecurityKey                                    
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)),SecurityAlgorithms.HmacSha256)
             );
+            // 将token转换为字符串
             string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            return Ok(res[0].Nickname + "," + token + "," + res[0].Id + "," + res[0].Name);
+
+            return token;
         }
+
 
         /// <summary>
         /// 登录2
@@ -77,33 +96,20 @@ namespace Snblog.Controllers
         /// <param name="pwd">密码</param>
         /// <returns>token</returns>
         [HttpPost("login2")]
-        public IActionResult Login2(string user, string pwd)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public IActionResult Login2(string user,string pwd)
         {
             if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
-            var res = _coreDbContext.Users.Where(w => w.Name == user && w.Pwd == pwd).AsNoTracking().ToList();
-            if (res.Count == 0) return Ok("用户或密码错误");
-            var claims = new List<Claim>();
-            claims.AddRange(new[]
-            {
-                new Claim("UserName", res[0].Name),
-                new Claim(ClaimTypes.Role,res[0].Name),
-                new Claim(JwtRegisteredClaimNames.Sub,res[0].Name),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
-            });
-            DateTime now = DateTime.UtcNow;
-            var jwtSecurityToken = new JwtSecurityToken( //生成token
-                issuer: jwtModel.Issuer, //签发者
-                audience: jwtModel.Audience, //生成token
-                claims: claims,  //jwt令牌数据体
-                notBefore: now,
-                expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)), //令牌过期时间
-                                                                             //为数字签名定义SecurityKey
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)), SecurityAlgorithms.HmacSha256)
-            );
-            string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            res[0].Ip = token;
-            return Ok(res[0]);
+            // 查询用户信息
+            var res = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
+            if (res == null) return BadRequest("用户或密码错误");
+
+            // 生成token
+            string token = GenerateToken(res);
+            res.Ip = token;
+            return Ok(res);
         }
         #endregion
 
@@ -114,9 +120,10 @@ namespace Snblog.Controllers
         /// <param name="id">主键</param>
         /// <param name="cache">缓存</param>
         [HttpGet("byid")]
-        public async Task<IActionResult> GetByIdAsync(int id = 0, bool cache = false)
+        public async Task<IActionResult> GetByIdAsync(int id = 0,bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id, cache));
+            var data = await _service.GetByIdAsync(id,cache);
+            return ApiResponse(cache:cache,data:data);
         }
         #endregion
 
@@ -127,9 +134,10 @@ namespace Snblog.Controllers
         /// <param name="name">查询字段</param>
         /// <param name="cache">缓存</param>
         [HttpGet("contains")]
-        public async Task<IActionResult> GetContainsAsync(string name = "c", bool cache = false)
+        public async Task<IActionResult> GetContainsAsync(string name = "c",bool cache = false)
         {
-            return Ok(await _service.GetContainsAsync(name, cache));
+            var data = await _service.GetContainsAsync(name,cache);
+            return ApiResponse(cache:cache,data:data);
         }
         #endregion
 
@@ -141,7 +149,8 @@ namespace Snblog.Controllers
         [HttpGet("sum")]
         public async Task<IActionResult> GetSumAsync(bool cache = false)
         {
-            return Ok(await _service.GetSumAsync(cache));
+            var data = await _service.GetSumAsync(cache);
+            return ApiResponse(cache:cache,data:data);
         }
 
         /// <summary>
@@ -150,9 +159,10 @@ namespace Snblog.Controllers
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">记录条数</param>
         [HttpGet("paging")]
-        public IActionResult GetPagingAsync(int pageIndex = 1, int pageSize = 10)
+        public IActionResult GetPagingAsync(int pageIndex = 1,int pageSize = 10)
         {
-            return Ok(_service.GetPagingAsync(pageIndex, pageSize));
+            var data = _service.GetPagingAsync(pageIndex,pageSize);
+            return ApiResponse(data:data);
         }
 
         /// <summary>
@@ -161,11 +171,13 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpPost("add")]
-        public async Task<ActionResult<User>> Add(User entity)
+        public async Task<IActionResult> Add(User entity)
         {
             entity.TimeCreate = DateTime.Now;
             entity.TimeModified = DateTime.Now;
-            return Ok(await _service.AddAsync(entity));
+
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data:data);
         }
 
         /// <summary>
@@ -177,7 +189,8 @@ namespace Snblog.Controllers
         [HttpDelete("del")]
         public async Task<IActionResult> Del(int id)
         {
-            return Ok(await _service.DelAsync(id));
+            var data = await _service.DelAsync(id);
+            return ApiResponse(data:data);
         }
 
         /// <summary>
@@ -191,7 +204,7 @@ namespace Snblog.Controllers
         {
             user.TimeModified = DateTime.Now;
             var data = await _service.UpdateAsync(user);
-            return Ok(data);
+            return ApiResponse(data:data);
         }
 
     }

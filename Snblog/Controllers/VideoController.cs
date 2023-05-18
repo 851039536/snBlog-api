@@ -8,7 +8,12 @@
     [Route("video")]
     public class VideoController : BaseController
     {
-        private readonly IVideoService _service; //IOC依赖注入
+        private readonly IVideoService _service; 
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public VideoController(IVideoService service)
         {
             _service = service;

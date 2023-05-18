@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
     /// <summary>
