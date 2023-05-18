@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Controllers
 {
+    /// <summary>
+    /// 重载路由统一返回格式
+    /// </summary>
     public abstract class BaseController : ControllerBase
     {
         /// <summary>

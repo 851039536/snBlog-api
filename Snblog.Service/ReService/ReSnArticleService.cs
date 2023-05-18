@@ -299,10 +299,10 @@ namespace Snblog.Service.ReService
             return result;
         }
 
-        public async Task<bool> UpdatePortionAsync(Article Article, string name)
+        
+        public async Task<bool> UpdatePortionAsync(Article article, string name)
         {
-            var date = await CreateService<Article>().UpdateAsync1(Article, true, name);
-
+            var date = await CreateService<Article>().UpdateAsync1(article, true, name);
             return date;
         }
     }

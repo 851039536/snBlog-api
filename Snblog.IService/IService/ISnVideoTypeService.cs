@@ -6,7 +6,7 @@
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-        Task<List<SnVideoType>> AsyGetTest();
+        Task<List<SnVideoType>> GetAll();
 
         /// <summary>
         /// 主键查询

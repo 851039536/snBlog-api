@@ -27,7 +27,7 @@ namespace Snblog.ControllersRepository
         /// <summary>
         /// 查询总数 (缓存)
         /// </summary>
-        [HttpGet("AsyGestTest")]
+        [HttpGet("sum")]
         public async Task<IActionResult> CountAsync()
         {
             return Ok(await _service.CountAsync());
@@ -135,6 +135,7 @@ namespace Snblog.ControllersRepository
             return Ok(await _service.GetFyTypeorderAsync(type, pageIndex, pageSize, order, isDesc));
         }
         #endregion
+        
         #region 标签ID查询 (缓存)
         /// <summary>
         /// 标签ID查询 (缓存)

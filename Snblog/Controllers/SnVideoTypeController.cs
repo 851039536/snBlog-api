@@ -3,13 +3,14 @@
     /// <summary>
     /// 视频分类
     /// </summary>
-    [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
-    public class SnVideoTypeController : Controller
+    [Route("videoType")]
+    public class SnVideoTypeController : BaseController
     {
         private readonly snblogContext _coreDbContext;
         private readonly ISnVideoTypeService _service; //IOC依赖注入
+
         public SnVideoTypeController(ISnVideoTypeService service, snblogContext coreDbContext)
         {
             _service = service;
@@ -17,13 +18,14 @@
         }
 
         /// <summary>
-        /// 分类视频查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
-        [HttpGet("AsyGestTest")]
-        public async Task<IActionResult> AsyGestTest()
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(await _service.AsyGetTest());
+            var data = await _service.GetAll();
+            return ApiResponse(data: data);
         }
 
         /// <summary>
@@ -34,7 +36,8 @@
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync(int id)
         {
-            return Ok(await _service.GetAllAsync(id));
+            var data = await _service.GetAllAsync(id);
+            return ApiResponse(data: data);
         }
 
         /// <summary>
@@ -44,7 +47,8 @@
         [HttpGet("CountAsync")]
         public async Task<IActionResult> CountAsync()
         {
-            return Ok(await _service.CountAsync());
+            var data = await _service.CountAsync();
+            return ApiResponse(data: data);
         }
 
         /// <summary>
@@ -52,7 +56,7 @@
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
-         [HttpPost("AddAsync")]
+        [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnVideoType Entity)
         {
@@ -64,7 +68,7 @@
         /// </summary>
         /// <param name="Entity"></param>
         /// <returns></returns>
-         [HttpDelete("DelectAsync")]
+        [HttpDelete("DelectAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DelectAsync(SnVideoType Entity)
         {

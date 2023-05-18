@@ -19,7 +19,7 @@
             return await _coreDbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<SnVideoType>> AsyGetTest()
+        public async Task<List<SnVideoType>> GetAll()
         {
             return await CreateService<SnVideoType>().GetAll().ToListAsync();
         }

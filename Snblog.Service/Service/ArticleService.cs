@@ -34,12 +34,12 @@
             cacheKey = $"{NAME}{ConstantString.DEL}{id}";
             Log.Information(cacheKey);
 
-            Article reslult = await _service.Articles.FindAsync(id);
+            Article result = await _service.Articles.FindAsync(id);
 
-            if (reslult == null) return false;
+            if (result == null) return false;
 
-            _service.Articles.Remove(reslult);//删除单个
-            _service.Remove(reslult);//直接在context上Remove()方法传入model，它会判断类型
+            _service.Articles.Remove(result);//删除单个
+            _service.Remove(result);//直接在context上Remove()方法传入model，它会判断类型
 
             return await _service.SaveChangesAsync() > 0;
         }
