@@ -1,4 +1,6 @@
-﻿namespace Snblog.Controllers
+﻿using Snblog.Util.GlobalVar;
+
+namespace Snblog.Controllers
 {
     #region 导航内容 SnNavigationController
 

@@ -4,7 +4,7 @@
     {
         public static bool IsNotNull(string obj)
         {
-            if (obj =="" || obj == null) {
+            if (string.IsNullOrEmpty(obj)) {
                 return false;
             };
             return true;

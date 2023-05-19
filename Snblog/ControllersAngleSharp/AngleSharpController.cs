@@ -1,4 +1,5 @@
 ﻿using Snblog.Service.AngleSharp;
+using Snblog.Util.GlobalVar;
 
 namespace Snblog.ControllersAngleSharp
 {

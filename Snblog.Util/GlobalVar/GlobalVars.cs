@@ -1,4 +1,4 @@
-﻿namespace Blog.Core
+﻿namespace Snblog.Util.GlobalVar
 {
     /// <summary>
     /// 权限变量配置

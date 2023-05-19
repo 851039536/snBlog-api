@@ -6,7 +6,8 @@ namespace Snblog.Service
     {
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly IConcardContext _mydbcontext;
-        public BaseService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext)
+
+        protected BaseService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext)
         {
             _repositoryFactory = repositoryFactory;
             _mydbcontext = mydbcontext;

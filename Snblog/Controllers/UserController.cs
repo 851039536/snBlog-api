@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Snblog.Jwt;
 using Microsoft.AspNetCore.Http;
+using Snblog.Util.GlobalVar;
 
 namespace Snblog.Controllers
 {

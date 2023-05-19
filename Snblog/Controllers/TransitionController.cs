@@ -1,7 +1,4 @@
-﻿using Snblog.Util.ChinesetoPinyin;
-using System.Text.Json;
-
-namespace Snblog.Controllers
+﻿namespace Snblog.Controllers
 {
     /// <summary>
     /// 转换
@@ -12,19 +9,20 @@ namespace Snblog.Controllers
     [Route("transition")]
     public class TransitionController : ControllerBase {
 
-        /// <summary>
-        /// 拼音
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [HttpGet("pinyin")]
-        public IActionResult ChinesetoPinyin(string value) {
-            JsonSerializerOptions options = new();
-            options.Converters.Add(new PinYinConverter());
-            string output = JsonSerializer.Serialize(value,options);
-            Console.WriteLine(output); //输出： "hàn zì zhuǎn pīn yīn"
-            return Ok(output);
-        }
+        // /// <summary>
+        // /// 拼音
+        // /// </summary>
+        // /// <param name="value"></param>
+        // /// <returns></returns>
+        // [HttpGet("pinyin")]
+        // public IActionResult ChineseToPinyin(string value) {
+        //     JsonSerializerOptions options = new();
+        //     options.Converters.Add(new PinYinConverter());
+        //     string output = JsonSerializer.Serialize(value,options);
+        //     Console.WriteLine(output); //输出： "hàn zì zhuǎn pīn yīn"
+        //     return Ok(output);
+        // }
+        //
         /// <summary>
         /// ToBaseString
         /// </summary>

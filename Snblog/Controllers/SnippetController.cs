@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Snblog.Util.GlobalVar;
 
 namespace Snblog.Controllers
 {

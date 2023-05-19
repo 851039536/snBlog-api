@@ -1,4 +1,6 @@
-﻿namespace Snblog.Controllers
+﻿using Snblog.Util.GlobalVar;
+
+namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制

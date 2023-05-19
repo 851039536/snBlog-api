@@ -1,4 +1,6 @@
-﻿namespace Snblog.Controllers
+﻿using Snblog.Util.GlobalVar;
+
+namespace Snblog.Controllers
 {
     /// <summary>
     /// SnTalkTypeController
