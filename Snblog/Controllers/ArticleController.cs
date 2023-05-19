@@ -79,7 +79,7 @@ namespace Snblog.Controllers
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet("ml")]
-        public IActionResult GetMLTest(string name)
+        public IActionResult GetMlTest(string name)
         {
             //Load sample data
             var sampleData = new TextMLModel.ModelInput() {
@@ -99,7 +99,7 @@ namespace Snblog.Controllers
         /// <param name="id">主键</param>
         /// <param name="cache">缓存</param>
         /// <returns>entity</returns>
-        [HttpGet("byid")]
+        [HttpGet("bid")]
         public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
         {
             var data = await _service.GetByIdAsync(id, cache);
@@ -169,7 +169,7 @@ namespace Snblog.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync(Article entity)
         {
-            var result = _validator.Validate(entity);
+            var result = await _validator.ValidateAsync(entity);
             if (!result.IsValid) {
                 return ApiResponse(statusCode: 404,message: result.Errors[0].ErrorMessage,data: entity);
             }

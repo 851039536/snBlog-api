@@ -17,7 +17,7 @@
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        int UserTalkTypeConut(int UserId);
+        int GetTypeSum(int UserId);
         /// <summary>
         /// 异步查询
         /// </summary>

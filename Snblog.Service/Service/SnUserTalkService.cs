@@ -41,7 +41,7 @@
             return data;
         }
 
-        public int UserTalkTypeConut(int userId)
+        public int GetTypeSum(int userId)
         {
             return CreateService<SnUserTalk>().Count(c => c.UserId == userId);
         }

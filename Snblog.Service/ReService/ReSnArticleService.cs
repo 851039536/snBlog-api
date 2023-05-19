@@ -239,7 +239,7 @@ namespace Snblog.Service.ReService
             }
         }
 
-        public async Task<List<Article>> GetTagtextAsync(int tag, bool isDesc)
+        public async Task<List<Article>> GetTagIdAsync(int tag, bool isDesc)
         {
             result_List = _cacheutil.CacheString1("ReGetTagtextAsync" + tag + isDesc, result_List); //设置缓存
             if (result_List == null)

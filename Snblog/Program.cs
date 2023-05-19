@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -10,19 +9,18 @@ namespace Snblog
     /// </summary>
     public class Program
     {
-     
         /// <summary>
         /// Main
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            // 读取 appsettings.json 配置文件
+            // 璇诲彇 appsettings.json 閰嶇疆鏂囦欢
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            // 配置 Serilog
+            // 閰嶇疆 Serilog
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
@@ -42,9 +40,9 @@ namespace Snblog
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-             .UseSerilog()  // 使用 Serilog 作为日志提供程序
+             .UseSerilog()  // 浣跨敤 Serilog 浣滀负鏃ュ織鎻愪緵绋嬪簭
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

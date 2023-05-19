@@ -5,7 +5,7 @@
        public enum LogsEnum
         {
             主键查询 = 1,
-            分页查询 = 2,
+            分页查询 = 2
         }
     }
 }

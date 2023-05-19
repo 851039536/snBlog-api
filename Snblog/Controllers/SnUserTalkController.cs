@@ -7,13 +7,11 @@ namespace Snblog.Controllers
     [ApiController]
     public class SnUserTalkController : Controller
     {
-        private readonly snblogContext _coreDbContext;
         private readonly ISnUserTalkService _service; //IOC依赖注入
 
-        public SnUserTalkController(ISnUserTalkService service, snblogContext coreDbContext)
+        public SnUserTalkController(ISnUserTalkService service)
         {
             _service = service;
-            _coreDbContext = coreDbContext;
         }
 
         /// <summary>
@@ -64,10 +62,10 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="userId">用户Id</param>
         /// <returns></returns>
-        [HttpGet("UserTalkTypeConut")]
-        public IActionResult UserTalkTypeConut(int userId)
+        [HttpGet("sum")]
+        public IActionResult GetTypeSum(int userId)
         {
-            return Ok(_service.UserTalkTypeConut(userId));
+            return Ok(_service.GetTypeSum(userId));
         }
 
         /// <summary>

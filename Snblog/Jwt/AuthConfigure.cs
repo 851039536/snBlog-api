@@ -16,7 +16,8 @@ namespace Snblog.Jwt
         /// <param name="configuration"></param>
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
-            if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))
+            //??如果该值为null，则该运算符将返回一个空字符串
+            if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"] ?? string.Empty))
             {
                 services.AddAuthentication(options =>
                 {
@@ -25,12 +26,15 @@ namespace Snblog.Jwt
                 }).AddJwtBearer("JwtBearer", options =>
                 {
                     options.Audience = configuration["Authentication:JwtBearer:Audience"];
- 
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         //是否验证IssuerSigningKey 
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Authentication:JwtBearer:SecurityKey"])),
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.ASCII.GetBytes(
+                                configuration["Authentication:JwtBearer:SecurityKey"] ?? string.Empty
+                            )),
 
                         // //是否验证Issuer
                         ValidateIssuer = true,
@@ -42,7 +46,7 @@ namespace Snblog.Jwt
 
                         // //是否验证超时  当设置exp和nbf时有效 同时启用ClockSkew 
                         ValidateLifetime = true,
- 
+
                         // If you want to allow a certain amount of clock drift, set that here
                         ClockSkew = TimeSpan.Zero
                     };

@@ -10,13 +10,11 @@ namespace Snblog.Controllers
     [Route("videoType")]
     public class SnVideoTypeController : BaseController
     {
-        private readonly snblogContext _coreDbContext;
-        private readonly ISnVideoTypeService _service; //IOC依赖注入
+        private readonly ISnVideoTypeService _service;
 
-        public SnVideoTypeController(ISnVideoTypeService service, snblogContext coreDbContext)
+        public SnVideoTypeController(ISnVideoTypeService service)
         {
             _service = service;
-            _coreDbContext = coreDbContext;
         }
 
         /// <summary>
@@ -56,37 +54,37 @@ namespace Snblog.Controllers
         /// <summary>
         /// 添加数据 （权限）
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> AddAsync(SnVideoType Entity)
+        public async Task<IActionResult> AddAsync(SnVideoType entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
 
         /// <summary>
         /// 删除数据 （权限）
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        [HttpDelete("DelectAsync")]
+        [HttpDelete("del")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> DelectAsync(SnVideoType Entity)
+        public async Task<IActionResult> DeleteAsync(SnVideoType entity)
         {
-            return Ok(await _service.DeleteAsync(Entity));
+            return Ok(await _service.DeleteAsync(entity));
         }
 
         /// <summary>
         /// 更新数据 （权限）
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnVideoType Entity)
+        public async Task<IActionResult> UpdateAsync(SnVideoType entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
     }
 }

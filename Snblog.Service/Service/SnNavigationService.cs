@@ -8,13 +8,11 @@ namespace Snblog.Service.Service
         private readonly CacheUtil _cacheutil;
         private readonly EntityData<SnNavigation> res = new();
         private readonly EntityDataDto<SnNavigationDto> resDto = new();
-        private readonly ILogger<SnNavigationService> _logger;
         private readonly IMapper _mapper;
-        public SnNavigationService(snblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationService> logger, IMapper mapper)
+        public SnNavigationService(snblogContext service, ICacheUtil cacheutil,  IMapper mapper)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;
-            _logger = logger;
             _mapper = mapper;
         }
         public async Task<List<SnNavigationDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)

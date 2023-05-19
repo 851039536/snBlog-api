@@ -72,7 +72,7 @@
         /// <param name="tag">标签id</param>
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <returns></returns>
-        Task<List<Article>> GetTagtextAsync(int tag, bool isDesc);
+        Task<List<Article>> GetTagIdAsync(int tag, bool isDesc);
 
         /// <summary>
         /// 添加数据

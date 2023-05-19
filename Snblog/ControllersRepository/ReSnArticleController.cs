@@ -129,8 +129,8 @@ namespace Snblog.ControllersRepository
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="order">排序条件[data:时间,read:阅读,give:点赞,comment:评论]默认按id排序</param>
         /// <returns></returns>
-        [HttpGet("GetFyTypeorderAsync")]
-        public async Task<IActionResult> GetFyTypeorderAsync(int type, int pageIndex, int pageSize, string order, bool isDesc)
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetPagingAsync(int type, int pageIndex, int pageSize, string order, bool isDesc)
         {
             return Ok(await _service.GetFyTypeorderAsync(type, pageIndex, pageSize, order, isDesc));
         }
@@ -143,12 +143,13 @@ namespace Snblog.ControllersRepository
         /// <param name="labelId">标签id</param>
         /// <param name="isDesc"></param>
         /// <returns></returns>
-        [HttpGet("GetTagtextAsync")]
-        public async Task<IActionResult> GetTagtextAsync(int labelId, bool isDesc)
+        [HttpGet("tagId")]
+        public async Task<IActionResult> GetTagIdAsync(int labelId, bool isDesc)
         {
-            return Ok(await _service.GetTagtextAsync(labelId, isDesc));
+            return Ok(await _service.GetTagIdAsync(labelId, isDesc));
         }
         #endregion
+        
         #region 添加数据
         /// <summary>
         /// 添加数据

@@ -73,9 +73,9 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> AddAsync(SnTalkType Entity)
+        public async Task<IActionResult> AddAsync(SnTalkType entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
 
         /// <summary>
@@ -94,9 +94,9 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnTalkType Entity)
+        public async Task<IActionResult> UpdateAsync(SnTalkType entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
     }
 }

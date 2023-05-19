@@ -18,19 +18,19 @@ namespace Snblog.Controllers
     {
         private readonly snblogContext _coreDbContext;
         private readonly IUserService _service; //IOC依赖注入
-        private readonly JwtConfig jwtModel = null;
+        private readonly JwtConfig _jwtModel;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
         /// <param name="coreDbContext"></param>
-        /// <param name="_jwtModel"></param>
-        public UserController(IUserService service,snblogContext coreDbContext,IOptions<JwtConfig> _jwtModel)
+        /// <param name="jwtModel"></param>
+        public UserController(IUserService service,snblogContext coreDbContext,IOptions<JwtConfig> jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;
-            jwtModel = _jwtModel.Value;
+            this._jwtModel = jwtModel.Value;
         }
 
         #region 登录
@@ -75,13 +75,13 @@ namespace Snblog.Controllers
             DateTime now = DateTime.UtcNow;
             //生成token
             var jwtSecurityToken = new JwtSecurityToken(
-                issuer: jwtModel.Issuer, //签发者
-                audience: jwtModel.Audience, //生成token
+                issuer: _jwtModel.Issuer, //签发者
+                audience: _jwtModel.Audience, //生成token
                 claims: claims, //jwt令牌数据体
                 notBefore: now,
-                expires: now.Add(TimeSpan.FromMinutes(jwtModel.Expiration)),//令牌过期时间
+                expires: now.Add(TimeSpan.FromMinutes(_jwtModel.Expiration)),//令牌过期时间
                                                                             //为数字签名定义SecurityKey                                    
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtModel.SecurityKey)),SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtModel.SecurityKey)),SecurityAlgorithms.HmacSha256)
             );
             // 将token转换为字符串
             string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
@@ -120,7 +120,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id">主键</param>
         /// <param name="cache">缓存</param>
-        [HttpGet("byid")]
+        [HttpGet("bid")]
         public async Task<IActionResult> GetByIdAsync(int id = 0,bool cache = false)
         {
             var data = await _service.GetByIdAsync(id,cache);
