@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnSoftware
     {
-        public int SoId { get; set; }
-        public string SoTitle { get; set; }
-        public string SoData { get; set; }
-        public string SoImg { get; set; }
-        public int? SoTypeid { get; set; }
-        public string SoComment { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Img { get; set; }
+        public int? TypeId { get; set; }
+        public int? CommentId { get; set; }
+        public DateTime? TimeCreate { get; set; }
+        public DateTime? TimeModified { get; set; }
+
+        public virtual SnSoftwareType Type { get; set; }
     }
 }

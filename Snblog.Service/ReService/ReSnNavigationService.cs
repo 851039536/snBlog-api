@@ -1,11 +1,4 @@
-﻿using Snblog.Cache.CacheUtil;
-using Snblog.IRepository;
-using Snblog.IService.IReService;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Snblog.Models;
+﻿using Snblog.IService.IReService;
 
 namespace Snblog.Service.ReService
 {
@@ -32,7 +25,7 @@ namespace Snblog.Service.ReService
         }
 
         /// <summary>
-        /// 主键查询
+        /// BYID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -48,7 +41,7 @@ namespace Snblog.Service.ReService
         }
 
         /// <summary>
-        /// 查询总数
+        /// SUM
         /// </summary>
         /// <returns></returns>
         public async Task<int> GetCountAsync()
@@ -72,7 +65,7 @@ namespace Snblog.Service.ReService
             result_Int = _cacheutil.CacheNumber1("ReCountTypeAsync", result_Int);
             if (result_Int == 0)
             {
-                result_Int = await CreateService<SnNavigation>().CountAsync(c => c.NavType == type);
+                result_Int = await CreateService<SnNavigation>().CountAsync(c => c.Type.Title == type);
                 _cacheutil.CacheNumber1("ReCountTypeAsync", result_Int);
             }
             return result_Int;
@@ -88,7 +81,7 @@ namespace Snblog.Service.ReService
             result_List = _cacheutil.CacheString1("ReGetDistinct" + type, result_List);
             if (result_List == null)
             {
-                result_List = await CreateService<SnNavigation>().Distinct(s => s.NavType == type).ToListAsync();
+                result_List = await CreateService<SnNavigation>().Distinct(s => s.Type.Title == type).ToListAsync();
                 _cacheutil.CacheString1("ReGetDistinct" + type, result_List);
             }
             return result_List;
@@ -106,7 +99,7 @@ namespace Snblog.Service.ReService
              result_List = _cacheutil.CacheString1("ReGetTypeOrderAsync" + type + order, result_List);
             if (result_List == null)
             {
-                result_List = await CreateService<SnNavigation>().Where(c => c.NavType == type, s => s.NavId, order).ToListAsync();
+                result_List = await CreateService<SnNavigation>().Where(c => c.Type.Title == type, s => s.Id, order).ToListAsync();
                 _cacheutil.CacheString1("ReGetTypeOrderAsync" + type + order, result_List);
             }
             return result_List;
@@ -155,19 +148,19 @@ namespace Snblog.Service.ReService
         /// </summary>
         public async Task<bool> DeleteAsync(int id)
         {
-            return  await CreateService<SnNavigation>().DeleteAsync(id)>0;
+            return  await CreateService<SnNavigation>().DelAsync(id)>0;
         }
 
         private async Task<List<SnNavigation>> FyAll(string type, int pageIndex, int pageSize, bool isDesc)
         {
             if (type == "all")
             {
-                var data = await CreateService<SnNavigation>().WherepageAsync(s => s.NavType != null, c => c.NavId, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnNavigation>().WherePageAsync(s => s.Type.Title != null, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
             else
             {
-                var data = await CreateService<SnNavigation>().WherepageAsync(s => s.NavType == type, c => c.NavId, pageIndex, pageSize, isDesc);
+                var data = await CreateService<SnNavigation>().WherePageAsync(s => s.Type.Title == type, c => c.Id, pageIndex, pageSize, isDesc);
                 return data.ToList();
             }
         }

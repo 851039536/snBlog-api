@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "TextMLModel_WebApi1": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53337;http://localhost:53338"
+    }
+  }
+}

@@ -1,30 +1,19 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Snblog.Cache.Cache;
-using Snblog.Cache.CacheUtil;
-using Snblog.Controllers;
-using Snblog.Enties.AutoMapper;
+using Snblog.Enties.Validator;
 using Snblog.IRepository;
-using Snblog.IService;
 using Snblog.IService.IReService;
-using Snblog.IService.IService;
 using Snblog.Jwt;
-using Snblog.Models;
-using Snblog.Repository.Repository;
 using Snblog.Service;
 using Snblog.Service.AngleSharp;
 using Snblog.Service.ReService;
 using Snblog.Service.Service;
+using Snblog.Util.Exceptions;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Snblog
@@ -32,18 +21,18 @@ namespace Snblog
     public class Startup
     {
 
-        #region °æ±¾¿ØÖÆÃ¶¾Ù
+        #region ç‰ˆæœ¬æ§åˆ¶æšä¸¾
         /// <summary>
-        /// °æ±¾¿ØÖÆ
+        /// ç‰ˆæœ¬æ§åˆ¶
         /// </summary>
         public enum ApiVersion
         {
             /// <summary>
-            /// v1°æ±¾
+            /// v1ç‰ˆæœ¬
             /// </summary>
             V1 = 1,
             /// <summary>
-            /// v2°æ±¾
+            /// v2ç‰ˆæœ¬
             /// </summary>
             V2 = 2,
             /// <summary>
@@ -58,71 +47,74 @@ namespace Snblog
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
-        //ÔËĞĞÊ±½«µ÷ÓÃ´Ë·½·¨¡£ Ê¹ÓÃ´Ë·½·¨½«·şÎñÌí¼Óµ½ÈİÆ÷¡£
+        //è¿è¡Œæ—¶å°†è°ƒç”¨æ­¤æ–¹æ³•ã€‚ ä½¿ç”¨æ­¤æ–¹æ³•å°†æœåŠ¡æ·»åŠ åˆ°å®¹å™¨ã€‚
         public void ConfigureServices(IServiceCollection services)
         {
-            #region MiniProfiler ĞÔÄÜ·ÖÎö
+            services.AddControllers().AddNewtonsoftJson(option =>
+              //å¿½ç•¥å¾ªç¯å¼•ç”¨
+              option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+          );
+            #region MiniProfiler æ€§èƒ½åˆ†æ
             services.AddMiniProfiler(options =>
             options.RouteBasePath = "/profiler"
              );
             #endregion
-            #region Swagger·şÎñ
-            services.AddSwaggerGen(c =>
+
+            #region SwaggeræœåŠ¡
+            services.AddSwaggerGen(c => {
+                // æ·»åŠ æ–‡æ¡£ä¿¡æ¯
+                //éå†ç‰ˆæœ¬ä¿¡æ¯
+                typeof(ApiVersion).GetEnumNames().ToList().ForEach(version => {
+                    c.SwaggerDoc(version,new OpenApiInfo {
+                        Title = "SN blog API", //æ ‡é¢˜
+                        Description = "EFCoreæ•°æ®æ“ä½œ ASP.NET Core Web API", //æè¿°
+                        TermsOfService = new Uri("https://example.com/terms"), //æœåŠ¡æ¡æ¬¾
+                        Contact = new OpenApiContact {
+                            Name = "kai ouyang", //è”ç³»äºº
+                            Email = string.Empty,  //é‚®ç®±
+                            Url = new Uri("https://twitter.com/spboyer"),//ç½‘ç«™
+                        },
+                        License = new OpenApiLicense {
+                            Name = "Use under LICX", //åè®®
+                            Url = new Uri("https://example.com/license"), //åè®®åœ°å€
+                        }
+                    });
+                });
+
+                // ä½¿ç”¨åå°„è·å–xmlæ–‡ä»¶ã€‚å¹¶æ„é€ å‡ºæ–‡ä»¶çš„è·¯å¾„
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                // è·å–xmlæ–‡ä»¶çš„è·¯å¾„
+                var filePath = Path.Combine(AppContext.BaseDirectory,xmlFile);
+                // å¯ç”¨xmlæ³¨é‡Š. è¯¥æ–¹æ³•ç¬¬äºŒä¸ªå‚æ•°å¯ç”¨æ§åˆ¶å™¨çš„æ³¨é‡Šï¼Œé»˜è®¤ä¸ºfalse.
+                c.IncludeXmlComments(filePath,true);
+                
+                // ä½¿ç”¨åå°„è·å–xmlæ–‡ä»¶ã€‚å¹¶æ„é€ å‡ºæ–‡ä»¶çš„è·¯å¾„
+                var xmlModel = Path.Combine("Snblog.Enties.xml");
+                // è·å–xmlæ–‡ä»¶çš„è·¯å¾„
+                var modelPath = Path.Combine(AppContext.BaseDirectory,xmlModel);
+                c.IncludeXmlComments(modelPath,true);
+                // å¯ä»¥è§£å†³ç›¸åŒç±»åä¼šæŠ¥é”™çš„é—®é¢˜
+                c.CustomSchemaIds(type => type.FullName);
+
+                #region é…ç½®Authorization
+                //Bearer çš„schemeå®šä¹‰
+                var securityScheme = new OpenApiSecurityScheme() {
+                    Description = "JWTæˆæƒ(æ•°æ®å°†åœ¨è¯·æ±‚å¤´ä¸­è¿›è¡Œä¼ è¾“) å‚æ•°ç»“æ„: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    //å‚æ•°æ·»åŠ åœ¨å¤´éƒ¨
+                    In = ParameterLocation.Header,
+                    //ä½¿ç”¨Authorizeå¤´éƒ¨
+                    Type = SecuritySchemeType.Http,
+                    //å†…å®¹ä¸ºä»¥ bearerå¼€å¤´
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                };
+
+                //æŠŠæ‰€æœ‰æ–¹æ³•é…ç½®ä¸ºå¢åŠ bearerå¤´éƒ¨ä¿¡æ¯
+                var securityRequirement = new OpenApiSecurityRequirement
               {
-                  // Ìí¼ÓÎÄµµĞÅÏ¢
-                  //±éÀú°æ±¾ĞÅÏ¢
-                  typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
-                  {
-                      c.SwaggerDoc(version, new OpenApiInfo
-                      {
-                          Title = "SN blog API", //±êÌâ
-                          Description = "EFCoreÊı¾İ²Ù×÷ ASP.NET Core Web API", //ÃèÊö
-                          TermsOfService = new Uri("https://example.com/terms"), //·şÎñÌõ¿î
-                          Contact = new OpenApiContact
-                          {
-                              Name = "kai ouyang", //ÁªÏµÈË
-                              Email = string.Empty,  //ÓÊÏä
-                              Url = new Uri("https://twitter.com/spboyer"),//ÍøÕ¾
-                          },
-                          License = new OpenApiLicense
-                          {
-                              Name = "Use under LICX", //Ğ­Òé
-                              Url = new Uri("https://example.com/license"), //Ğ­ÒéµØÖ·
-                          }
-                      });
-                  });
-
-                  // Ê¹ÓÃ·´Éä»ñÈ¡xmlÎÄ¼ş¡£²¢¹¹Ôì³öÎÄ¼şµÄÂ·¾¶
-                  var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                  var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
-                  // ÆôÓÃxml×¢ÊÍ. ¸Ã·½·¨µÚ¶ş¸ö²ÎÊıÆôÓÃ¿ØÖÆÆ÷µÄ×¢ÊÍ£¬Ä¬ÈÏÎªfalse.
-                  c.IncludeXmlComments(xmlpath, true);
-                  //Model Ò²Ìí¼Ó×¢ÊÍËµÃ÷
-                  var xmlpath1 = Path.Combine("Snblog.Enties.xml");
-                  var xmlpath2 = Path.Combine(AppContext.BaseDirectory, xmlpath1);
-                  c.IncludeXmlComments(xmlpath2, true);
-                  c.CustomSchemaIds(type => type.FullName);// ¿ÉÒÔ½â¾öÏàÍ¬ÀàÃû»á±¨´íµÄÎÊÌâ
-
-                  #region ÅäÖÃAuthorization
-                  //Bearer µÄscheme¶¨Òå
-                  var securityScheme = new OpenApiSecurityScheme()
-                  {
-                      Description = "JWTÊÚÈ¨(Êı¾İ½«ÔÚÇëÇóÍ·ÖĞ½øĞĞ´«Êä) ²ÎÊı½á¹¹: \"Authorization: Bearer {token}\"",
-                      Name = "Authorization",
-                      //²ÎÊıÌí¼ÓÔÚÍ·²¿
-                      In = ParameterLocation.Header,
-                      //Ê¹ÓÃAuthorizeÍ·²¿
-                      Type = SecuritySchemeType.Http,
-                      //ÄÚÈİÎªÒÔ bearer¿ªÍ·
-                      Scheme = "bearer",
-                      BearerFormat = "JWT"
-                  };
-
-                  //°ÑËùÓĞ·½·¨ÅäÖÃÎªÔö¼ÓbearerÍ·²¿ĞÅÏ¢
-                  var securityRequirement = new OpenApiSecurityRequirement
-                {
                     {
                             new OpenApiSecurityScheme
                             {
@@ -136,25 +128,32 @@ namespace Snblog
                     }
                 };
 
-                  //×¢²áµ½swaggerÖĞ
-                  c.AddSecurityDefinition("bearerAuth", securityScheme);
-                  c.AddSecurityRequirement(securityRequirement);
-                  #endregion
-              });
+                //æ³¨å†Œåˆ°swaggerä¸­
+                c.AddSecurityDefinition("bearerAuth",securityScheme);
+                c.AddSecurityRequirement(securityRequirement);
+                #endregion
+
+            });
+
             #endregion
-            #region DbContext
-            services.AddDbContext<SnblogContext>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+
+            #region æ•°æ®åº“è¿æ¥æ± 
+
+            services.AddDbContext<snblogContext>(
+                options => options
+                .UseMySQL(Configuration.GetConnectionString("DefaultConnection") ?? string.Empty
+                ));
             #endregion
-            # region jwt
+
+            #region JWTèº«ä»½æˆæƒ
             services.ConfigureJwt(Configuration);
-            //×¢ÈëJWTÅäÖÃÎÄ¼ş
+            //æ³¨å…¥JWTé…ç½®æ–‡ä»¶
             services.Configure<JwtConfig>(Configuration.GetSection("Authentication:JwtBearer"));
             #endregion
-            #region Cors¿çÓòÇëÇó
-            services.AddCors(c =>
-            {
-                c.AddPolicy("AllRequests", policy =>
-                {
+
+            #region Corsè·¨åŸŸè¯·æ±‚
+            services.AddCors(c => {
+                c.AddPolicy("AllRequests",policy => {
                     policy
                     .AllowAnyOrigin()
                     .AllowAnyMethod()
@@ -163,53 +162,52 @@ namespace Snblog
                 });
             });
             #endregion
-            #region DIÒÀÀµ×¢ÈëÅäÖÃ¡£
 
-
-
-            // ÔÚASP.NET CoreÖĞËùÓĞÓÃµ½EFµÄService ¶¼ĞèÒª×¢²á³ÉScoped
-            services.AddScoped<IRepositoryFactory, RepositoryFactory>();//·ºĞÍ¹¤³§
-            services.AddScoped<IConcardContext, SnblogContext>();//db
-            services.AddScoped<ISnArticleService, SnArticleService>();//ioc
-            services.AddScoped<ISnNavigationService, SnNavigationService>();
-            services.AddScoped<ISnLabelsService, SnLabelsService>();
-            services.AddScoped<ISnSortService, SnSortService>();
-            services.AddScoped<ISnOneService, SnOneService>();
-            services.AddScoped<ISnVideoService, SnVideoService>();
-            services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
-            services.AddScoped<ISnUserTalkService, SnUserTalkService>();
-            services.AddScoped<ISnUserService, SnUserService>();
-            services.AddScoped<ISnOneTypeService, SnOneTypeService>();
-            services.AddScoped<ISnPictureService, SnPictureService>();
-            services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
-            services.AddScoped<ISnTalkService, SnTalkService>();
-            services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
-            services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
-            services.AddScoped<ISnleaveService, SnleaveService>();
-            services.AddScoped<ICacheUtil, CacheUtil>();
-            services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
-            services.AddScoped<ISnInterfaceService, SnInterfaceService>();
-            services.AddScoped<ISnSetBlogService, SnSetBlogService>();
-
-            //»º´æ-Õû¸öÓ¦ÓÃ³ÌĞòÉúÃüÖÜÆÚÒÔÄÚÖ»´´½¨Ò»¸öÊµÀı 
-            services.AddSingleton<ICacheManager, CacheManager>();
-
-            services.AddScoped<IReSnArticleService, ReSnArticleService>();
-            services.AddScoped<IReSnLabelsService, ReSnLabelsService>();
-            services.AddScoped<IReSnNavigationService, ReSnNavigationService>();
-            services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
-
+            #region DIä¾èµ–æ³¨å…¥é…ç½®ã€‚
+            // åœ¨ASP.NET Coreä¸­æ‰€æœ‰ç”¨åˆ°EFçš„Service éƒ½éœ€è¦æ³¨å†ŒæˆScoped
+            services.AddScoped<IRepositoryFactory,RepositoryFactory>();//æ³›å‹å·¥å‚
+            services.AddScoped<IConcardContext,snblogContext>();//db
+            services.AddScoped<IArticleService,ArticleService>();//ioc
+            services.AddScoped<ISnNavigationService,SnNavigationService>();
+            services.AddScoped<IArticleTagService,ArticleTagService>();
+            services.AddScoped<IArticleTypeService,ArticleTypeService>();
+            services.AddScoped<IDiaryService,DiaryService>();
+            services.AddScoped<IVideoService,VideoService>();
+            services.AddScoped<ISnVideoTypeService,SnVideoTypeService>();
+            services.AddScoped<ISnUserTalkService,SnUserTalkService>();
+            services.AddScoped<IUserService,UserService>();
+            services.AddScoped<IDiaryTypeService,DiaryTypeService>();
+            services.AddScoped<ISnPictureService,SnPictureService>();
+            services.AddScoped<ISnPictureTypeService,SnPictureTypeService>();
+            services.AddScoped<ISnTalkService,SnTalkService>();
+            services.AddScoped<ISnTalkTypeService,SnTalkTypeService>();
+            services.AddScoped<ISnNavigationTypeService,SnNavigationTypeService>();
+            services.AddScoped<ISnleaveService,SnleaveService>();
+            services.AddScoped<ISnNavigationTypeService,SnNavigationTypeService>();
+            services.AddScoped<IInterfaceService,InterfaceService>();
+            services.AddScoped<ISnSetBlogService,SnSetBlogService>();
+            services.AddScoped<ISnippetService,SnippetService>();
+            services.AddScoped<ISnippetTagService,SnippetTagService>();
+            services.AddScoped<ISnippetTypeService,SnippetTypeService>();
+            services.AddScoped<ISnippetLabelService,SnippetLabelService>();
+            services.AddScoped<IReSnArticleService,ReSnArticleService>();
+            services.AddScoped<IReSnNavigationService,ReSnNavigationService>();
+            services.AddScoped<HotNewsAngleSharp,HotNewsAngleSharp>();
+            services.AddTransient<IValidator<Article>,ArticleValidator>();
+            //æ•´ä¸ªåº”ç”¨ç¨‹åºç”Ÿå‘½å‘¨æœŸä»¥å†…åªåˆ›å»ºä¸€ä¸ªå®ä¾‹ 
+            services.AddSingleton<ICacheManager,CacheManager>();
+             services.AddSingleton<ICacheUtil,CacheUtil>();
+              
             #endregion
 
-
-            #region ÊµÌåÓ³Éä
+            #region å®ä½“æ˜ å°„
 
             //services.AddAutoMapper(typeof(MappingProfile));
 
-            //×Ô¶¯»¯×¢²á
+            //è‡ªåŠ¨åŒ–æ³¨å†Œ
             services.AddAutoMapper(
                Assembly.Load("Snblog.Enties").GetTypes()
-                   .Where(t => t.FullName.EndsWith("Mapper"))
+                   .Where(t => t.FullName != null && t.FullName.EndsWith("Mapper"))
                    .ToArray()
            );
             #endregion
@@ -220,54 +218,53 @@ namespace Snblog
 
 
         /// <summary>
-        ///   ÔËĞĞÊ±½«µ÷ÓÃ´Ë·½·¨¡£ Ê¹ÓÃ´Ë·½·¨À´ÅäÖÃHTTPÇëÇó¹ÜµÀ¡£
+        ///   è¿è¡Œæ—¶å°†è°ƒç”¨æ­¤æ–¹æ³•ã€‚ ä½¿ç”¨æ­¤æ–¹æ³•æ¥é…ç½®HTTPè¯·æ±‚ç®¡é“ã€‚
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app,IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                //¶ÔÓÚ¿ª·¢Ä£Ê½£¬Ò»µ©±¨´í¾ÍÌø×ªµ½´íÎó¶ÑÕ»Ò³Ãæ
+            if (env.IsDevelopment()) {
+                //å¯¹äºå¼€å‘æ¨¡å¼ï¼Œä¸€æ—¦æŠ¥é”™å°±è·³è½¬åˆ°é”™è¯¯å †æ ˆé¡µé¢
                 app.UseDeveloperExceptionPage();
+            } else {
+                app.UseExceptionMiddleware();
             }
-            #region Swagger+ĞÔÄÜ·ÖÎö£¨MiniProfiler£©+×Ô¶¨ÒåÒ³Ãæ
 
-            //¼¤»îUseMiniProfiler
+            #region Swagger+æ€§èƒ½åˆ†æï¼ˆMiniProfilerï¼‰+è‡ªå®šä¹‰é¡µé¢
+
+            //æ¿€æ´»UseMiniProfiler
             app.UseMiniProfiler();
-            //¿ÉÒÔ½«SwaggerµÄUIÒ³ÃæÅäÖÃÔÚConfigureµÄ¿ª·¢»·¾³Ö®ÖĞ
-            // ÆôÓÃSwaggerÖĞ¼ä¼ş
+            //å¯ä»¥å°†Swaggerçš„UIé¡µé¢é…ç½®åœ¨Configureçš„å¼€å‘ç¯å¢ƒä¹‹ä¸­
+            // å¯ç”¨Swaggerä¸­é—´ä»¶
             app.UseSwagger();
 
-            //ÅäÖÃSwaggerUI
-            app.UseSwaggerUI(c =>
-            {
-                typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
-                {
+            //é…ç½®SwaggerUI
+            app.UseSwaggerUI(c => {
+                typeof(ApiVersion).GetEnumNames().ToList().ForEach(version => {
                     c.IndexStream = () => GetType().GetTypeInfo()
                          .Assembly.GetManifestResourceStream("Snblog.index.html");
-                    ////ÉèÖÃÊ×Ò³ÎªSwagger
+                    ////è®¾ç½®é¦–é¡µä¸ºSwagger
                     c.RoutePrefix = string.Empty;
-                    //×Ô¶¨ÒåÒ³Ãæ ¼¯³ÉĞÔÄÜ·ÖÎö
-                    c.SwaggerEndpoint($"/swagger/{version}/swagger.json", version);
-                    ////ÉèÖÃÎªnone¿ÉÕÛµşËùÓĞ·½·¨
+                    //è‡ªå®šä¹‰é¡µé¢ é›†æˆæ€§èƒ½åˆ†æ
+                    c.SwaggerEndpoint($"/swagger/{version}/swagger.json",version);
+                    ////è®¾ç½®ä¸ºnoneå¯æŠ˜å æ‰€æœ‰æ–¹æ³•
                     c.DocExpansion(DocExpansion.None);
-                    ////ÉèÖÃÎª-1 ¿É²»ÏÔÊ¾models
+                    ////è®¾ç½®ä¸º-1 å¯ä¸æ˜¾ç¤ºmodels
                     // c.DefaultModelsExpandDepth(-1);
                 });
             });
             #endregion
             app.UseHttpsRedirection();
             app.UseRouting();
-            #region ¿ªÆôCors¿çÓòÇëÇóÖĞ¼ä¼ş
+            #region å¼€å¯Corsè·¨åŸŸè¯·æ±‚ä¸­é—´ä»¶
             app.UseCors("AllRequests");
             #endregion
-            #region ÆôÓÃjwt
+            #region å¯ç”¨jwt
             app.UseAuthentication();
             app.UseAuthorization();
             #endregion
-            app.UseEndpoints(endpoints =>
-            {
+            app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
         }

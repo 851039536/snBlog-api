@@ -1,8 +1,4 @@
-﻿using Snblog.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Snblog.IService
+﻿namespace Snblog.IService
 {
     /// <summary>
     /// 业务类接口
@@ -21,7 +17,7 @@ namespace Snblog.IService
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        int UserTalkTypeConut(int UserId);
+        int GetTypeSum(int UserId);
         /// <summary>
         /// 异步查询
         /// </summary>

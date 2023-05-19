@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnPicture
     {
-        public int PictureId { get; set; }
-        public string PictureUrl { get; set; }
-        public string PictureTitle { get; set; }
-        public int? PictureTypeId { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string ImgUrl { get; set; }
+        public int TypeId { get; set; }
+        public int UserId { get; set; }
+
+        public virtual SnPictureType Type { get; set; }
+        public virtual User User { get; set; }
     }
 }

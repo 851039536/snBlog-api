@@ -1,12 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Snblog.IRepository;
-using Snblog.IService;
-using Snblog.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Snblog.Service
+﻿namespace Snblog.Service
 {
     public class SnUserTalkService : BaseService, ISnUserTalkService
     {
@@ -20,7 +12,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<string> AsyDetUserTalk(int id)
         {
-            int da = await  CreateService<SnUserTalk>().DeleteAsync(id);
+            int da = await CreateService<SnUserTalk>().DelAsync(id);
             string data = da == 1 ? "删除成功" : "删除失败";
             return data;
         }
@@ -38,7 +30,7 @@ namespace Snblog.Service
         /// <returns></returns>
         public async Task<SnUserTalk> AsyInsUserTalk(SnUserTalk talk)
         {
-             return await CreateService<SnUserTalk>().AddAsync(talk);
+            return await CreateService<SnUserTalk>().AddAsync(talk);
         }
 
 
@@ -49,7 +41,7 @@ namespace Snblog.Service
             return data;
         }
 
-        public int UserTalkTypeConut(int userId)
+        public int GetTypeSum(int userId)
         {
             return CreateService<SnUserTalk>().Count(c => c.UserId == userId);
         }
@@ -57,7 +49,7 @@ namespace Snblog.Service
 
         public List<SnUserTalk> GetPagingUserTalk(int label, int pageIndex, int pageSize, out int count, bool isDesc)
         {
-            var data = CreateService<SnUserTalk>().Wherepage(s => true, c => c.TalkTime, pageIndex, pageSize, out count, isDesc);
+            var data = CreateService<SnUserTalk>().WherePage(s => true, c => c.TalkTime, pageIndex, pageSize, out count, isDesc);
             return data.ToList();
         }
 
@@ -83,7 +75,7 @@ namespace Snblog.Service
 
         public async Task<List<SnUserTalk>> AsyGetTalk(int talkId)
         {
-           var data = CreateService<SnUserTalk>().Where(s => s.Id == talkId);
+            var data = CreateService<SnUserTalk>().Where(s => s.Id == talkId);
             return await data.ToListAsync();
         }
     }

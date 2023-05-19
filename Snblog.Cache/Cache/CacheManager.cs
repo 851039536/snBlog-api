@@ -1,16 +1,11 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-
-namespace Snblog.Cache.Cache
+﻿namespace Snblog.Cache.Cache
 {
  public class CacheManager:ICacheManager
     {
         public  TimeSpan Time = new TimeSpan(00, 00, 00, 60); //缓存过期时间
-        public TimeSpan Time1  = TimeSpan.FromSeconds(3);  // 滑动缓存时间
-        private IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+        // public TimeSpan Time1  = TimeSpan.FromSeconds(3);  // 滑动缓存时间
+         IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+
 
         /// <summary>
         /// 判断是否在缓存中
@@ -19,6 +14,8 @@ namespace Snblog.Cache.Cache
         /// <returns></returns>
         public bool IsInCache(string key)
         {
+            // 判断是否存在
+            bool found = _cache.TryGetValue(key,out string result);
             List<string> keys = GetAllKeys();
             foreach (var i in keys)
             {
@@ -71,9 +68,8 @@ namespace Snblog.Cache.Cache
         /// <returns></returns>
         public T Get<T>(string key)
         {
-            if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
             T value;
+            //获取一个缓存（并可得到具体的缓存是否存在）
             _cache.TryGetValue(key, out value);
             return value;
         }
@@ -120,12 +116,7 @@ namespace Snblog.Cache.Cache
         /// <param name="value">缓存值</param>
         public void Set_AbsoluteExpire<T>(string key, T value, TimeSpan span)
         {
-            if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
-
-            T v;
-            if (_cache.TryGetValue(key, out v))
-                _cache.Remove(key);
+            _cache.Remove(key);
             _cache.Set(key, value, span);
         }
 

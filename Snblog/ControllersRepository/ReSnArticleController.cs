@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService.IReService;
-using Snblog.Models;
+﻿using Snblog.IService.IReService;
 
 namespace Snblog.ControllersRepository
 {
@@ -30,7 +27,7 @@ namespace Snblog.ControllersRepository
         /// <summary>
         /// 查询总数 (缓存)
         /// </summary>
-        [HttpGet("AsyGestTest")]
+        [HttpGet("sum")]
         public async Task<IActionResult> CountAsync()
         {
             return Ok(await _service.CountAsync());
@@ -87,7 +84,7 @@ namespace Snblog.ControllersRepository
         /// 读取[字段/阅读/点赞]总数量-缓存
         /// </summary>
         /// <param name="type">text-内容-read:阅读-give:点赞</param>
-        [HttpGet("GetSumAsync")]
+        [HttpGet("GetStrSumAsync")]
         public async Task<IActionResult> GetSumAsync(string type)
         {
             return Ok(await _service.GetSumAsync(type));
@@ -132,12 +129,13 @@ namespace Snblog.ControllersRepository
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="order">排序条件[data:时间,read:阅读,give:点赞,comment:评论]默认按id排序</param>
         /// <returns></returns>
-        [HttpGet("GetFyTypeorderAsync")]
-        public async Task<IActionResult> GetFyTypeorderAsync(int type, int pageIndex, int pageSize, string order, bool isDesc)
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetPagingAsync(int type, int pageIndex, int pageSize, string order, bool isDesc)
         {
             return Ok(await _service.GetFyTypeorderAsync(type, pageIndex, pageSize, order, isDesc));
         }
         #endregion
+        
         #region 标签ID查询 (缓存)
         /// <summary>
         /// 标签ID查询 (缓存)
@@ -145,12 +143,13 @@ namespace Snblog.ControllersRepository
         /// <param name="labelId">标签id</param>
         /// <param name="isDesc"></param>
         /// <returns></returns>
-        [HttpGet("GetTagtextAsync")]
-        public async Task<IActionResult> GetTagtextAsync(int labelId, bool isDesc)
+        [HttpGet("tagId")]
+        public async Task<IActionResult> GetTagIdAsync(int labelId, bool isDesc)
         {
-            return Ok(await _service.GetTagtextAsync(labelId, isDesc));
+            return Ok(await _service.GetTagIdAsync(labelId, isDesc));
         }
         #endregion
+        
         #region 添加数据
         /// <summary>
         /// 添加数据
@@ -158,7 +157,7 @@ namespace Snblog.ControllersRepository
         /// <returns></returns>
         //[Authorize(Roles = "kai")] //角色授权
         [HttpPost("AddAsync")]
-        public async Task<ActionResult<SnArticle>> AddAsync(SnArticle entity)
+        public async Task<ActionResult<Article>> AddAsync(Article entity)
         {
             return Ok(await _service.AddAsync(entity));
         }
@@ -170,7 +169,7 @@ namespace Snblog.ControllersRepository
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
-        public async Task<IActionResult> UpdateAsync(SnArticle entity)
+        public async Task<IActionResult> UpdateAsync(Article entity)
         {
             var data = await _service.UpdateAsync(entity);
             return Ok(data);
@@ -184,7 +183,7 @@ namespace Snblog.ControllersRepository
         /// <param name="type">更新字段</param>
         /// <returns></returns>
         [HttpPut("UpdatePortionAsync")]
-        public async Task<IActionResult> UpdatePortionAsync(SnArticle entity, string type)
+        public async Task<IActionResult> UpdatePortionAsync(Article entity, string type)
         {
             return Ok(await _service.UpdatePortionAsync(entity, type));
         }
@@ -196,7 +195,7 @@ namespace Snblog.ControllersRepository
         /// <param name="id"></param>
         /// <returns></returns>
        //  [Authorize(Roles = "kai")] //角色授权
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));

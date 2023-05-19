@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
-using Snblog.Models;
-using System.Threading.Tasks;
-using Snblog.IService.IService;
-using Blog.Core;
+﻿using Snblog.Util.GlobalVar;
 
 namespace Snblog.Controllers
 {
@@ -120,7 +114,7 @@ namespace Snblog.Controllers
         /// 删除数据 （权限）
         /// </summary>
         /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {

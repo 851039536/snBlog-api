@@ -1,9 +1,6 @@
-using System;
-using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 
 namespace Snblog
 {
@@ -12,42 +9,30 @@ namespace Snblog
     /// </summary>
     public class Program
     {
-
-        /// <summary>
-        /// Configuration
-        /// </summary>
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-       .SetBasePath(Directory.GetCurrentDirectory())
-       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-       .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-       .AddEnvironmentVariables()
-       .Build();
-
         /// <summary>
         /// Main
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            // 璇诲彇 appsettings.json 閰嶇疆鏂囦欢
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            // 閰嶇疆 Serilog
             Log.Logger = new LoggerConfiguration()
-         .ReadFrom.Configuration(Configuration)
-         .Enrich.FromLogContext()
-         .CreateLogger();
-            try
-            {
-                Log.Information("启动主机");
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
+            try {
+                Log.Information("Starting web host");
                 CreateHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "主机意外终止");
-            }
-            finally
-            {
+            } catch (Exception ex) {
+                Log.Fatal(ex,"Host terminated unexpectedly");
+            } finally {
                 Log.CloseAndFlush();
             }
-
-            //CreateHostBuilder(args).Build().Run();
         }
 
         /// <summary>
@@ -55,9 +40,9 @@ namespace Snblog
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-             .UseSerilog() // <-添加此行
+             .UseSerilog()  // 浣跨敤 Serilog 浣滀负鏃ュ織鎻愪緵绋嬪簭
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

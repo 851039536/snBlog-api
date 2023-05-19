@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService.IService;
-using System.Threading.Tasks;
-using Snblog.Models;
-using Blog.Core;
+﻿using Snblog.Util.GlobalVar;
 
 namespace Snblog.Controllers
 {
@@ -65,6 +60,7 @@ namespace Snblog.Controllers
             return Ok(await _service.GetByIdAsync(id, cache));
         }
         #endregion
+
         #region 分页查询
         /// <summary>
         /// 分页查询 
@@ -100,7 +96,7 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="id">主键</param>
         /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {

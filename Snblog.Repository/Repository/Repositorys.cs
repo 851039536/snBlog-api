@@ -1,29 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Snblog.IRepository;
-using Snblog.IRepository.IRepository;
-using Snblog.Models;
-
-namespace Snblog.Repository.Repository
+﻿namespace Snblog.Repository.Repository
 {
     // Repository.cs仓储类，它是一个泛型类，并且拥有一个带有参数的构造方法，通过构造方法获得当前DbContext上下文对象，
     //泛型类为指定Model类型，通过DbContext.Set<T>()方法最终得到相应的DbSet<T>对象来操作工作单元。
     //实现了CRUD基本功能的封装
     public class Repositorys<T> : IRepositorys<T> where T : class
     {
-        private readonly SnblogContext _dbContext;
+        private readonly snblogContext _dbContext;
         private readonly DbSet<T> _dbSet;
         private readonly string _connStr;
 
         public Repositorys(IConcardContext mydbcontext)
         {
-            _dbContext = mydbcontext as SnblogContext;
+            _dbContext = mydbcontext as snblogContext;
             if (_dbContext == null)
             {
                 return;
@@ -60,10 +48,7 @@ namespace Snblog.Repository.Repository
 
         public void Rollback()
         {
-            if (_dbContext.Database.CurrentTransaction != null)
-            {
-                _dbContext.Database.CurrentTransaction.Rollback();
-            }
+            _dbContext.Database.CurrentTransaction?.Rollback();
         }
 
         public int SaveChanges()
@@ -134,21 +119,17 @@ namespace Snblog.Repository.Repository
             }
         }
 
-        public async Task<int> DeleteAsync(object id)
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <returns>-1 || 1</returns>
+        public async Task<int> DelAsync(object id)
         {
-            //执行查询
-            var todoItem = await _dbSet.FindAsync(id);
-            int data;
-            if (todoItem == null)
-            {
-                data = 0;
-            }
-            else
-            {
-                _dbSet.Remove(todoItem);
-                data = SaveChanges();
-            }
-            return data;
+            var result = await _dbSet.FindAsync(id);
+            if (result == null) return -1;
+            _dbSet.Remove(result);
+            return SaveChanges();
         }
 
         public int Delete(object id)
@@ -184,13 +165,9 @@ namespace Snblog.Repository.Repository
 
         public async Task<int> UpdateAsync(T entity)
         {
-            var entry = _dbContext.Entry(entity);
-            if (entry.State == EntityState.Detached)
-            {
-                entry.State = EntityState.Modified;
-            }
-            var da = await Task.Run(SaveChangesAsync);
-            return da;
+            var en = _dbContext.Entry(entity);
+            if (en.State == EntityState.Detached) en.State = EntityState.Modified;
+            return await Task.Run(SaveChangesAsync);
         }
 
         public int Update(T entity)
@@ -271,7 +248,7 @@ namespace Snblog.Repository.Repository
         }
 
 
-        public IEnumerable<T> Wherepage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc)
+        public IEnumerable<T> WherePage<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, out int count, bool isDesc)
         {
             count = Count();
             if (isDesc)
@@ -284,7 +261,7 @@ namespace Snblog.Repository.Repository
                 return this._dbSet.Where(@where).OrderBy(order).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
         }
-        public async Task<IEnumerable<T>> WherepageAsync<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, bool isDesc)
+        public async Task<IEnumerable<T>> WherePageAsync<TOrder>(Func<T, bool> @where, Func<T, TOrder> order, int pageIndex, int pageSize, bool isDesc)
         {
             if (isDesc)
             {
@@ -434,7 +411,7 @@ namespace Snblog.Repository.Repository
 
         public void Dispose()
         {
-            this._dbContext.Dispose();
+            _dbContext.Dispose();
         }
 
 
@@ -620,7 +597,7 @@ namespace Snblog.Repository.Repository
 #pragma warning restore CS0693 // 类型参数“T”与外部类型“Repositorys<T>”中的类型参数同名
         { }
 
-       // [Obsolete]
+        // [Obsolete]
         //public int ExecuteSql(string sql)
         //{
         //    return _dbContext.Database.ExecuteSqlCommand(sql);
@@ -655,11 +632,11 @@ namespace Snblog.Repository.Repository
             throw new NotImplementedException();
         }
 
-      
+
 
         IQueryable<T> IRepositorys<T>.GetAll()
         {
-            return  _dbSet.AsNoTracking();
+            return _dbSet.AsNoTracking();
         }
 
         public async Task<List<T>> GetAllAsync()

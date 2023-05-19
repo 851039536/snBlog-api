@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Snblog.Enties.AutoMapper
-{
+﻿namespace Snblog.Enties.AutoMapper
+    {
+    /// <summary>
+    /// ArticleMapper
+    /// </summary>
     public class ArticleMapper : Profile
     {
         /// <summary>
@@ -16,7 +13,7 @@ namespace Snblog.Enties.AutoMapper
             //构建实体映射规则添加映射对象  
             //如两个实体字段一致可直接映射关系
             //SnUser原对象类型，SnUserDto 目标对象类型  ReverseMap，可相互转换
-            CreateMap<SnArticle, SnArticleDto>().ReverseMap(); 
+            CreateMap<Article, ArticleDto>().ReverseMap(); 
 
         }
     }

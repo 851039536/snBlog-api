@@ -1,15 +1,5 @@
-﻿using System.Threading.Tasks;
-using Blog.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Snblog.IService;
-using Snblog.Jwt;
-using Snblog.Models;
-using Snblog.Repository.Repository;
+﻿using Snblog.Util.GlobalVar;
 
-//默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
     [Route("api/[controller]")]
@@ -17,16 +7,11 @@ namespace Snblog.Controllers
     [ApiController]
     public class SnUserTalkController : Controller
     {
-
-        private readonly SnblogContext _coreDbContext;
         private readonly ISnUserTalkService _service; //IOC依赖注入
 
-
-
-        public SnUserTalkController(ISnUserTalkService service, SnblogContext coreDbContext)
+        public SnUserTalkController(ISnUserTalkService service)
         {
             _service = service;
-            _coreDbContext = coreDbContext;
         }
 
         /// <summary>
@@ -77,15 +62,14 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="userId">用户Id</param>
         /// <returns></returns>
-        [HttpGet("UserTalkTypeConut")]
-        public IActionResult UserTalkTypeConut(int userId)
+        [HttpGet("sum")]
+        public IActionResult GetTypeSum(int userId)
         {
-            return Ok(_service.UserTalkTypeConut(userId));
+            return Ok(_service.GetTypeSum(userId));
         }
 
-
         /// <summary>
-        /// 条件分页查询 - 支持排序
+        /// 条件分页查询
         /// </summary>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>

@@ -1,8 +1,4 @@
-﻿using Snblog.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Snblog.IService
+﻿namespace Snblog.IService
 {
     public interface ISnVideoTypeService
     {
@@ -10,7 +6,7 @@ namespace Snblog.IService
         /// 查询所有
         /// </summary>
         /// <returns></returns>
-        Task<List<SnVideoType>> AsyGetTest();
+        Task<List<SnVideoType>> GetAll();
 
         /// <summary>
         /// 主键查询

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.IO;
 using AngleSharp;
 using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 
 namespace Snblog.Service.AngleSharp
 {
@@ -13,18 +13,15 @@ namespace Snblog.Service.AngleSharp
             _logger = logger;
         }
 
-        public async Task<List<string>> Cnblogs(string url, string selector, string selectorall)
+        public async Task<List<string>> GetCnblogs(string url,string selector,string selectorall)
         {
-            if (url == null && selector == null && selectorall == null)
-            {
+            if (url == null && selector == null && selectorall == null) {
                 url = "https://www.cnblogs.com/";
                 selector = "#post_list";
                 selectorall = "div.post-item-text > a";
-                _logger.LogInformation("Cnblogs 默认赋值");
-
+                Log.Information("GetCnblogs 默认赋值");
             }
-            List<string> resultData = await reptile(url, selector, selectorall);
-            return resultData;
+            return await Reptile(url,selector,selectorall);
         }
 
         /// <summary>
@@ -34,82 +31,67 @@ namespace Snblog.Service.AngleSharp
         /// <param name="selector">信息头</param>
         /// <param name="selectorall">信息具体内容</param>
         /// <returns></returns>
-        public async Task<List<string>> GeneralCrawl(string url, string selector, string selectorall)
+        public async Task<List<string>> GeneralCrawl(string url,string selector,string selectorall)
         {
-             List<string> resultData =new List<string>();
-            if (url == null && selector == null && selectorall == null)
-            {
-               resultData.Add("内容不能为空");
-            }
-            else
-            {
-                  resultData = await reptile(url, selector, selectorall);
+            List<string> resultData = new();
+            if (url == null && selector == null && selectorall == null) {
+                resultData.Add("内容不能为空");
+            } else {
+                resultData = await Reptile(url,selector,selectorall);
             }
             return resultData;
         }
 
-        public async Task<string> Daka()
+        public static async Task<string> Daka()
         {
             // 设置配置以支持文档加载
             var config = Configuration.Default.WithDefaultLoader();
             // 请求
-            var document = await  BrowsingContext.New(config).OpenAsync(@"http://183.63.20.253:8008/consume/login.php");
+            var document = await BrowsingContext.New(config).OpenAsync(@"http://183.63.20.253:8008/consume/login.php");
             // 根据css选择器获取html元素
-            var doc = document.QuerySelectorAll("div");
-        //    document.GetElementById("username").ClassName = "190006";
-              //doc.getElementById("submit").click();//执行提交事件
+            document.QuerySelectorAll("div");
+            //    document.GetElementById("username").ClassName = "190006";
+            //doc.getElementById("submit").click();//执行提交事件
 
             return "1";
         }
-        private async Task<List<string>> reptile(string url, string selector, string selectorall)
+        private async Task<List<string>> Reptile(string url,string selector,string selectorall)
         {
             int num = 1;
-            List<string> resultData = new List<string>();
-            // 设置配置以支持文档加载
+            List<string> rData = new();
+            // 设置配置以支持文档加载 //// 建立 Browser 的配置
             var config = Configuration.Default.WithDefaultLoader();
             // 地址
             var urls = url;
             // 请求
             var document = await BrowsingContext.New(config).OpenAsync(urls);
-            if (selector != null)
-            {
+            if (selector != null) {
                 // 根据css选择器获取html元素
                 var container = document.QuerySelector(selector);
                 var matches = container.QuerySelectorAll(selectorall);
 
-                foreach (var item in matches)
-                {
-                   
-                    if (num<=10)
-                    {
+                foreach (var item in matches) {
+                    if (num <= 10) {
                         num++;
-                        resultData.Add(item.InnerHtml + "-" + item.GetAttribute("href"));
+                        rData.Add(item.InnerHtml + "-" + item.GetAttribute("href"));
                     }
-                    
                 }
-            }
-            else
-            {
+            } else {
                 var matches = document.QuerySelectorAll(selectorall);
-                foreach (var item in matches)
-                {
-                    
-                    if (num <= 10)
-                    {
+                foreach (var item in matches) {
+                    if (num <= 10) {
                         num++;
-                        _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
-                        resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
+                        Log.Information(item.InnerHtml + "," + item.GetAttribute("href"));
+                        rData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
                     }
-            
                 }
             }
-
-            return resultData;
+            return rData;
         }
 
         public async Task<List<string>> GiteeItem()
         {
-            List<string> resultData = new List<string>();
+            List<string> resultData = new();
             // 设置配置以支持文档加载
             var config = Configuration.Default.WithDefaultLoader();
             // 地址
@@ -120,14 +102,55 @@ namespace Snblog.Service.AngleSharp
             var container = document.QuerySelector("#popular-pinned-projects");
             var matches = container.QuerySelectorAll("div.header > a");
 
-
             // We are only interested in the text - select it with LINQ
-            foreach (var item in matches)
-            {
-                _logger.LogInformation(item.InnerHtml + "," + item.GetAttribute("href"));
+            foreach (var item in matches) {
+                Log.Information(item.InnerHtml + "," + item.GetAttribute("href"));
                 resultData.Add(item.InnerHtml + "," + item.GetAttribute("href"));
             }
             return resultData;
+        }
+
+
+        /// <summary>
+        /// 数据备份
+        /// </summary>
+        /// <param name="path">备份路径默认null</param>
+        /// <returns>备份结果</returns>
+
+        public static string SqlBackups(string path)
+        {
+            //string constring = "server=" + ip + ";User=" + User + ";pwd=" + pwd + ";database=" + database + ";";
+
+            string constring = "server=localhost;User= root;pwd= woshishui;database=snblog;";
+            string time = DateTime.Now.ToString("d").Replace("/","-");
+             //path = Assembly.GetEntryAssembly().Location;
+             path = Directory.GetCurrentDirectory();
+            string file = path + $"/mysql/{time}_blog.sql";
+
+            using MySqlConnection conn = new(constring);
+            using MySqlCommand cmd = new();
+            using MySqlBackup mb = new(cmd);
+
+            cmd.Connection = conn;
+            conn.Open();
+            mb.ExportToFile(file);
+            conn.Close();
+            return "true";
+        }
+
+        public static string SqlRestore(string ip,string user,string pwd,string database)
+        {
+            string constring = "server=" + ip + ";User=" + user + ";pwd=" + pwd + ";database=" + database + ";";
+            string file = ".//mysql/" + "blog.sql";
+            using MySqlConnection conn = new(constring);
+            using MySqlCommand cmd = new();
+            using MySqlBackup mb = new(cmd);
+            cmd.Connection = conn;
+            conn.Open();
+            mb.ImportFromFile(file);
+            conn.Close();
+
+            return "true";
         }
     }
 }

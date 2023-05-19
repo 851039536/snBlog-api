@@ -1,12 +1,4 @@
-﻿using Blog.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
-using Snblog.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Snblog.Util.GlobalVar;
 
 namespace Snblog.Controllers
 {
@@ -81,16 +73,16 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> AddAsync(SnTalkType Entity)
+        public async Task<IActionResult> AddAsync(SnTalkType entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
 
         /// <summary>
         /// 删除数据 （权限）
         /// </summary>
         /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
@@ -102,9 +94,9 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnTalkType Entity)
+        public async Task<IActionResult> UpdateAsync(SnTalkType entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
     }
 }

@@ -1,16 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
-using Snblog.Models;
-using System.Threading.Tasks;
-using Snblog.IService.IService;
-using Blog.Core;
+﻿using Snblog.Util.GlobalVar;
 
-//默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
-
     /// <summary>
     /// SnTalkController
     /// </summary>
@@ -31,7 +22,8 @@ namespace Snblog.Controllers
         }
 
         #region 查询所有
-       /// <summary>
+
+        /// <summary>
         /// 查询所有
         /// </summary>
         /// <returns></returns>
@@ -40,7 +32,8 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.GetAllAsync());
         }
-       #endregion
+
+        #endregion
 
         /// <summary>
         /// 主键查询
@@ -89,14 +82,16 @@ namespace Snblog.Controllers
         {
             return Ok(await _service.CountAsync());
         }
-          /// <summary>
+
+        /// <summary>
         /// 条件查询总数
         /// </summary>
         /// <returns></returns>
         [HttpGet("CountTypeAsync")]
         public async Task<IActionResult> CountAsync(int type)
         {
-            return Ok(await _service.CountAsync(type));
+            var data = await _service.CountAsync(type);
+            return Ok(data);
         }
 
         /// <summary>
@@ -114,12 +109,13 @@ namespace Snblog.Controllers
         /// 删除数据 （权限）
         /// </summary>
         /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             return Ok(await _service.DeleteAsync(id));
         }
+
         /// <summary>
         /// 更新数据 （权限）
         /// </summary>

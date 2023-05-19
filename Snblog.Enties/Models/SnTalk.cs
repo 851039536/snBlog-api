@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnTalk
     {
         public int Id { get; set; }
+        public string Title { get; set; }
+        public string Describe { get; set; }
+        public string Text { get; set; }
+        public int Read { get; set; }
+        public int Give { get; set; }
+        public int CommentId { get; set; }
         public int UserId { get; set; }
-        public DateTime TalkTime { get; set; }
-        public string TalkTitle { get; set; }
-        public string TalkBrief { get; set; }
-        public string TalkText { get; set; }
-        public int TalkRead { get; set; }
-        public int TalkGive { get; set; }
-        public int TalkComment { get; set; }
-        public int TalkTypeId { get; set; }
+        public int TypeId { get; set; }
+        public DateTime TimeCreate { get; set; }
+        public DateTime TimeModified { get; set; }
 
-        //public virtual SnUser User { get; set; }
+        public virtual SnTalkType Type { get; set; }
+        public virtual User User { get; set; }
     }
 }

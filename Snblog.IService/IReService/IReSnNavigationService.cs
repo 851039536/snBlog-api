@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Snblog.Models;
-
-namespace Snblog.IService.IReService
+﻿namespace Snblog.IService.IReService
 {
     public interface IReSnNavigationService
     {

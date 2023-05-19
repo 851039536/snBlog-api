@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Snblog.Models
+#nullable disable
+
+namespace Snblog.Enties.Models
 {
     public partial class SnUserTalk
     {
@@ -14,6 +15,6 @@ namespace Snblog.Models
         public int? TalkGive { get; set; }
         public int? CommentId { get; set; }
 
-        public virtual SnUser User { get; set; }
+        public virtual User User { get; set; }
     }
 }

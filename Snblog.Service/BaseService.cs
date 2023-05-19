@@ -1,17 +1,16 @@
-﻿using Snblog.IRepository;
-using Snblog.IRepository.IRepository;
-using Snblog.IService;
+﻿using Snblog.IRepository.IRepository;
 
 namespace Snblog.Service
 {
     public class BaseService : IBaseService
     {
-        private IRepositoryFactory _repositoryFactory;
-        private IConcardContext _mydbcontext;
-        public BaseService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext)
+        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IConcardContext _mydbcontext;
+
+        protected BaseService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext)
         {
-            this._repositoryFactory = repositoryFactory;
-            this._mydbcontext = mydbcontext;
+            _repositoryFactory = repositoryFactory;
+            _mydbcontext = mydbcontext;
         }
 
         public IRepositorys<T> CreateService<T>() where T : class, new()

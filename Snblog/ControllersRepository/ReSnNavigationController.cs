@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService.IReService;
-using Snblog.Models;
+﻿using Snblog.IService.IReService;
 
 namespace Snblog.ControllersRepository
 {
@@ -52,7 +48,7 @@ namespace Snblog.ControllersRepository
         /// 查询总数(缓存)
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetCountAsync")]
+        [HttpGet("GetSunAsync")]
         public async Task<IActionResult> GetCountAsync()
         {
             return Ok(await _service.GetCountAsync());
@@ -140,7 +136,7 @@ namespace Snblog.ControllersRepository
         /// </summary>
         /// <param name="id">主键</param>
         /// <returns></returns>
-        [HttpDelete("DeleteAsync")]
+        [HttpDelete("DelAsync")]
         [Authorize(Roles = "kai")] //角色授权
         public async Task<IActionResult> DeleteAsync(int id)
         {

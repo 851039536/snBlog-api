@@ -1,39 +1,31 @@
-﻿﻿using System.Threading.Tasks;
-using Blog.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Snblog.IService;
-using Snblog.Models;
- using Snblog.Repository.Repository;
+﻿using Snblog.Util.GlobalVar;
 
- //默认的约定集将应用于程序集中的所有操作：
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Snblog.Controllers
 {
     /// <summary>
     /// 视频分类
     /// </summary>
-    [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
-    public class SnVideoTypeController : Controller
+    [Route("videoType")]
+    public class SnVideoTypeController : BaseController
     {
-        private readonly SnblogContext _coreDbContext;
-        private readonly ISnVideoTypeService _service; //IOC依赖注入
-        public SnVideoTypeController(ISnVideoTypeService service, SnblogContext coreDbContext)
+        private readonly ISnVideoTypeService _service;
+
+        public SnVideoTypeController(ISnVideoTypeService service)
         {
             _service = service;
-            _coreDbContext = coreDbContext;
         }
 
         /// <summary>
-        /// 分类视频查询
+        /// 查询所有
         /// </summary>
         /// <returns></returns>
-        [HttpGet("AsyGestTest")]
-        public async Task<IActionResult> AsyGestTest()
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(await _service.AsyGetTest());
+            var data = await _service.GetAll();
+            return ApiResponse(data: data);
         }
 
         /// <summary>
@@ -44,7 +36,8 @@ namespace Snblog.Controllers
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllAsync(int id)
         {
-            return Ok(await _service.GetAllAsync(id));
+            var data = await _service.GetAllAsync(id);
+            return ApiResponse(data: data);
         }
 
         /// <summary>
@@ -54,43 +47,44 @@ namespace Snblog.Controllers
         [HttpGet("CountAsync")]
         public async Task<IActionResult> CountAsync()
         {
-            return Ok(await _service.CountAsync());
+            var data = await _service.CountAsync();
+            return ApiResponse(data: data);
         }
 
         /// <summary>
         /// 添加数据 （权限）
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-         [HttpPost("AddAsync")]
+        [HttpPost("AddAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> AddAsync(SnVideoType Entity)
+        public async Task<IActionResult> AddAsync(SnVideoType entity)
         {
-            return Ok(await _service.AddAsync(Entity));
+            return Ok(await _service.AddAsync(entity));
         }
 
         /// <summary>
         /// 删除数据 （权限）
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-         [HttpDelete("DelectAsync")]
+        [HttpDelete("del")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> DelectAsync(SnVideoType Entity)
+        public async Task<IActionResult> DeleteAsync(SnVideoType entity)
         {
-            return Ok(await _service.DeleteAsync(Entity));
+            return Ok(await _service.DeleteAsync(entity));
         }
 
         /// <summary>
         /// 更新数据 （权限）
         /// </summary>
-        /// <param name="Entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnVideoType Entity)
+        public async Task<IActionResult> UpdateAsync(SnVideoType entity)
         {
-            return Ok(await _service.UpdateAsync(Entity));
+            return Ok(await _service.UpdateAsync(entity));
         }
     }
 }
