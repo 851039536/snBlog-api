@@ -8,9 +8,9 @@
         /// <summary>
         /// 缓存Key
         /// </summary>
-        private string cacheKey;
-        private readonly EntityData<Article> res = new();
-        private readonly EntityDataDto<ArticleDto> resDto = new();
+        private string _cacheKey;
+        private readonly EntityData<Article> _res = new();
+        private readonly EntityDataDto<ArticleDto> _resDto = new();
 
         //服务
         private readonly snblogContext _service;
@@ -31,8 +31,8 @@
 
         public async Task<bool> DelAsync(int id)
         {
-            cacheKey = $"{NAME}{ConstantString.DEL}{id}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            Log.Information(_cacheKey);
 
             Article result = await _service.Articles.FindAsync(id);
 
@@ -45,45 +45,45 @@
         }
         public async Task<ArticleDto> GetByIdAsync(int id,bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                resDto.Entity = _cache.GetValue(cacheKey,resDto.Entity);
-                if (resDto.Entity != null) return resDto.Entity;
+                _resDto.Entity = _cache.GetValue(_cacheKey,_resDto.Entity);
+                if (_resDto.Entity != null) return _resDto.Entity;
             }
 
-            resDto.Entity = await _service.Articles
+            _resDto.Entity = await _service.Articles
                 .SelectArticle()
                 .SingleOrDefaultAsync(b => b.Id == id);
-            _cache.SetValue(cacheKey,resDto.Entity);
-            return resDto.Entity;
+            _cache.SetValue(_cacheKey,_resDto.Entity);
+            return _resDto.Entity;
         }
         public async Task<List<ArticleDto>> GetTypeAsync(int identity,string type,bool cache)
         {
-            cacheKey = $"{NAME}{identity}_{type}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{identity}_{type}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                resDto.EntityList = _cache.GetValue(cacheKey,resDto.EntityList);
-                if (resDto.EntityList != null) {
-                    return resDto.EntityList;
+                _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
+                if (_resDto.EntityList != null) {
+                    return _resDto.EntityList;
                 }
             }
 
             if (identity == 1) { //分类
-                resDto.EntityList = await _service.Articles
+                _resDto.EntityList = await _service.Articles
                     .SelectArticle()
                     .Where(s => s.Type.Name == type)
                     .ToListAsync();
             } else { //2 标签
-                resDto.EntityList = await _service.Articles
+                _resDto.EntityList = await _service.Articles
                     .SelectArticle()
                     .Where(s => s.Tag.Name == type)
                     .ToListAsync();
             }
-            _cache.SetValue(cacheKey,resDto.EntityList);
-            return resDto.EntityList;
+            _cache.SetValue(_cacheKey,_resDto.EntityList);
+            return _resDto.EntityList;
         }
 
         public async Task<bool> AddAsync(Article entity)
@@ -126,11 +126,11 @@
 
         public async Task<int> GetSumAsync(int identity,string type,bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.SUM}{identity}_{type}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.SUM}{identity}_{type}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                int sum =  _cache.GetValue(cacheKey,0);
+                int sum =  _cache.GetValue(_cacheKey,0);
                 if (sum != 0) {  //通过entityInt 值是否为 0 判断结果是否被缓存
                     return sum;
                 }
@@ -160,7 +160,7 @@
 
             try {
                 int count = await query.CountAsync();
-                _cache.SetValue(cacheKey,count); //设置缓存
+                _cache.SetValue(_cacheKey,count); //设置缓存
                 return count;
             } catch {
                 return -1;
@@ -169,15 +169,15 @@
 
         public async Task<List<ArticleDto>> GetAllAsync(bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.ALL}{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.ALL}{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                resDto.EntityList = _cache.GetValue(cacheKey,resDto.EntityList);
-                if (resDto.EntityList != null) return resDto.EntityList;
+                _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
+                if (_resDto.EntityList != null) return _resDto.EntityList;
             }
             var data = await _service.Articles.SelectArticle().ToListAsync();
-            _cache.SetValue(cacheKey,resDto.EntityList);
+            _cache.SetValue(_cacheKey,_resDto.EntityList);
             return data;
         }
 
@@ -191,32 +191,32 @@
         /// <returns>int</returns>
         public async Task<int> GetStrSumAsync(int identity,int type,string name,bool cache)
         {
-            cacheKey = $"{NAME}统计{identity}_{type}_{name}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}统计{identity}_{type}_{name}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                res.EntityCount = _cache.GetValue(cacheKey,res.EntityCount);
-                if (res.EntityCount != 0) {
-                    return res.EntityCount;
+                _res.EntityCount = _cache.GetValue(_cacheKey,_res.EntityCount);
+                if (_res.EntityCount != 0) {
+                    return _res.EntityCount;
                 }
             }
 
             switch (identity) {
                 case 0:
-                res.EntityCount = await GetStatistic(type);
+                _res.EntityCount = await GetStatistic(type);
                 break;
                 case 1:
-                res.EntityCount = await GetStatistic(type,c => c.Type.Name == name);
+                _res.EntityCount = await GetStatistic(type,c => c.Type.Name == name);
                 break;
                 case 2:
-                res.EntityCount = await GetStatistic(type,c => c.Tag.Name == name);
+                _res.EntityCount = await GetStatistic(type,c => c.Tag.Name == name);
                 break;
                 case 3:
-                res.EntityCount = await GetStatistic(type,c => c.User.Name == name);
+                _res.EntityCount = await GetStatistic(type,c => c.User.Name == name);
                 break;
             }
-            _cache.SetValue(cacheKey,res.EntityCount);
-            return res.EntityCount;
+            _cache.SetValue(_cacheKey,_res.EntityCount);
+            return _res.EntityCount;
         }
 
         /// <summary>
@@ -252,13 +252,13 @@
         /// <param name="ordering">排序规则 data:时间|read:阅读|give:点赞|id:主键</param>
         public async Task<List<ArticleDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,string ordering,bool isDesc,bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                resDto.EntityList = _cache.GetValue(cacheKey,resDto.EntityList);
-                if (resDto.EntityList != null) {
-                    return resDto.EntityList;
+                _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
+                if (_resDto.EntityList != null) {
+                    return _resDto.EntityList;
                 }
             }
             switch (identity) {
@@ -271,9 +271,9 @@
                 case 3:
                 return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc,w => w.User.Name == type);
                 case 4:
-                resDto.Name = type.Split(',');
-                return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc,w => w.Tag.Name == resDto.Name[0]
-                    && w.User.Name == resDto.Name[1]);
+                _resDto.Name = type.Split(',');
+                return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc,w => w.Tag.Name == _resDto.Name[0]
+                    && w.User.Name == _resDto.Name[1]);
                 default:
                 return await GetArticlePaging(pageIndex,pageSize,ordering,isDesc);
             }
@@ -302,7 +302,7 @@
             }
             var data = await articles.Skip(( pageIndex - 1 ) * pageSize).Take(pageSize)
             .SelectArticle().ToListAsync();
-            _cache.SetValue(cacheKey,resDto.EntityList);
+            _cache.SetValue(_cacheKey,_resDto.EntityList);
             return data;
         }
 
@@ -336,13 +336,13 @@
         public async Task<List<ArticleDto>> GetContainsAsync(int identity,string type,string name,bool cache)
         {
             var upNames = name.ToUpper();
-            cacheKey = $"{NAME}{ConstantString.CONTAINS}{identity}_{type}_{name}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.CONTAINS}{identity}_{type}_{name}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                resDto.EntityList = _cache.GetValue(cacheKey,resDto.EntityList);
-                if (resDto.EntityList != null) {
-                    return resDto.EntityList;
+                _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
+                if (_resDto.EntityList != null) {
+                    return _resDto.EntityList;
                 }
             }
            
@@ -360,11 +360,14 @@
         /// <param name="predicate">筛选文章的条件</param>
         private async Task<List<ArticleDto>> GetArticleContainsAsync(Expression<Func<Article,bool>> predicate = null)
         {
-            if (predicate != null) {
-                resDto.EntityList = await _service.Articles.Where(predicate).SelectArticle().ToListAsync();
-                _cache.SetValue(cacheKey,resDto.EntityList); //设置缓存
+            if (predicate == null)
+            {
+                return _resDto.EntityList;
             }
-            return resDto.EntityList;
+
+            _resDto.EntityList = await _service.Articles.Where(predicate).SelectArticle().ToListAsync();
+            _cache.SetValue(_cacheKey,_resDto.EntityList); //设置缓存
+            return _resDto.EntityList;
         }
          
     }
