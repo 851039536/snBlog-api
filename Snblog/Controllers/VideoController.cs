@@ -44,7 +44,7 @@ namespace Snblog.Controllers
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         [ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
-        [HttpGet("GetAllAsync")]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
             var data = await _service.GetAllAsync(cache);

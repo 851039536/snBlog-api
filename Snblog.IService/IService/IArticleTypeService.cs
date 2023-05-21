@@ -1,4 +1,4 @@
-﻿namespace Snblog.IService
+﻿namespace Snblog.IService.IService
 {
     /// <summary>
     /// 文章分类接口

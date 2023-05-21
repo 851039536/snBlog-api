@@ -1,4 +1,4 @@
-﻿namespace Snblog.IService
+﻿namespace Snblog.IService.IService
 {
     /// <summary>
     /// 业务类接口
