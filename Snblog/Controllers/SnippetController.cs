@@ -6,13 +6,12 @@ namespace Snblog.Controllers
     /// <summary>
     /// 代码片段
     /// </summary>
-   //[Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
     [Route("snippet")]
     public class SnippetController : ControllerBase
     {
-        private readonly ISnippetService _service; //IOC依赖注入
+        private readonly ISnippetService _service; 
 
         #region 构造函数
         /// <summary>

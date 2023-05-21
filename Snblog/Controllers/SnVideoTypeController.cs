@@ -60,7 +60,8 @@ namespace Snblog.Controllers
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnVideoType entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data:data);
         }
 
         /// <summary>
@@ -72,7 +73,8 @@ namespace Snblog.Controllers
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(SnVideoType entity)
         {
-            return Ok(await _service.DeleteAsync(entity));
+            var data = await  _service.DeleteAsync(entity);
+            return ApiResponse(data: data);
         }
 
         /// <summary>
@@ -80,11 +82,12 @@ namespace Snblog.Controllers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        [HttpPut("UpdateAsync")]
+        [HttpPut("update")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnVideoType entity)
         {
-            return Ok(await _service.UpdateAsync(entity));
+            var data = await _service.UpdateAsync(entity);
+            return  ApiResponse(data: data);
         }
     }
 }

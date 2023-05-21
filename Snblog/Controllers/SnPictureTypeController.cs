@@ -12,7 +12,7 @@ namespace Snblog.Controllers
     [ApiController]
     public class SnPictureTypeController : ControllerBase
     {
-        private readonly ISnPictureTypeService _service; //IOC依赖注入
+        private readonly ISnPictureTypeService _service; 
         /// <summary>
         /// 构造函数
         /// </summary>

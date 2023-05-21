@@ -2,16 +2,16 @@
 
 namespace Snblog.Controllers
 {
-
     /// <summary>
     /// 片段标签
     /// </summary>
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
     [Route("snippetType")]
-    public class SnippeTypeController : ControllerBase
+    public class SnippeTypeController : BaseController
     {
         private readonly ISnippetTypeService _service; //IOC依赖注入
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -20,7 +20,9 @@ namespace Snblog.Controllers
         {
             _service = service;
         }
+
         #region 查询总数
+
         /// <summary>
         /// 查询总数
         /// </summary>
@@ -29,11 +31,14 @@ namespace Snblog.Controllers
         [HttpGet("sum")]
         public async Task<IActionResult> GetSumAsync(bool cache = false)
         {
-            return Ok(await _service.GetSumAsync(cache));
+            var data = await _service.GetSumAsync(cache);
+            return ApiResponse(data: data, cache: cache);
         }
+
         #endregion
 
         #region 查询所有
+
         /// <summary>
         /// 查询所有
         /// </summary>
@@ -42,41 +47,51 @@ namespace Snblog.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync(bool cache = false)
         {
-            return Ok(await _service.GetAllAsync(cache));
+            var data = await _service.GetAllAsync(cache);
+            return ApiResponse(data: data, cache: cache);
         }
+
         #endregion
 
         #region 主键查询
+
         /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id">主键</param>
         /// <param name="cache">缓存</param>
         /// <returns>entity</returns>
-        [HttpGet("byId")]
+        [HttpGet("bid")]
         public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id, cache));
+            var data = await _service.GetByIdAsync(id, cache);
+            return ApiResponse(data: data, cache: cache);
         }
+
         #endregion
 
-        #region 分页查询 
-            /// <summary>
-            /// 分页查询 
-            /// </summary>
-            /// <param name="pageIndex">当前页码</param>
-            /// <param name="pageSize">每页记录条数</param>
-            /// <param name="isDesc">是否倒序</param>
-            /// <param name="cache">缓存</param>
-            /// <returns>list-entity</returns>
+        #region 分页查询
+
+        /// <summary>
+        /// 分页查询 
+        /// </summary>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        /// <param name="cache">缓存</param>
+        /// <returns>list-entity</returns>
         [HttpGet("paging")]
-        public async Task<IActionResult> GetFyAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
+        public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true,
+            bool cache = false)
         {
-            return Ok(await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache));
+            var data = await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache);
+            return ApiResponse(data: data, cache: cache);
         }
+
         #endregion
 
         #region 添加
+
         /// <summary>
         ///  添加 
         /// </summary>
@@ -86,10 +101,14 @@ namespace Snblog.Controllers
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(SnippetType entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var data = await    _service.AddAsync(entity);
+            return ApiResponse(data: data);
         }
+
         #endregion
+
         #region 更新数据
+
         /// <summary>
         /// 更新
         /// </summary>
@@ -99,11 +118,14 @@ namespace Snblog.Controllers
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> UpdateAsync(SnippetType entity)
         {
-            return Ok(await _service.UpdateAsync(entity));
+            var data = await _service.UpdateAsync(entity);
+            return ApiResponse(data: data);
         }
+
         #endregion
 
         #region 删除
+
         /// <summary>
         /// 删除
         /// </summary>
@@ -113,7 +135,8 @@ namespace Snblog.Controllers
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            var data = await _service.DeleteAsync(id);
+            return ApiResponse(data: data);
         }
         #endregion
     }
