@@ -1,5 +1,5 @@
 ﻿
-namespace Snblog.IService
+namespace Snblog.IService.IService
 {
     public  interface ISnTalkTypeService
     {
