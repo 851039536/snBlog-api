@@ -1,34 +1,29 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Snblog.Service.Service
+﻿namespace Snblog.Service.Service
 {
     public class ArticleTypeService : BaseService, IArticleTypeService
-        {
-
+    {
         private readonly snblogContext _service;
-        private readonly CacheUtil _cacheutil;
+        private readonly CacheUtil _cache;
 
-        private readonly EntityData<ArticleType> res = new();
-        private readonly EntityDataDto<ArticleTypeDto> resDto = new();
-        private readonly ILogger<ArticleType> _logger;
+        private readonly EntityData<ArticleType> _res = new();
+        private readonly EntityDataDto<ArticleTypeDto> _resDto = new();
+
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// 缓存Key
+        /// </summary>
+        private string _cacheKey;
+
         const string NAME = "ArticleType_";
-        const string BYID = "BYID_";
-        const string SUM = "SUM_";
-        const string CONTAINS = "CONTAINS_";
-        const string PAGING = "PAGING_";
-        const string ALL = "ALL_";
-        const string DEL = "DEL_";
-        const string ADD = "ADD_";
-        const string UP = "UP_";
-        public ArticleTypeService(IRepositoryFactory repositoryFactory,IConcardContext mydbcontext,snblogContext service,ICacheUtil cacheutil,ILogger<ArticleType> logger,IMapper mapper) : base(repositoryFactory,mydbcontext)
-            {
+
+        public ArticleTypeService(IRepositoryFactory repositoryFactory, IConcardContext myContext,
+            snblogContext service, ICacheUtil cache, IMapper mapper) : base(repositoryFactory, myContext)
+        {
             _service = service;
-            _cacheutil = (CacheUtil)cacheutil;
-            _logger = logger;
+            _cache = (CacheUtil)cache;
             _mapper = mapper;
-            }
+        }
 
         /// <summary>
         /// 删除数据
@@ -36,20 +31,17 @@ namespace Snblog.Service.Service
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<bool> DeleteAsync(int id)
-            {
-            var result = await _service.ArticleTypes.FindAsync(id);
-            if (result == null) {
-                return false;
-                }
-            _service.ArticleTypes.Remove(result);
-            return await _service.SaveChangesAsync() > 0;
-            }
+        {
+            // 设置缓存键
+            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            Log.Information(_cacheKey);
 
-        public async Task<List<ArticleType>> AsyGetSort()
-            {
-            var data = CreateService<ArticleType>();
-            return await data.GetAll().ToListAsync();
-            }
+            var ret = await _service.ArticleTypes.FindAsync(id);
+            if (ret == null) return false;
+
+            _service.ArticleTypes.Remove(ret);
+            return await _service.SaveChangesAsync() > 0;
+        }
 
         /// <summary>
         /// 主键查询
@@ -57,15 +49,21 @@ namespace Snblog.Service.Service
         /// <param name="id">主键</param>
         /// <param name="cache">缓存</param>
         /// <returns>entity</returns>
-        public async Task<ArticleTypeDto> GetByIdAsync(int id,bool cache)
+        public async Task<ArticleTypeDto> GetByIdAsync(int id, bool cache)
+        {
+            _cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
+            Log.Information(_cacheKey);
+
+            if (cache)
             {
-            Log.Information($"{NAME}{BYID}{id}{cache}");
-            resDto.Entity = _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}{id}",resDto.Entity,cache);
-            if (res.Entity != null) return resDto.Entity;
-            resDto.Entity = _mapper.Map<ArticleTypeDto>(await _service.ArticleTypes.FindAsync(id));
-            _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}",resDto.Entity,cache);
-            return resDto.Entity;
+                _resDto.Entity = _cache.GetValue(_cacheKey, _resDto.Entity);
+                if (_resDto != null) return _resDto.Entity;
             }
+
+            _resDto.Entity = _mapper.Map<ArticleTypeDto>(await _service.ArticleTypes.FindAsync(id));
+            _cache.SetValue(_cacheKey, _resDto.Entity);
+            return _resDto.Entity;
+        }
 
         /// <summary>
         ///  添加
@@ -73,16 +71,20 @@ namespace Snblog.Service.Service
         /// <param name="entity"></param>
         /// <returns>bool</returns>
         public async Task<bool> AddAsync(ArticleType entity)
-            {
+        {
+            Log.Information("{ArticleType}{Add}{@Entity}", NAME, ConstantString.ADD, entity);
+
             await _service.ArticleTypes.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
-            }
+        }
 
         public async Task<bool> UpdateAsync(ArticleType entity)
-            {
+        {
+            Log.Information($"{NAME}{ConstantString.UP}{entity}");
+
             _service.ArticleTypes.Update(entity);
             return await _service.SaveChangesAsync() > 0;
-            }
+        }
 
         /// <summary>
         /// 分页查询 
@@ -92,47 +94,75 @@ namespace Snblog.Service.Service
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">缓存</param>
         /// <returns>list-entity</returns>
-        public async Task<List<ArticleTypeDto>> GetPagingAsync(int pageIndex,int pageSize,bool isDesc,bool cache)
+        public async Task<List<ArticleTypeDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
+        {
+            _cacheKey = $"{NAME}{ConstantString.PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}";
+            Log.Information(_cacheKey);
+
+            if (cache)
             {
-            Log.Information($"{NAME}{PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}");
-            resDto.EntityList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}",resDto.EntityList,cache);
-            if (res.EntityList != null) return resDto.EntityList;
-            await QPaging(pageIndex,pageSize,isDesc);
-            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}",resDto.EntityList,cache);
-            return resDto.EntityList;
+                _resDto.EntityList = _cache.GetValue(
+                    _cacheKey,
+                    _resDto.EntityList);
+                if (_res.EntityList != null) return _resDto.EntityList;
             }
 
-        private async Task QPaging(int pageIndex,int pageSize,bool isDesc)
+            await QPaging(pageIndex, pageSize, isDesc);
+            _cache.SetValue(_cacheKey, _resDto.EntityList);
+            return _resDto.EntityList;
+        }
+
+        private async Task QPaging(int pageIndex, int pageSize, bool isDesc)
+        {
+            if (isDesc)
             {
-            if (isDesc) {
-                resDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes.OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize).Take(pageSize).ToListAsync());
-                } else {
-                resDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes.OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize).Take(pageSize).ToListAsync());
-                }
+                _resDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes
+                    .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
             }
+            else
+            {
+                _resDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes.OrderBy(c => c.Id)
+                    .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
+            }
+        }
 
         public async Task<List<ArticleTypeDto>> GetAllAsync(bool cache)
+        {
+            _cacheKey = $"{NAME}{ConstantString.ALL}{cache}";
+            Log.Information(_cacheKey);
+
+            if (cache)
             {
-            Log.Information($"{NAME}{ALL}",cache);
-            resDto.EntityList = _cacheutil.CacheString($"{NAME}{SUM}{cache}",resDto.EntityList,cache);
-            if (resDto.EntityList != null) return resDto.EntityList;
-            resDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes.AsNoTracking().ToListAsync());
-            _cacheutil.CacheString($"{NAME}{SUM}{cache}",resDto.EntityList,cache);
-            return resDto.EntityList;
+                _resDto.EntityList =
+                    _cache.GetValue(_cacheKey, _resDto.EntityList);
+                if (_resDto.EntityList != null) return _resDto.EntityList;
             }
+
+            _resDto.EntityList =
+                _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes.AsNoTracking().ToListAsync());
+
+            _cache.SetValue(_cacheKey, _resDto.EntityList);
+            return _resDto.EntityList;
+        }
+
         /// <summary>
         /// 查询总数
         /// </summary>
         /// <param name="cache">缓存</param>
         /// <returns>int</returns>
         public async Task<int> GetSumAsync(bool cache)
+        {
+            _cacheKey = $"{NAME}{ConstantString.SUM}{cache}";
+            Log.Information(_cacheKey);
+            if (cache)
             {
-            Log.Information($"{NAME}{SUM}" + cache);
-            res.EntityCount = _cacheutil.CacheNumber($"{NAME}{SUM}{cache}",res.EntityCount,cache);
-            if (res.EntityCount != 0) return res.EntityCount;
-            res.EntityCount = await _service.ArticleTypes.AsNoTracking().CountAsync();
-            _cacheutil.CacheNumber($"{NAME}{SUM}{cache}",res.EntityCount,cache);
-            return res.EntityCount;
+                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
+                if (_res.EntityCount != 0) return _res.EntityCount;
             }
+
+            _res.EntityCount = await _service.ArticleTypes.AsNoTracking().CountAsync();
+            _cache.SetValue(_cacheKey, _res.EntityCount);
+            return _res.EntityCount;
         }
     }
+}

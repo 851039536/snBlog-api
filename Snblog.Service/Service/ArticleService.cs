@@ -15,7 +15,6 @@
         //服务
         private readonly snblogContext _service;
         private readonly CacheUtil _cache;
-        private readonly IMapper _mapper;
 
         /// <summary>
         /// 使用了IServiceProvider接口来获取所需的服务
@@ -24,23 +23,28 @@
         /// <param name="serviceProvider"></param>
         public ArticleService(IServiceProvider serviceProvider)
         {
+            // 获取服务提供程序中的实例
             _service = serviceProvider.GetRequiredService<snblogContext>();
             _cache = (CacheUtil)serviceProvider.GetRequiredService<ICacheUtil>();
-            _mapper = serviceProvider.GetRequiredService<IMapper>();
         }
 
         public async Task<bool> DelAsync(int id)
         {
+            // 设置缓存键
             _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            // 记录日志
             Log.Information(_cacheKey);
-
+            
+            // 通过id查找文章
             Article result = await _service.Articles.FindAsync(id);
 
+            // 如果文章不存在，返回false
             if (result == null) return false;
-
+            
             _service.Articles.Remove(result);//删除单个
             _service.Remove(result);//直接在context上Remove()方法传入model，它会判断类型
 
+            // 保存更改
             return await _service.SaveChangesAsync() > 0;
         }
         public async Task<ArticleDto> GetByIdAsync(int id,bool cache)
@@ -62,6 +66,7 @@
         public async Task<List<ArticleDto>> GetTypeAsync(int identity,string type,bool cache)
         {
             _cacheKey = $"{NAME}{identity}_{type}_{cache}";
+            
             Log.Information(_cacheKey);
 
             if (cache) {
@@ -88,7 +93,8 @@
 
         public async Task<bool> AddAsync(Article entity)
         {
-            Log.Information($"{NAME}{ConstantString.ADD}{entity}");
+            Log.Information("{Article}{Add}{@Entity}", NAME, ConstantString.ADD, entity);
+            // Log.Information($"{NAME}{ConstantString.ADD}{entity}");
 
             entity.TimeCreate = entity.TimeModified = DateTime.Now;
             //此方法中的异步添加改为同步添加，因为 SaveChangesAsync 方法已经是异步的，不需要再使用异步添加
@@ -223,6 +229,7 @@
         /// 读取内容数量
         /// </summary>
         /// <param name="type">内容:1|阅读:2|点赞:3</param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
         private async Task<int> GetStatistic(int type,Expression<Func<Article,bool>> predicate = null)
         {

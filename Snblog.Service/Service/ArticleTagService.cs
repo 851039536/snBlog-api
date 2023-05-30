@@ -3,20 +3,21 @@
     public class ArticleTagService : IArticleTagService
     {
         const string NAME = "articleTag_";
+
         /// <summary>
         /// 缓存Key
         /// </summary>
-        private string cacheKey;
+        private string _cacheKey;
 
-        private readonly EntityData<ArticleTag> res = new();
-        private readonly EntityDataDto<ArticleTagDto> rDto = new();
+        private readonly EntityData<ArticleTag> _res = new();
+        private readonly EntityDataDto<ArticleTagDto> _rDto = new();
 
         private readonly snblogContext _service;
         private readonly CacheUtil _cache;
         private readonly IMapper _mapper;
 
 
-        public ArticleTagService(snblogContext service,ICacheUtil cacheutil,IMapper mapper) 
+        public ArticleTagService(snblogContext service, ICacheUtil cacheutil, IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cacheutil;
@@ -26,36 +27,38 @@
 
         public async Task<bool> DeleteAsync(int id)
         {
-            cacheKey = $"{NAME}{ConstantString.DEL}{id}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            Log.Information(_cacheKey);
 
             ArticleTag result = await _service.ArticleTags.FindAsync(id);
+
             if (result == null) return false;
 
             _service.ArticleTags.Remove(result);
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<ArticleTagDto> GetByIdAsync(int id,bool cache)
+        public async Task<ArticleTagDto> GetByIdAsync(int id, bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
+            _cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
             Log.Information($"{NAME}{ConstantString.BYID}{id}{cache}");
 
-            if (cache) {
-                rDto.Entity = _cache.GetValue(cacheKey,rDto.Entity);
-                if (res.Entity != null) return rDto.Entity;
+            if (cache)
+            {
+                _rDto.Entity = _cache.GetValue(_cacheKey, _rDto.Entity);
+                if (_res.Entity != null) return _rDto.Entity;
             }
 
-            rDto.Entity = _mapper.Map<ArticleTagDto>(await _service.ArticleTags.FindAsync(id));
-            _cache.SetValue(cacheKey,rDto.Entity);
-            return rDto.Entity;
+            _rDto.Entity = _mapper.Map<ArticleTagDto>(await _service.ArticleTags.FindAsync(id));
+            _cache.SetValue(_cacheKey, _rDto.Entity);
+            return _rDto.Entity;
         }
 
         public async Task<bool> AddAsync(ArticleTag entity)
         {
-            Log.Information(cacheKey);
+            Log.Information(_cacheKey);
 
-             _service.ArticleTags.Add(entity);
+            _service.ArticleTags.Add(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
@@ -75,44 +78,51 @@
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">缓存</param>
         /// <returns>list-entity</returns>
-        public async Task<List<ArticleTagDto>> GetPagingAsync(int pageIndex,int pageSize,bool isDesc,bool cache)
+        public async Task<List<ArticleTagDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}";
+            Log.Information(_cacheKey);
 
-            if (cache) {
-                rDto.EntityList = _cache.GetValue(cacheKey,rDto.EntityList);
-                if (res.EntityList != null) return rDto.EntityList;
+            if (cache)
+            {
+                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                if (_res.EntityList != null) return _rDto.EntityList;
             }
 
-            await QPaging(pageIndex,pageSize,isDesc);
-            _cache.SetValue(cacheKey,rDto.EntityList);
-            return rDto.EntityList;
+            await QPaging(pageIndex, pageSize, isDesc);
+            _cache.SetValue(_cacheKey, _rDto.EntityList);
+            return _rDto.EntityList;
         }
 
-        private async Task QPaging(int pageIndex,int pageSize,bool isDesc)
+        private async Task QPaging(int pageIndex, int pageSize, bool isDesc)
         {
-            if (isDesc) {
-                rDto.EntityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderByDescending(c => c.Id).Skip(( pageIndex - 1 ) * pageSize).Take(pageSize).ToListAsync());
-            } else {
-                rDto.EntityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderBy(c => c.Id).Skip(( pageIndex - 1 ) * pageSize).Take(pageSize).ToListAsync());
+            if (isDesc)
+            {
+                _rDto.EntityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags
+                    .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
+            }
+            else
+            {
+                _rDto.EntityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderBy(c => c.Id)
+                    .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
             }
         }
 
 
         public async Task<int> GetSumAsync(bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.SUM}{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.SUM}{cache}";
+            Log.Information(_cacheKey);
 
-            if (cache) {
-                res.EntityCount = _cache.GetValue(cacheKey,res.EntityCount);
-                if (res.EntityCount != 0) return res.EntityCount;
+            if (cache)
+            {
+                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
+                if (_res.EntityCount != 0) return _res.EntityCount;
             }
 
-            res.EntityCount = await _service.ArticleTags.AsNoTracking().CountAsync();
-            _cache.SetValue(cacheKey,res.EntityCount);
-            return res.EntityCount;
+            _res.EntityCount = await _service.ArticleTags.AsNoTracking().CountAsync();
+            _cache.SetValue(_cacheKey, _res.EntityCount);
+            return _res.EntityCount;
         }
     }
 }
