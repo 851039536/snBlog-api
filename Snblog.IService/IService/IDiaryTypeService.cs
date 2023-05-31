@@ -6,13 +6,6 @@
     public interface IDiaryTypeService
     {
         /// <summary>
-        /// 查询所有
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        Task<List<DiaryType>> GetAllAsync(bool cache);
-
-        /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id">主键</param>
@@ -34,7 +27,7 @@
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<int> CountAsync(bool cache);
+        Task<int> GetSumAsync(bool cache);
 
         /// <summary>
         /// 添加数据

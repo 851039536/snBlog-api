@@ -21,19 +21,7 @@ namespace Snblog.Controllers
             _service = service;
         }
 
-        #region 查询所有
-        /// <summary>
-        /// 查询所有
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllAsync(bool cache)
-        {
-            var data = await _service.GetAllAsync(cache);
-            return ApiResponse(cache:cache, data: data);
-        }
-        #endregion
+
 
         #region 主键查询
         /// <summary>
@@ -75,7 +63,7 @@ namespace Snblog.Controllers
 
         public async Task<IActionResult> CountAsync(bool cache)
         {
-            var data =await _service.CountAsync(cache);
+            var data =await _service.GetSumAsync(cache);
             return ApiResponse(data: data,cache:cache);
         }
         #endregion

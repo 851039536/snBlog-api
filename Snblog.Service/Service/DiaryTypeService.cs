@@ -1,74 +1,69 @@
-﻿using Microsoft.Extensions.Logging;
-
+﻿
 namespace Snblog.Service.Service
 {
     public class DiaryTypeService : IDiaryTypeService
     {
         private readonly snblogContext _service;
-        private readonly CacheUtil _cacheutil;
-        private int result_Int;
-        private List<DiaryType> result_List = null;
+        private readonly CacheUtil _cache;
+        private int _resultInt;
+        private List<DiaryType> _resultList = null;
 
-        private readonly ILogger<DiaryTypeService> _logger;
-        public DiaryTypeService(snblogContext service, ICacheUtil cacheutil, ILogger<DiaryTypeService> logger)
+        const string NAME = "diaryType_";
+        private string _cacheKey;
+        public DiaryTypeService(snblogContext service, ICacheUtil cache)
         {
             _service = service;
-            _cacheutil = (CacheUtil)cacheutil;
-            _logger = logger;
+            _cache = (CacheUtil)cache;
         }
 
         public async Task<bool> AddAsync(DiaryType entity)
         {
-            Log.Information("添加数据_SnOneType" + entity);
+            Log.Information($"{NAME}{ConstantString.ADD}{entity}");
+            
             await _service.DiaryTypes.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<int> CountAsync(bool cache)
+        public async Task<int> GetSumAsync(bool cache)
         {
-            Log.Information("查询总数_SnOneType" + cache);
-            result_Int = _cacheutil.CacheNumber("CountAsync_SnOneType" + cache, result_Int, cache);
-            if (result_Int != 0)
+            _cacheKey = $"{NAME}{ConstantString.SUM}{cache}";
+            Log.Information(_cacheKey);
+            
+            
+            if (cache)
             {
-                return result_Int;
+                _resultInt = _cache.GetValue(_cacheKey, _resultInt);
+                if (_resultInt != 0)return _resultInt;
+                    
             }
-            result_Int = await _service.DiaryTypes.CountAsync();
-            _cacheutil.CacheNumber("CountAsync_SnOneType" + cache, result_Int, cache);
-            return result_Int;
+            _resultInt = await _service.DiaryTypes.CountAsync();
+            _cache.SetValue(_cacheKey, _resultInt);
+            return _resultInt;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            Log.Information("删除数据_SnOneType" + id);
-            var result = await _service.DiaryTypes.FindAsync(id);
-            _service.DiaryTypes.Remove(result);
-            return await _service.SaveChangesAsync() > 0;
-        }
+            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            Log.Information(_cacheKey);
+            
+            var ret = await _service.DiaryTypes.FindAsync(id);
+            
+            if (ret == null) return false;
 
-        public async Task<List<DiaryType>> GetAllAsync(bool cache)
-        {
-            Log.Information("查询所有_SnOneType" + cache);
-            result_List = _cacheutil.CacheString("GetAllAsync_SnOneType" + cache, result_List, cache);
-            if (result_List != null)
-            {
-                return result_List;
-            }
-            result_List = await _service.DiaryTypes.ToListAsync();
-            _cacheutil.CacheString("GetAllAsync_SnOneType" + cache, result_List, cache);
-            return result_List;
+            return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<DiaryType> GetByIdAsync(int id, bool cache)
         {
             Log.Information("主键查询_SnOneType" + cache);
             DiaryType result = default;
-            result = _cacheutil.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
+            result = _cache.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
             if (result != null)
             {
                 return result;
             }
             result = await _service.DiaryTypes.FindAsync(id);
-            _cacheutil.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
+            _cache.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
             return result;
         }
 
@@ -76,13 +71,13 @@ namespace Snblog.Service.Service
         {
             Log.Information("类别查询_SnOneType" + type + cache);
             DiaryType result = default;
-            result = _cacheutil.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
+            result = _cache.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
             if (result != null)
             {
                 return result;
             }
             result = await _service.DiaryTypes.FirstAsync(s => s.Id == type);
-            _cacheutil.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
+            _cache.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
             return result;
         }
 

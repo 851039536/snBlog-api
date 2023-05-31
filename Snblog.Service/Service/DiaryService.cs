@@ -2,22 +2,20 @@
 {
     public class DiaryService : IDiaryService
     {
-        string cacheKey;
+        private string _cacheKey;
         const string NAME = "diary_";
 
-        readonly EntityData<Diary> res = new();
-        readonly EntityDataDto<DiaryDto> resDto = new();
+        readonly EntityData<Diary> _res = new();
+        readonly EntityDataDto<DiaryDto> _resDto = new();
 
         private readonly CacheUtil _cache;
-        private readonly snblogContext _service;//DB
-        private readonly IMapper _mapper;
+        private readonly snblogContext _service;
 
 
-        public DiaryService(snblogContext service,ICacheUtil cacheutil,IMapper mapper)
+        public DiaryService(snblogContext service,ICacheUtil cache)
         {
             _service = service;
-            _cache = (CacheUtil)cacheutil;
-            _mapper = mapper;
+            _cache = (CacheUtil)cache;
         }
 
         /// <summary>
@@ -28,20 +26,20 @@
         /// <returns></returns>
         public async Task<DiaryDto> GetByIdAsync(int id,bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.BYID}{id}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.BYID}{id}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                resDto.Entity = _cache.GetValue(cacheKey,resDto.Entity);
-                if (resDto.Entity != null) return resDto.Entity;
+                _resDto.Entity = _cache.GetValue(_cacheKey,_resDto.Entity);
+                if (_resDto.Entity != null) return _resDto.Entity;
             }
 
-            resDto.Entity = await _service.Diaries.SelectDiary()
+            _resDto.Entity = await _service.Diaries.SelectDiary()
               .SingleOrDefaultAsync(b => b.Id == id);
 
-             _cache.SetValue(cacheKey,resDto.Entity);
+             _cache.SetValue(_cacheKey,_resDto.Entity);
 
-            return resDto.Entity;
+            return _resDto.Entity;
         }
         /// <summary>
         /// 分页查询
@@ -56,50 +54,47 @@
         public async Task<List<DiaryDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,string ordering,bool isDesc,bool cache)
         {
 
-            cacheKey = $"{NAME}{ConstantString.PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                resDto.EntityList = _cache.GetValue(cacheKey,resDto.EntityList);
-                if (resDto.EntityList == null) return resDto.EntityList;
-                }
-
-            switch (identity) {
-                case 0:
-                return await GetDiaryPaging(pageIndex,pageSize,ordering,isDesc);
-                case 1:
-                return await GetDiaryPaging(pageIndex,pageSize,ordering,isDesc,w => w.Type.Name == type);
-                case 2:
-                return await GetDiaryPaging(pageIndex,pageSize,ordering,isDesc,w => w.User.Name == type);
-                default:
-                return await GetDiaryPaging(pageIndex,pageSize,ordering,isDesc);
+                _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
+                if (_resDto.EntityList == null) return _resDto.EntityList;
             }
+
+            return identity switch
+            {
+                0 => await GetDiaryPaging(pageIndex, pageSize, ordering, isDesc),
+                1 => await GetDiaryPaging(pageIndex, pageSize, ordering, isDesc, w => w.Type.Name == type),
+                2 => await GetDiaryPaging(pageIndex, pageSize, ordering, isDesc, w => w.User.Name == type),
+                _ => await GetDiaryPaging(pageIndex, pageSize, ordering, isDesc)
+            };
         }
 
         private async Task<List<DiaryDto>> GetDiaryPaging(int pageIndex,int pageSize,string ordering,bool isDesc,Expression<Func<Diary,bool>> predicate = null)
         {
-            IQueryable<Diary> diarys = _service.Diaries.AsQueryable();
+            IQueryable<Diary> diary = _service.Diaries.AsQueryable();
 
             if (predicate != null) {
-                diarys = diarys.Where(predicate);
+                diary = diary.Where(predicate);
             }
             switch (ordering) {
                 case "id":
-                diarys = isDesc ? diarys.OrderByDescending(c => c.Id) : diarys.OrderBy(c => c.Id);
+                diary = isDesc ? diary.OrderByDescending(c => c.Id) : diary.OrderBy(c => c.Id);
                 break;
                 case "data":
-                diarys = isDesc ? diarys.OrderByDescending(c => c.TimeCreate) : diarys.OrderBy(c => c.TimeCreate);
+                diary = isDesc ? diary.OrderByDescending(c => c.TimeCreate) : diary.OrderBy(c => c.TimeCreate);
                 break;
                 case "read":
-                diarys = isDesc ? diarys.OrderByDescending(c => c.Read) : diarys.OrderBy(c => c.Read);
+                diary = isDesc ? diary.OrderByDescending(c => c.Read) : diary.OrderBy(c => c.Read);
                 break;
                 case "give":
-                diarys = isDesc ? diarys.OrderByDescending(c => c.Give) : diarys.OrderBy(c => c.Give);
+                diary = isDesc ? diary.OrderByDescending(c => c.Give) : diary.OrderBy(c => c.Give);
                 break;
             }
-            var data = await diarys.Skip(( pageIndex - 1 ) * pageSize).Take(pageSize)
+            var data = await diary.Skip(( pageIndex - 1 ) * pageSize).Take(pageSize)
             .SelectDiary().ToListAsync();
-            _cache.SetValue(cacheKey,resDto.EntityList);
+            _cache.SetValue(_cacheKey,_resDto.EntityList);
             return data;
         }
 
@@ -110,8 +105,8 @@
         /// <returns></returns>
         public async Task<bool> DelAsync(int id)
         {
-            cacheKey = $"{NAME}{ConstantString.DEL}{id}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            Log.Information(_cacheKey);
 
             var result = await _service.Diaries.FindAsync(id);
             if (result == null) return false;
@@ -126,16 +121,16 @@
         /// <returns></returns>
         public async Task<bool> AddAsync(Diary entity)
         {
-            cacheKey = $"{NAME}{ConstantString.ADD}{entity}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.ADD}{entity}";
+            Log.Information(_cacheKey);
             _service.Diaries.Add(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateAsync(Diary entity)
         {
-            cacheKey = $"{NAME}{ConstantString.UP}{entity}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.UP}{entity}";
+            Log.Information(_cacheKey);
             _service.Diaries.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
@@ -149,12 +144,12 @@
         /// <returns>int</returns>
         public async Task<int> GetSumAsync(int identity,string type,bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.SUM}{identity}_{type}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.SUM}{identity}_{type}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                res.EntityCount = _cache.GetValue(cacheKey,res.EntityCount);
-                if (res.EntityCount != 0) return res.EntityCount;
+                _res.EntityCount = _cache.GetValue(_cacheKey,_res.EntityCount);
+                if (_res.EntityCount != 0) return _res.EntityCount;
             }
 
             return identity switch {
@@ -178,43 +173,43 @@
                 query = query.Where(predicate);
             }
             int count = await query.CountAsync();
-            _cache.SetValue(cacheKey,count); 
+            _cache.SetValue(_cacheKey,count); 
             return count;
         }
 
         public async Task<int> CountTypeAsync(int type,bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.SUM}{type}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.SUM}{type}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                res.EntityCount = _cache.GetValue(cacheKey,res.EntityCount);
-                if (res.EntityCount != 0) return res.EntityCount;
-                }
+                _res.EntityCount = _cache.GetValue(_cacheKey,_res.EntityCount);
+                if (_res.EntityCount != 0) return _res.EntityCount;
+            }
          
-                res.EntityCount = await _service.Diaries.CountAsync(s => s.TypeId == type);
-                _cache.SetValue(cacheKey,res.EntityCount);
+            _res.EntityCount = await _service.Diaries.CountAsync(s => s.TypeId == type);
+            _cache.SetValue(_cacheKey,_res.EntityCount);
            
-            return res.EntityCount;
+            return _res.EntityCount;
 
         }
 
         public async Task<int> GetSumAsync(string type,bool cache)
         {
-            cacheKey = $"{NAME}{ConstantString.SUM}{type}_{cache}";
+            _cacheKey = $"{NAME}{ConstantString.SUM}{type}_{cache}";
 
-            Log.Information(cacheKey);
+            Log.Information(_cacheKey);
 
             if (cache) {
-                res.EntityCount = _cache.GetValue(cacheKey,res.EntityCount);
-                if (res.EntityCount != 0) {
-                    return res.EntityCount;
+                _res.EntityCount = _cache.GetValue(_cacheKey,_res.EntityCount);
+                if (_res.EntityCount != 0) {
+                    return _res.EntityCount;
                 }
             }
           
-            res.EntityCount = await GetSum(type);
-            _cache.SetValue(cacheKey,res.EntityCount);
-            return res.EntityCount;
+            _res.EntityCount = await GetSum(type);
+            _cache.SetValue(_cacheKey,_res.EntityCount);
+            return _res.EntityCount;
         }
 
         private async Task<int> GetSum(string type)
@@ -252,19 +247,20 @@
 
         public async Task<bool> UpdatePortionAsync(Diary entity,string typeName)
         {
-            cacheKey = $"{NAME}{ConstantString.UP_PORTIOG}{typeName}_{entity}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.UP_PORTIOG}{typeName}_{entity}";
+            Log.Information(_cacheKey);
 
-            var resulet = await _service.Diaries.FindAsync(entity.Id);
-            if (resulet == null) return false;
+            var result = await _service.Diaries.FindAsync(entity.Id);
+            if (result == null) return false;
+            
             switch (typeName) {    //指定字段进行更新操作
                 case "give":
                 //date.Property("OneGive").IsModified = true;
-                resulet.Give = entity.Give;
+                result.Give = entity.Give;
                 break;
                 case "read":
                 //date.Property("OneRead").IsModified = true;
-                resulet.Read = entity.Read;
+                result.Read = entity.Read;
                 break;
             }
             return await _service.SaveChangesAsync() > 0;
@@ -274,12 +270,12 @@
         public async Task<List<DiaryDto>> GetContainsAsync(int identity,string type,string name,bool cache)
         {
             var upNames = name.ToUpper();
-            cacheKey = $"{NAME}{ConstantString.CONTAINS}{identity}_{type}_{name}_{cache}";
-            Log.Information(cacheKey);
+            _cacheKey = $"{NAME}{ConstantString.CONTAINS}{identity}_{type}_{name}_{cache}";
+            Log.Information(_cacheKey);
 
             if (cache) {
-                resDto.EntityList = _cache.GetValue(cacheKey,resDto.EntityList);
-                if (resDto.EntityList != null) return resDto.EntityList;
+                _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
+                if (_resDto.EntityList != null) return _resDto.EntityList;
             }
 
             return identity switch {
@@ -299,11 +295,11 @@
             IQueryable<Diary> query = _service.Diaries.AsNoTracking();
             if (predicate != null) {
 
-                resDto.EntityList = await query.Where(predicate).SelectDiary().ToListAsync();
+                _resDto.EntityList = await query.Where(predicate).SelectDiary().ToListAsync();
 
-                _cache.SetValue(cacheKey,resDto.EntityList);
+                _cache.SetValue(_cacheKey,_resDto.EntityList);
             }
-            return resDto.EntityList;
+            return _resDto.EntityList;
         }
     }
 }
