@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
     {
+        /// <summary>
+        /// SnippetLabel对象映射关系
+        /// </summary>
     public class SnippetLabelMapper : Profile
     {
         /// <summary>

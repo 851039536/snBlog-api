@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
 {
+    /// <summary>
+    /// User对象映射关系
+    /// </summary>
     public class UserMapper : Profile
     {
         /// <summary>

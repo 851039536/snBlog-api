@@ -1,6 +1,9 @@
 ﻿
 namespace Snblog.Enties.AutoMapper
 {
+    /// <summary>
+    /// Diary对象映射关系
+    /// </summary>
     public class DiaryMapper : Profile
     {
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
 {
+    /// <summary>
+    /// Video对象映射关系
+    /// </summary>
     public class VideoMapper : Profile
     {
         /// <summary>
@@ -11,7 +14,6 @@
             //如两个实体字段一致可直接映射关系
             //SnUser原对象类型，SnUserDto 目标对象类型  ReverseMap，可相互转换
             CreateMap<Video, VideoDto>().ReverseMap();
-
         }
     }
 }

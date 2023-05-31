@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
 {
+    /// <summary>
+    /// SetBlog对象映射关系
+    /// </summary>
     public class SetBlogMapper : Profile
     {
         /// <summary>
