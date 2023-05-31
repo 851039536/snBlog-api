@@ -1,8 +1,4 @@
-﻿using Snblog.Enties.Models;
-using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿#nullable disable
 
 namespace Snblog.Enties.ModelsDto
 {
