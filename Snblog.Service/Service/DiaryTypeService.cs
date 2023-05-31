@@ -6,7 +6,6 @@ namespace Snblog.Service.Service
         private readonly snblogContext _service;
         private readonly CacheUtil _cache;
         private int _resultInt;
-        private List<DiaryType> _resultList = null;
 
         const string NAME = "diaryType_";
         private string _cacheKey;
@@ -55,35 +54,43 @@ namespace Snblog.Service.Service
 
         public async Task<DiaryType> GetByIdAsync(int id, bool cache)
         {
-            Log.Information("主键查询_SnOneType" + cache);
-            DiaryType result = default;
-            result = _cache.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
-            if (result != null)
+            _cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
+            Log.Information(_cacheKey);
+            DiaryType diaryType;
+            
+            if (cache)
             {
-                return result;
+                diaryType = _cache.GetValue(_cacheKey, (DiaryType)null);
+                if (diaryType != null) return diaryType;
             }
-            result = await _service.DiaryTypes.FindAsync(id);
-            _cache.CacheString("GetByIdAsync_SnOneType" + id + cache, result, cache);
-            return result;
+           
+            diaryType = await _service.DiaryTypes.FindAsync(id);
+            _cache.SetValue(_cacheKey, diaryType);
+            return diaryType;
         }
 
         public async Task<DiaryType> GetTypeAsync(int type, bool cache)
         {
-            Log.Information("类别查询_SnOneType" + type + cache);
-            DiaryType result = default;
-            result = _cache.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
-            if (result != null)
+            _cacheKey = $"{NAME}{ConstantString.BYID}{type}_{cache}";
+            Log.Information(_cacheKey);
+            
+            DiaryType diaryType;
+            if (cache)
             {
-                return result;
+                diaryType = _cache.GetValue(_cacheKey, (DiaryType)null);
+                if (diaryType != null) return diaryType;
             }
-            result = await _service.DiaryTypes.FirstAsync(s => s.Id == type);
-            _cache.CacheString("GetTypeAsync_SnOneType" + type + cache, result, cache);
-            return result;
+           
+            diaryType = await _service.DiaryTypes.FirstAsync(s => s.Id == type);
+            _cache.SetValue(_cacheKey, diaryType);
+            return diaryType;
         }
 
         public async Task<bool> UpdateAsync(DiaryType entity)
         {
-            Log.Information("更新数据_SnOneType" + entity);
+            _cacheKey = $"{NAME}{ConstantString.UP}{entity.Id}";
+            Log.Information(_cacheKey);
+            
             _service.DiaryTypes.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
