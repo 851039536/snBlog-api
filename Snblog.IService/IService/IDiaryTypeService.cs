@@ -5,6 +5,17 @@
     /// </summary>
     public interface IDiaryTypeService
     {
+        
+        /// <summary>
+        /// 分页查询 
+        /// </summary>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        /// <param name="isDesc">是否倒序</param>
+        /// <param name="cache">缓存</param>
+        /// <returns>list-entity</returns>
+        Task<List<DiaryType>> GetPagingAsync(int pageInde, int pageSize, bool isDesc, bool cache);
+        
         /// <summary>
         /// 主键查询
         /// </summary>

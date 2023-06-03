@@ -59,7 +59,7 @@
 
             if (cache) {
                 _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
-                if (_resDto.EntityList == null) return _resDto.EntityList;
+                if (_resDto.EntityList != null) return _resDto.EntityList;
             }
 
             return identity switch
