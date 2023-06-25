@@ -169,6 +169,7 @@ namespace Snblog.Controllers
         /// <summary>
         /// 添加
         /// </summary>
+        /// <param name="entity"></param>
         /// <returns></returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpPost("add")]

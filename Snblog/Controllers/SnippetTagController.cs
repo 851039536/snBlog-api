@@ -8,14 +8,14 @@ namespace Snblog.Controllers
     [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
     [Route("snippetTag")]
-    public class SnippeTagController : BaseController
+    public class SnippetTagController : BaseController
     {
         private readonly ISnippetTagService _service;
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
-        public SnippeTagController(ISnippetTagService service)
+        public SnippetTagController(ISnippetTagService service)
         {
             _service = service;
         }

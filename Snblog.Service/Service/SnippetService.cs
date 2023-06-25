@@ -4,7 +4,7 @@
     {
         private readonly snblogContext _service;
         private readonly CacheUtil _cache;
-        private readonly EntityData<Snippet> _res = new();
+        private readonly EntityData<Snippet> _ret = new();
         private readonly EntityDataDto<SnippetDto> _rDto = new();
         private readonly IMapper _mapper;
 
@@ -63,8 +63,6 @@
         public async Task<bool> AddAsync(Snippet entity)
         {
             Log.Information($"{NAME}{ADD}{entity}");
-            //entity.TimeCreate = DateTime.Now;
-            //entity.TimeModified = DateTime.Now;
             await _service.Snippets.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
         }
@@ -79,25 +77,25 @@
         public async Task<int> GetSumAsync(int identity,string type,bool cache)
         {
             Log.Information($"{NAME}{SUM}{identity}_{cache}");
-            _res.EntityCount = _cache.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}",_res.EntityCount,cache);
-            if (_res.EntityCount == 0) {
+            _ret.EntityCount = _cache.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}",_ret.EntityCount,cache);
+            if (_ret.EntityCount == 0) {
                 switch (identity) {
                     case 0:
-                    _res.EntityCount = await _service.Snippets.AsNoTracking().CountAsync();
+                    _ret.EntityCount = await _service.Snippets.AsNoTracking().CountAsync();
                     break;
                     case 1:
-                    _res.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.Type.Name == type);
+                    _ret.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.Type.Name == type);
                     break;
                     case 2:
-                    _res.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.Tag.Name == type);
+                    _ret.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.Tag.Name == type);
                     break;
                     case 3:
-                    _res.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.User.Name == type);
+                    _ret.EntityCount = await _service.Snippets.AsNoTracking().CountAsync(c => c.User.Name == type);
                     break;
                 }
-                _cache.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}",_res.EntityCount,cache);
+                _cache.CacheNumber($"{NAME}{SUM}{identity}{type}{cache}",_ret.EntityCount,cache);
             }
-            return _res.EntityCount;
+            return _ret.EntityCount;
         }
 
         /// <summary>
@@ -110,34 +108,34 @@
         public async Task<int> GetStrSumAsync(int identity,string name,bool cache)
         {
             Log.Information($"{NAME}统计_{identity}_{cache}");
-            _res.EntityCount = _cache.CacheNumber($"{NAME}GetStrSumAsync{identity}{name}{cache}",_res.EntityCount,cache);
-            if (_res.EntityCount == 0) {
+            _ret.EntityCount = _cache.CacheNumber($"{NAME}GetStrSumAsync{identity}{name}{cache}",_ret.EntityCount,cache);
+            if (_ret.EntityCount == 0) {
                 int num = 0;
                 switch (identity) {
                     case 0:
                     List<string> text = await _service.Snippets.Select(c => c.Text).ToListAsync();
                     for (int i = 0 ; i < text.Count ; i++) num += text[i].Length;
-                    _res.EntityCount = num;
+                    _ret.EntityCount = num;
                     break;
                     case 1:
                     List<string> ttext = await _service.Snippets.Where(w => w.Type.Name == name).Select(c => c.Text).ToListAsync();
                     for (int i = 0 ; i < ttext.Count ; i++) num += ttext[i].Length;
-                    _res.EntityCount = num;
+                    _ret.EntityCount = num;
                     break;
                     case 2:
                     List<string> tagtext = await _service.Snippets.Where(w => w.Tag.Name == name).Select(c => c.Text).ToListAsync();
                     for (int i = 0 ; i < tagtext.Count ; i++) num += tagtext[i].Length;
-                    _res.EntityCount = num;
+                    _ret.EntityCount = num;
                     break;
                     case 3:
                     List<string> utext = await _service.Snippets.Where(w => w.User.Name == name).Select(c => c.Text).ToListAsync();
                     for (int i = 0 ; i < utext.Count ; i++) num += utext[i].Length;
-                    _res.EntityCount = num;
+                    _ret.EntityCount = num;
                     break;
                 }
-                _cache.CacheNumber($"{NAME}GetStrSumAsync{identity}{name}{cache}",_res.EntityCount,cache);
+                _cache.CacheNumber($"{NAME}GetStrSumAsync{identity}{name}{cache}",_ret.EntityCount,cache);
             }
-            return _res.EntityCount;
+            return _ret.EntityCount;
         }
 
         /// <summary>
