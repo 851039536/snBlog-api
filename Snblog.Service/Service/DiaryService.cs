@@ -12,7 +12,7 @@
         private readonly snblogContext _service;
 
 
-        public DiaryService(snblogContext service,ICacheUtil cache)
+        public DiaryService(snblogContext service, ICacheUtil cache)
         {
             _service = service;
             _cache = (CacheUtil)cache;
@@ -24,23 +24,25 @@
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        public async Task<DiaryDto> GetByIdAsync(int id,bool cache)
+        public async Task<DiaryDto> GetByIdAsync(int id, bool cache)
         {
             _cacheKey = $"{NAME}{ConstantString.BYID}{id}";
             Log.Information(_cacheKey);
 
-            if (cache) {
-                _resDto.Entity = _cache.GetValue(_cacheKey,_resDto.Entity);
+            if (cache)
+            {
+                _resDto.Entity = _cache.GetValue(_cacheKey, _resDto.Entity);
                 if (_resDto.Entity != null) return _resDto.Entity;
             }
 
             _resDto.Entity = await _service.Diaries.SelectDiary()
-              .SingleOrDefaultAsync(b => b.Id == id);
+                .SingleOrDefaultAsync(b => b.Id == id);
 
-             _cache.SetValue(_cacheKey,_resDto.Entity);
+            _cache.SetValue(_cacheKey, _resDto.Entity);
 
             return _resDto.Entity;
         }
+
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -51,14 +53,16 @@
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间 read:阅读 give:点赞 按id排序]</param>
-        public async Task<List<DiaryDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,string ordering,bool isDesc,bool cache)
+        public async Task<List<DiaryDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
+            string ordering, bool isDesc, bool cache)
         {
-
-            _cacheKey = $"{NAME}{ConstantString.PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
+            _cacheKey =
+                $"{NAME}{ConstantString.PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
             Log.Information(_cacheKey);
 
-            if (cache) {
-                _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
+            if (cache)
+            {
+                _resDto.EntityList = _cache.GetValue(_cacheKey, _resDto.EntityList);
                 if (_resDto.EntityList != null) return _resDto.EntityList;
             }
 
@@ -71,30 +75,35 @@
             };
         }
 
-        private async Task<List<DiaryDto>> GetDiaryPaging(int pageIndex,int pageSize,string ordering,bool isDesc,Expression<Func<Diary,bool>> predicate = null)
+        private async Task<List<DiaryDto>> GetDiaryPaging(int pageIndex, int pageSize, string ordering, bool isDesc,
+            Expression<Func<Diary, bool>> predicate = null)
         {
             IQueryable<Diary> diary = _service.Diaries.AsQueryable();
 
-            if (predicate != null) {
+            if (predicate != null)
+            {
                 diary = diary.Where(predicate);
             }
-            switch (ordering) {
+
+            switch (ordering)
+            {
                 case "id":
-                diary = isDesc ? diary.OrderByDescending(c => c.Id) : diary.OrderBy(c => c.Id);
-                break;
+                    diary = isDesc ? diary.OrderByDescending(c => c.Id) : diary.OrderBy(c => c.Id);
+                    break;
                 case "data":
-                diary = isDesc ? diary.OrderByDescending(c => c.TimeCreate) : diary.OrderBy(c => c.TimeCreate);
-                break;
+                    diary = isDesc ? diary.OrderByDescending(c => c.TimeCreate) : diary.OrderBy(c => c.TimeCreate);
+                    break;
                 case "read":
-                diary = isDesc ? diary.OrderByDescending(c => c.Read) : diary.OrderBy(c => c.Read);
-                break;
+                    diary = isDesc ? diary.OrderByDescending(c => c.Read) : diary.OrderBy(c => c.Read);
+                    break;
                 case "give":
-                diary = isDesc ? diary.OrderByDescending(c => c.Give) : diary.OrderBy(c => c.Give);
-                break;
+                    diary = isDesc ? diary.OrderByDescending(c => c.Give) : diary.OrderBy(c => c.Give);
+                    break;
             }
-            var data = await diary.Skip(( pageIndex - 1 ) * pageSize).Take(pageSize)
-            .SelectDiary().ToListAsync();
-            _cache.SetValue(_cacheKey,_resDto.EntityList);
+
+            var data = await diary.Skip((pageIndex - 1) * pageSize).Take(pageSize)
+                .SelectDiary().ToListAsync();
+            _cache.SetValue(_cacheKey, _resDto.EntityList);
             return data;
         }
 
@@ -142,17 +151,19 @@
         /// <param name="type">条件(identity为0则null) </param>
         /// <param name="cache"></param>
         /// <returns>int</returns>
-        public async Task<int> GetSumAsync(int identity,string type,bool cache)
+        public async Task<int> GetSumAsync(int identity, string type, bool cache)
         {
             _cacheKey = $"{NAME}{ConstantString.SUM}{identity}_{type}_{cache}";
             Log.Information(_cacheKey);
 
-            if (cache) {
-                _res.EntityCount = _cache.GetValue(_cacheKey,_res.EntityCount);
+            if (cache)
+            {
+                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
                 if (_res.EntityCount != 0) return _res.EntityCount;
             }
 
-            return identity switch {
+            return identity switch
+            {
                 0 => await GetDiaryCountAsync(),
                 1 => await GetDiaryCountAsync(w => w.Type.Name == type),
                 2 => await GetDiaryCountAsync(w => w.User.Name == type),
@@ -165,120 +176,119 @@
         /// </summary>
         /// <param name="predicate">筛选文章的条件</param>
         /// <returns>返回文章的数量</returns>
-        private async Task<int> GetDiaryCountAsync(Expression<Func<Diary,bool>> predicate = null)
+        private async Task<int> GetDiaryCountAsync(Expression<Func<Diary, bool>> predicate = null)
         {
             IQueryable<Diary> query = _service.Diaries.AsNoTracking();
 
-            if (predicate != null) { //如果有筛选条件
+            if (predicate != null)
+            {
+                //如果有筛选条件
                 query = query.Where(predicate);
             }
+
             int count = await query.CountAsync();
-            _cache.SetValue(_cacheKey,count); 
+            _cache.SetValue(_cacheKey, count);
             return count;
         }
 
-        public async Task<int> CountTypeAsync(int type,bool cache)
+        public async Task<int> CountTypeAsync(int type, bool cache)
         {
             _cacheKey = $"{NAME}{ConstantString.SUM}{type}_{cache}";
             Log.Information(_cacheKey);
 
-            if (cache) {
-                _res.EntityCount = _cache.GetValue(_cacheKey,_res.EntityCount);
+            if (cache)
+            {
+                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
                 if (_res.EntityCount != 0) return _res.EntityCount;
             }
-         
-            _res.EntityCount = await _service.Diaries.CountAsync(s => s.TypeId == type);
-            _cache.SetValue(_cacheKey,_res.EntityCount);
-           
-            return _res.EntityCount;
 
+            _res.EntityCount = await _service.Diaries.CountAsync(s => s.TypeId == type);
+            _cache.SetValue(_cacheKey, _res.EntityCount);
+
+            return _res.EntityCount;
         }
 
-        public async Task<int> GetSumAsync(string type,bool cache)
+        public async Task<int> GetSumAsync(string type, bool cache)
         {
             _cacheKey = $"{NAME}{ConstantString.SUM}{type}_{cache}";
 
             Log.Information(_cacheKey);
 
-            if (cache) {
-                _res.EntityCount = _cache.GetValue(_cacheKey,_res.EntityCount);
-                if (_res.EntityCount != 0) {
+            if (cache)
+            {
+                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
+                if (_res.EntityCount != 0)
+                {
                     return _res.EntityCount;
                 }
             }
-          
+
             _res.EntityCount = await GetSum(type);
-            _cache.SetValue(_cacheKey,_res.EntityCount);
+            _cache.SetValue(_cacheKey, _res.EntityCount);
             return _res.EntityCount;
         }
 
         private async Task<int> GetSum(string type)
         {
             int num = 0;
-            switch (type) //按类型查询
+            //按类型查询
+            switch (type)
             {
                 case "read":
-                var read = await _service.Diaries.Select(c => c.Read).ToListAsync();
-                foreach (var i in read) {
-                    var item = i;
-                    num += item;
-                }
-
-                break;
+                    var read = await _service.Diaries.Select(c => c.Read).ToListAsync();
+                    num += read.Sum();
+                    break;
                 case "text":
-                var text = await _service.Diaries.Select(c => c.Text).ToListAsync();
-                foreach (var t in text) {
-                    num += t.Length;
-                }
-
-                break;
+                    var text = await _service.Diaries.Select(c => c.Text).ToListAsync();
+                    num += text.Sum(t => t.Length);
+                    break;
                 case "give":
-                var give = await _service.Diaries.Select(c => c.Give).ToListAsync();
-                foreach (var i in give) {
-                    var item = i;
-                    num += item;
-                }
-
-                break;
+                    var give = await _service.Diaries.Select(c => c.Give).ToListAsync();
+                    num += give.Sum();
+                    break;
             }
 
             return num;
         }
 
-        public async Task<bool> UpdatePortionAsync(Diary entity,string typeName)
+        public async Task<bool> UpdatePortionAsync(Diary entity, string typeName)
         {
             _cacheKey = $"{NAME}{ConstantString.UP_PORTIOG}{typeName}_{entity}";
             Log.Information(_cacheKey);
 
             var result = await _service.Diaries.FindAsync(entity.Id);
             if (result == null) return false;
-            
-            switch (typeName) {    //指定字段进行更新操作
-                case "give":
-                //date.Property("OneGive").IsModified = true;
-                result.Give = entity.Give;
-                break;
-                case "read":
-                //date.Property("OneRead").IsModified = true;
-                result.Read = entity.Read;
-                break;
-            }
-            return await _service.SaveChangesAsync() > 0;
 
+            switch (typeName)
+            {
+                //指定字段进行更新操作
+                case "give":
+                    //date.Property("OneGive").IsModified = true;
+                    result.Give = entity.Give;
+                    break;
+                case "read":
+                    //date.Property("OneRead").IsModified = true;
+                    result.Read = entity.Read;
+                    break;
+            }
+
+            return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<DiaryDto>> GetContainsAsync(int identity,string type,string name,bool cache)
+        public async Task<List<DiaryDto>> GetContainsAsync(int identity, string type, string name, bool cache)
         {
             var upNames = name.ToUpper();
             _cacheKey = $"{NAME}{ConstantString.CONTAINS}{identity}_{type}_{name}_{cache}";
             Log.Information(_cacheKey);
 
-            if (cache) {
-                _resDto.EntityList = _cache.GetValue(_cacheKey,_resDto.EntityList);
+            if (cache)
+            {
+                _resDto.EntityList = _cache.GetValue(_cacheKey, _resDto.EntityList);
                 if (_resDto.EntityList != null) return _resDto.EntityList;
             }
 
-            return identity switch {
+            return identity switch
+            {
                 0 => await GetDiaryContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
                 1 => await GetDiaryContainsAsync(l => l.Name.ToUpper().Contains(name) && l.Type.Name == type),
                 2 => await GetDiaryContainsAsync(l => l.Name.ToUpper().Contains(name) && l.User.Name == type),
@@ -290,15 +300,16 @@
         /// 模糊查询
         /// </summary>
         /// <param name="predicate">筛选条件</param>
-        private async Task<List<DiaryDto>> GetDiaryContainsAsync(Expression<Func<Diary,bool>> predicate = null)
+        private async Task<List<DiaryDto>> GetDiaryContainsAsync(Expression<Func<Diary, bool>> predicate = null)
         {
             IQueryable<Diary> query = _service.Diaries.AsNoTracking();
-            if (predicate != null) {
-
+            if (predicate != null)
+            {
                 _resDto.EntityList = await query.Where(predicate).SelectDiary().ToListAsync();
 
-                _cache.SetValue(_cacheKey,_resDto.EntityList);
+                _cache.SetValue(_cacheKey, _resDto.EntityList);
             }
+
             return _resDto.EntityList;
         }
     }

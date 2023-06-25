@@ -5,8 +5,8 @@
         private readonly snblogContext _service;
         private readonly CacheUtil _cache;
 
-        private readonly EntityData<ArticleType> _res = new();
-        private readonly EntityDataDto<ArticleTypeDto> _resDto = new();
+        private readonly EntityData<ArticleType> _ret = new();
+        private readonly EntityDataDto<ArticleTypeDto> _retDto = new();
 
         private readonly IMapper _mapper;
 
@@ -56,13 +56,13 @@
 
             if (cache)
             {
-                _resDto.Entity = _cache.GetValue(_cacheKey, _resDto.Entity);
-                if (_resDto != null) return _resDto.Entity;
+                _retDto.Entity = _cache.GetValue(_cacheKey, _retDto.Entity);
+                if (_retDto != null) return _retDto.Entity;
             }
 
-            _resDto.Entity = _mapper.Map<ArticleTypeDto>(await _service.ArticleTypes.FindAsync(id));
-            _cache.SetValue(_cacheKey, _resDto.Entity);
-            return _resDto.Entity;
+            _retDto.Entity = _mapper.Map<ArticleTypeDto>(await _service.ArticleTypes.FindAsync(id));
+            _cache.SetValue(_cacheKey, _retDto.Entity);
+            return _retDto.Entity;
         }
 
         /// <summary>
@@ -101,27 +101,27 @@
 
             if (cache)
             {
-                _resDto.EntityList = _cache.GetValue(
+                _retDto.EntityList = _cache.GetValue(
                     _cacheKey,
-                    _resDto.EntityList);
-                if (_res.EntityList != null) return _resDto.EntityList;
+                    _retDto.EntityList);
+                if (_ret.EntityList != null) return _retDto.EntityList;
             }
 
             await QPaging(pageIndex, pageSize, isDesc);
-            _cache.SetValue(_cacheKey, _resDto.EntityList);
-            return _resDto.EntityList;
+            _cache.SetValue(_cacheKey, _retDto.EntityList);
+            return _retDto.EntityList;
         }
 
         private async Task QPaging(int pageIndex, int pageSize, bool isDesc)
         {
             if (isDesc)
             {
-                _resDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes
+                _retDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes
                     .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
             }
             else
             {
-                _resDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes.OrderBy(c => c.Id)
+                _retDto.EntityList = _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes.OrderBy(c => c.Id)
                     .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
             }
         }
@@ -133,16 +133,16 @@
 
             if (cache)
             {
-                _resDto.EntityList =
-                    _cache.GetValue(_cacheKey, _resDto.EntityList);
-                if (_resDto.EntityList != null) return _resDto.EntityList;
+                _retDto.EntityList =
+                    _cache.GetValue(_cacheKey, _retDto.EntityList);
+                if (_retDto.EntityList != null) return _retDto.EntityList;
             }
 
-            _resDto.EntityList =
+            _retDto.EntityList =
                 _mapper.Map<List<ArticleTypeDto>>(await _service.ArticleTypes.AsNoTracking().ToListAsync());
 
-            _cache.SetValue(_cacheKey, _resDto.EntityList);
-            return _resDto.EntityList;
+            _cache.SetValue(_cacheKey, _retDto.EntityList);
+            return _retDto.EntityList;
         }
 
         /// <summary>
@@ -156,13 +156,13 @@
             Log.Information(_cacheKey);
             if (cache)
             {
-                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
-                if (_res.EntityCount != 0) return _res.EntityCount;
+                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                if (_ret.EntityCount != 0) return _ret.EntityCount;
             }
 
-            _res.EntityCount = await _service.ArticleTypes.AsNoTracking().CountAsync();
-            _cache.SetValue(_cacheKey, _res.EntityCount);
-            return _res.EntityCount;
+            _ret.EntityCount = await _service.ArticleTypes.AsNoTracking().CountAsync();
+            _cache.SetValue(_cacheKey, _ret.EntityCount);
+            return _ret.EntityCount;
         }
     }
 }
