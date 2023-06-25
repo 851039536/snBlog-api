@@ -19,7 +19,6 @@
         public virtual DbSet<Interface> Interfaces { get; set; }
         public virtual DbSet<InterfaceType> InterfaceTypes { get; set; }
         public virtual DbSet<SnComment> SnComments { get; set; }
-        public virtual DbSet<SnLeave> SnLeaves { get; set; }
         public virtual DbSet<SnNavigation> SnNavigations { get; set; }
         public virtual DbSet<SnNavigationType> SnNavigationTypes { get; set; }
         public virtual DbSet<SnPicture> SnPictures { get; set; }
@@ -371,43 +370,6 @@
                     .HasComment("用户id");
             });
 
-            modelBuilder.Entity<SnLeave>(entity => {
-                entity.ToTable("sn_leave");
-
-                entity.HasCharSet("utf8mb4")
-                    .UseCollation("utf8mb4_bin");
-
-                entity.HasIndex(e => e.UserId,"user_id");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasComment("主键");
-
-                entity.Property(e => e.Text)
-                    .IsRequired()
-                    .HasColumnType("mediumtext")
-                    .HasColumnName("text")
-                    .HasComment("留言内容");
-
-                entity.Property(e => e.TimeCreate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("time_create")
-                    .HasComment("发布时间");
-
-                entity.Property(e => e.TimeModified)
-                    .HasColumnType("datetime")
-                    .HasColumnName("time_modified");
-
-                entity.Property(e => e.UserId)
-                    .HasColumnName("user_id")
-                    .HasComment("用户外键");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.SnLeaves)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("user_id");
-            });
 
             modelBuilder.Entity<SnNavigation>(entity => {
                 entity.ToTable("sn_navigation");

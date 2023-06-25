@@ -182,7 +182,6 @@ namespace Snblog
             services.AddScoped<ISnTalkService,SnTalkService>();
             services.AddScoped<ISnTalkTypeService,SnTalkTypeService>();
             services.AddScoped<ISnNavigationTypeService,SnNavigationTypeService>();
-            services.AddScoped<ISnleaveService,SnleaveService>();
             services.AddScoped<ISnNavigationTypeService,SnNavigationTypeService>();
             services.AddScoped<IInterfaceService,InterfaceService>();
             services.AddScoped<ISnSetBlogService,SnSetBlogService>();
