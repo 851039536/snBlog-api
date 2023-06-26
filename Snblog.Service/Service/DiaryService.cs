@@ -5,8 +5,8 @@
         private string _cacheKey;
         const string NAME = "diary_";
 
-        readonly EntityData<Diary> _res = new();
-        readonly EntityDataDto<DiaryDto> _resDto = new();
+        readonly EntityData<Diary> _ret = new();
+        readonly EntityDataDto<DiaryDto> _rDto = new();
 
         private readonly CacheUtil _cache;
         private readonly snblogContext _service;
@@ -31,16 +31,16 @@
 
             if (cache)
             {
-                _resDto.Entity = _cache.GetValue(_cacheKey, _resDto.Entity);
-                if (_resDto.Entity != null) return _resDto.Entity;
+                _rDto.Entity = _cache.GetValue(_cacheKey, _rDto.Entity);
+                if (_rDto.Entity != null) return _rDto.Entity;
             }
 
-            _resDto.Entity = await _service.Diaries.SelectDiary()
+            _rDto.Entity = await _service.Diaries.SelectDiary()
                 .SingleOrDefaultAsync(b => b.Id == id);
 
-            _cache.SetValue(_cacheKey, _resDto.Entity);
+            _cache.SetValue(_cacheKey, _rDto.Entity);
 
-            return _resDto.Entity;
+            return _rDto.Entity;
         }
 
         /// <summary>
@@ -62,8 +62,8 @@
 
             if (cache)
             {
-                _resDto.EntityList = _cache.GetValue(_cacheKey, _resDto.EntityList);
-                if (_resDto.EntityList != null) return _resDto.EntityList;
+                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
             return identity switch
@@ -103,7 +103,7 @@
 
             var data = await diary.Skip((pageIndex - 1) * pageSize).Take(pageSize)
                 .SelectDiary().ToListAsync();
-            _cache.SetValue(_cacheKey, _resDto.EntityList);
+            _cache.SetValue(_cacheKey, _rDto.EntityList);
             return data;
         }
 
@@ -158,8 +158,8 @@
 
             if (cache)
             {
-                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
-                if (_res.EntityCount != 0) return _res.EntityCount;
+                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                if (_ret.EntityCount != 0) return _ret.EntityCount;
             }
 
             return identity switch
@@ -198,14 +198,14 @@
 
             if (cache)
             {
-                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
-                if (_res.EntityCount != 0) return _res.EntityCount;
+                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                if (_ret.EntityCount != 0) return _ret.EntityCount;
             }
 
-            _res.EntityCount = await _service.Diaries.CountAsync(s => s.TypeId == type);
-            _cache.SetValue(_cacheKey, _res.EntityCount);
+            _ret.EntityCount = await _service.Diaries.CountAsync(s => s.TypeId == type);
+            _cache.SetValue(_cacheKey, _ret.EntityCount);
 
-            return _res.EntityCount;
+            return _ret.EntityCount;
         }
 
         public async Task<int> GetSumAsync(string type, bool cache)
@@ -216,16 +216,16 @@
 
             if (cache)
             {
-                _res.EntityCount = _cache.GetValue(_cacheKey, _res.EntityCount);
-                if (_res.EntityCount != 0)
+                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                if (_ret.EntityCount != 0)
                 {
-                    return _res.EntityCount;
+                    return _ret.EntityCount;
                 }
             }
 
-            _res.EntityCount = await GetSum(type);
-            _cache.SetValue(_cacheKey, _res.EntityCount);
-            return _res.EntityCount;
+            _ret.EntityCount = await GetSum(type);
+            _cache.SetValue(_cacheKey, _ret.EntityCount);
+            return _ret.EntityCount;
         }
 
         private async Task<int> GetSum(string type)
@@ -283,8 +283,8 @@
 
             if (cache)
             {
-                _resDto.EntityList = _cache.GetValue(_cacheKey, _resDto.EntityList);
-                if (_resDto.EntityList != null) return _resDto.EntityList;
+                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
             return identity switch
@@ -305,12 +305,12 @@
             IQueryable<Diary> query = _service.Diaries.AsNoTracking();
             if (predicate != null)
             {
-                _resDto.EntityList = await query.Where(predicate).SelectDiary().ToListAsync();
+                _rDto.EntityList = await query.Where(predicate).SelectDiary().ToListAsync();
 
-                _cache.SetValue(_cacheKey, _resDto.EntityList);
+                _cache.SetValue(_cacheKey, _rDto.EntityList);
             }
 
-            return _resDto.EntityList;
+            return _rDto.EntityList;
         }
     }
 }

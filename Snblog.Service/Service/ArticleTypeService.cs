@@ -1,6 +1,6 @@
 ﻿namespace Snblog.Service.Service
 {
-    public class ArticleTypeService : BaseService, IArticleTypeService
+    public class ArticleTypeService :  IArticleTypeService
     {
         private readonly snblogContext _service;
         private readonly CacheUtil _cache;
@@ -17,8 +17,7 @@
 
         const string NAME = "ArticleType_";
 
-        public ArticleTypeService(IRepositoryFactory repositoryFactory, IConcardContext myContext,
-            snblogContext service, ICacheUtil cache, IMapper mapper) : base(repositoryFactory, myContext)
+        public ArticleTypeService(snblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;
@@ -32,9 +31,7 @@
         /// <returns></returns>
         public async Task<bool> DeleteAsync(int id)
         {
-            // 设置缓存键
-            _cacheKey = $"{NAME}{Common.Del}{id}";
-            Log.Information(_cacheKey);
+            Common.CacheInfo($"{NAME}{Common.Del}{id}");
 
             var ret = await _service.ArticleTypes.FindAsync(id);
             if (ret == null) return false;
@@ -51,9 +48,8 @@
         /// <returns>entity</returns>
         public async Task<ArticleTypeDto> GetByIdAsync(int id, bool cache)
         {
-            _cacheKey = $"{NAME}{Common.Bid}{id}_{cache}";
-            Log.Information(_cacheKey);
-
+            Common.CacheInfo($"{NAME}{Common.Bid}{id}_{cache}");
+            
             if (cache)
             {
                 _retDto.Entity = _cache.GetValue(_cacheKey, _retDto.Entity);

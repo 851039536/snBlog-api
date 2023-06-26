@@ -4,7 +4,7 @@
     {
         private readonly snblogContext _service;
         private readonly CacheUtil _cache;
-        private int _resultInt;
+        private int _rInt;
 
         readonly EntityData<DiaryType> _ret = new();
 
@@ -33,13 +33,13 @@
 
             if (cache)
             {
-                _resultInt = _cache.GetValue(_cacheKey, _resultInt);
-                if (_resultInt != 0) return _resultInt;
+                _rInt = _cache.GetValue(_cacheKey, _rInt);
+                if (_rInt != 0) return _rInt;
             }
 
-            _resultInt = await _service.DiaryTypes.CountAsync();
-            _cache.SetValue(_cacheKey, _resultInt);
-            return _resultInt;
+            _rInt = await _service.DiaryTypes.CountAsync();
+            _cache.SetValue(_cacheKey, _rInt);
+            return _rInt;
         }
 
         public async Task<bool> DeleteAsync(int id)

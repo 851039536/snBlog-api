@@ -5,7 +5,6 @@
         // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
         const string NAME = "article_";
 
-
         private readonly EntityData<Article> _ret = new();
         private readonly EntityDataDto<ArticleDto> _retDto = new();
 

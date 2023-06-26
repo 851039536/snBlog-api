@@ -202,7 +202,7 @@ namespace Snblog.Controllers
         /// <returns></returns>
         [Authorize(Roles = Permissions.Name)]
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateAsync(UserDto user)
+        public async Task<IActionResult> UpdateAsync(User user)
         {
             user.TimeModified = DateTime.Now;
             var data = await _service.UpdateAsync(user);

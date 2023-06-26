@@ -9,11 +9,6 @@
         /// <returns>list-entity</returns>
         Task<List<SnippetTagDto>> GetAllAsync(bool cache);
 
-        /// <summary>
-        /// 异步查询
-        /// </summary>
-        /// <returns></returns>
-        Task<List<SnippetTagDto>> AsyGetSort();
 
         /// <summary>
         /// 主键查询

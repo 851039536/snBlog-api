@@ -41,13 +41,13 @@
         /// <summary>
         /// 删除
         /// </summary>
-        Task<int> DelAsync(int userId);
+        Task<bool> DelAsync(int userId);
 
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<int> UpdateAsync(UserDto user);
+        Task<bool> UpdateAsync(User user);
     }
 }

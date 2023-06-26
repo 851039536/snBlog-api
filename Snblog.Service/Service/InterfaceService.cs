@@ -14,7 +14,7 @@
         private readonly CacheUtil _cache;
 
         private readonly IMapper _mapper;
-        private readonly EntityDataDto<InterfaceDto> _retDto = new();
+        private readonly EntityDataDto<InterfaceDto> _rDto = new();
 
 
         public InterfaceService(snblogContext service, ICacheUtil cache, IMapper mapper)
@@ -38,28 +38,28 @@
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(_cacheKey, _retDto.EntityList);
-                if (_retDto.EntityList != null) return _retDto.EntityList;
+                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
             switch (identity)
             {
                 case 0:
-                    _retDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
+                    _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
                         .Where(s => s.Type.Name == type && s.User.Name == userName).AsNoTracking().ToListAsync());
                     break;
                 case 1:
-                    _retDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
+                    _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
                         .Where(s => s.User.Name == userName).AsNoTracking().ToListAsync());
                     break;
                 case 2:
-                    _retDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
+                    _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
                         .Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
                     break;
             }
 
-            _cache.SetValue(_cacheKey, _retDto.EntityList);
-            return _retDto.EntityList;
+            _cache.SetValue(_cacheKey, _rDto.EntityList);
+            return _rDto.EntityList;
         }
 
 
@@ -77,7 +77,7 @@
 
             var data = await interfaces.Skip((pageIndex - 1) * pageSize).Take(pageSize).SelectInterface()
                 .AsNoTracking().ToListAsync();
-            _cache.SetValue(_cacheKey, _retDto.EntityList);
+            _cache.SetValue(_cacheKey, _rDto.EntityList);
             return data;
         }
 
@@ -98,10 +98,10 @@
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(_cacheKey, _retDto.EntityList);
-                if (_retDto.EntityList != null)
+                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                if (_rDto.EntityList != null)
                 {
-                    return _retDto.EntityList;
+                    return _rDto.EntityList;
                 }
             }
 
@@ -122,7 +122,7 @@
                         w => w.User.Name == sName[0] && w.Type.Name == sName[1]);
             }
 
-            return _retDto.EntityList;
+            return _rDto.EntityList;
         }
 
         public async Task<bool> AddAsync(Interface entity)
@@ -163,13 +163,13 @@
 
             if (cache)
             {
-                _retDto.Entity = _cache.GetValue(_cacheKey, _retDto.Entity);
-                if (_retDto.Entity != null) return _retDto.Entity;
+                _rDto.Entity = _cache.GetValue(_cacheKey, _rDto.Entity);
+                if (_rDto.Entity != null) return _rDto.Entity;
             }
 
-            _retDto.Entity = _mapper.Map<InterfaceDto>(await _service.Interfaces.FindAsync(id));
-            _cache.SetValue(_cacheKey, _retDto.Entity);
-            return _retDto.Entity;
+            _rDto.Entity = _mapper.Map<InterfaceDto>(await _service.Interfaces.FindAsync(id));
+            _cache.SetValue(_cacheKey, _rDto.Entity);
+            return _rDto.Entity;
         }
     }
 }
