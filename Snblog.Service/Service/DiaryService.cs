@@ -26,7 +26,7 @@
         /// <returns></returns>
         public async Task<DiaryDto> GetByIdAsync(int id, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.BYID}{id}";
+            _cacheKey = $"{NAME}{Common.Bid}{id}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -57,7 +57,7 @@
             string ordering, bool isDesc, bool cache)
         {
             _cacheKey =
-                $"{NAME}{ConstantString.PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
+                $"{NAME}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -114,7 +114,7 @@
         /// <returns></returns>
         public async Task<bool> DelAsync(int id)
         {
-            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            _cacheKey = $"{NAME}{Common.Del}{id}";
             Log.Information(_cacheKey);
 
             var result = await _service.Diaries.FindAsync(id);
@@ -130,7 +130,7 @@
         /// <returns></returns>
         public async Task<bool> AddAsync(Diary entity)
         {
-            _cacheKey = $"{NAME}{ConstantString.ADD}{entity}";
+            _cacheKey = $"{NAME}{Common.Add}{entity}";
             Log.Information(_cacheKey);
             _service.Diaries.Add(entity);
             return await _service.SaveChangesAsync() > 0;
@@ -138,7 +138,7 @@
 
         public async Task<bool> UpdateAsync(Diary entity)
         {
-            _cacheKey = $"{NAME}{ConstantString.UP}{entity}";
+            _cacheKey = $"{NAME}{Common.Up}{entity}";
             Log.Information(_cacheKey);
             _service.Diaries.Update(entity);
             return await _service.SaveChangesAsync() > 0;
@@ -153,7 +153,7 @@
         /// <returns>int</returns>
         public async Task<int> GetSumAsync(int identity, string type, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.SUM}{identity}_{type}_{cache}";
+            _cacheKey = $"{NAME}{Common.Sum}{identity}_{type}_{cache}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -193,7 +193,7 @@
 
         public async Task<int> CountTypeAsync(int type, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.SUM}{type}_{cache}";
+            _cacheKey = $"{NAME}{Common.Sum}{type}_{cache}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -210,7 +210,7 @@
 
         public async Task<int> GetSumAsync(string type, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.SUM}{type}_{cache}";
+            _cacheKey = $"{NAME}{Common.Sum}{type}_{cache}";
 
             Log.Information(_cacheKey);
 
@@ -253,7 +253,7 @@
 
         public async Task<bool> UpdatePortionAsync(Diary entity, string typeName)
         {
-            _cacheKey = $"{NAME}{ConstantString.UP_PORTIOG}{typeName}_{entity}";
+            _cacheKey = $"{NAME}{Common.UpPortiog}{typeName}_{entity}";
             Log.Information(_cacheKey);
 
             var result = await _service.Diaries.FindAsync(entity.Id);
@@ -278,7 +278,7 @@
         public async Task<List<DiaryDto>> GetContainsAsync(int identity, string type, string name, bool cache)
         {
             var upNames = name.ToUpper();
-            _cacheKey = $"{NAME}{ConstantString.CONTAINS}{identity}_{type}_{name}_{cache}";
+            _cacheKey = $"{NAME}{Common.Contains}{identity}_{type}_{name}_{cache}";
             Log.Information(_cacheKey);
 
             if (cache)

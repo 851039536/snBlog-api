@@ -10,12 +10,6 @@
         Task<List<SnippetLabelDto>> GetAllAsync(bool cache);
 
         /// <summary>
-        /// 异步查询
-        /// </summary>
-        /// <returns></returns>
-        Task<List<SnippetLabelDto>> AsyGetSort();
-
-        /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id">主键</param>
@@ -31,7 +25,7 @@
         /// <param name="isDesc">是否倒序</param>
         /// <param name="cache">缓存</param>
         /// <returns>list-entity</returns>
-        Task<List<SnippetLabelDto>> GetPagingAsync(int pageInde,int pageSize,bool isDesc,bool cache);
+        Task<List<SnippetLabelDto>> GetPagingAsync(int pageIndex,int pageSize,bool isDesc,bool cache);
 
         /// <summary>
         /// 查询总数
@@ -50,7 +44,7 @@
         /// </summary>
         /// <param name="entity">实体</param>
         /// <returns>bool</returns>
-        Task<bool> UpdateAsync(SnippetLabel test);
+        Task<bool> UpdateAsync(SnippetLabel entity);
         /// <summary>
         /// 删除
         /// </summary>

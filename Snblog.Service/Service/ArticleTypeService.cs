@@ -33,7 +33,7 @@
         public async Task<bool> DeleteAsync(int id)
         {
             // 设置缓存键
-            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            _cacheKey = $"{NAME}{Common.Del}{id}";
             Log.Information(_cacheKey);
 
             var ret = await _service.ArticleTypes.FindAsync(id);
@@ -51,7 +51,7 @@
         /// <returns>entity</returns>
         public async Task<ArticleTypeDto> GetByIdAsync(int id, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
+            _cacheKey = $"{NAME}{Common.Bid}{id}_{cache}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -72,7 +72,7 @@
         /// <returns>bool</returns>
         public async Task<bool> AddAsync(ArticleType entity)
         {
-            Log.Information("{ArticleType}{Add}{@Entity}", NAME, ConstantString.ADD, entity);
+            Log.Information("{ArticleType}{Add}{@Entity}", NAME, Common.Add, entity);
 
             await _service.ArticleTypes.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
@@ -80,7 +80,7 @@
 
         public async Task<bool> UpdateAsync(ArticleType entity)
         {
-            Log.Information($"{NAME}{ConstantString.UP}{entity}");
+            Log.Information($"{NAME}{Common.Up}{entity}");
 
             _service.ArticleTypes.Update(entity);
             return await _service.SaveChangesAsync() > 0;
@@ -96,7 +96,7 @@
         /// <returns>list-entity</returns>
         public async Task<List<ArticleTypeDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}";
+            _cacheKey = $"{NAME}{Common.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -128,7 +128,7 @@
 
         public async Task<List<ArticleTypeDto>> GetAllAsync(bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.ALL}{cache}";
+            _cacheKey = $"{NAME}{Common.All}{cache}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -152,7 +152,7 @@
         /// <returns>int</returns>
         public async Task<int> GetSumAsync(bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.SUM}{cache}";
+            _cacheKey = $"{NAME}{Common.Sum}{cache}";
             Log.Information(_cacheKey);
             if (cache)
             {

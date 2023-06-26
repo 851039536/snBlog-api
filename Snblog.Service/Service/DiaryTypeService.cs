@@ -19,7 +19,7 @@
 
         public async Task<bool> AddAsync(DiaryType entity)
         {
-            Log.Information($"{NAME}{ConstantString.ADD}{entity}");
+            Log.Information($"{NAME}{Common.Add}{entity}");
 
             await _service.DiaryTypes.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
@@ -27,7 +27,7 @@
 
         public async Task<int> GetSumAsync(bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.SUM}{cache}";
+            _cacheKey = $"{NAME}{Common.Sum}{cache}";
             Log.Information(_cacheKey);
 
 
@@ -44,7 +44,7 @@
 
         public async Task<bool> DeleteAsync(int id)
         {
-            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            _cacheKey = $"{NAME}{Common.Del}{id}";
             Log.Information(_cacheKey);
 
             var ret = await _service.DiaryTypes.FindAsync(id);
@@ -56,7 +56,7 @@
 
         public async Task<List<DiaryType>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}";
+            _cacheKey = $"{NAME}{Common.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -86,7 +86,7 @@
 
         public async Task<DiaryType> GetByIdAsync(int id, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
+            _cacheKey = $"{NAME}{Common.Bid}{id}_{cache}";
             Log.Information(_cacheKey);
             DiaryType diaryType;
 
@@ -103,7 +103,7 @@
 
         public async Task<DiaryType> GetTypeAsync(int type, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.BYID}{type}_{cache}";
+            _cacheKey = $"{NAME}{Common.Bid}{type}_{cache}";
             Log.Information(_cacheKey);
 
             DiaryType diaryType;
@@ -120,7 +120,7 @@
 
         public async Task<bool> UpdateAsync(DiaryType entity)
         {
-            _cacheKey = $"{NAME}{ConstantString.UP}{entity.Id}";
+            _cacheKey = $"{NAME}{Common.Up}{entity.Id}";
             Log.Information(_cacheKey);
 
             _service.DiaryTypes.Update(entity);

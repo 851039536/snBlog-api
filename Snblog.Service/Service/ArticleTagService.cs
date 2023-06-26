@@ -27,7 +27,7 @@
 
         public async Task<bool> DeleteAsync(int id)
         {
-            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
+            _cacheKey = $"{NAME}{Common.Del}{id}";
             Log.Information(_cacheKey);
 
             ArticleTag result = await _service.ArticleTags.FindAsync(id);
@@ -40,8 +40,8 @@
 
         public async Task<ArticleTagDto> GetByIdAsync(int id, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
-            Log.Information($"{NAME}{ConstantString.BYID}{id}{cache}");
+            _cacheKey = $"{NAME}{Common.Bid}{id}_{cache}";
+            Log.Information($"{NAME}{Common.Bid}{id}{cache}");
 
             if (cache)
             {
@@ -64,7 +64,7 @@
 
         public async Task<bool> UpdateAsync(ArticleTag entity)
         {
-            Log.Information($"{NAME}{ConstantString.UP}{entity}");
+            Log.Information($"{NAME}{Common.Up}{entity}");
 
             _service.ArticleTags.Update(entity);
             return await _service.SaveChangesAsync() > 0;
@@ -80,7 +80,7 @@
         /// <returns>list-entity</returns>
         public async Task<List<ArticleTagDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}";
+            _cacheKey = $"{NAME}{Common.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}";
             Log.Information(_cacheKey);
 
             if (cache)
@@ -111,7 +111,7 @@
 
         public async Task<int> GetSumAsync(bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.SUM}{cache}";
+            _cacheKey = $"{NAME}{Common.Sum}{cache}";
             Log.Information(_cacheKey);
 
             if (cache)

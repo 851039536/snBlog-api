@@ -5,10 +5,6 @@
         // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
         const string NAME = "article_";
 
-        /// <summary>
-        /// 缓存Key
-        /// </summary>
-        private string _cacheKey;
 
         private readonly EntityData<Article> _ret = new();
         private readonly EntityDataDto<ArticleDto> _retDto = new();
@@ -31,10 +27,8 @@
 
         public async Task<bool> DelAsync(int id)
         {
-            // 设置缓存键
-            _cacheKey = $"{NAME}{ConstantString.DEL}{id}";
-            // 记录日志
-            Log.Information(_cacheKey);
+            // 设置缓存键,记录日志
+            Common.CacheInfo($"{NAME}{Common.Del}{id}");
 
             // 通过id查找文章
             Article result = await _service.Articles.FindAsync(id);
@@ -52,31 +46,27 @@
 
         public async Task<ArticleDto> GetByIdAsync(int id, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.BYID}{id}_{cache}";
-            Log.Information(_cacheKey);
-
+            Common.CacheInfo($"{NAME}{Common.Bid}{id}_{cache}");
             if (cache)
             {
-                _retDto.Entity = _cache.GetValue(_cacheKey, _retDto.Entity);
+                _retDto.Entity = _cache.GetValue(Common.CacheKey, _retDto.Entity);
                 if (_retDto.Entity != null) return _retDto.Entity;
             }
 
             _retDto.Entity = await _service.Articles
                 .SelectArticle()
                 .SingleOrDefaultAsync(b => b.Id == id);
-            _cache.SetValue(_cacheKey, _retDto.Entity);
+            _cache.SetValue(Common.CacheKey, _retDto.Entity);
             return _retDto.Entity;
         }
 
         public async Task<List<ArticleDto>> GetTypeAsync(int identity, string type, bool cache)
         {
-            _cacheKey = $"{NAME}{identity}_{type}_{cache}";
-
-            Log.Information(_cacheKey);
+            Common.CacheInfo($"{NAME}{Common.Bid}{identity}_{type}_{cache}");
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(_cacheKey, _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue(Common.CacheKey, _retDto.EntityList);
                 if (_retDto.EntityList != null)
                 {
                     return _retDto.EntityList;
@@ -100,13 +90,14 @@
                     .ToListAsync();
             }
 
-            _cache.SetValue(_cacheKey, _retDto.EntityList);
+            _cache.SetValue(Common.CacheKey, _retDto.EntityList);
             return _retDto.EntityList;
         }
 
         public async Task<bool> AddAsync(Article entity)
         {
-            Log.Information("{Article}{Add}{@Entity}", NAME, ConstantString.ADD, entity);
+            Common.CacheInfo($"{NAME}{Common.Add}{entity}");
+
             entity.TimeCreate = entity.TimeModified = DateTime.Now;
             //此方法中的异步添加改为同步添加，因为 SaveChangesAsync 方法已经是异步的，不需要再使用异步添加
             _service.Articles.Add(entity);
@@ -115,7 +106,7 @@
 
         public async Task<bool> UpdateAsync(Article entity)
         {
-            Log.Information($"{NAME}{ConstantString.UP}{entity}");
+            Common.CacheInfo($"{NAME}{Common.Up}{entity}");
 
             entity.TimeModified = DateTime.Now; //更新时间
 
@@ -144,12 +135,11 @@
 
         public async Task<int> GetSumAsync(int identity, string type, bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.SUM}{identity}_{type}_{cache}";
-            Log.Information(_cacheKey);
+            Common.CacheInfo($"{NAME}{Common.Sum}{identity}_{type}_{cache}");
 
             if (cache)
             {
-                int sum = _cache.GetValue(_cacheKey, 0);
+                int sum = _cache.GetValue(Common.CacheKey, 0);
                 if (sum != 0)
                 {
                     //通过entityInt 值是否为 0 判断结果是否被缓存
@@ -184,7 +174,7 @@
             try
             {
                 int count = await query.CountAsync();
-                _cache.SetValue(_cacheKey, count); //设置缓存
+                _cache.SetValue(Common.CacheKey, count); //设置缓存
                 return count;
             }
             catch
@@ -195,17 +185,16 @@
 
         public async Task<List<ArticleDto>> GetAllAsync(bool cache)
         {
-            _cacheKey = $"{NAME}{ConstantString.ALL}{cache}";
-            Log.Information(_cacheKey);
+            Common.CacheInfo($"{NAME}{Common.All}{cache}");
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(_cacheKey, _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue(Common.CacheKey, _retDto.EntityList);
                 if (_retDto.EntityList != null) return _retDto.EntityList;
             }
 
             var data = await _service.Articles.SelectArticle().ToListAsync();
-            _cache.SetValue(_cacheKey, _retDto.EntityList);
+            _cache.SetValue(Common.CacheKey, _retDto.EntityList);
             return data;
         }
 
@@ -219,12 +208,11 @@
         /// <returns>int</returns>
         public async Task<int> GetStrSumAsync(int identity, int type, string name, bool cache)
         {
-            _cacheKey = $"{NAME}统计{identity}_{type}_{name}_{cache}";
-            Log.Information(_cacheKey);
+            Common.CacheInfo($"{NAME}统计{identity}_{type}_{name}_{cache}");
 
             if (cache)
             {
-                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                _ret.EntityCount = _cache.GetValue(Common.CacheKey, _ret.EntityCount);
                 if (_ret.EntityCount != 0)
                 {
                     return _ret.EntityCount;
@@ -247,7 +235,7 @@
                     break;
             }
 
-            _cache.SetValue(_cacheKey, _ret.EntityCount);
+            _cache.SetValue(Common.CacheKey, _ret.EntityCount);
             return _ret.EntityCount;
         }
 
@@ -288,13 +276,12 @@
         public async Task<List<ArticleDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
             string ordering, bool isDesc, bool cache)
         {
-            _cacheKey =
-                $"{NAME}{ConstantString.PAGING}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}";
-            Log.Information(_cacheKey);
+            Common.CacheInfo(
+                $"{NAME}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(_cacheKey, _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue(Common.CacheKey, _retDto.EntityList);
                 if (_retDto.EntityList != null)
                 {
                     return _retDto.EntityList;
@@ -352,14 +339,14 @@
 
             var data = await articles.Skip((pageIndex - 1) * pageSize).Take(pageSize)
                 .SelectArticle().ToListAsync();
-            _cache.SetValue(_cacheKey, _retDto.EntityList);
+            _cache.SetValue(Common.CacheKey, _retDto.EntityList);
             return data;
         }
 
 
         public async Task<bool> UpdatePortionAsync(Article entity, string type)
         {
-            Log.Information("Article更新部分参数");
+            Common.CacheInfo($"{NAME}{Common.UpPortiog}{entity.Id}_{type}");
             var result = await _service.Articles.FindAsync(entity.Id);
             if (result == null) return false;
 
@@ -389,12 +376,12 @@
         public async Task<List<ArticleDto>> GetContainsAsync(int identity, string type, string name, bool cache)
         {
             var upNames = name.ToUpper();
-            _cacheKey = $"{NAME}{ConstantString.CONTAINS}{identity}_{type}_{name}_{cache}";
-            Log.Information(_cacheKey);
+
+            Common.CacheInfo($"{NAME}{Common.Contains}{identity}_{type}_{name}_{cache}");
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(_cacheKey, _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue(Common.CacheKey, _retDto.EntityList);
                 if (_retDto.EntityList != null)
                 {
                     return _retDto.EntityList;
@@ -422,7 +409,7 @@
             }
 
             _retDto.EntityList = await _service.Articles.Where(predicate).SelectArticle().ToListAsync();
-            _cache.SetValue(_cacheKey, _retDto.EntityList); //设置缓存
+            _cache.SetValue(Common.CacheKey, _retDto.EntityList); //设置缓存
             return _retDto.EntityList;
         }
     }

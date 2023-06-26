@@ -1,33 +1,21 @@
-﻿using Microsoft.Extensions.Logging;
-using Snblog.IService;
-
-namespace Snblog.Service.Service
+﻿namespace Snblog.Service.Service
 {
-    public class SnippetLabelService : BaseService, ISnippetLabelService
-        {
-
+    public class SnippetLabelService : ISnippetLabelService
+    {
         private readonly snblogContext _service;
-        private readonly CacheUtil _cacheutil;
+        private readonly CacheUtil _cache;
 
-        private readonly EntityData<SnippetLabel> res = new();
-        private readonly EntityDataDto<SnippetLabelDto> rDto = new();
-        private readonly ILogger<SnippetLabel> _logger;
+
+        private readonly EntityData<SnippetLabel> _ret = new();
+        private readonly EntityDataDto<SnippetLabelDto> _rDto = new();
         private readonly IMapper _mapper;
 
         const string NAME = "SnippetLabel_";
-        const string BYID = "BYID_";
-        const string SUM = "SUM_";
-        const string CONTAINS = "CONTAINS_";
-        const string PAGING = "PAGING_";
-        const string ALL = "ALL_";
-        const string DEL = "DEL_";
-        const string ADD = "ADD_";
-        const string UP = "UP_";
-        public SnippetLabelService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, snblogContext service, ICacheUtil cacheutil, ILogger<SnippetLabel> logger, IMapper mapper) : base(repositoryFactory, mydbcontext)
+
+        public SnippetLabelService(snblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
-            _cacheutil = (CacheUtil)cacheutil;
-            _logger = logger;
+            _cache = (CacheUtil)cache;
             _mapper = mapper;
         }
 
@@ -38,17 +26,14 @@ namespace Snblog.Service.Service
         /// <returns>bool</returns>
         public async Task<bool> DeleteAsync(int id)
         {
+            Common.CacheInfo($"{NAME}{Common.Del}{id}");
+
             var result = await _service.SnippetTypes.FindAsync(id);
             if (result == null) return false;
             _service.SnippetTypes.Remove(result);
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<SnippetLabelDto>> AsyGetSort()
-        {
-            var data = CreateService<SnippetLabelDto>();
-            return await data.GetAll().ToListAsync();
-        }
 
         /// <summary>
         /// 主键查询
@@ -58,13 +43,18 @@ namespace Snblog.Service.Service
         /// <returns>entity</returns>
         public async Task<SnippetLabelDto> GetByIdAsync(int id, bool cache)
         {
-            Log.Information($"{NAME}{BYID}{id}_{cache}");
-            rDto.Entity = _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}{id}", rDto.Entity, cache);
-            if (res.Entity != null) return rDto.Entity;
-            rDto.Entity = _mapper.Map<SnippetLabelDto>(await _service.SnippetLabels.FindAsync(id));
-            _cacheutil.CacheString($"{NAME}{BYID}{id}{cache}", rDto.Entity, cache);
-            return rDto.Entity;
+            Common.CacheInfo($"{NAME}{Common.Bid}{id}_{cache}");
+            if (cache)
+            {
+                _rDto.Entity = _cache.GetValue(Common.CacheKey, _rDto.Entity);
+                if (_rDto.Entity != null) return _rDto.Entity;
+            }
+
+            _rDto.Entity = _mapper.Map<SnippetLabelDto>(await _service.SnippetLabels.FindAsync(id));
+            _cache.SetValue(Common.CacheKey, _rDto.Entity);
+            return _rDto.Entity;
         }
+
 
         /// <summary>
         ///  添加 
@@ -73,10 +63,12 @@ namespace Snblog.Service.Service
         /// <returns>bool</returns>
         public async Task<bool> AddAsync(SnippetLabel entity)
         {
+            Common.CacheInfo($"{NAME}{Common.Add}{entity}");
+
             await _service.SnippetLabels.AddAsync(entity);
             return await _service.SaveChangesAsync() > 0;
-
         }
+
         /// <summary>
         /// 更新
         /// </summary>
@@ -84,9 +76,11 @@ namespace Snblog.Service.Service
         /// <returns>bool</returns>
         public async Task<bool> UpdateAsync(SnippetLabel entity)
         {
+            Common.CacheInfo($"{NAME}{Common.Up}{entity}");
             _service.SnippetLabels.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
+
         /// <summary>
         /// 分页查询 
         /// </summary>
@@ -97,17 +91,26 @@ namespace Snblog.Service.Service
         /// <returns>list-entity</returns>
         public async Task<List<SnippetLabelDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
         {
-            Log.Information($"{NAME}{PAGING}{pageIndex}_{pageSize}_{isDesc}_{cache}");
-            rDto.EntityList = _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.EntityList, cache);
-            if (res.EntityList != null) return rDto.EntityList;
-            //await QPaging(pageIndex, pageSize, isDesc);
-            if (isDesc) {
-               rDto.EntityList = _mapper.Map<List<SnippetLabelDto>>(await _service.SnippetLabels.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
-                } else {
-               rDto.EntityList = _mapper.Map<List<SnippetLabelDto>>(await _service.SnippetLabels.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
-                }
-            _cacheutil.CacheString($"{NAME}{PAGING}{pageIndex}{pageSize}{isDesc}{cache}", rDto.EntityList, cache);
-            return rDto.EntityList;
+            Common.CacheInfo($"{NAME}{Common.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
+            if (cache)
+            {
+                _rDto.EntityList = _cache.GetValue(Common.CacheKey, _rDto.EntityList);
+                if (_rDto.EntityList != null) return _rDto.EntityList;
+            }
+
+            if (isDesc)
+            {
+                _rDto.EntityList = _mapper.Map<List<SnippetLabelDto>>(await _service.SnippetLabels
+                    .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
+            }
+            else
+            {
+                _rDto.EntityList = _mapper.Map<List<SnippetLabelDto>>(await _service.SnippetLabels.OrderBy(c => c.Id)
+                    .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
+            }
+
+            _cache.SetValue(Common.CacheKey, _rDto.EntityList);
+            return _rDto.EntityList;
         }
 
         /// <summary>
@@ -117,13 +120,15 @@ namespace Snblog.Service.Service
         /// <returns>list-entity</returns>
         public async Task<List<SnippetLabelDto>> GetAllAsync(bool cache)
         {
-            Log.Information($"{NAME}{ALL}", cache);
-            rDto.EntityList = _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.EntityList, cache);
-            if (rDto.EntityList != null) return rDto.EntityList;
-            rDto.EntityList = _mapper.Map<List<SnippetLabelDto>>(await _service.SnippetLabels.AsNoTracking().ToListAsync());
-            _cacheutil.CacheString($"{NAME}{ALL}{cache}", rDto.EntityList, cache);
-            return rDto.EntityList;
+            Common.CacheInfo($"{NAME}{Common.All}{cache}");
+            _rDto.EntityList = _cache.GetValue(Common.CacheKey, _rDto.EntityList);
+            if (_rDto.EntityList != null) return _rDto.EntityList;
+            _rDto.EntityList =
+                _mapper.Map<List<SnippetLabelDto>>(await _service.SnippetLabels.AsNoTracking().ToListAsync());
+            _cache.SetValue(Common.CacheKey, _rDto.EntityList);
+            return _rDto.EntityList;
         }
+
         /// <summary>
         /// 查询总数
         /// </summary>
@@ -131,12 +136,15 @@ namespace Snblog.Service.Service
         /// <returns>int</returns>
         public async Task<int> GetSumAsync(bool cache)
         {
-            Log.Information($"{NAME}{SUM}{cache}");
-            res.EntityCount = _cacheutil.CacheNumber($"{NAME}{SUM}{cache}", res.EntityCount, cache);
-            if (res.EntityCount != 0) return res.EntityCount;
-            res.EntityCount = await _service.SnippetLabels.AsNoTracking().CountAsync();
-            _cacheutil.CacheNumber($"{NAME}{SUM}{cache}", res.EntityCount, cache);
-            return res.EntityCount;
+            Common.CacheInfo($"{NAME}{Common.Sum}{cache}");
+
+            _ret.EntityCount = _cache.GetValue(Common.CacheKey, _ret.EntityCount);
+
+            if (_ret.EntityCount != 0) return _ret.EntityCount;
+            _ret.EntityCount = await _service.SnippetLabels.AsNoTracking().CountAsync();
+            _cache.SetValue(Common.CacheKey, _ret.EntityCount);
+
+            return _ret.EntityCount;
         }
     }
 }
