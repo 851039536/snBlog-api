@@ -7,6 +7,9 @@ namespace Snblog.Enties.Validator
     /// </summary>
     public class ArticleValidator :AbstractValidator<Article>
     {
+        /// <summary>
+        /// Article数据校验
+        /// </summary>
         public ArticleValidator()
         {
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);

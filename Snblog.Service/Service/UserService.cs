@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Snblog.Service
+namespace Snblog.Service.Service
 {
-    public class UserService : BaseService, IUserService
+    public class UserService :  IUserService
     {
-        private readonly CacheUtil _cacheutil;
+        private readonly CacheUtil _cache;
         private readonly snblogContext _service;
-        private readonly ILogger<UserService> _logger;
-        private int rInt;
-        private UserDto rDto = default;
-        private List<UserDto> rListDto = default;
+        private int _rInt;
+        private UserDto _rDto = default;
+        private List<UserDto> _rListDto = default;
         // 创建一个字段来存储mapper对象
         private readonly IMapper _mapper;
 
@@ -20,30 +19,40 @@ namespace Snblog.Service
         const string DEL = "DEL_";
         const string ADD = "ADD";
         const string UPDATE = "UPDATE_";
-        public UserService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext, snblogContext service, IMapper mapper, ILogger<UserService> logger, ICacheUtil cacheutil) : base(repositoryFactory, mydbcontext)
+        public UserService( snblogContext service, IMapper mapper, ICacheUtil cache) 
         {
             _service = service;
             _mapper = mapper;
-            _logger = logger;
-            _cacheutil = (CacheUtil)cacheutil;
+            _cache = (CacheUtil)cache;
         }
 
-        public async Task<int> DelAsync(int id)
+        public async Task<bool> DelAsync(int id)
         {
-            Log.Information($"{NAME}{DEL}{id}");
-            return await CreateService<User>().DelAsync(id);
+            Common.CacheInfo($"{NAME}{Common.Del}{id}");
+
+            // 通过id查找文章
+            var user = await _service.Users.FindAsync(id);
+
+            // 如果文章不存在，返回false
+            if (user == null) return false;
+
+            _service.Users.Remove(user); //删除单个
+            _service.Remove(user); //直接在context上Remove()方法传入model，它会判断类型
+
+            // 保存更改
+            return await _service.SaveChangesAsync() > 0;
         }
 
         public async Task<UserDto> GetByIdAsync(int id, bool cache)
         {
             Log.Information($"{NAME}{BYID}{id}_{cache}");
-            rDto = _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}", rDto, cache);
-            if (rDto == null)
+            _rDto = _cache.CacheString($"{NAME}{BYID}{id}_{cache}", _rDto, cache);
+            if (_rDto == null)
             {
-                rDto = _mapper.Map<UserDto>(await _service.Users.FindAsync(id));
-                _cacheutil.CacheString($"{NAME}{BYID}{id}_{cache}", rDto, cache);
+                _rDto = _mapper.Map<UserDto>(await _service.Users.FindAsync(id));
+                _cache.CacheString($"{NAME}{BYID}{id}_{cache}", _rDto, cache);
             }
-            return rDto;
+            return _rDto;
         }
 
         public async Task<int> AddAsync(User entity)
@@ -53,11 +62,11 @@ namespace Snblog.Service
             return await _service.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateAsync(UserDto entity)
+        public async Task<bool> UpdateAsync(User entity)
         {
-            Log.Information($"{NAME}{UPDATE}{entity}");
-            var model = _mapper.Map<User>(entity);
-            return await CreateService<User>().UpdateAsync(model);
+            Common.CacheInfo($"{NAME}{Common.Up}{entity}");
+            _service.Users.Update(entity);
+            return await _service.SaveChangesAsync() > 0;
         }
 
         /// <summary>
@@ -74,26 +83,26 @@ namespace Snblog.Service
         public async Task<int> GetSumAsync(bool cache)
         {
             Log.Information($"{NAME}{SUM}{cache}");
-            rInt = _cacheutil.CacheString($"{NAME}{SUM}{cache}", rInt, cache);
-            if (rInt == 0)
+            _rInt = _cache.CacheString($"{NAME}{SUM}{cache}", _rInt, cache);
+            if (_rInt == 0)
             {
-                rInt = await _service.Users.CountAsync();
-                _cacheutil.CacheString($"{NAME}{SUM}{cache}", rInt, cache);
+                _rInt = await _service.Users.CountAsync();
+                _cache.CacheString($"{NAME}{SUM}{cache}", _rInt, cache);
             }
-            return rInt;
+            return _rInt;
         }
 
         public async Task<List<UserDto>> GetContainsAsync(string name, bool cache)
         {
             Log.Information( $"{NAME}{CONTAINS}{name}{cache}");
-            rListDto = _cacheutil.CacheString($"{NAME}{CONTAINS}{name}{cache}", rListDto, cache);
-            if (rListDto == null)
+            _rListDto = _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}", _rListDto, cache);
+            if (_rListDto == null)
             {
                 var res = await _service.Users.Where(u => u.Name.Contains(name) || u.Nickname.Contains(name)).AsNoTracking().ToListAsync();
-                rListDto = _mapper.Map<List<UserDto>>(res);
-                _cacheutil.CacheString($"{NAME}{CONTAINS}{name}{cache}", rListDto, cache);
+                _rListDto = _mapper.Map<List<UserDto>>(res);
+                _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}", _rListDto, cache);
             }
-            return rListDto;
+            return _rListDto;
         }
     }
 }

@@ -2,9 +2,9 @@
 {
     public class RepositoryFactory : IRepositoryFactory
     {
-        public IRepositorys<T> CreateRepository<T>(IConcardContext mydbcontext) where T : class
+        public IRepositorys<T> CreateRepository<T>(IConcardContext myDbContext) where T : class
         {
-            return new Repositorys<T>(mydbcontext);
+            return new Repositorys<T>(myDbContext);
         }
     }
 }

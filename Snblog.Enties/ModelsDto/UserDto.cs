@@ -1,8 +1,4 @@
-﻿using Snblog.Enties.Models;
-using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿#nullable disable
 
 namespace Snblog.Enties.ModelsDto
 {
@@ -18,7 +14,6 @@ namespace Snblog.Enties.ModelsDto
         {
             Articles = new HashSet<Article>();
             Interfaces = new HashSet<Interface>();
-            SnLeaves = new HashSet<SnLeave>();
             SnNavigations = new HashSet<SnNavigation>();
             Diaries = new HashSet<Diary>();
             SnPictures = new HashSet<SnPicture>();
@@ -71,7 +66,6 @@ namespace Snblog.Enties.ModelsDto
 
         public virtual ICollection<Article> Articles { get; set; }
         public virtual ICollection<Interface> Interfaces { get; set; }
-        public virtual ICollection<SnLeave> SnLeaves { get; set; }
         public virtual ICollection<SnNavigation> SnNavigations { get; set; }
         public virtual ICollection<Diary> Diaries { get; set; }
         public virtual ICollection<SnPicture> SnPictures { get; set; }

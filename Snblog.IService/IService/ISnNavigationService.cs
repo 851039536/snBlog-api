@@ -43,7 +43,7 @@
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间 按id排序]</param>
-        Task<List<SnNavigationDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
+        Task<List<SnNavigationDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
         /// <summary>
         /// 模糊查询
         /// </summary>

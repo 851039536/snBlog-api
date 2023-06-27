@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
 {
+    /// <summary>
+    /// SnNavigation对象映射关系
+    /// </summary>
     public class SnNavigationMappe : Profile
     {
         /// <summary>

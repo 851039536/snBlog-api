@@ -3,7 +3,7 @@
 namespace Snblog.Controllers
 {
     /// <summary>
-    /// InterfaceController
+    /// 路由导航
     /// </summary>
     [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
@@ -31,7 +31,7 @@ namespace Snblog.Controllers
         /// <param name="id">主键</param>
         /// <param name="cache">启缓存</param>
         /// <returns></returns>
-        [HttpGet("byid")]
+        [HttpGet("bid")]
         public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
         {
             var data = await _service.GetByIdAsync(id,cache);
@@ -65,12 +65,11 @@ namespace Snblog.Controllers
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">排序</param>
         /// <param name="cache">缓存</param>
-        /// <param name="ordering">排序条件[按id排序]</param>
         /// <returns>list-entity</returns>
         [HttpGet("paging")]
-        public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false)
+        public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
         {
-            var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache);
+            var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,isDesc,cache);
             return ApiResponse(cache: cache,data: data);
         }
         #endregion

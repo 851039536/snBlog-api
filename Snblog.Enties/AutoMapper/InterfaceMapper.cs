@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
 {
+    /// <summary>
+    /// Interface对象映射关系
+    /// </summary>
     public class InterfaceMapper : Profile
     {
         /// <summary>

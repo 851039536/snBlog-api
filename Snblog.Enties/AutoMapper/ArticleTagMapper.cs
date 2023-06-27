@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
 {
+    /// <summary>
+    /// ArticleTag对象映射关系
+    /// </summary>
     public class ArticleTagMapper : Profile
     {
         /// <summary>

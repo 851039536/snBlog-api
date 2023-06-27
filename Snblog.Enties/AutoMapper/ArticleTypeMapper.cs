@@ -1,5 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
 {
+    /// <summary>
+    /// ArticleType对象映射关系
+    /// </summary>
     public class ArticleTypeMapper : Profile
     {
         /// <summary>

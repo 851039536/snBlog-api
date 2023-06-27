@@ -25,9 +25,8 @@
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">排序</param>
         /// <param name="cache">缓存</param>
-        /// <param name="ordering">排序条件[按id排序]</param>
         /// <returns>list-entity</returns>
-        public Task<List<InterfaceDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache);
+        public Task<List<InterfaceDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,  bool isDesc, bool cache);
 
 
         /// <summary>

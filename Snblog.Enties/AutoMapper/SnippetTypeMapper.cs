@@ -1,6 +1,9 @@
 ﻿
 namespace Snblog.Enties.AutoMapper
     {
+        /// <summary>
+        /// SnippetType对象映射关系
+        /// </summary>
     public class SnippetTypeMapper : Profile
     {
         /// <summary>

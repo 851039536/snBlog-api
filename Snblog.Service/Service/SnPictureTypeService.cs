@@ -3,13 +3,13 @@
     public class SnPictureTypeService : ISnPictureTypeService
     {
         private readonly snblogContext _service;//DB
-        private readonly CacheUtil _cacheutil;
-        private int result_Int = default;
-        private List<SnPictureType> result_List = default;
-        public SnPictureTypeService(snblogContext service, ICacheUtil cacheutil)
+        private readonly CacheUtil _cache;
+        private int _resultInt;
+        private List<SnPictureType> _resultList;
+        public SnPictureTypeService(snblogContext service, ICacheUtil cache)
         {
             _service = service;
-            _cacheutil = (CacheUtil)cacheutil;
+            _cache = (CacheUtil)cache;
         }
 
 
@@ -21,26 +21,26 @@
 
         public async Task<List<SnPictureType>> GetAllAsync()
         {
-            result_List = _cacheutil.CacheString1("SnPictureType_GetAllAsync", result_List);
-            if (result_List != null)
+            _resultList = _cache.CacheString1("SnPictureType_GetAllAsync", _resultList);
+            if (_resultList != null)
             {
-                return result_List;
+                return _resultList;
             }
-            result_List = await _service.SnPictureTypes.ToListAsync();
-            _cacheutil.CacheString1("SnPictureType_GetAllAsync", result_List);
-            return result_List;
+            _resultList = await _service.SnPictureTypes.ToListAsync();
+            _cache.CacheString1("SnPictureType_GetAllAsync", _resultList);
+            return _resultList;
         }
 
         public async Task<int> CountAsync()
         {
-            result_Int = _cacheutil.CacheNumber1("SnPictureType_CountAsync", result_Int);
-            if (result_Int != 0)
+            _resultInt = _cache.CacheNumber1("SnPictureType_CountAsync", _resultInt);
+            if (_resultInt != 0)
             {
-                return result_Int;
+                return _resultInt;
             }
-            result_Int = await _service.SnPictureTypes.CountAsync();
-            _cacheutil.CacheNumber1("SnPictureType_CountAsync", result_Int);
-            return result_Int;
+            _resultInt = await _service.SnPictureTypes.CountAsync();
+            _cache.CacheNumber1("SnPictureType_CountAsync", _resultInt);
+            return _resultInt;
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -55,13 +55,13 @@
         public async Task<SnPictureType> GetByIdAsync(int id)
         {
             SnPictureType result = default;
-            result = _cacheutil.CacheString1("SnPictureType_GetByIdAsync" + id, result);
+            result = _cache.CacheString1("SnPictureType_GetByIdAsync" + id, result);
             if (result != null)
             {
                 return result;
             }
             result = await _service.SnPictureTypes.FindAsync(id);
-            _cacheutil.CacheString1("SnPictureType_GetByIdAsync" + id, result);
+            _cache.CacheString1("SnPictureType_GetByIdAsync" + id, result);
             return result;
         }
 
@@ -73,14 +73,14 @@
 
         public async Task<List<SnPictureType>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            result_List = _cacheutil.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, result_List);
-            if (result_List != null)
+            _resultList = _cache.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, _resultList);
+            if (_resultList != null)
             {
-                return result_List;
+                return _resultList;
             }
-            result_List = await GetFyAll(pageIndex, pageSize, isDesc);
-            _cacheutil.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, result_List);
-            return result_List;
+            _resultList = await GetFyAll(pageIndex, pageSize, isDesc);
+            _cache.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, _resultList);
+            return _resultList;
         }
 
         private async Task<List<SnPictureType>> GetFyAll(int pageIndex, int pageSize, bool isDesc)
