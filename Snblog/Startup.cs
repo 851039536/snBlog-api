@@ -18,6 +18,9 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Snblog
 {
+    /// <summary>
+    /// Startup
+    /// </summary>
     public class Startup
     {
 
@@ -42,6 +45,10 @@ namespace Snblog
         }
         #endregion
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -49,7 +56,10 @@ namespace Snblog
 
         private IConfiguration Configuration { get; }
 
-        //运行时将调用此方法。 使用此方法将服务添加到容器。
+        /// <summary>
+        /// 运行时将调用此方法。 使用此方法将服务添加到容器。
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson(option =>

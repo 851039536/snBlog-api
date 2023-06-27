@@ -54,15 +54,15 @@
 
         public async Task<SnPictureType> GetByIdAsync(int id)
         {
-            SnPictureType result = default;
-            result = _cache.CacheString1("SnPictureType_GetByIdAsync" + id, result);
-            if (result != null)
+            SnPictureType pictureType = default;
+            pictureType = _cache.CacheString1("SnPictureType_GetByIdAsync" + id, pictureType);
+            if (pictureType != null)
             {
-                return result;
+                return pictureType;
             }
-            result = await _service.SnPictureTypes.FindAsync(id);
-            _cache.CacheString1("SnPictureType_GetByIdAsync" + id, result);
-            return result;
+            pictureType = await _service.SnPictureTypes.FindAsync(id);
+            _cache.CacheString1("SnPictureType_GetByIdAsync" + id, pictureType);
+            return pictureType;
         }
 
         public async Task<bool> UpdateAsync(SnPictureType entity)
