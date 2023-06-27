@@ -346,7 +346,6 @@ namespace Snblog.IRepository.IRepository
         /// <param name="where">过滤条件</param>
         /// <returns></returns>
         TType Sum<TType>(Expression<Func<T, TType>> selector, Expression<Func<T, bool>> @where) where TType : new();
-
         #endregion
 
         #region 执行Sql语句
