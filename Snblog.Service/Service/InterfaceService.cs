@@ -38,7 +38,7 @@
 
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<InterfaceDto>>(_cacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
@@ -98,7 +98,7 @@
 
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<InterfaceDto>>(_cacheKey);
                 if (_rDto.EntityList != null)
                 {
                     return _rDto.EntityList;
@@ -163,7 +163,7 @@
 
             if (cache)
             {
-                _rDto.Entity = _cache.GetValue(_cacheKey, _rDto.Entity);
+                _rDto.Entity = _cache.GetValue<InterfaceDto>(_cacheKey);
                 if (_rDto.Entity != null) return _rDto.Entity;
             }
 

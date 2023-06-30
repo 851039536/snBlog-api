@@ -22,7 +22,7 @@
             Common.CacheInfo($"{NAME}{Common.Bid}{id}{cache}");
             if (cache)
             {
-                _rDto.Entity = _cache.GetValue(Common.CacheKey, _rDto.Entity);
+                _rDto.Entity = _cache.GetValue<VideoDto>(Common.CacheKey);
                 if (_rDto.Entity != null) return _rDto.Entity;
             }
 
@@ -36,7 +36,7 @@
             Common.CacheInfo($"{NAME}{Common.All}{cache}");
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(Common.CacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
@@ -205,7 +205,7 @@
             Common.CacheInfo($"{NAME}{Common.Contains}{identity}{type}{name}{cache}");
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(Common.CacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
@@ -267,7 +267,7 @@
             Common.CacheInfo($"{NAME}{Common.Paging}{identity}{pageIndex}{pageSize}{isDesc}{cache}");
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(Common.CacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 

@@ -44,7 +44,7 @@
             Common.CacheInfo($"{NAME}{Common.Bid}{id}");
             if (cache)
             {
-                _rDto.Entity = _cache.GetValue(Common.CacheKey, _rDto.Entity);
+                _rDto.Entity = _cache.GetValue<SnippetTagDto>(Common.CacheKey);
                 if (_rDto.Entity != null) return _rDto.Entity;
             }
 
@@ -90,8 +90,7 @@
             Common.CacheInfo($"{NAME}{Common.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(Common.CacheKey,
-                    _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<SnippetTagDto>>(Common.CacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
@@ -120,7 +119,7 @@
             Common.CacheInfo($"{NAME}{Common.All}{cache}");
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(Common.CacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<SnippetTagDto>>(Common.CacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
@@ -140,7 +139,7 @@
             Common.CacheInfo($"{NAME}{Common.Sum}{cache}");
             if (cache)
             {
-                _ret.EntityCount = _cache.GetValue(Common.CacheKey, _ret.EntityCount);
+                _ret.EntityCount = _cache.GetValue<int>(Common.CacheKey);
                 if (_ret.EntityCount != 0) return _ret.EntityCount;
             }
 

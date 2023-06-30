@@ -4,7 +4,7 @@
     {
         public  TimeSpan Time = new TimeSpan(00, 00, 00, 60); //缓存过期时间
         // public TimeSpan Time1  = TimeSpan.FromSeconds(3);  // 滑动缓存时间
-         IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+        readonly IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
 
 
         /// <summary>
@@ -68,9 +68,8 @@
         /// <returns></returns>
         public T Get<T>(string key)
         {
-            T value;
             //获取一个缓存（并可得到具体的缓存是否存在）
-            _cache.TryGetValue(key, out value);
+            _cache.TryGetValue(key, out T value);
             return value;
         }
 
