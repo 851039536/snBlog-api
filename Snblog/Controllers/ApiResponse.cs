@@ -1,5 +1,9 @@
 ﻿namespace Snblog.Controllers
 {
+    /// <summary>
+    /// Api返回状态
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ApiResponse<T>
     {
         /// <summary>

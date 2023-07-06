@@ -12,6 +12,10 @@ namespace Snblog.Controllers
     {
         private readonly ISnVideoTypeService _service;
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="service"></param>
         public SnVideoTypeController(ISnVideoTypeService service)
         {
             _service = service;

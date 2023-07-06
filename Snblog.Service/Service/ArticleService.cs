@@ -48,7 +48,7 @@
             Common.CacheInfo($"{NAME}{Common.Bid}{id}_{cache}");
             if (cache)
             {
-                _retDto.Entity = _cache.GetValue(Common.CacheKey, _retDto.Entity);
+                _retDto.Entity = _cache.GetValue<ArticleDto>(Common.CacheKey);
                 if (_retDto.Entity != null) return _retDto.Entity;
             }
 
@@ -65,7 +65,7 @@
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(Common.CacheKey, _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(Common.CacheKey);
                 if (_retDto.EntityList != null)
                 {
                     return _retDto.EntityList;
@@ -138,7 +138,7 @@
 
             if (cache)
             {
-                int sum = _cache.GetValue(Common.CacheKey, 0);
+                int sum = _cache.GetValue<int>(Common.CacheKey);
                 if (sum != 0)
                 {
                     //通过entityInt 值是否为 0 判断结果是否被缓存
@@ -165,8 +165,7 @@
         /// <returns>返回文章的数量</returns>
         private async Task<int> GetArticleCountAsync(Expression<Func<Article, bool>> predicate = null)
         {
-            IQueryable<Article> query = _service.Articles.AsNoTracking();
-
+            var query = _service.Articles.AsNoTracking();
             //如果有筛选条件
             if (predicate != null) query = query.Where(predicate);
 
@@ -188,7 +187,7 @@
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(Common.CacheKey, _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(Common.CacheKey);
                 if (_retDto.EntityList != null) return _retDto.EntityList;
             }
 
@@ -211,7 +210,7 @@
 
             if (cache)
             {
-                _ret.EntityCount = _cache.GetValue(Common.CacheKey, _ret.EntityCount);
+                _ret.EntityCount = _cache.GetValue<int>(Common.CacheKey);
                 if (_ret.EntityCount != 0)
                 {
                     return _ret.EntityCount;
@@ -280,7 +279,7 @@
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(Common.CacheKey, _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(Common.CacheKey);
                 if (_retDto.EntityList != null)
                 {
                     return _retDto.EntityList;
@@ -380,7 +379,7 @@
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(Common.CacheKey, _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(Common.CacheKey);
                 if (_retDto.EntityList != null)
                 {
                     return _retDto.EntityList;

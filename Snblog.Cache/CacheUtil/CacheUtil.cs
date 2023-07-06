@@ -59,12 +59,11 @@ namespace Snblog.Cache.CacheUtil
         /// </summary>
         /// <typeparam name="T">传入返回格式</typeparam>
         /// <param name="key">键</param>
-        /// <param name="value">值</param>
-        /// <returns></returns>
-        public T GetValue<T>(string key,T value)
+        /// <returns>返回传入的格式数据</returns>
+        public T GetValue<T>(string key)
         {
-            T result = _cache.Get<T>(key);
-            return result;
+            T value = _cache.Get<T>(key);
+            return value;
         }
         /// <summary>
         /// 设置缓存
@@ -75,9 +74,9 @@ namespace Snblog.Cache.CacheUtil
         /// <returns></returns>
         public T SetValue<T>(string key,T value)
         {
-            T result = default;
+            T ret = default;
             _cache.Set_AbsoluteExpire(key,value,_cache.Time);
-            return result;
+            return ret;
         }
         /// <summary>
         /// 设置并返回缓存值(字符串)

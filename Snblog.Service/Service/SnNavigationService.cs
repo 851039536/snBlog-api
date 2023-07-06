@@ -23,7 +23,7 @@
                 $"{NAME}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(Common.CacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<SnNavigationDto>>(Common.CacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 

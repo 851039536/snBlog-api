@@ -52,7 +52,7 @@
             
             if (cache)
             {
-                _retDto.Entity = _cache.GetValue(_cacheKey, _retDto.Entity);
+                _retDto.Entity = _cache.GetValue<ArticleTypeDto>(_cacheKey);
                 if (_retDto != null) return _retDto.Entity;
             }
 
@@ -97,9 +97,8 @@
 
             if (cache)
             {
-                _retDto.EntityList = _cache.GetValue(
-                    _cacheKey,
-                    _retDto.EntityList);
+                _retDto.EntityList = _cache.GetValue<List<ArticleTypeDto>>(
+                    _cacheKey);
                 if (_ret.EntityList != null) return _retDto.EntityList;
             }
 
@@ -130,7 +129,7 @@
             if (cache)
             {
                 _retDto.EntityList =
-                    _cache.GetValue(_cacheKey, _retDto.EntityList);
+                    _cache.GetValue<List<ArticleTypeDto>>(_cacheKey);
                 if (_retDto.EntityList != null) return _retDto.EntityList;
             }
 
@@ -152,7 +151,7 @@
             Log.Information(_cacheKey);
             if (cache)
             {
-                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                _ret.EntityCount = _cache.GetValue<int>(_cacheKey);
                 if (_ret.EntityCount != 0) return _ret.EntityCount;
             }
 

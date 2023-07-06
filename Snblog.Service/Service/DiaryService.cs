@@ -31,7 +31,7 @@
 
             if (cache)
             {
-                _rDto.Entity = _cache.GetValue(_cacheKey, _rDto.Entity);
+                _rDto.Entity = _cache.GetValue<DiaryDto>(_cacheKey);
                 if (_rDto.Entity != null) return _rDto.Entity;
             }
 
@@ -62,7 +62,7 @@
 
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<DiaryDto>>(_cacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 
@@ -158,7 +158,7 @@
 
             if (cache)
             {
-                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                _ret.EntityCount = _cache.GetValue<int>(_cacheKey);
                 if (_ret.EntityCount != 0) return _ret.EntityCount;
             }
 
@@ -198,7 +198,7 @@
 
             if (cache)
             {
-                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                _ret.EntityCount = _cache.GetValue<int>(_cacheKey);
                 if (_ret.EntityCount != 0) return _ret.EntityCount;
             }
 
@@ -216,7 +216,7 @@
 
             if (cache)
             {
-                _ret.EntityCount = _cache.GetValue(_cacheKey, _ret.EntityCount);
+                _ret.EntityCount = _cache.GetValue<int>(_cacheKey);
                 if (_ret.EntityCount != 0)
                 {
                     return _ret.EntityCount;
@@ -283,7 +283,7 @@
 
             if (cache)
             {
-                _rDto.EntityList = _cache.GetValue(_cacheKey, _rDto.EntityList);
+                _rDto.EntityList = _cache.GetValue<List<DiaryDto>>(_cacheKey);
                 if (_rDto.EntityList != null) return _rDto.EntityList;
             }
 

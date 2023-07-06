@@ -33,7 +33,7 @@
 
             if (cache)
             {
-                _rInt = _cache.GetValue(_cacheKey, _rInt);
+                _rInt = _cache.GetValue<int>(_cacheKey);
                 if (_rInt != 0) return _rInt;
             }
 
@@ -61,7 +61,7 @@
 
             if (cache)
             {
-                _ret.EntityList = _cache.GetValue(_cacheKey, _ret.EntityList);
+                _ret.EntityList = _cache.GetValue<List<DiaryType>>(_cacheKey);
                 if (_ret.EntityList != null) return _ret.EntityList;
             }
 
@@ -92,7 +92,7 @@
 
             if (cache)
             {
-                diaryType = _cache.GetValue(_cacheKey, (DiaryType)null);
+                diaryType = _cache.GetValue<DiaryType>(_cacheKey);
                 if (diaryType != null) return diaryType;
             }
 
@@ -109,7 +109,7 @@
             DiaryType diaryType;
             if (cache)
             {
-                diaryType = _cache.GetValue(_cacheKey, (DiaryType)null);
+                diaryType = _cache.GetValue<DiaryType>(_cacheKey);
                 if (diaryType != null) return diaryType;
             }
 
