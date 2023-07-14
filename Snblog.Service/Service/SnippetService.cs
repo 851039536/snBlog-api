@@ -291,7 +291,7 @@
         /// <summary>
         /// 模糊查询
         /// </summary>
-        /// <param name="identity">所有:0|分类:1|标签:2|用户名:3|内容:4</param>
+        /// <param name="identity">所有:0|分类:1|标签:2|用户名:3|内容:4|标题:5</param>
         /// <param name="type">查询参数(多条件以','分割)</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">缓存</param>
@@ -352,6 +352,14 @@
                     _rDto.EntityList =
                         await _service.Snippets
                             .Where(l => l.Text.ToUpper().Contains(uppercaseName))
+                            .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize)
+                            .SelectSnippet().ToListAsync();
+                    break;
+                case 5:
+                    _rDto.EntityList =
+                        await _service.Snippets
+                            .Where(l => l.Name.ToUpper().Contains(uppercaseName))
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize)
                             .SelectSnippet().ToListAsync();
