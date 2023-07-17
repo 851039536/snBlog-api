@@ -26,7 +26,7 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 查询总数 GetCountAsync
+        #region 查询总数
         /// <summary>
         /// 查询总数 
         /// </summary>
@@ -41,7 +41,7 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 查询所有GetAllAsync
+        #region 查询所有
         /// <summary>
         /// 查询所有
         /// </summary>
@@ -54,11 +54,11 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 模糊查询 Contains
+        #region 模糊查询
         /// <summary>
         /// 模糊查询
         /// </summary>
-        /// <param name="identity">无条件:0 || 分类:1 || 用户:2</param>
+        /// <param name="identity">匹配描述，标题，URL:0 || 分类:1 || 用户:2</param>
         /// <param name="type">查询条件:用户||分类</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>

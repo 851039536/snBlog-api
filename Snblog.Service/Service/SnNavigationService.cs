@@ -297,40 +297,53 @@
             return _rDto.Entity;
         }
 
+        /// <summary>
+        /// 模糊查询
+        /// </summary>
+        /// <param name="identity">匹配描述，标题，URL:0 || 分类:1 || 用户:2</param>
+        /// <param name="type">查询条件:用户||分类</param>
+        /// <param name="name">查询字段</param>
+        /// <param name="cache">是否开启缓存</param>
+        /// <returns></returns>
         public async Task<List<SnNavigationDto>> GetContainsAsync(int identity, string type, string name, bool cache)
         {
-            Log.Information($"SnNavigationDto模糊查询=>{type}{name}{cache}");
+            Common.CacheInfo($"SnNavigationDto模糊查询=>{type}{name}{cache}");
 
-            _rDto.EntityList =
-                _cache.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, _rDto.EntityList, cache);
-            if (_rDto.EntityList == null)
+            if (cache)
             {
-                switch (identity)
+                _rDto.EntityList =
+                    _cache.GetValue<List<SnNavigationDto>>(Common.CacheKey);
+                if (_rDto.EntityList !=null)
                 {
-                    case 0:
-                        _rDto.EntityList = _mapper.Map<List<SnNavigationDto>>(
-                            await _service.SnNavigations
-                                .Where(l => l.Title.Contains(name)).OrderByDescending(c => c.Id).Include(z => z.Type
-                                ).Include(i => i.User).AsNoTracking().ToListAsync());
-                        break;
-                    case 1:
-                        _rDto.EntityList = _mapper.Map<List<SnNavigationDto>>(
-                            await _service.SnNavigations
-                                .Where(l => l.Title.Contains(name) && l.Type.Title == type)
-                                .OrderByDescending(c => c.Id).Include(z => z.Type
-                                ).Include(i => i.User).AsNoTracking().ToListAsync());
-                        break;
-                    case 2:
-                        _rDto.EntityList = _mapper.Map<List<SnNavigationDto>>(
-                            await _service.SnNavigations
-                                .Where(l => l.Title.Contains(name) && l.User.Name == type)
-                                .OrderByDescending(c => c.Id).Include(z => z.Type
-                                ).Include(i => i.User).AsNoTracking().ToListAsync());
-                        break;
+                    return _rDto.EntityList;
                 }
-
-                _cache.CacheString("GetContainsAsync_SnNavigationDto" + name + cache, _rDto.EntityList, cache);
             }
+           
+            switch (identity)
+            {
+                case 0:
+                    _rDto.EntityList = _mapper.Map<List<SnNavigationDto>>(
+                        await _service.SnNavigations
+                            .Where(l => l.Title.ToLower().Contains(name) || l.Describe.ToLower().Contains(name)  || l.Url.ToLower().Contains(name)).OrderByDescending(c => c.Id).Include(z => z.Type
+                            ).Include(i => i.User).AsNoTracking().ToListAsync());
+                    break;
+                case 1:
+                    _rDto.EntityList = _mapper.Map<List<SnNavigationDto>>(
+                        await _service.SnNavigations
+                            .Where(l => l.Title.Contains(name) && l.Type.Title == type)
+                            .OrderByDescending(c => c.Id).Include(z => z.Type
+                            ).Include(i => i.User).AsNoTracking().ToListAsync());
+                    break;
+                case 2:
+                    _rDto.EntityList = _mapper.Map<List<SnNavigationDto>>(
+                        await _service.SnNavigations
+                            .Where(l => l.Title.Contains(name) && l.User.Name == type)
+                            .OrderByDescending(c => c.Id).Include(z => z.Type
+                            ).Include(i => i.User).AsNoTracking().ToListAsync());
+                    break;
+            }
+
+            _cache.SetValue(Common.CacheKey, _rDto.EntityList); //设置缓存
 
             return _rDto.EntityList;
         }
