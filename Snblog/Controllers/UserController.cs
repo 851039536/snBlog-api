@@ -12,12 +12,13 @@ namespace Snblog.Controllers
     /// <summary>
     /// 用户
     /// </summary>
+    [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
     [Route("user")]
     public class UserController : BaseController
     {
         private readonly snblogContext _coreDbContext;
-        private readonly IUserService _service; //IOC依赖注入
+        private readonly IUserService _service;
         private readonly JwtConfig _jwtModel;
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace Snblog.Controllers
             var data = await _service.GetSumAsync(cache);
             return ApiResponse(cache:cache,data:data);
         }
-
+        //TODO 查询失败
         /// <summary>
         /// 分页查询
         /// </summary>

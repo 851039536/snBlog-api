@@ -171,6 +171,8 @@
             }
         }
 
+      
+
         /// <summary>
         /// DEL
         /// </summary>
@@ -243,6 +245,34 @@
             return await _service.SaveChangesAsync() > 0;
         }
 
+        
+        /// <summary>
+        /// 生成随机数
+        /// </summary>
+        /// <param name="minValue">1</param>
+        /// <param name="maxValue">11</param>
+        /// <returns></returns>
+        public async Task<bool> RandomImg(int minValue, int maxValue)
+        {
+            // 获取所有记录ID
+            var allIds = _service.SnNavigations.Select(entity => entity.Id).ToList();
+            foreach (var id in allIds)
+            {
+                // 根据记录ID获取实体对象
+                var entity = _service.SnNavigations.FirstOrDefault(e => e.Id == id);
+                //c#生成1到10的随机数，每次生成更新SnNavigations中的img
+                Random random = new();
+                if (entity != null)
+                {
+                    var num=  random.Next(minValue, maxValue); // 生成1到10的随机数
+                    // 更新"Img"字段的值
+                    entity.Img = num +".jpg";
+                    // 保存更改
+                    await  _service.SaveChangesAsync();
+                }
+            }
+            return true;
+        }
         public async Task<int> GetCountAsync(int identity, string type, bool cache)
         {
             Log.Information("SnNavigation查询总数=>" + identity + type + cache);

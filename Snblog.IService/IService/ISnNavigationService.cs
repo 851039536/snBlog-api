@@ -53,6 +53,7 @@
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         Task<List<SnNavigationDto>> GetContainsAsync(int identity,string type , string name , bool cache );
+        Task<bool> RandomImg(int minValue, int maxValue);
         /// <summary>
         /// 删除
         /// </summary>

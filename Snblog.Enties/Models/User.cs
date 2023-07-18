@@ -1,46 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Snblog.Enties.Models;
 
-#nullable disable
-
-namespace Snblog.Enties.Models
+public partial class User
 {
-    public partial class User
-    {
-        public User()
-        {
-            Articles = new HashSet<Article>();
-            Diaries = new HashSet<Diary>();
-            Interfaces = new HashSet<Interface>();
-            SnNavigations = new HashSet<SnNavigation>();
-            SnPictures = new HashSet<SnPicture>();
-            SnSetblogs = new HashSet<SnSetblog>();
-            SnTalks = new HashSet<SnTalk>();
-            SnUserTalks = new HashSet<SnUserTalk>();
-            Snippets = new HashSet<Snippet>();
-            Videos = new HashSet<Video>();
-        }
+    /// <summary>
+    /// 主键
+    /// </summary>
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public string Ip { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Pwd { get; set; }
-        public string Photo { get; set; }
-        public DateTime TimeCreate { get; set; }
-        public DateTime TimeModified { get; set; }
-        public string Nickname { get; set; }
-        public string Brief { get; set; }
+    /// <summary>
+    /// ip地址
+    /// </summary>
+    public string Ip { get; set; }
 
-        public virtual ICollection<Article> Articles { get; set; }
-        public virtual ICollection<Diary> Diaries { get; set; }
-        public virtual ICollection<Interface> Interfaces { get; set; }
-        public virtual ICollection<SnNavigation> SnNavigations { get; set; }
-        public virtual ICollection<SnPicture> SnPictures { get; set; }
-        public virtual ICollection<SnSetblog> SnSetblogs { get; set; }
-        public virtual ICollection<SnTalk> SnTalks { get; set; }
-        public virtual ICollection<SnUserTalk> SnUserTalks { get; set; }
-        public virtual ICollection<Snippet> Snippets { get; set; }
-        public virtual ICollection<Video> Videos { get; set; }
-    }
+    /// <summary>
+    /// 账号
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// 邮箱
+    /// </summary>
+    public string Email { get; set; }
+
+    /// <summary>
+    /// 密码
+    /// </summary>
+    public string Pwd { get; set; }
+
+    /// <summary>
+    /// 头像
+    /// </summary>
+    public string Photo { get; set; }
+
+    /// <summary>
+    /// 注册时间
+    /// </summary>
+    public DateTime TimeCreate { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    public DateTime TimeModified { get; set; }
+
+    /// <summary>
+    /// 称呼
+    /// </summary>
+    public string Nickname { get; set; }
+
+    /// <summary>
+    /// 简介
+    /// </summary>
+    public string Brief { get; set; }
+
+    public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
+
+    public virtual ICollection<Diary> Diaries { get; set; } = new List<Diary>();
+
+    public virtual ICollection<Interface> Interfaces { get; set; } = new List<Interface>();
+
+    public virtual ICollection<SnNavigation> SnNavigations { get; set; } = new List<SnNavigation>();
+
+    public virtual ICollection<SnPicture> SnPictures { get; set; } = new List<SnPicture>();
+
+    public virtual ICollection<SnSetblog> SnSetblogs { get; set; } = new List<SnSetblog>();
+
+    public virtual ICollection<SnTalk> SnTalks { get; set; } = new List<SnTalk>();
+
+    public virtual ICollection<SnUserTalk> SnUserTalks { get; set; } = new List<SnUserTalk>();
+
+    public virtual ICollection<Snippet> Snippets { get; set; } = new List<Snippet>();
+
+    public virtual ICollection<Video> Videos { get; set; } = new List<Video>();
 }

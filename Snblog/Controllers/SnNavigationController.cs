@@ -98,7 +98,7 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 分页查询GetFyAsync
+        #region 分页查询
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -115,6 +115,19 @@ namespace Snblog.Controllers
             return Ok(await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
         }
         #endregion
+        
+        /// <summary>
+        /// 生成随机图片导航
+        /// </summary>
+        /// <param name="minValue">1</param>
+        /// <param name="maxValue">11</param>
+        /// <returns></returns>
+        [HttpPost("randomImg")]
+        public async Task<IActionResult> RandomImg(int minValue =1, int maxValue =11)
+        {
+            return Ok(await _service.RandomImg(minValue,maxValue));
+        }
+        
 
         #region 添加数据AddAsync
         /// <summary>

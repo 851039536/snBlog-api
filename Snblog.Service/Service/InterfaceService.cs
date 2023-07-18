@@ -17,7 +17,7 @@
         private readonly EntityDataDto<InterfaceDto> _rDto = new();
 
 
-        public InterfaceService(snblogContext service, ICacheUtil cache, IMapper mapper)
+        public InterfaceService(snblogContext service,ICacheUtil cache,IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;
@@ -31,7 +31,7 @@
         ///  <param name="userName">用户名称</param>
         ///  <param name="type">类别</param>
         ///  <param name="cache">缓存</param>
-        public async Task<List<InterfaceDto>> GetConditionAsync(int identity, string userName, string type, bool cache)
+        public async Task<List<InterfaceDto>> GetConditionAsync(int identity,string userName,string type,bool cache)
         {
             _cacheKey = $"{NAME}{Common.Contains}{identity}_{userName}_{type}_{cache}";
             Log.Information(_cacheKey);
@@ -45,26 +45,26 @@
             switch (identity)
             {
                 case 0:
-                    _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
-                        .Where(s => s.Type.Name == type && s.User.Name == userName).AsNoTracking().ToListAsync());
-                    break;
+                _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
+                    .Where(s => s.Type.Name == type && s.User.Name == userName).AsNoTracking().ToListAsync());
+                break;
                 case 1:
-                    _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
-                        .Where(s => s.User.Name == userName).AsNoTracking().ToListAsync());
-                    break;
+                _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
+                    .Where(s => s.User.Name == userName).AsNoTracking().ToListAsync());
+                break;
                 case 2:
-                    _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
-                        .Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
-                    break;
+                _rDto.EntityList = _mapper.Map<List<InterfaceDto>>(await _service.Interfaces
+                    .Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
+                break;
             }
 
-            _cache.SetValue(_cacheKey, _rDto.EntityList);
+            _cache.SetValue(_cacheKey,_rDto.EntityList);
             return _rDto.EntityList;
         }
 
 
-        private async Task<List<InterfaceDto>> GetInterfacesPaging(int pageIndex, int pageSize, bool isDesc,
-            Expression<Func<Interface, bool>> predicate = null)
+        private async Task<List<InterfaceDto>> GetInterfacesPaging(int pageIndex,int pageSize,bool isDesc,
+            Expression<Func<Interface,bool>> predicate = null)
         {
             IQueryable<Interface> interfaces = _service.Interfaces.AsQueryable();
 
@@ -77,7 +77,7 @@
 
             var data = await interfaces.Skip((pageIndex - 1) * pageSize).Take(pageSize).SelectInterface()
                 .AsNoTracking().ToListAsync();
-            _cache.SetValue(_cacheKey, _rDto.EntityList);
+            _cache.SetValue(_cacheKey,_rDto.EntityList);
             return data;
         }
 
@@ -90,8 +90,8 @@
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">排序</param>
         /// <param name="cache">缓存</param>
-        public async Task<List<InterfaceDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
-            bool isDesc, bool cache)
+        public async Task<List<InterfaceDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,
+            bool isDesc,bool cache)
         {
             _cacheKey = $"{NAME}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}";
             Log.Information(_cacheKey);
@@ -108,18 +108,18 @@
             switch (identity) //查询条件
             {
                 case 0:
-                    return await GetInterfacesPaging(pageSize, pageIndex, isDesc);
+                return await GetInterfacesPaging(pageSize,pageIndex,isDesc);
 
                 case 1:
-                    return await GetInterfacesPaging(pageSize, pageIndex, isDesc, w => w.Type.Name == type);
+                return await GetInterfacesPaging(pageSize,pageIndex,isDesc,w => w.Type.Name == type);
 
                 case 2:
-                    return await GetInterfacesPaging(pageSize, pageIndex, isDesc, w => w.User.Name == type);
+                return await GetInterfacesPaging(pageSize,pageIndex,isDesc,w => w.User.Name == type);
 
                 case 3:
-                    string[] sName = type.Split(',');
-                    return await GetInterfacesPaging(pageSize, pageIndex, isDesc,
-                        w => w.User.Name == sName[0] && w.Type.Name == sName[1]);
+                string[] sName = type.Split(',');
+                return await GetInterfacesPaging(pageSize,pageIndex,isDesc,
+                    w => w.User.Name == sName[0] && w.Type.Name == sName[1]);
             }
 
             return _rDto.EntityList;
@@ -156,7 +156,7 @@
         /// <param name="id">主键</param>
         /// <param name="cache">缓存</param>
         /// <returns>entity</returns>
-        public async Task<InterfaceDto> GetByIdAsync(int id, bool cache)
+        public async Task<InterfaceDto> GetByIdAsync(int id,bool cache)
         {
             _cacheKey = $"{NAME}{Common.Bid}{id}_{cache}";
             Log.Information(_cacheKey);
@@ -168,7 +168,7 @@
             }
 
             _rDto.Entity = _mapper.Map<InterfaceDto>(await _service.Interfaces.FindAsync(id));
-            _cache.SetValue(_cacheKey, _rDto.Entity);
+            _cache.SetValue(_cacheKey,_rDto.Entity);
             return _rDto.Entity;
         }
     }
