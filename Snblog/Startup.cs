@@ -28,7 +28,7 @@ namespace Snblog
         /// <summary>
         /// 版本控制
         /// </summary>
-        public enum ApiVersion
+        private enum ApiVersion
         {
             /// <summary>
             /// v1版本
@@ -45,6 +45,7 @@ namespace Snblog
         }
         #endregion
 
+        private IConfiguration Configuration { get; }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -54,7 +55,7 @@ namespace Snblog
             Configuration = configuration;
         }
 
-        private IConfiguration Configuration { get; }
+   
 
         /// <summary>
         /// 运行时将调用此方法。 使用此方法将服务添加到容器。
