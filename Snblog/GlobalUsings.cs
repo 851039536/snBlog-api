@@ -11,11 +11,9 @@ global using Snblog.Repository.Repository;
 global using System.Collections.Generic;
 global using System.Linq;
 global using System.Threading.Tasks;
-global using Z.EntityFramework.Plus;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
 global using FluentValidation;
-global using Snblog.IService;
 
 //startup
 global using System.IO;
