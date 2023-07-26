@@ -55,8 +55,6 @@ namespace Snblog
             Configuration = configuration;
         }
 
-   
-
         /// <summary>
         /// 运行时将调用此方法。 使用此方法将服务添加到容器。
         /// </summary>
@@ -79,11 +77,11 @@ namespace Snblog
                 //遍历版本信息
                 typeof(ApiVersion).GetEnumNames().ToList().ForEach(version => {
                     c.SwaggerDoc(version,new OpenApiInfo {
-                        Title = "SN blog API", //标题
+                        Title = "SN Blog API", //标题
                         Description = "EFCore数据操作 ASP.NET Core Web API", //描述
                         TermsOfService = new Uri("https://example.com/terms"), //服务条款
                         Contact = new OpenApiContact {
-                            Name = "kai ouyang", //联系人
+                            Name = "Kai OuYang", //联系人
                             Email = string.Empty,  //邮箱
                             Url = new Uri("https://twitter.com/spboyer"),//网站
                         },
