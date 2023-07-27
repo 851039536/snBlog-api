@@ -1,15 +1,15 @@
 ﻿using Snblog.Service.AngleSharp;
 using Snblog.Util.GlobalVar;
 
-namespace Snblog.ControllersAngleSharp
+namespace Snblog.DataBaseControllers
 {
     /// <summary>
-    /// AngleSharpController
+    /// 数据库操作
     /// </summary>
-    [ApiExplorerSettings(GroupName = "AngleSharp")]
+    [ApiExplorerSettings(GroupName = "Sql")]
     [ApiController]
-    [Route("angleSharp")]
-    public class AngleSharpController : ControllerBase
+    [Route("dataBase")]
+    public class DataBaseController : ControllerBase
     {
         /// <summary>
         /// 数据备份
@@ -41,9 +41,9 @@ namespace Snblog.ControllersAngleSharp
         /// 测试TOKEN是否存在
         /// </summary>
         /// <returns></returns>
-        [HttpGet("TOKEN")]
+        [HttpGet("token")]
         [Authorize(Roles = Permissions.Name)]
-        public ActionResult TOKEN()
+        public ActionResult CheckToken()
         {
             return Ok();
         }

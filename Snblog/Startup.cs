@@ -188,7 +188,7 @@ namespace Snblog
             services.AddScoped<IDiaryService, DiaryService>();
             services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
-            services.AddScoped<ISnUserTalkService, SnUserTalkService>();
+            services.AddScoped<IUserTalkService, UserTalkService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDiaryTypeService, DiaryTypeService>();
             services.AddScoped<ISnPictureService, SnPictureService>();

@@ -13,8 +13,8 @@
         V2 = 2,
 
         /// <summary>
-        /// AngleSharp
+        /// Sql
         /// </summary>
-        AngleSharp = 3
+        Sql = 3
     }
 }

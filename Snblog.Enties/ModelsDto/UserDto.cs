@@ -1,6 +1,5 @@
 ﻿namespace Snblog.Enties.ModelsDto;
 
-
 public partial class UserDto
 {
     /// <summary>
@@ -67,9 +66,9 @@ public partial class UserDto
 
     public virtual ICollection<SnTalk> SnTalks { get; set; } = new List<SnTalk>();
 
-    public virtual ICollection<SnUserTalk> SnUserTalks { get; set; } = new List<SnUserTalk>();
-
     public virtual ICollection<Snippet> Snippets { get; set; } = new List<Snippet>();
+
+    public virtual ICollection<UserTalk> UserTalks { get; set; } = new List<UserTalk>();
 
     public virtual ICollection<Video> Videos { get; set; } = new List<Video>();
 }

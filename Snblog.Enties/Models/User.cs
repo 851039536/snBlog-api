@@ -66,9 +66,9 @@ public partial class User
 
     public virtual ICollection<SnTalk> SnTalks { get; set; } = new List<SnTalk>();
 
-    public virtual ICollection<SnUserTalk> SnUserTalks { get; set; } = new List<SnUserTalk>();
-
     public virtual ICollection<Snippet> Snippets { get; set; } = new List<Snippet>();
+
+    public virtual ICollection<UserTalk> UserTalks { get; set; } = new List<UserTalk>();
 
     public virtual ICollection<Video> Videos { get; set; } = new List<Video>();
 }
