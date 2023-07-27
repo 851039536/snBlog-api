@@ -149,7 +149,7 @@ namespace Snblog
 
             services.AddDbContext<snblogContext>(
                 options => options
-                    .UseMySQL(Configuration.GetConnectionString("DefaultConnection") ?? string.Empty
+                    .UseMySQL(Configuration.GetConnectionString("MysqlConnection") ?? string.Empty
                     ));
 
             #endregion
@@ -203,7 +203,7 @@ namespace Snblog
             services.AddScoped<ISnippetTagService, SnippetTagService>();
             services.AddScoped<ISnippetTypeService, SnippetTypeService>();
             services.AddScoped<ISnippetLabelService, SnippetLabelService>();
-            services.AddScoped<HotNewsAngleSharp, HotNewsAngleSharp>();
+            services.AddScoped<DataBaseSql, DataBaseSql>();
             services.AddTransient<IValidator<Article>, ArticleValidator>();
             //整个应用程序生命周期以内只创建一个实例 
             services.AddSingleton<ICacheManager, CacheManager>();
@@ -223,7 +223,6 @@ namespace Snblog
             );
 
             #endregion
-
 
 
             services.AddControllers();

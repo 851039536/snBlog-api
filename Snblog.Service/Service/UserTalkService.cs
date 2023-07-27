@@ -1,5 +1,5 @@
 ﻿
-namespace Snblog.Service
+namespace Snblog.Service.Service
 {
     public class UserTalkService : IUserTalkService
     {

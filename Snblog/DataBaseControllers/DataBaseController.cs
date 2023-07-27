@@ -19,7 +19,7 @@ namespace Snblog.DataBaseControllers
         [HttpPost("SqlBackups")]
         public ActionResult SqlBackups(string path = "null")
         {
-            return Ok(HotNewsAngleSharp.SqlBackups(path));
+            return Ok(DataBaseSql.SqlBackups(path));
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Snblog.DataBaseControllers
         public ActionResult SqlRestore(string ip = "localhost", string user = "root", string pwd = "woshishui",
             string database = "snblog")
         {
-            return Ok(HotNewsAngleSharp.SqlRestore(ip, user, pwd, database));
+            return Ok(DataBaseSql.SqlRestore(ip, user, pwd, database));
         }
 
         /// <summary>
