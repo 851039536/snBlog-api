@@ -10,10 +10,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog", "Snblog\Snblog.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog.Enties", "Snblog.Enties\Snblog.Enties.csproj", "{71BC72C6-5027-4625-9AB5-308239402B1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog.IRepository", "Snblog.IRepository\Snblog.IRepository.csproj", "{130E512B-BE4A-4F16-84B5-0CFFCF1F79C7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog.Repository", "Snblog.Repository\Snblog.Repository.csproj", "{26BA53B4-AE5C-49BD-8B43-1E334DB30188}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog.IService", "Snblog.IService\Snblog.IService.csproj", "{2F39A991-1BD4-4478-9C02-F83B0F38E1D8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snblog.Service", "Snblog.Service\Snblog.Service.csproj", "{74F29408-852A-4CAF-94D4-F2E1B8B1A8F3}"
@@ -41,14 +37,6 @@ Global
 		{71BC72C6-5027-4625-9AB5-308239402B1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71BC72C6-5027-4625-9AB5-308239402B1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71BC72C6-5027-4625-9AB5-308239402B1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{130E512B-BE4A-4F16-84B5-0CFFCF1F79C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{130E512B-BE4A-4F16-84B5-0CFFCF1F79C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{130E512B-BE4A-4F16-84B5-0CFFCF1F79C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{130E512B-BE4A-4F16-84B5-0CFFCF1F79C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26BA53B4-AE5C-49BD-8B43-1E334DB30188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26BA53B4-AE5C-49BD-8B43-1E334DB30188}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26BA53B4-AE5C-49BD-8B43-1E334DB30188}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26BA53B4-AE5C-49BD-8B43-1E334DB30188}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2F39A991-1BD4-4478-9C02-F83B0F38E1D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F39A991-1BD4-4478-9C02-F83B0F38E1D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F39A991-1BD4-4478-9C02-F83B0F38E1D8}.Release|Any CPU.ActiveCfg = Release|Any CPU

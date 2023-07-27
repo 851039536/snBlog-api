@@ -3,14 +3,11 @@ using MySql.Data.MySqlClient;
 
 namespace Snblog.Service.AngleSharp
 {
-    public class HotNewsAngleSharp
+    public class DataBaseSql
     {
-        public HotNewsAngleSharp()
+        public DataBaseSql()
         {
         }
-
-
-
 
         /// <summary>
         /// 数据备份
@@ -20,8 +17,6 @@ namespace Snblog.Service.AngleSharp
 
         public static string SqlBackups(string path)
         {
-            //string constring = "server=" + ip + ";User=" + User + ";pwd=" + pwd + ";database=" + database + ";";
-
             const string sqlUrl = "server=localhost;User= root;pwd= woshishui;database=snblog;";
             string time = DateTime.Now.ToString("d").Replace("/","-");
              //path = Assembly.GetEntryAssembly().Location;

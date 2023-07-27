@@ -14,7 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Snblog.Cache\Snblog.Cache.csproj" />
     <ProjectReference Include="..\Snblog.IService\Snblog.IService.csproj" />
-    <ProjectReference Include="..\Snblog.Repository\Snblog.Repository.csproj" />
     <ProjectReference Include="..\Snblog.Util\Snblog.Util.csproj" />
   </ItemGroup>
 

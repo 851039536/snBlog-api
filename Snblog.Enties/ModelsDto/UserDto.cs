@@ -1,77 +1,74 @@
-﻿#nullable disable
+﻿namespace Snblog.Enties.ModelsDto;
 
-namespace Snblog.Enties.ModelsDto
+public partial class UserDto
 {
     /// <summary>
-    /// 用户DTO
+    /// 主键
     /// </summary>
-    public partial class UserDto
-    {
-        /// <summary>
-        /// UserDto
-        /// </summary>
-        public UserDto()
-        {
-            Articles = new HashSet<Article>();
-            Interfaces = new HashSet<Interface>();
-            SnNavigations = new HashSet<SnNavigation>();
-            Diaries = new HashSet<Diary>();
-            SnPictures = new HashSet<SnPicture>();
-            SnSetblogs = new HashSet<SnSetblog>();
-            SnTalks = new HashSet<SnTalk>();
-            SnUserTalks = new HashSet<SnUserTalk>();
-            SnVideos = new HashSet<Video>();
-        }
+    public int Id { get; set; }
 
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public int Id { get; set; }
-        /// <summary>
-        /// ip
-        /// </summary>
-        public string Ip { get; set; }
-        /// <summary>
-        /// 账户名
-        /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// 邮箱
-        /// </summary>
-        public string Email { get; set; }
-        /// <summary>
-        /// 密码
-        /// </summary>
-        public string Pwd { get; set; }
-        /// <summary>
-        /// 头像标识
-        /// </summary>
-        public string Photo { get; set; }
-        /// <summary>
-        /// 注册时间
-        /// </summary>
-        public DateTime TimeCreate { get; set; }
-        /// <summary>
-        /// 更新时间
-        /// </summary>
-        public DateTime TimeModified { get; set; }
-        /// <summary>
-        /// 别名
-        /// </summary>
-        public string Nickname { get; set; }
-        /// <summary>
-        /// 介绍
-        /// </summary>
-        public string Brief { get; set; }
+    /// <summary>
+    /// ip地址
+    /// </summary>
+    public string Ip { get; set; }
 
-        public virtual ICollection<Article> Articles { get; set; }
-        public virtual ICollection<Interface> Interfaces { get; set; }
-        public virtual ICollection<SnNavigation> SnNavigations { get; set; }
-        public virtual ICollection<Diary> Diaries { get; set; }
-        public virtual ICollection<SnPicture> SnPictures { get; set; }
-        public virtual ICollection<SnSetblog> SnSetblogs { get; set; }
-        public virtual ICollection<SnTalk> SnTalks { get; set; }
-        public virtual ICollection<SnUserTalk> SnUserTalks { get; set; }
-        public virtual ICollection<Video> SnVideos { get; set; }
-    }
+    /// <summary>
+    /// 账号
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// 邮箱
+    /// </summary>
+    public string Email { get; set; }
+
+    /// <summary>
+    /// 密码
+    /// </summary>
+    public string Pwd { get; set; }
+
+    /// <summary>
+    /// 头像
+    /// </summary>
+    public string Photo { get; set; }
+
+    /// <summary>
+    /// 注册时间
+    /// </summary>
+    public DateTime TimeCreate { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    public DateTime TimeModified { get; set; }
+
+    /// <summary>
+    /// 称呼
+    /// </summary>
+    public string Nickname { get; set; }
+
+    /// <summary>
+    /// 简介
+    /// </summary>
+    public string Brief { get; set; }
+
+    public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
+
+    public virtual ICollection<Diary> Diaries { get; set; } = new List<Diary>();
+
+    public virtual ICollection<Interface> Interfaces { get; set; } = new List<Interface>();
+
+    public virtual ICollection<SnNavigation> SnNavigations { get; set; } = new List<SnNavigation>();
+
+    public virtual ICollection<SnPicture> SnPictures { get; set; } = new List<SnPicture>();
+
+    public virtual ICollection<SnSetblog> SnSetblogs { get; set; } = new List<SnSetblog>();
+
+    public virtual ICollection<SnTalk> SnTalks { get; set; } = new List<SnTalk>();
+
+    public virtual ICollection<Snippet> Snippets { get; set; } = new List<Snippet>();
+
+    public virtual ICollection<UserTalk> UserTalks { get; set; } = new List<UserTalk>();
+
+    public virtual ICollection<Video> Videos { get; set; } = new List<Video>();
 }

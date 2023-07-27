@@ -3,7 +3,7 @@
     public class ArticleService : IArticleService
     {
         // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
-        const string NAME = "article_";
+        const string Name = "article_";
 
         private readonly EntityData<Article> _ret = new();
         private readonly EntityDataDto<ArticleDto> _retDto = new();
@@ -27,7 +27,7 @@
         public async Task<bool> DelAsync(int id)
         {
             // 设置缓存键,记录日志
-            Common.CacheInfo($"{NAME}{Common.Del}{id}");
+            Common.CacheInfo($"{Name}{Common.Del}{id}");
 
             // 通过id查找文章
             Article result = await _service.Articles.FindAsync(id);
@@ -45,7 +45,7 @@
 
         public async Task<ArticleDto> GetByIdAsync(int id, bool cache)
         {
-            Common.CacheInfo($"{NAME}{Common.Bid}{id}_{cache}");
+            Common.CacheInfo($"{Name}{Common.Bid}{id}_{cache}");
             if (cache)
             {
                 _retDto.Entity = _cache.GetValue<ArticleDto>(Common.CacheKey);
@@ -61,7 +61,7 @@
 
         public async Task<List<ArticleDto>> GetTypeAsync(int identity, string type, bool cache)
         {
-            Common.CacheInfo($"{NAME}{Common.Bid}{identity}_{type}_{cache}");
+            Common.CacheInfo($"{Name}{Common.Bid}{identity}_{type}_{cache}");
 
             if (cache)
             {
@@ -95,7 +95,7 @@
 
         public async Task<bool> AddAsync(Article entity)
         {
-            Common.CacheInfo($"{NAME}{Common.Add}{entity}");
+            Common.CacheInfo($"{Name}{Common.Add}{entity}");
 
             entity.TimeCreate = entity.TimeModified = DateTime.Now;
             //此方法中的异步添加改为同步添加，因为 SaveChangesAsync 方法已经是异步的，不需要再使用异步添加
@@ -105,7 +105,7 @@
 
         public async Task<bool> UpdateAsync(Article entity)
         {
-            Common.CacheInfo($"{NAME}{Common.Up}{entity}");
+            Common.CacheInfo($"{Name}{Common.Up}{entity}");
 
             entity.TimeModified = DateTime.Now; //更新时间
 
@@ -134,7 +134,7 @@
 
         public async Task<int> GetSumAsync(int identity, string type, bool cache)
         {
-            Common.CacheInfo($"{NAME}{Common.Sum}{identity}_{type}_{cache}");
+            Common.CacheInfo($"{Name}{Common.Sum}{identity}_{type}_{cache}");
 
             if (cache)
             {
@@ -183,7 +183,7 @@
 
         public async Task<List<ArticleDto>> GetAllAsync(bool cache)
         {
-            Common.CacheInfo($"{NAME}{Common.All}{cache}");
+            Common.CacheInfo($"{Name}{Common.All}{cache}");
 
             if (cache)
             {
@@ -206,7 +206,7 @@
         /// <returns>int</returns>
         public async Task<int> GetStrSumAsync(int identity, int type, string name, bool cache)
         {
-            Common.CacheInfo($"{NAME}统计{identity}_{type}_{name}_{cache}");
+            Common.CacheInfo($"{Name}统计{identity}_{type}_{name}_{cache}");
 
             if (cache)
             {
@@ -275,7 +275,7 @@
             string ordering, bool isDesc, bool cache)
         {
             Common.CacheInfo(
-                $"{NAME}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
+                $"{Name}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
 
             if (cache)
             {
@@ -289,24 +289,24 @@
             switch (identity)
             {
                 case 0:
-                    return await GetArticlePaging(pageIndex, pageSize, ordering, isDesc);
+                    return await GetPaging(pageIndex, pageSize, ordering, isDesc);
                 case 1:
-                    return await GetArticlePaging(pageIndex, pageSize, ordering, isDesc, w => w.Type.Name == type);
+                    return await GetPaging(pageIndex, pageSize, ordering, isDesc, w => w.Type.Name == type);
                 case 2:
-                    return await GetArticlePaging(pageIndex, pageSize, ordering, isDesc, w => w.Tag.Name == type);
+                    return await GetPaging(pageIndex, pageSize, ordering, isDesc, w => w.Tag.Name == type);
                 case 3:
-                    return await GetArticlePaging(pageIndex, pageSize, ordering, isDesc, w => w.User.Name == type);
+                    return await GetPaging(pageIndex, pageSize, ordering, isDesc, w => w.User.Name == type);
                 case 4:
                     _retDto.Name = type.Split(',');
-                    return await GetArticlePaging(pageIndex, pageSize, ordering, isDesc, w =>
+                    return await GetPaging(pageIndex, pageSize, ordering, isDesc, w =>
                         w.Tag.Name == _retDto.Name[0]
                         && w.User.Name == _retDto.Name[1]);
                 default:
-                    return await GetArticlePaging(pageIndex, pageSize, ordering, isDesc);
+                    return await GetPaging(pageIndex, pageSize, ordering, isDesc);
             }
         }
 
-        private async Task<List<ArticleDto>> GetArticlePaging(int pageIndex, int pageSize, string ordering, bool isDesc,
+        private async Task<List<ArticleDto>> GetPaging(int pageIndex, int pageSize, string ordering, bool isDesc,
             Expression<Func<Article, bool>> predicate = null)
         {
             IQueryable<Article> articles = _service.Articles.AsQueryable();
@@ -344,7 +344,7 @@
 
         public async Task<bool> UpdatePortionAsync(Article entity, string type)
         {
-            Common.CacheInfo($"{NAME}{Common.UpPortiog}{entity.Id}_{type}");
+            Common.CacheInfo($"{Name}{Common.UpPortiog}{entity.Id}_{type}");
             var result = await _service.Articles.FindAsync(entity.Id);
             if (result == null) return false;
 
@@ -375,7 +375,7 @@
         {
             var upNames = name.ToUpper();
 
-            Common.CacheInfo($"{NAME}{Common.Contains}{identity}_{type}_{name}_{cache}");
+            Common.CacheInfo($"{Name}{Common.Contains}{identity}_{type}_{name}_{cache}");
 
             if (cache)
             {
@@ -388,10 +388,10 @@
 
             return identity switch
             {
-                0 => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
-                1 => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Type.Name == type),
-                2 => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Tag.Name == type),
-                _ => await GetArticleContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
+                0 => await GetContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
+                1 => await GetContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Type.Name == type),
+                2 => await GetContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Tag.Name == type),
+                _ => await GetContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
             };
         }
 
@@ -399,7 +399,7 @@
         /// 模糊查询
         /// </summary>
         /// <param name="predicate">筛选文章的条件</param>
-        private async Task<List<ArticleDto>> GetArticleContainsAsync(Expression<Func<Article, bool>> predicate = null)
+        private async Task<List<ArticleDto>> GetContainsAsync(Expression<Func<Article, bool>> predicate = null)
         {
             if (predicate == null)
             {

@@ -2,7 +2,7 @@
 
 namespace Snblog.Service.Service
 {
-    public class UserService :  IUserService
+    public class UserService : IUserService
     {
         private readonly CacheUtil _cache;
         private readonly snblogContext _service;
@@ -19,7 +19,7 @@ namespace Snblog.Service.Service
         const string DEL = "DEL_";
         const string ADD = "ADD";
         const string UPDATE = "UPDATE_";
-        public UserService( snblogContext service, IMapper mapper, ICacheUtil cache) 
+        public UserService(snblogContext service,IMapper mapper,ICacheUtil cache)
         {
             _service = service;
             _mapper = mapper;
@@ -43,16 +43,28 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<UserDto> GetByIdAsync(int id, bool cache)
+        public async Task<UserDto> GetByIdAsync(int id,bool cache)
         {
             Log.Information($"{NAME}{BYID}{id}_{cache}");
-            _rDto = _cache.CacheString($"{NAME}{BYID}{id}_{cache}", _rDto, cache);
+            _rDto = _cache.CacheString($"{NAME}{BYID}{id}_{cache}",_rDto,cache);
             if (_rDto == null)
             {
                 _rDto = _mapper.Map<UserDto>(await _service.Users.FindAsync(id));
-                _cache.CacheString($"{NAME}{BYID}{id}_{cache}", _rDto, cache);
+                _cache.CacheString($"{NAME}{BYID}{id}_{cache}",_rDto,cache);
             }
             return _rDto;
+        }
+
+        //todo 查询异常
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录条数</param>
+        public async Task<List<UserDto>> GetPagingAsync(int pageIndex,int pageSize)
+        {
+            var data = await _service.Users.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToListAsync();
+            return _mapper.Map<List<UserDto>>(data);
         }
 
         public async Task<int> AddAsync(User entity)
@@ -69,38 +81,27 @@ namespace Snblog.Service.Service
             return await _service.SaveChangesAsync() > 0;
         }
 
-        /// <summary>
-        /// 分页查询
-        /// </summary>
-        /// <param name="pageIndex">当前页码</param>
-        /// <param name="pageSize">每页记录条数</param>
-        public async Task<List<UserDto>> GetPagingAsync(int pageIndex, int pageSize)
-        {
-            var data = await _service.Users.OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToListAsync();
-            return _mapper.Map<List<UserDto>>(data);
-        }
-
         public async Task<int> GetSumAsync(bool cache)
         {
             Log.Information($"{NAME}{SUM}{cache}");
-            _rInt = _cache.CacheString($"{NAME}{SUM}{cache}", _rInt, cache);
+            _rInt = _cache.CacheString($"{NAME}{SUM}{cache}",_rInt,cache);
             if (_rInt == 0)
             {
                 _rInt = await _service.Users.CountAsync();
-                _cache.CacheString($"{NAME}{SUM}{cache}", _rInt, cache);
+                _cache.CacheString($"{NAME}{SUM}{cache}",_rInt,cache);
             }
             return _rInt;
         }
 
-        public async Task<List<UserDto>> GetContainsAsync(string name, bool cache)
+        public async Task<List<UserDto>> GetContainsAsync(string name,bool cache)
         {
-            Log.Information( $"{NAME}{CONTAINS}{name}{cache}");
-            _rListDto = _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}", _rListDto, cache);
+            Log.Information($"{NAME}{CONTAINS}{name}{cache}");
+            _rListDto = _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}",_rListDto,cache);
             if (_rListDto == null)
             {
                 var res = await _service.Users.Where(u => u.Name.Contains(name) || u.Nickname.Contains(name)).AsNoTracking().ToListAsync();
                 _rListDto = _mapper.Map<List<UserDto>>(res);
-                _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}", _rListDto, cache);
+                _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}",_rListDto,cache);
             }
             return _rListDto;
         }

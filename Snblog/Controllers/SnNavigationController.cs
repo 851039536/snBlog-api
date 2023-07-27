@@ -26,7 +26,7 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 查询总数 GetCountAsync
+        #region 查询总数
         /// <summary>
         /// 查询总数 
         /// </summary>
@@ -41,7 +41,7 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 查询所有GetAllAsync
+        #region 查询所有
         /// <summary>
         /// 查询所有
         /// </summary>
@@ -54,11 +54,11 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 模糊查询 Contains
+        #region 模糊查询
         /// <summary>
         /// 模糊查询
         /// </summary>
-        /// <param name="identity">无条件:0 || 分类:1 || 用户:2</param>
+        /// <param name="identity">匹配描述，标题，URL:0 || 分类:1 || 用户:2</param>
         /// <param name="type">查询条件:用户||分类</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
@@ -98,7 +98,7 @@ namespace Snblog.Controllers
         }
         #endregion
 
-        #region 分页查询GetFyAsync
+        #region 分页查询
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -115,6 +115,19 @@ namespace Snblog.Controllers
             return Ok(await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
         }
         #endregion
+        
+        /// <summary>
+        /// 生成随机图片导航
+        /// </summary>
+        /// <param name="minValue">1</param>
+        /// <param name="maxValue">11</param>
+        /// <returns></returns>
+        [HttpPost("randomImg")]
+        public async Task<IActionResult> RandomImg(int minValue =1, int maxValue =11)
+        {
+            return Ok(await _service.RandomImg(minValue,maxValue));
+        }
+        
 
         #region 添加数据AddAsync
         /// <summary>

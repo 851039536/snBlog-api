@@ -47,12 +47,13 @@
         /// <summary>
         /// 模糊查询
         /// </summary>
-        /// <param name="identity">无条件:0 || 分类:1 || 用户:2</param>
-        /// <param name="type">查询条件</param>
+        /// <param name="identity">匹配描述，标题，URL:0 || 分类:1 || 用户:2</param>
+        /// <param name="type">查询条件:用户||分类</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
         Task<List<SnNavigationDto>> GetContainsAsync(int identity,string type , string name , bool cache );
+        Task<bool> RandomImg(int minValue, int maxValue);
         /// <summary>
         /// 删除
         /// </summary>
