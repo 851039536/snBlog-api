@@ -1,6 +1,6 @@
-﻿namespace Snblog.Repository.Repository
+﻿namespace Snblog.Enties.Models
 {
-    public partial class snblogContext : DbContext, IConcardContext
+    public partial class snblogContext : DbContext
     {
         public snblogContext()
         {

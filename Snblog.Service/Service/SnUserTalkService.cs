@@ -1,26 +1,38 @@
 ﻿namespace Snblog.Service
 {
-    public class SnUserTalkService : BaseService, ISnUserTalkService
+    public class SnUserTalkService : ISnUserTalkService
     {
-        public SnUserTalkService(IRepositoryFactory repositoryFactory, IConcardContext mydbcontext) : base(repositoryFactory, mydbcontext)
+        private readonly snblogContext _service;
+
+        public SnUserTalkService(snblogContext service)
         {
+            _service = service;
         }
+
         /// <summary>
         /// 删除数据
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<string> AsyDetUserTalk(int id)
+        public async Task<bool> DelAsync(int id)
         {
-            int da = await CreateService<SnUserTalk>().DelAsync(id);
-            string data = da == 1 ? "删除成功" : "删除失败";
-            return data;
+            // 通过id查找文章
+            var result = await _service.SnUserTalks.FindAsync(id);
+
+            // 如果文章不存在，返回false
+            if (result == null) return false;
+
+            _service.SnUserTalks.Remove(result); //删除单个
+            _service.Remove(result); //直接在context上Remove()方法传入model，它会判断类型
+
+            // 保存更改
+            return await _service.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<SnUserTalk>> AsyGetUserTalk()
+        public async Task<List<SnUserTalk>> GetAll()
         {
-            var data = CreateService<SnUserTalk>();
-            return await data.GetAll().ToListAsync();
+            var data = await _service.SnUserTalks.ToListAsync();
+            return  data;
         }
 
         /// <summary>
@@ -28,55 +40,19 @@
         /// </summary>
         /// <param name="talk"></param>
         /// <returns></returns>
-        public async Task<SnUserTalk> AsyInsUserTalk(SnUserTalk talk)
+        public async Task<bool> AsyInsUserTalk(SnUserTalk entity)
         {
-            return await CreateService<SnUserTalk>().AddAsync(talk);
+            _service.SnUserTalks.Add(entity);
+            return await _service.SaveChangesAsync() > 0;
         }
 
 
-        public async Task<string> AysUpUserTalk(SnUserTalk talk)
+        public async Task<bool> AysUpUserTalk(SnUserTalk entity)
         {
-            int da = await CreateService<SnUserTalk>().UpdateAsync(talk);
-            string data = da == 1 ? "更新成功" : "更新失败";
-            return data;
+            _service.SnUserTalks.Update(entity);
+            return await _service.SaveChangesAsync() > 0;
         }
 
-        public int GetTypeSum(int userId)
-        {
-            return CreateService<SnUserTalk>().Count(c => c.UserId == userId);
-        }
-
-
-        public List<SnUserTalk> GetPagingUserTalk(int label, int pageIndex, int pageSize, out int count, bool isDesc)
-        {
-            var data = CreateService<SnUserTalk>().WherePage(s => true, c => c.TalkTime, pageIndex, pageSize, out count, isDesc);
-            return data.ToList();
-        }
-
-        /// <summary>
-        /// 返回总条数
-        /// </summary>
-        /// <returns></returns>
-        public int GetTalkCount()
-        {
-            int data = CreateService<SnUserTalk>().Count();
-            return data;
-        }
-
-
-
-
-        public string GetUserTalkFirst(int userId, bool isdesc)
-        {
-            var data = CreateService<SnUserTalk>().FirstOrDefault(u => u.UserId == userId, c => c.TalkTime, isdesc);
-            return data.TalkText;
-
-        }
-
-        public async Task<List<SnUserTalk>> AsyGetTalk(int talkId)
-        {
-            var data = CreateService<SnUserTalk>().Where(s => s.Id == talkId);
-            return await data.ToListAsync();
-        }
+        
     }
 }

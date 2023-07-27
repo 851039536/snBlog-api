@@ -1,4 +1,5 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Microsoft.AspNetCore.RateLimiting;
+using Snblog.Util.GlobalVar;
 
 namespace Snblog.Controllers
 {
@@ -34,6 +35,7 @@ namespace Snblog.Controllers
         /// <param name="type">条件</param>
         /// <param name="cache">缓存</param>
         /// <returns>int</returns>
+        [EnableRateLimiting("fixed")]
         [HttpGet("sum")]
         public async Task<IActionResult> GetSumAsync(int identity = 0,string type = null,bool cache = false)
         {

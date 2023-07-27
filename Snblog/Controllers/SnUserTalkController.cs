@@ -21,64 +21,9 @@ namespace Snblog.Controllers
         [HttpGet("AsyGetUserTalk")]
         public async Task<IActionResult> AsyGetUserTalk()
         {
-            return Ok(await _service.AsyGetUserTalk());
+            return Ok(await _service.GetAll());
         }
-
-        /// <summary>
-        /// 主键id查询
-        /// </summary>
-        /// <param name="talkId">主键id</param>
-        /// <returns></returns>
-        [HttpGet("AsyGetTalk")]
-        public async Task<IActionResult> AsyGetTalk(int talkId)
-        {
-            return Ok(await _service.AsyGetTalk(talkId));
-        }
-
-        /// <summary>
-        /// 查询当前用户的说说
-        /// </summary>
-        /// <param name="userId">查询条件</param>
-        /// <param name="isdesc">排序方式</param>
-        /// <returns></returns>
-        [HttpGet("GetUserTalkFirst")]
-        public IActionResult GetUserTalkFirst(int userId, bool isdesc)
-        {
-            return Ok(_service.GetUserTalkFirst(userId, isdesc));
-        }
-
-        /// <summary>
-        /// 查询总条数
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetTalkCount")]
-        public IActionResult GetTalkCount()
-        {
-            return Ok(_service.GetTalkCount());
-        }
-
-        /// <summary>
-        /// 条件查询总数
-        /// </summary>
-        /// <param name="userId">用户Id</param>
-        /// <returns></returns>
-        [HttpGet("sum")]
-        public IActionResult GetTypeSum(int userId)
-        {
-            return Ok(_service.GetTypeSum(userId));
-        }
-
-        /// <summary>
-        /// 条件分页查询
-        /// </summary>
-        /// <param name="pageIndex">当前页码</param>
-        /// <param name="pageSize">每页记录条数</param>
-        /// <param name="isDesc">是否倒序</param>
-        [HttpGet("GetPagingUserTalk")]
-        public IActionResult GetPagingUserTalk(int pageIndex, int pageSize, bool isDesc)
-        {
-            return Ok(_service.GetPagingUserTalk(1, pageIndex, pageSize, out _, isDesc));
-        }
+        
 
         /// <summary>
         /// 添加数据 （权限）
@@ -99,7 +44,7 @@ namespace Snblog.Controllers
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AsyDetUserTalk(int id)
         {
-            return Ok(await _service.AsyDetUserTalk(id));
+            return Ok(await _service.DelAsync(id));
         }
 
         /// <summary>

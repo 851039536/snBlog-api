@@ -39,9 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Snblog.Enties\Snblog.Enties.csproj" />
-    <ProjectReference Include="..\Snblog.IRepository\Snblog.IRepository.csproj" />
     <ProjectReference Include="..\Snblog.IService\Snblog.IService.csproj" />
-    <ProjectReference Include="..\Snblog.Repository\Snblog.Repository.csproj" />
     <ProjectReference Include="..\Snblog.Service\Snblog.Service.csproj" />
     <ProjectReference Include="..\Snblog.Util\Snblog.Util.csproj" />
   </ItemGroup>
