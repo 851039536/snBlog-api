@@ -29,23 +29,26 @@ namespace Snblog.IService.IService
         /// <param name="ordering">排序规则 data:时间|id:主键</param>
         /// <returns>list-entity</returns>
         Task<List<UserTalkDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,string ordering,bool isDesc,bool cache);
+     
+        
         /// <summary>
-        /// 按id删除
+        /// 删除数据
         /// </summary>
         Task<bool> DelAsync(int id);
 
         /// <summary>
-        /// 异步添加数据
+        ///  添加
         /// </summary>
-        /// <returns></returns>
-        Task<bool> AsyInsUserTalk(UserTalk entity);
+        /// <param name="entity"></param>
+        /// <returns>bool</returns>
+        Task<bool> AddAsync(UserTalk entity);
      
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="talk"></param>
+        /// <param name="test"></param>
         /// <returns></returns>
-        Task<bool> AysUpUserTalk(UserTalk entity);
+        Task<bool> UpdateAsync(UserTalk test);
 
     }
 }

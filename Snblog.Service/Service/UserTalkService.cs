@@ -1,12 +1,8 @@
-﻿
-namespace Snblog.Service.Service
+﻿namespace Snblog.Service.Service
 {
     public class UserTalkService : IUserTalkService
     {
-        
-        // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
         const string Name = "userTalk_";
-        
         private readonly EntityData<UserTalk> _ret = new();
         private readonly EntityDataDto<UserTalkDto> _retDto = new();
 
@@ -15,7 +11,7 @@ namespace Snblog.Service.Service
         private readonly CacheUtil _cache;
         private readonly IMapper _mapper;
 
-        public UserTalkService(snblogContext service ,ICacheUtil cache, IMapper mapper)
+        public UserTalkService(snblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
@@ -26,7 +22,7 @@ namespace Snblog.Service.Service
         {
             var upNames = name.ToUpper();
             Common.CacheInfo($"{Name}{Common.Contains}{identity}_{type}_{name}_{cache}");
-            
+
             if (cache)
             {
                 _retDto.EntityList = _cache.GetValue<List<UserTalkDto>>(Common.CacheKey);
@@ -35,14 +31,15 @@ namespace Snblog.Service.Service
                     return _retDto.EntityList;
                 }
             }
+
             return identity switch
             {
                 0 => await GetContainsAsync(l => l.Text.ToUpper().Contains(upNames)),
                 1 => await GetContainsAsync(l => l.Text.ToUpper().Contains(upNames) && l.User.Name == type),
                 _ => await GetContainsAsync(l => l.Text.ToUpper().Contains(upNames)),
             };
-            
         }
+
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -54,7 +51,8 @@ namespace Snblog.Service.Service
         /// <param name="cache">缓存</param>
         /// <param name="ordering">排序规则 data:时间|id:主键</param>
         /// <returns>list-entity</returns>
-        public async Task<List<UserTalkDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
+        public async Task<List<UserTalkDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
+            string ordering, bool isDesc, bool cache)
         {
             Common.CacheInfo(
                 $"{Name}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
@@ -100,16 +98,16 @@ namespace Snblog.Service.Service
                         ? userTalks.OrderByDescending(c => c.TimeCreate)
                         : userTalks.OrderBy(c => c.TimeCreate);
                     break;
-               
             }
 
-            var data = await userTalks.Skip((pageIndex - 1) * pageSize).Take(pageSize)
+            _retDto.EntityList = await userTalks.Skip((pageIndex - 1) * pageSize).Take(pageSize).SelectUserTalk()
                 .ToListAsync();
             _cache.SetValue(Common.CacheKey, _retDto.EntityList);
-            
-            _retDto.EntityList = _mapper.Map<List<UserTalkDto>>(data);
+
+            // _retDto.EntityList = _mapper.Map<List<UserTalkDto>>(data);
             return _retDto.EntityList;
         }
+
         /// <summary>
         /// 模糊查询
         /// </summary>
@@ -120,52 +118,36 @@ namespace Snblog.Service.Service
             {
                 return _retDto.EntityList;
             }
-
-            _ret.EntityList = await _service.UserTalks.Where(predicate).ToListAsync();
+            _retDto.EntityList = await _service.UserTalks.Where(predicate).SelectUserTalk().ToListAsync();
             _cache.SetValue(Common.CacheKey, _retDto.EntityList); //设置缓存
-            _retDto.EntityList = _mapper.Map<List<UserTalkDto>>(_ret.EntityList);
             return _retDto.EntityList;
         }
 
-        /// <summary>
-        /// 删除数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+
         public async Task<bool> DelAsync(int id)
         {
-            // 通过id查找文章
-            var result = await _service.UserTalks.FindAsync(id);
-
-            // 如果文章不存在，返回false
-            if (result == null) return false;
-
-            _service.UserTalks.Remove(result); //删除单个
-            _service.Remove(result); //直接在context上Remove()方法传入model，它会判断类型
-
-            // 保存更改
+            Common.CacheInfo($"{Name}{Common.Del}{id}");
+            var ret = await _service.UserTalks.FindAsync(id);
+            if (ret == null) return false;
+            _service.UserTalks.Remove(ret);
             return await _service.SaveChangesAsync() > 0;
         }
 
-
-        /// <summary>
-        /// 添加数据
-        /// </summary>
-        /// <param name="talk"></param>
-        /// <returns></returns>
-        public async Task<bool> AsyInsUserTalk(UserTalk entity)
+        public async Task<bool> AddAsync(UserTalk entity)
         {
+            
+            Common.CacheInfo($"{Name}{Common.Add}{entity}");
+            entity.TimeCreate = DateTime.Now; 
             _service.UserTalks.Add(entity);
             return await _service.SaveChangesAsync() > 0;
         }
 
-
-        public async Task<bool> AysUpUserTalk(UserTalk entity)
+        public async Task<bool> UpdateAsync(UserTalk entity)
         {
+            Common.CacheInfo($"{Name}{Common.Up}{entity}");
+
             _service.UserTalks.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }
-
-        
     }
 }

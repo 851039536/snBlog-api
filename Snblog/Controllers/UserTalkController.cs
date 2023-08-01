@@ -2,7 +2,7 @@
 
 namespace Snblog.Controllers
 {
-    [ApiExplorerSettings(GroupName = "V1")] //版本控制
+    [ApiExplorerSettings(GroupName = "V1")]
     [ApiController]
     [Route("userTalk")]
     public class UserTalkController : BaseController
@@ -14,8 +14,9 @@ namespace Snblog.Controllers
             _service = service;
         }
 
-        
+
         #region 模糊查询
+
         /// <summary>
         /// 模糊查询
         /// </summary>
@@ -24,14 +25,17 @@ namespace Snblog.Controllers
         /// <param name="name">查询字段</param>
         /// <param name="cache">缓存</param>
         [HttpGet("contains")]
-        public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "winfrom",bool cache = false)
+        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null",
+            string name = "winfrom", bool cache = false)
         {
-            var data = await _service.GetContainsAsync(identity, type,name,cache);
-            return ApiResponse(cache: cache,data: data);
+            var data = await _service.GetContainsAsync(identity, type, name, cache);
+            return ApiResponse(cache: cache, data: data);
         }
+
         #endregion
-        
+
         #region 分页查询
+
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -44,47 +48,64 @@ namespace Snblog.Controllers
         /// <param name="ordering">排序规则 data:时间|id:主键</param>
         /// <returns>list-entity</returns>
         [HttpGet("paging")]
-        public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false)
+        public async Task<IActionResult> GetPagingAsync(int identity = 0, string type = "null", int pageIndex = 1,
+            int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
         {
-            var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache);
-            return ApiResponse(cache: cache,data:data );
+            var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
+            return ApiResponse(cache: cache, data: data);
         }
+
         #endregion
-        
+
+
+        #region 添加
 
         /// <summary>
-        /// 添加数据 （权限）
+        ///  添加
         /// </summary>
-        /// <returns></returns>
-        [HttpPost("AsyInsUserTalk")]
+        /// <param name="entity">实体</param>
+        /// <returns>bool</returns>
+        [HttpPost("add")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<ActionResult<UserTalk>> AsyInsUserTalk(UserTalk talk)
+        public async Task<IActionResult> AddAsync(UserTalk entity)
         {
-            return Ok(await _service.AsyInsUserTalk(talk));
-        }
-        /// <summary>
-        /// 删除数据 （权限）
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpDelete("AsyDetUserTalk")]
-        [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> AsyDetUserTalk(int id)
-        {
-            return Ok(await _service.DelAsync(id));
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data: data);
         }
 
+        #endregion
+
+        #region 删除
+
         /// <summary>
-        /// 更新数据 （权限）
+        /// 删除
         /// </summary>
-        /// <param name="talk"></param>
+        /// <param name="id">主键</param>
         /// <returns></returns>
-        [HttpPut("AysUpArticle")]
+        [HttpDelete("del")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> AysUpUserTalk(UserTalk talk)
+        public async Task<IActionResult> DelAsync(int id)
         {
-            var data = await _service.AysUpUserTalk(talk);
-            return Ok(data);
+            var data = await _service.DelAsync(id);
+            return ApiResponse(data: data);
         }
+
+        #endregion
+
+        #region 更新
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="entity">实体</param>
+        /// <returns>bool</returns>
+        [HttpPut("update")]
+        [Authorize(Roles = Permissions.Name)]
+        public async Task<IActionResult> UpdateAsync(UserTalk entity)
+        {
+            var data = await _service.UpdateAsync(entity);
+            return ApiResponse(data: data);
+        }
+
+        #endregion
     }
 }

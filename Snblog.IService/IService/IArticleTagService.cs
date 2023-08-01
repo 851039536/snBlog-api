@@ -38,9 +38,9 @@
         /// <summary>
         /// 更新数据
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(ArticleTag test);
+        Task<bool> UpdateAsync(ArticleTag entity);
         /// <summary>
         /// 删除数据
         /// </summary>
