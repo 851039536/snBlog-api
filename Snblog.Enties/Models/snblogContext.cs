@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Snblog.Models;
+﻿using Snblog.Models;
 
 namespace Snblog.Enties.Models;
 
@@ -431,7 +428,12 @@ public partial class SnblogContext : DbContext
                 .IsRequired()
                 .HasMaxLength(225)
                 .HasComment("描述")
-                .HasColumnName("description");
+                .HasColumnName("description");   
+            entity.Property(e => e.Img)
+                .IsRequired()
+                .HasMaxLength(225)
+                .HasComment("描述")
+                .HasColumnName("img");
             entity.Property(e => e.Give).HasColumnName("give");
             entity.Property(e => e.Name)
                 .IsRequired()

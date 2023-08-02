@@ -182,6 +182,7 @@ namespace Snblog
             // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IArticleService, ArticleService>(); //ioc
             services.AddScoped<ISnNavigationService, SnNavigationService>();
+            services.AddScoped<IPhotoGalleryService, PhotoGalleryService>();
             services.AddScoped<IArticleTagService, ArticleTagService>();
             services.AddScoped<IArticleTypeService, ArticleTypeService>();
             services.AddScoped<IDiaryService, DiaryService>();
@@ -208,6 +209,7 @@ namespace Snblog
             services.AddTransient<IValidator<Article>, ArticleValidator>();
             services.AddTransient<IValidator<Snippet>, SnippetValidator>();
             services.AddTransient<IValidator<UserTalk>, UserTalkValidator>();
+            services.AddTransient<IValidator<PhotoGallery>, PhotoGalleryValidator>();
             //整个应用程序生命周期以内只创建一个实例 
             services.AddSingleton<ICacheManager, CacheManager>();
             services.AddSingleton<ICacheUtil, CacheUtil>();

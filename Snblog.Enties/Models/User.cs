@@ -1,6 +1,7 @@
 ﻿using Snblog.Models;
 using System;
 using System.Collections.Generic;
+using PhotoGalleryDto = Snblog.Enties.ModelsDto.PhotoGalleryDto;
 
 namespace Snblog.Enties.Models;
 

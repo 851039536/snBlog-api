@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable disable
 
-#nullable disable
-
-namespace Snblog.Enties.Models
+namespace Snblog.Enties.ModelsDto
 {
     public partial class ArticleTagDto
     {

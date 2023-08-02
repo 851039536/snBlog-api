@@ -1,8 +1,8 @@
 ﻿using Snblog.Models;
 
-namespace Snblog.Enties.Models;
+namespace Snblog.Enties.ModelsDto;
 
-public partial class PhotoGallery
+public partial class PhotoGalleryDto
 {
     public int Id { get; set; }
 
@@ -15,6 +15,7 @@ public partial class PhotoGallery
     /// 描述
     /// </summary>
     public string Description { get; set; }
+    
     public string Img { get; set; }
 
     public int TypeId { get; set; }

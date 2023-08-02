@@ -57,7 +57,7 @@ public partial class Photo
     /// </summary>
     public DateTime? TimeCreate { get; set; }
 
-    public virtual PhotoGallery PhotoGallery { get; set; }
+    public virtual Enties.ModelsDto.PhotoGalleryDto PhotoGallery { get; set; }
 
     public virtual PhotoType Type { get; set; }
 
