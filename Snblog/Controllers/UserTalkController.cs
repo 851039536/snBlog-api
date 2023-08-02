@@ -8,10 +8,11 @@ namespace Snblog.Controllers
     public class UserTalkController : BaseController
     {
         private readonly IUserTalkService _service;
-
-        public UserTalkController(IUserTalkService service)
+        private readonly IValidator <UserTalk> _validator;
+        public UserTalkController(IUserTalkService service, IValidator<UserTalk> validator)
         {
             _service = service;
+            _validator = validator;
         }
 
 
@@ -69,8 +70,12 @@ namespace Snblog.Controllers
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> AddAsync(UserTalk entity)
         {
-            var data = await _service.AddAsync(entity);
-            return ApiResponse(data: data);
+            var ret = await _validator.ValidateAsync(entity);
+            if (!ret.IsValid)
+            {
+                return ApiResponse(statusCode: 404, message: ret.Errors[0].ErrorMessage, data: entity);
+            }
+            return ApiResponse(data: await _service.AddAsync(entity));
         }
 
         #endregion

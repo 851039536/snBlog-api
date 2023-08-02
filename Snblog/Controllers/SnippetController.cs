@@ -14,10 +14,12 @@ namespace Snblog.Controllers
         private readonly ISnippetService _service; 
         private readonly IValidator <Snippet> _validator;
         #region 构造函数
+
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service">service</param>
+        /// <param name="validator">validator</param>
         public SnippetController(ISnippetService service,  IValidator<Snippet> validator)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));

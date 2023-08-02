@@ -207,6 +207,7 @@ namespace Snblog
             //IValidator
             services.AddTransient<IValidator<Article>, ArticleValidator>();
             services.AddTransient<IValidator<Snippet>, SnippetValidator>();
+            services.AddTransient<IValidator<UserTalk>, UserTalkValidator>();
             //整个应用程序生命周期以内只创建一个实例 
             services.AddSingleton<ICacheManager, CacheManager>();
             services.AddSingleton<ICacheUtil, CacheUtil>();
