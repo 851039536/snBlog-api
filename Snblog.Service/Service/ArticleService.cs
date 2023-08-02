@@ -9,7 +9,7 @@
         private readonly EntityDataDto<ArticleDto> _retDto = new();
 
         //服务
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
 
         /// <summary>
@@ -20,7 +20,7 @@
         public ArticleService(IServiceProvider serviceProvider)
         {
             // 获取服务提供程序中的实例
-            _service = serviceProvider.GetRequiredService<snblogContext>();
+            _service = serviceProvider.GetRequiredService<SnblogContext>();
             _cache = (CacheUtil)serviceProvider.GetRequiredService<ICacheUtil>();
         }
 

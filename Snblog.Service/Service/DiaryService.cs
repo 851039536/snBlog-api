@@ -9,10 +9,10 @@
         readonly EntityDataDto<DiaryDto> _rDto = new();
 
         private readonly CacheUtil _cache;
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
 
 
-        public DiaryService(snblogContext service, ICacheUtil cache)
+        public DiaryService(SnblogContext service, ICacheUtil cache)
         {
             _service = service;
             _cache = (CacheUtil)cache;

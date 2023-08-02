@@ -17,7 +17,7 @@ namespace Snblog.Controllers
     [Route("user")]
     public class UserController : BaseController
     {
-        private readonly snblogContext _coreDbContext;
+        private readonly SnblogContext _coreDbContext;
         private readonly IUserService _service;
         private readonly JwtConfig _jwtModel;
 
@@ -27,7 +27,7 @@ namespace Snblog.Controllers
         /// <param name="service"></param>
         /// <param name="coreDbContext"></param>
         /// <param name="jwtModel"></param>
-        public UserController(IUserService service,snblogContext coreDbContext,IOptions<JwtConfig> jwtModel)
+        public UserController(IUserService service,SnblogContext coreDbContext,IOptions<JwtConfig> jwtModel)
         {
             _service = service;
             _coreDbContext = coreDbContext;

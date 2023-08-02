@@ -147,7 +147,7 @@ namespace Snblog
 
             #region 数据库连接池
 
-            services.AddDbContext<snblogContext>(
+            services.AddDbContext<SnblogContext>(
                 options => options
                     .UseMySQL(Configuration.GetConnectionString("MysqlConnection") ?? string.Empty
                     ));

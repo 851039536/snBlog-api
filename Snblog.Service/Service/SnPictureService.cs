@@ -2,11 +2,11 @@
 {
     public class SnPictureService : ISnPictureService
     {
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnPicture> result_List = default;
-        public SnPictureService(snblogContext service, ICacheUtil cacheutil)
+        public SnPictureService(SnblogContext service, ICacheUtil cacheutil)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;

@@ -1,12 +1,17 @@
-﻿namespace Snblog.Enties.Models;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Snblog.Models;
 
-public partial class snblogContext : DbContext
+namespace Snblog.Enties.Models;
+
+public partial class SnblogContext : DbContext
 {
-    public snblogContext()
+    public SnblogContext()
     {
     }
 
-    public snblogContext(DbContextOptions<snblogContext> options)
+    public SnblogContext(DbContextOptions<SnblogContext> options)
         : base(options)
     {
     }
@@ -24,6 +29,14 @@ public partial class snblogContext : DbContext
     public virtual DbSet<Interface> Interfaces { get; set; }
 
     public virtual DbSet<InterfaceType> InterfaceTypes { get; set; }
+
+    public virtual DbSet<Photo> Photos { get; set; }
+
+    public virtual DbSet<PhotoGallery> PhotoGalleries { get; set; }
+
+    public virtual DbSet<PhotoGalleryType> PhotoGalleryTypes { get; set; }
+
+    public virtual DbSet<PhotoType> PhotoTypes { get; set; }
 
     public virtual DbSet<SnComment> SnComments { get; set; }
 
@@ -65,9 +78,7 @@ public partial class snblogContext : DbContext
 
     public virtual DbSet<Video> Videos { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseMySql("server=localhost;userid=root;pwd=woshishui;port=3306;database=snblog;sslmode=none", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.33-mysql"));
+   
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -84,11 +95,11 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.TagId, "article_labelsId");
+            entity.HasIndex(e => e.TagId,"article_labelsId");
 
-            entity.HasIndex(e => e.TypeId, "article_sortId");
+            entity.HasIndex(e => e.TypeId,"article_sortId");
 
-            entity.HasIndex(e => e.UserId, "user_id");
+            entity.HasIndex(e => e.UserId,"user_id");
 
             entity.Property(e => e.Id)
                 .HasComment("主键")
@@ -204,13 +215,13 @@ public partial class snblogContext : DbContext
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity
-                .ToTable("diary", tb => tb.HasComment("日记表"))
+                .ToTable("diary",tb => tb.HasComment("日记表"))
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.UserId, "one_user_id");
+            entity.HasIndex(e => e.UserId,"one_user_id");
 
-            entity.HasIndex(e => e.TypeId, "sn_one_type");
+            entity.HasIndex(e => e.TypeId,"sn_one_type");
 
             entity.Property(e => e.Id)
                 .HasComment("主键")
@@ -269,7 +280,7 @@ public partial class snblogContext : DbContext
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity
-                .ToTable("diary_type", tb => tb.HasComment("日记分类"))
+                .ToTable("diary_type",tb => tb.HasComment("日记分类"))
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
@@ -289,9 +300,9 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.TypeId, "type_id");
+            entity.HasIndex(e => e.TypeId,"type_id");
 
-            entity.HasIndex(e => e.UserId, "user_id");
+            entity.HasIndex(e => e.UserId,"user_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Identity)
@@ -341,6 +352,142 @@ public partial class snblogContext : DbContext
                 .HasColumnName("name");
         });
 
+        modelBuilder.Entity<Photo>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("photo",tb => tb.HasComment("图册"));
+
+            entity.HasIndex(e => e.PhotoGalleryId,"fk_ph_gallery");
+
+            entity.HasIndex(e => e.TypeId,"fk_type");
+
+            entity.HasIndex(e => e.UserId,"fk_user");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Description)
+                .IsRequired()
+                .HasMaxLength(225)
+                .HasComment("描述")
+                .HasColumnName("description");
+            entity.Property(e => e.Give)
+                .HasComment("热度")
+                .HasColumnName("give");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(80)
+                .HasComment("名称")
+                .HasColumnName("name");
+            entity.Property(e => e.Path)
+                .IsRequired()
+                .HasMaxLength(225)
+                .HasComment("路径")
+                .HasColumnName("path");
+            entity.Property(e => e.PhotoGalleryId).HasColumnName("photo_gallery_id");
+            entity.Property(e => e.Read)
+                .HasComment("阅读")
+                .HasColumnName("read");
+            entity.Property(e => e.Tag)
+                .HasMaxLength(50)
+                .HasComment("标签")
+                .HasColumnName("tag");
+            entity.Property(e => e.TimeCreate)
+                .HasComment("创建时间")
+                .HasColumnType("datetime")
+                .HasColumnName("time_create");
+            entity.Property(e => e.TypeId)
+                .HasComment("分类")
+                .HasColumnName("type_id");
+            entity.Property(e => e.UserId)
+                .HasComment("用户")
+                .HasColumnName("user_id");
+
+            entity.HasOne(d => d.PhotoGallery).WithMany(p => p.Photos)
+                .HasForeignKey(d => d.PhotoGalleryId)
+                .HasConstraintName("fk_ph_gallery");
+
+            entity.HasOne(d => d.Type).WithMany(p => p.Photos)
+                .HasForeignKey(d => d.TypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_type");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Photos)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("fk_user");
+        });
+
+        modelBuilder.Entity<PhotoGallery>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("photo_gallery");
+
+            entity.HasIndex(e => e.TypeId,"FK1_TYPE");
+
+            entity.HasIndex(e => e.UserId,"FK2_USER");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Description)
+                .IsRequired()
+                .HasMaxLength(225)
+                .HasComment("描述")
+                .HasColumnName("description");
+            entity.Property(e => e.Give).HasColumnName("give");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasComment("名称")
+                .HasColumnName("name");
+            entity.Property(e => e.Tag)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("tag");
+            entity.Property(e => e.TimeCreate)
+                .HasColumnType("datetime")
+                .HasColumnName("time_create");
+            entity.Property(e => e.TimeModified)
+                .HasColumnType("datetime")
+                .HasColumnName("time_modified");
+            entity.Property(e => e.TypeId).HasColumnName("type_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Type).WithMany(p => p.PhotoGalleries)
+                .HasForeignKey(d => d.TypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK1_TYPE");
+
+            entity.HasOne(d => d.User).WithMany(p => p.PhotoGalleries)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK2_USER");
+        });
+
+        modelBuilder.Entity<PhotoGalleryType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("photo_gallery_type");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'0'")
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<PhotoType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("photo_type");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .HasColumnName("name");
+        });
+
         modelBuilder.Entity<SnComment>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -383,9 +530,9 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.TypeId, "nav_type_id");
+            entity.HasIndex(e => e.TypeId,"nav_type_id");
 
-            entity.HasIndex(e => e.UserId, "nav_user_id");
+            entity.HasIndex(e => e.UserId,"nav_user_id");
 
             entity.Property(e => e.Id)
                 .HasComment("主键")
@@ -462,9 +609,9 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.UserId, "pivture_user_id");
+            entity.HasIndex(e => e.UserId,"pivture_user_id");
 
-            entity.HasIndex(e => e.TypeId, "prcture_type_id");
+            entity.HasIndex(e => e.TypeId,"prcture_type_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ImgUrl)
@@ -519,9 +666,9 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.TypeId, "setblog_type_id");
+            entity.HasIndex(e => e.TypeId,"setblog_type_id");
 
-            entity.HasIndex(e => e.UserId, "setblog_user_id");
+            entity.HasIndex(e => e.UserId,"setblog_user_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Isopen)
@@ -581,7 +728,7 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.TypeId, "software_type_id");
+            entity.HasIndex(e => e.TypeId,"software_type_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CommentId)
@@ -635,9 +782,9 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.TypeId, "sn_talk_typeId");
+            entity.HasIndex(e => e.TypeId,"sn_talk_typeId");
 
-            entity.HasIndex(e => e.UserId, "user_id");
+            entity.HasIndex(e => e.UserId,"user_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CommentId)
@@ -754,13 +901,13 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.LabelId, "label");
+            entity.HasIndex(e => e.LabelId,"label");
 
-            entity.HasIndex(e => e.TagId, "tagid");
+            entity.HasIndex(e => e.TagId,"tagid");
 
-            entity.HasIndex(e => e.TypeId, "typeid");
+            entity.HasIndex(e => e.TypeId,"typeid");
 
-            entity.HasIndex(e => e.UserId, "uid");
+            entity.HasIndex(e => e.UserId,"uid");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.LabelId).HasColumnName("label_id");
@@ -800,7 +947,7 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.Name, "name").IsUnique();
+            entity.HasIndex(e => e.Name,"name").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -913,7 +1060,7 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.UserId, "sn_user_talk_userId");
+            entity.HasIndex(e => e.UserId,"sn_user_talk_userId");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CommentId)
@@ -945,9 +1092,9 @@ public partial class snblogContext : DbContext
                 .HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_bin");
 
-            entity.HasIndex(e => e.TypeId, "video_type_id");
+            entity.HasIndex(e => e.TypeId,"video_type_id");
 
-            entity.HasIndex(e => e.UserId, "video_user_id");
+            entity.HasIndex(e => e.UserId,"video_user_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Img)

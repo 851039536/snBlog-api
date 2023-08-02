@@ -10,14 +10,14 @@
         private string _cacheKey;
 
 
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
 
         private readonly IMapper _mapper;
         private readonly EntityDataDto<InterfaceDto> _rDto = new();
 
 
-        public InterfaceService(snblogContext service,ICacheUtil cache,IMapper mapper)
+        public InterfaceService(SnblogContext service,ICacheUtil cache,IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;

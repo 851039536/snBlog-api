@@ -4,13 +4,13 @@ namespace Snblog.Service.Service
 {
     public class SnSetBlogService : ISnSetBlogService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cacheutil;
         private readonly ILogger<SnSetBlogService> _logger;
         readonly EntityData<SnSetblog> res = new();
         readonly EntityDataDto<SnSetblogDto> resDto = new();
         private readonly IMapper _mapper;
-        public SnSetBlogService(ICacheUtil cacheUtil, snblogContext coreDbContext, ILogger<SnSetBlogService> logger, IMapper mapper)
+        public SnSetBlogService(ICacheUtil cacheUtil, SnblogContext coreDbContext, ILogger<SnSetBlogService> logger, IMapper mapper)
         {
             _service = coreDbContext;
             _cacheutil = (CacheUtil)cacheUtil;

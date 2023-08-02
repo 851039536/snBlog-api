@@ -2,7 +2,7 @@
 {
     public class ArticleTypeService :  IArticleTypeService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
 
         private readonly EntityData<ArticleType> _ret = new();
@@ -17,7 +17,7 @@
 
         const string NAME = "ArticleType_";
 
-        public ArticleTypeService(snblogContext service, ICacheUtil cache, IMapper mapper)
+        public ArticleTypeService(SnblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;

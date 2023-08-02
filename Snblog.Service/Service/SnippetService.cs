@@ -2,14 +2,14 @@
 {
     public class SnippetService : ISnippetService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
         private readonly EntityData<Snippet> _ret = new();
         private readonly EntityDataDto<SnippetDto> _rDto = new();
 
         const string NAME = "Snippet_";
 
-        public SnippetService(ICacheUtil cacheUtil, snblogContext coreDbContext)
+        public SnippetService(ICacheUtil cacheUtil, SnblogContext coreDbContext)
         {
             _service = coreDbContext;
             _cache = (CacheUtil)cacheUtil;

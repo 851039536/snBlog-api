@@ -2,8 +2,8 @@
 {
     public class SnVideoTypeService : ISnVideoTypeService
     {
-        private readonly snblogContext _service;
-        public SnVideoTypeService(snblogContext service) 
+        private readonly SnblogContext _service;
+        public SnVideoTypeService(SnblogContext service) 
         {
             _service = service;
         }

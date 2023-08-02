@@ -7,11 +7,11 @@
         private readonly EntityDataDto<UserTalkDto> _retDto = new();
 
         //服务
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
         private readonly IMapper _mapper;
 
-        public UserTalkService(snblogContext service, ICacheUtil cache, IMapper mapper)
+        public UserTalkService(SnblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;

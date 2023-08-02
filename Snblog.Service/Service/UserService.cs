@@ -5,7 +5,7 @@ namespace Snblog.Service.Service
     public class UserService : IUserService
     {
         private readonly CacheUtil _cache;
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private int _rInt;
         private UserDto _rDto = default;
         private List<UserDto> _rListDto = default;
@@ -19,7 +19,7 @@ namespace Snblog.Service.Service
         const string DEL = "DEL_";
         const string ADD = "ADD";
         const string UPDATE = "UPDATE_";
-        public UserService(snblogContext service,IMapper mapper,ICacheUtil cache)
+        public UserService(SnblogContext service,IMapper mapper,ICacheUtil cache)
         {
             _service = service;
             _mapper = mapper;

@@ -6,11 +6,11 @@ namespace Snblog.Service.Service
     {
 
         private readonly ILogger<SnNavigationTypeService> _logger;
-        private readonly snblogContext _service;//DB
+        private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cacheutil;
         private int result_Int;
         private List<SnNavigationType> result_List = null;
-        public SnNavigationTypeService(snblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationTypeService> logger)
+        public SnNavigationTypeService(SnblogContext service, ICacheUtil cacheutil, ILogger<SnNavigationTypeService> logger)
         {
             _service = service;
             _cacheutil = (CacheUtil)cacheutil;

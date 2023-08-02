@@ -2,7 +2,7 @@
 {
     public class SnippetTagService : ISnippetTagService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
 
         private readonly EntityData<SnippetTag> _ret = new();
@@ -11,7 +11,7 @@
 
         const string NAME = "SnippetTag_";
 
-        public SnippetTagService(snblogContext service, ICacheUtil cache, IMapper mapper)
+        public SnippetTagService(SnblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;

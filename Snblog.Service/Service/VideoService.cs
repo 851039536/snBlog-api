@@ -2,7 +2,7 @@
 {
     public class VideoService : IVideoService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
         private readonly EntityData<Video> _ret = new();
         private readonly EntityDataDto<VideoDto> _rDto = new();
@@ -10,7 +10,7 @@
 
         const string NAME = "video_";
 
-        public VideoService(snblogContext service, ICacheUtil cache, IMapper mapper)
+        public VideoService(SnblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;

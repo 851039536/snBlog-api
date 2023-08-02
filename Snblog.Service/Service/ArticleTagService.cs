@@ -7,12 +7,12 @@
         private readonly EntityData<ArticleTag> _ret = new();
         private readonly EntityDataDto<ArticleTagDto> _rDto = new();
 
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
         private readonly IMapper _mapper;
 
 
-        public ArticleTagService(snblogContext service, ICacheUtil cache, IMapper mapper)
+        public ArticleTagService(SnblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;

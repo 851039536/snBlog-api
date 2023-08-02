@@ -3,13 +3,13 @@
     public class SnNavigationService : ISnNavigationService
     {
         const string NAME = "Navigation_";
-        private readonly snblogContext _service; //DB
+        private readonly SnblogContext _service; //DB
         private readonly CacheUtil _cache;
         private readonly EntityData<SnNavigation> _ret = new();
         private readonly EntityDataDto<SnNavigationDto> _rDto = new();
         private readonly IMapper _mapper;
 
-        public SnNavigationService(snblogContext service, ICacheUtil cache, IMapper mapper)
+        public SnNavigationService(SnblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;

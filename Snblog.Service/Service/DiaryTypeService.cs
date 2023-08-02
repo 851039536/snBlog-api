@@ -2,7 +2,7 @@
 {
     public class DiaryTypeService : IDiaryTypeService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
         private int _rInt;
 
@@ -11,7 +11,7 @@
         const string NAME = "diaryType_";
         private string _cacheKey;
 
-        public DiaryTypeService(snblogContext service, ICacheUtil cache)
+        public DiaryTypeService(SnblogContext service, ICacheUtil cache)
         {
             _service = service;
             _cache = (CacheUtil)cache;

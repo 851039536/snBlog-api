@@ -5,7 +5,7 @@ namespace Snblog.Service.Service
 {
     public class SnippetTypeService : ISnippetTypeService
     {
-        private readonly snblogContext _service;
+        private readonly SnblogContext _service;
         private readonly CacheUtil _cache;
 
         private readonly EntityData<SnippetType> _ret = new();
@@ -14,7 +14,7 @@ namespace Snblog.Service.Service
 
         const string NAME = "SnippetType_";
 
-        public SnippetTypeService(snblogContext service, ICacheUtil cache, IMapper mapper)
+        public SnippetTypeService(SnblogContext service, ICacheUtil cache, IMapper mapper)
         {
             _service = service;
             _cache = (CacheUtil)cache;
