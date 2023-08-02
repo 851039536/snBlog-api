@@ -9,18 +9,19 @@ namespace Snblog.Controllers
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
     [Route("snippet")]
-    public class SnippetController : ControllerBase
+    public class SnippetController : BaseController
     {
         private readonly ISnippetService _service; 
-
+        private readonly IValidator <Snippet> _validator;
         #region 构造函数
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service">service</param>
-        public SnippetController(ISnippetService service)
+        public SnippetController(ISnippetService service,  IValidator<Snippet> validator)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
+            _validator = validator;
         }
         #endregion
 
@@ -119,7 +120,12 @@ namespace Snblog.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync(Snippet entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var ret =await  _validator.ValidateAsync(entity);
+            if (!ret.IsValid)
+            {
+                return ApiResponse(statusCode: 404, message: ret.Errors[0].ErrorMessage, data: entity);
+            }
+            return ApiResponse(data: await _service.AddAsync(entity));
         }
         #endregion
 

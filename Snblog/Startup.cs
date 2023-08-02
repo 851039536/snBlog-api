@@ -177,10 +177,9 @@ namespace Snblog
 
             #endregion
 
-            #region DI依赖注入配置。
+            #region DI依赖注入配置
 
             // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
-            // services.AddScoped<IConcardContext, snblogContext>(); //db
             services.AddScoped<IArticleService, ArticleService>(); //ioc
             services.AddScoped<ISnNavigationService, SnNavigationService>();
             services.AddScoped<IArticleTagService, ArticleTagService>();
@@ -204,7 +203,10 @@ namespace Snblog
             services.AddScoped<ISnippetTypeService, SnippetTypeService>();
             services.AddScoped<ISnippetLabelService, SnippetLabelService>();
             services.AddScoped<DataBaseSql, DataBaseSql>();
+            
+            //IValidator
             services.AddTransient<IValidator<Article>, ArticleValidator>();
+            services.AddTransient<IValidator<Snippet>, SnippetValidator>();
             //整个应用程序生命周期以内只创建一个实例 
             services.AddSingleton<ICacheManager, CacheManager>();
             services.AddSingleton<ICacheUtil, CacheUtil>();
