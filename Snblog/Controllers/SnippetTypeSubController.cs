@@ -3,19 +3,19 @@
 namespace Snblog.Controllers
 {
     /// <summary>
-    /// 片段标签
+    /// 分类子类
     /// </summary>
     [ApiExplorerSettings(GroupName = "V1")] 
     [ApiController]
-    [Route("snippetLabel")]
-    public class SnippetLabelController : BaseController
+    [Route("snippetTypeSub")]
+    public class SnippetTypeSubController : BaseController
     {
-        private readonly ISnippetLabelService _service; 
+        private readonly ISnippetTypeSubService _service; 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
-        public SnippetLabelController(ISnippetLabelService service)
+        public SnippetTypeSubController(ISnippetTypeSubService service)
         {
             _service = service;
         }
@@ -46,8 +46,25 @@ namespace Snblog.Controllers
             var data = await _service.GetAllAsync(cache);
             return ApiResponse(cache: cache, data: data);
         }
+
+
         #endregion
 
+
+        #region 根据主表类别id查询
+        /// <summary>
+        /// 根据主表类别id查询
+        /// </summary>
+        /// <param name="snippetTypeId">主表类别id</param>
+        /// <param name="cache">缓存</param>
+        /// <returns>list-entity</returns>
+        [HttpGet("condition")]
+        public async Task<IActionResult> GetCondition(int snippetTypeId,bool cache =false)
+        {
+            var data = await _service.GetCondition(snippetTypeId,cache);
+            return ApiResponse(cache: cache,data: data);
+        }
+        #endregion
         #region 主键查询
         /// <summary>
         /// 主键查询
@@ -88,7 +105,7 @@ namespace Snblog.Controllers
         /// <returns>bool</returns>
         [HttpPost("add")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> AddAsync(SnippetLabel entity)
+        public async Task<IActionResult> AddAsync(SnippetTypeSub entity)
         {
             var data = await _service.AddAsync(entity);
             return ApiResponse(data: data);
@@ -103,7 +120,7 @@ namespace Snblog.Controllers
         /// <returns>bool</returns>
         [HttpPut("update")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnippetLabel entity)
+        public async Task<IActionResult> UpdateAsync(SnippetTypeSub entity)
         {
             var data = await _service.UpdateAsync(entity);
             return ApiResponse(data: data);

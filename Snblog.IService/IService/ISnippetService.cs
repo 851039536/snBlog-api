@@ -1,5 +1,5 @@
 ﻿namespace Snblog.IService.IService
-    {
+{
     /// <summary>
     /// 代码片段接口
     /// </summary>

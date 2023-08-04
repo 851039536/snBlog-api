@@ -194,10 +194,14 @@
         public async Task<List<SnNavigationDto>> GetTypeAsync(int identity, string type, bool cache)
         {
             Log.Information("SnNavigation条件查询=>" + type + identity + cache);
-            _rDto.EntityList = _cache.CacheString("GetTypeOrderAsync_SnNavigation" + type + identity + cache,
-                _rDto.EntityList, cache);
-            if (_rDto.EntityList == null)
+
+            if (cache)
             {
+                _rDto.EntityList = _cache.GetValue<List<SnNavigationDto>>("GetTypeOrderAsync_SnNavigation" + type + identity + cache);
+                if (_rDto.EntityList != null) return _rDto.EntityList;
+
+            }
+         
                 switch (identity)
                 {
                     case 1:
@@ -210,8 +214,7 @@
                         break;
                 }
 
-                _cache.CacheString("GetTypeOrderAsync_SnNavigation" + type + identity + cache, _rDto.EntityList, cache);
-            }
+                _cache.GetValue<List<SnNavigationDto>>("GetTypeOrderAsync_SnNavigation" + type + identity + cache);
 
             return _rDto.EntityList;
         }

@@ -202,7 +202,7 @@ namespace Snblog
             services.AddScoped<ISnippetService, SnippetService>();
             services.AddScoped<ISnippetTagService, SnippetTagService>();
             services.AddScoped<ISnippetTypeService, SnippetTypeService>();
-            services.AddScoped<ISnippetLabelService, SnippetLabelService>();
+            services.AddScoped<ISnippetTypeSubService, SnippetTypeSubService>();
             services.AddScoped<DataBaseSql, DataBaseSql>();
             
             //IValidator

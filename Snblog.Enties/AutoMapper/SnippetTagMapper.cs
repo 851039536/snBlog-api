@@ -1,8 +1,8 @@
 ﻿namespace Snblog.Enties.AutoMapper
-    {
-        /// <summary>
-        /// SnippetTag对象映射关系
-        /// </summary>
+{
+    /// <summary>
+    /// SnippetTag对象映射关系
+    /// </summary>
     public class SnippetTagMapper : Profile
     {
         /// <summary>

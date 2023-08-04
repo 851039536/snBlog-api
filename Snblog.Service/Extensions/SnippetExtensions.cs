@@ -1,4 +1,6 @@
-﻿namespace Snblog.Service.Extensions
+﻿using Snblog.Models;
+
+namespace Snblog.Service.Extensions
 {
     /// <summary>
     /// 封装Select
@@ -24,16 +26,20 @@
                     Id = e.Type.Id,
                     Name = e.Type.Name
                 },
+                TypeSubId = e.TypeSubId,
+                TypeSub = new SnippetTypeSub
+                {
+                    Id = e.TypeSub.Id,
+                    Name = e.TypeSub.Name
+                },
                 TagId = e.TagId,
                 Tag = new SnippetTag {
                     Id = e.Tag.Id,
                     Name = e.Tag.Name
                 },
-                LabelId = e.LabelId,
-                Label = new SnippetLabel {
-                    Id = e.Label.Id,
-                    Name = e.Label.Name
-                }
+                SnippetVersionId = e.SnippetVersionId,
+                TimeCreate = e.TimeCreate,
+                TimeUpdate = e.TimeUpdate,
             }).AsNoTracking();
         }
     }

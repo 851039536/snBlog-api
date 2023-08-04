@@ -198,14 +198,14 @@
                     if (isDesc)
                     {
                         _rDto.EntityList = await _service.Snippets
-                            .Where(w => w.Label.Name == type)
+                            .Where(w => w.TypeSub.Name == type)
                             .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).SelectSnippet().ToListAsync();
                     }
                     else
                     {
                         _rDto.EntityList = await _service.Snippets
-                            .Where(w => w.Label.Name == type)
+                            .Where(w => w.TypeSub.Name == type)
                             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).SelectSnippet().ToListAsync();
                     }
@@ -316,7 +316,7 @@
                 case 0: //所有 查分类,标题,内容
                     _rDto.EntityList = await _service.Snippets
                         .Where(w => w.Name.ToUpper().Contains(uppercaseName) ||
-                                    w.Label.Name.ToUpper()
+                                    w.TypeSub.Name.ToUpper()
                                         .Contains(uppercaseName) ||
                                     w.Text.ToUpper().Contains(uppercaseName))
                         .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)

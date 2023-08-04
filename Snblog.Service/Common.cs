@@ -15,6 +15,7 @@
         public const string Add = "ADD_";
         public const string Up = "UP_";
         public const string UpPortiog = "UP_PORTIOG_";
+        public const string Condition = "Condition";
 
 
         /// <summary>
