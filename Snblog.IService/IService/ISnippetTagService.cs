@@ -17,6 +17,7 @@
         /// <param name="cache">缓存</param>
         /// <returns>entity</returns>
         Task<SnippetTagDto> GetByIdAsync(int id, bool cache);
+        Task<SnippetTagDto> GetByTitle(string name, bool cache);
 
         /// <summary>
         /// 分页查询 
@@ -45,7 +46,7 @@
         /// </summary>
         /// <param name="entity">实体</param>
         /// <returns>bool</returns>
-        Task<bool> UpdateAsync(SnippetTag test);
+        Task<bool> UpdateAsync(SnippetTag entity);
         /// <summary>
         /// 删除
         /// </summary>

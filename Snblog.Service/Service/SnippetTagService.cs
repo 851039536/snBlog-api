@@ -51,6 +51,21 @@
             _rDto.Entity = _mapper.Map<SnippetTagDto>(await _service.SnippetTags.FindAsync(id));
             _cache.SetValue(Common.CacheKey, _rDto.Entity);
             return _rDto.Entity;
+        }     
+        
+        public async Task<SnippetTagDto> GetByTitle(string name, bool cache)
+        {
+            Common.CacheInfo($"{NAME}{Common.Bid}{name}");
+            if (cache)
+            {
+                _rDto.Entity = _cache.GetValue<SnippetTagDto>(Common.CacheKey);
+                if (_rDto.Entity != null) return _rDto.Entity;
+            }
+
+            var ret = await _service.SnippetTags.Where(w => w.Name == name).FirstAsync();
+            _rDto.Entity = _mapper.Map<SnippetTagDto>(ret);
+            _cache.SetValue(Common.CacheKey, _rDto.Entity);
+            return _rDto.Entity;
         }
 
         /// <summary>
@@ -73,6 +88,7 @@
         public async Task<bool> UpdateAsync(SnippetTag entity)
         {
             Common.CacheInfo($"{NAME}{Common.Up}{entity.Id}");
+
             _service.SnippetTags.Update(entity);
             return await _service.SaveChangesAsync() > 0;
         }

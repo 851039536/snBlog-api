@@ -61,6 +61,24 @@ namespace Snblog.Controllers
             return ApiResponse(data: data,cache: cache);
         }
         #endregion
+        
+        #region 按名称查询
+        
+        /// <summary>
+        /// 按名称查询
+        /// </summary>
+        /// <param name="name">标题</param>
+        /// <param name="cache">缓存</param>
+        /// <returns>entity</returns>
+        [HttpGet("byTitle")]
+        public async Task<IActionResult> GetByTitle(string name,bool cache = false)
+        {
+            var data = await _service.GetByTitle(name,cache);
+            return ApiResponse(data: data,cache: cache);
+        }
+        #endregion
+        
+        
 
         #region 分页查询 
         /// <summary>
