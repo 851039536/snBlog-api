@@ -181,7 +181,7 @@ namespace Snblog
 
             // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
             services.AddScoped<IArticleService, ArticleService>(); //ioc
-            services.AddScoped<ISnNavigationService, SnNavigationService>();
+            services.AddScoped<INavigationService, NavigationService>();
             services.AddScoped<IPhotoGalleryService, PhotoGalleryService>();
             services.AddScoped<IArticleTagService, ArticleTagService>();
             services.AddScoped<IArticleTypeService, ArticleTypeService>();
@@ -195,8 +195,7 @@ namespace Snblog
             services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
             services.AddScoped<ISnTalkService, SnTalkService>();
             services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
-            services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
-            services.AddScoped<ISnNavigationTypeService, SnNavigationTypeService>();
+            services.AddScoped<INavigationTypeService, NavigationTypeService>();
             services.AddScoped<IInterfaceService, InterfaceService>();
             services.AddScoped<ISnSetBlogService, SnSetBlogService>();
             services.AddScoped<ISnippetService, SnippetService>();

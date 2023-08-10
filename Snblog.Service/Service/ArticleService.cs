@@ -3,7 +3,7 @@
     public class ArticleService : IArticleService
     {
         // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
-        const string Name = "article_";
+        const string Name = "Article_";
 
         private readonly EntityData<Article> _ret = new();
         private readonly EntityDataDto<ArticleDto> _retDto = new();
@@ -58,7 +58,7 @@
 
         public async Task<List<ArticleDto>> GetTypeAsync(int identity, string type, bool cache)
         {
-            Common.CacheInfo($"{Name}{Common.Bid}{identity}_{type}_{cache}");
+            Common.CacheInfo($"{Name}{Common.Condition}{identity}_{type}_{cache}");
 
             if (cache)
             {
@@ -282,7 +282,6 @@
                 }
             }
 
-
             switch (identity)
             {
                 case 0:
@@ -306,33 +305,33 @@
         private async Task<List<ArticleDto>> GetPaging(int pageIndex, int pageSize, string ordering, bool isDesc,
             Expression<Func<Article, bool>> predicate = null)
         {
-            IQueryable<Article> ret = _service.Articles.AsQueryable();
+            IQueryable<Article> article = _service.Articles.AsQueryable();
 
             // 查询条件,如果为空则无条件查询
             if (predicate != null)
             {
-                ret = ret.Where(predicate);
+                article = article.Where(predicate);
             }
 
             switch (ordering)
             {
                 case "id":
-                    ret = isDesc ? ret.OrderByDescending(c => c.Id) : ret.OrderBy(c => c.Id);
+                    article = isDesc ? article.OrderByDescending(c => c.Id) : article.OrderBy(c => c.Id);
                     break;
                 case "data":
-                    ret = isDesc
-                        ? ret.OrderByDescending(c => c.TimeCreate)
-                        : ret.OrderBy(c => c.TimeCreate);
+                    article = isDesc
+                        ? article.OrderByDescending(c => c.TimeCreate)
+                        : article.OrderBy(c => c.TimeCreate);
                     break;
                 case "read":
-                    ret = isDesc ? ret.OrderByDescending(c => c.Read) : ret.OrderBy(c => c.Read);
+                    article = isDesc ? article.OrderByDescending(c => c.Read) : article.OrderBy(c => c.Read);
                     break;
                 case "give":
-                    ret = isDesc ? ret.OrderByDescending(c => c.Give) : ret.OrderBy(c => c.Give);
+                    article = isDesc ? article.OrderByDescending(c => c.Give) : article.OrderBy(c => c.Give);
                     break;
             }
 
-            var data = await ret.Skip((pageIndex - 1) * pageSize).Take(pageSize)
+            var data = await article.Skip((pageIndex - 1) * pageSize).Take(pageSize)
                 .SelectArticle().ToListAsync();
             _cache.SetValue(Common.CacheKey, _retDto.EntityList);
             return data;
@@ -385,10 +384,10 @@
 
             return identity switch
             {
-                0 => await GetContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
-                1 => await GetContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Type.Name == type),
-                2 => await GetContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Tag.Name == type),
-                _ => await GetContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
+                0 => await ContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
+                1 => await ContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Type.Name == type),
+                2 => await ContainsAsync(l => l.Name.ToUpper().Contains(upNames) && l.Tag.Name == type),
+                _ => await ContainsAsync(l => l.Name.ToUpper().Contains(upNames)),
             };
         }
 
@@ -396,7 +395,7 @@
         /// 模糊查询
         /// </summary>
         /// <param name="predicate">筛选文章的条件</param>
-        private async Task<List<ArticleDto>> GetContainsAsync(Expression<Func<Article, bool>> predicate = null)
+        private async Task<List<ArticleDto>> ContainsAsync(Expression<Func<Article, bool>> predicate = null)
         {
             if (predicate == null)
             {

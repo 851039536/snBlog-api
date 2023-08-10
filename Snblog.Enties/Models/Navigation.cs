@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Snblog.Models;
+namespace Snblog.Enties.Models;
 
-public partial class Video
+public partial class Navigation
 {
+    /// <summary>
+    /// 主键
+    /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// 标题
+    /// 导航标题
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// 图片
+    /// 标题描述
+    /// </summary>
+    public string Describe { get; set; }
+
+    /// <summary>
+    /// 图片路径
     /// </summary>
     public string Img { get; set; }
 
@@ -27,16 +35,16 @@ public partial class Video
     /// </summary>
     public int TypeId { get; set; }
 
+    /// <summary>
+    /// 用户
+    /// </summary>
     public int UserId { get; set; }
 
-    /// <summary>
-    /// 时间
-    /// </summary>
-    public DateTime TimeCreate { get; set; }
+    public DateTime? TimeCreate { get; set; }
 
-    public DateTime TimeModified { get; set; }
+    public DateTime? TimeModified { get; set; }
 
-    public virtual SnVideoType Type { get; set; }
+    public virtual NavigationType Type { get; set; }
 
     public virtual User User { get; set; }
 }

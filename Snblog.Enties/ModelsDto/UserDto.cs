@@ -66,7 +66,7 @@ public partial class UserDto
 
     public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
 
-    public virtual ICollection<SnNavigation> SnNavigations { get; set; } = new List<SnNavigation>();
+    public virtual ICollection<Navigation> Navigations { get; set; } = new List<Navigation>();
 
     public virtual ICollection<SnPicture> SnPictures { get; set; } = new List<SnPicture>();
 

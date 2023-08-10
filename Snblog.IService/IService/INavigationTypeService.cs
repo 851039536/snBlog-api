@@ -1,13 +1,13 @@
 ﻿namespace Snblog.IService.IService
 {
-    public interface ISnNavigationTypeService
+    public interface INavigationTypeService
     {
          /// <summary>
          /// 查询所有
          /// </summary>
          /// <param name="cache">是否开启缓存</param>
          /// <returns></returns>
-        Task<List<SnNavigationType>> GetAllAsync(bool cache);
+        Task<List<NavigationType>> GetAllAsync(bool cache);
 
         /// <summary>
         /// 主键查询
@@ -15,7 +15,7 @@
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<SnNavigationType>GetByIdAsync(int id,bool cache);
+        Task<NavigationType>GetByIdAsync(int id,bool cache);
 
         /// <summary>
         /// 条件分页查询
@@ -26,21 +26,21 @@
         /// <param name="isDesc"></param>
         /// <param name="cache"></param>
         /// <returns></returns>
-        Task<List<SnNavigationType>> GetFyTypeAllAsync(string type, int pageIndex, int pageSize, bool isDesc,bool cache);
+        Task<List<NavigationType>> GetPagingAsync(string type, int pageIndex, int pageSize, bool isDesc,bool cache);
 
         /// <summary>
         ///  查询总数
         /// </summary>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        Task<int> CountAsync(bool cache);
+        Task<int> GetSumAsync(bool cache);
 
         /// <summary>
         /// 添加数据
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> AddAsync(SnNavigationType entity);
+        Task<bool> AddAsync(NavigationType entity);
 
         /// <summary>
         /// 删除数据
@@ -53,6 +53,6 @@
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(SnNavigationType entity);
+        Task<bool> UpdateAsync(NavigationType entity);
     }
 }

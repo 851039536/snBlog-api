@@ -2,25 +2,23 @@
 
 namespace Snblog.Controllers
 {
-    #region 导航内容 SnNavigationController
-
 
     /// <summary>
-    /// 导航内容
+    /// 导航
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("navigation")]
     [ApiExplorerSettings(GroupName = "V1")] //版本控制
     [ApiController]
-    public class SnNavigationController : ControllerBase
+    public class NavigationController : BaseController
     {
-        private readonly ISnNavigationService _service; //IOC依赖注入
+        private readonly INavigationService _service;
 
-        #region SnNavigationController
+        #region 构造函数
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="service"></param>
-        public SnNavigationController(ISnNavigationService service)
+        public NavigationController(INavigationService service)
         {
             _service = service;
         }
@@ -34,25 +32,14 @@ namespace Snblog.Controllers
         /// <param name="type">条件(identity为0则填0) </param>
         /// <param name="cache"></param>
         /// <returns></returns>
-        [HttpGet("GetSunAsync")]
-        public async Task<IActionResult> GetCountAsync(int identity = 0, string type = "null", bool cache = false)
+        [HttpGet("sum")]
+        public async Task<IActionResult> GetSumAsync(int identity = 0,string type = "null",bool cache = false)
         {
-            return Ok(await _service.GetCountAsync(identity, type, cache));
+            int data = await _service.GetSumAsync(identity,type,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
 
-        #region 查询所有
-        /// <summary>
-        /// 查询所有
-        /// </summary>
-        /// <param name="cache">是否开启缓存</param>
-        /// <returns></returns>
-        [HttpGet("GetAllAsync")]
-        public async Task<IActionResult> GetAllAsync(bool cache = false)
-        {
-            return Ok(await _service.GetAllAsync(cache));
-        }
-        #endregion
 
         #region 模糊查询
         /// <summary>
@@ -63,38 +50,41 @@ namespace Snblog.Controllers
         /// <param name="name">查询字段</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("GetContainsAsync")]
-        public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "c", bool cache = false)
+        [HttpGet("contains")]
+        public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false)
         {
-            return Ok(await _service.GetContainsAsync(identity, type, name, cache));
+            var data = await _service.GetContainsAsync(identity,type,name,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
 
-        #region 主键查询GetByIdAsync
+        #region 主键查询
         /// <summary>
         /// 主键查询
         /// </summary>
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
+        [HttpGet("bid")]
+        public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
         {
-            return Ok(await _service.GetByIdAsync(id, cache));
+            var data = await _service.GetByIdAsync(id,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
 
-        #region 条件查询 GetTypeAsync
+        #region 条件查询
         /// <summary>
-        ///条件查询 
+        ///条件查询(可删除，同分页查询)
         /// </summary>
         /// <param name="identity">分类:1 || 用户:2</param>
         /// <param name="type">查询条件</param>
         /// <param name="cache">是否开启缓存</param>
-        [HttpGet("GetTypeAsync")]
-        public async Task<IActionResult> GetTypeAsync(int identity = 1, string type = "null", bool cache = false)
+        [HttpGet("type")]
+        public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false)
         {
-            return Ok(await _service.GetTypeAsync(identity, type, cache));
+            var data = await _service.GetTypeAsync(identity,type,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
 
@@ -109,13 +99,14 @@ namespace Snblog.Controllers
         /// <param name="isDesc">是否倒序[true/false]</param>
         /// <param name="cache">是否开启缓存</param>
         /// <param name="ordering">排序条件[data:时间 按id排序]</param>
-        [HttpGet("GetPagingAsync")]
-        public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetFyAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false)
         {
-            return Ok(await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
+            var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache);
+            return ApiResponse(cache: cache,data: data);
         }
         #endregion
-        
+
         /// <summary>
         /// 生成随机图片导航
         /// </summary>
@@ -123,52 +114,54 @@ namespace Snblog.Controllers
         /// <param name="maxValue">11</param>
         /// <returns></returns>
         [HttpPost("randomImg")]
-        public async Task<IActionResult> RandomImg(int minValue =1, int maxValue =11)
+        public async Task<IActionResult> RandomImg(int minValue = 1,int maxValue = 11)
         {
             return Ok(await _service.RandomImg(minValue,maxValue));
         }
-        
 
-        #region 添加数据AddAsync
+
+        #region 添加
         /// <summary>
-        /// 添加数据 
+        /// 添加
         /// </summary>
         /// <returns></returns>
-        [HttpPost("AddAsync")]
+        [HttpPost("add")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<ActionResult<SnNavigation>> AddAsync(SnNavigation entity)
+        public async Task<IActionResult> AddAsync(Navigation entity)
         {
-            return Ok(await _service.AddAsync(entity));
+            var data = await _service.AddAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
 
-        #region 更新数据 UpdateAsync
+        #region 更新
         /// <summary>
-        /// 更新数据 
+        /// 更新
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        [HttpPut("UpdateAsync")]
+        [HttpPut("update")]
         [Authorize(Roles = Permissions.Name)]
-        public async Task<IActionResult> UpdateAsync(SnNavigation entity)
+        public async Task<IActionResult> UpdateAsync(Navigation entity)
         {
-            return Ok(await _service.UpdateAsync(entity));
+            var data = await _service.UpdateAsync(entity);
+            return ApiResponse(data: data);
         }
         #endregion
 
-        #region 删除数据DeleteAsync
+        #region 删除
         /// <summary>
         /// 删除数据
         /// </summary>
         /// <param name="id">主键</param>
         /// <returns></returns>
-        [HttpDelete("DelAsync")]
+        [HttpDelete("del")]
         [Authorize(Roles = Permissions.Name)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(id));
+            var data = await _service.DeleteAsync(id);
+            return ApiResponse(data: data);
         }
         #endregion
     }
-    #endregion
 }

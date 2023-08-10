@@ -13,8 +13,17 @@
         public const string All = "ALL_";
         public const string Del = "DEL_";
         public const string Add = "ADD_";
+        /// <summary>
+        /// 更新
+        /// </summary>
         public const string Up = "UP_";
+        /// <summary>
+        /// 更新单个字符
+        /// </summary>
         public const string UpPortiog = "UP_PORTIOG_";
+        /// <summary>
+        /// 条件查询
+        /// </summary>
         public const string Condition = "Condition";
 
 
