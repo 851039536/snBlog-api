@@ -1,5 +1,4 @@
-﻿#nullable disable
-
+﻿
 namespace Snblog.Enties.Models
 {
     public partial class ArticleType

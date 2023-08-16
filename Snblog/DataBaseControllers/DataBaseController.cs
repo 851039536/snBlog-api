@@ -17,9 +17,9 @@ namespace Snblog.DataBaseControllers
         /// <param name="path">备份路径默认null</param>
         /// <returns></returns>
         [HttpPost("SqlBackups")]
-        public ActionResult SqlBackups(string path = "null")
+        public ActionResult SqlBackups()
         {
-            return Ok(DataBaseSql.SqlBackups(path));
+            return Ok(DataBaseSql.SqlBackups());
         }
 
         /// <summary>

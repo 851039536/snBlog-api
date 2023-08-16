@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace Snblog.Enties.Models
+﻿namespace Snblog.Enties.Models
 {
     public partial class Diary
     {

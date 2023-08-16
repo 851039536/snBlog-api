@@ -60,7 +60,7 @@ namespace Snblog.Controllers
         /// <param name="id">主键</param>
         /// <param name="cache">是否开启缓存</param>
         /// <returns></returns>
-        [HttpGet("byid")]
+        [HttpGet("bid")]
         public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
         {
             var data = await _service.GetByIdAsync(id,cache);

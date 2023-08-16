@@ -15,12 +15,12 @@ namespace Snblog.Service.AngleSharp
         /// <param name="path">备份路径默认null</param>
         /// <returns>备份结果</returns>
 
-        public static string SqlBackups(string path)
+        public static string SqlBackups()
         {
             const string sqlUrl = "server=localhost;User= root;pwd= woshishui;database=snblog;";
             string time = DateTime.Now.ToString("d").Replace("/","-");
              //path = Assembly.GetEntryAssembly().Location;
-             path = Directory.GetCurrentDirectory();
+            var path = Directory.GetCurrentDirectory();
             string file = path + $"/mysql/{time}_blog.sql";
 
             using MySqlConnection conn = new(sqlUrl);

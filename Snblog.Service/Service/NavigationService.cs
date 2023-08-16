@@ -116,7 +116,7 @@ namespace Snblog.Service.Service
                 break;
             }
 
-            _cache.SetValue<List<NavigationDto>>(Common.CacheKey,_rDto.EntityList);
+            _cache.SetValue(Common.CacheKey,_rDto.EntityList);
 
             return _rDto.EntityList;
         }

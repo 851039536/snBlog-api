@@ -1,5 +1,4 @@
 ﻿using Snblog.Util.GlobalVar;
-using System.Security.Principal;
 
 namespace Snblog.Controllers
 {

@@ -114,6 +114,27 @@ namespace Snblog.Controllers
             return Ok(res);
         }
         #endregion
+        
+        
+        /// <summary>
+        /// admin后台
+        /// </summary>
+        /// <param name="user">用户</param>
+        /// <param name="pwd">密码</param>
+        /// <returns>token</returns>
+        [HttpPost("loginAdmin")]
+        public IActionResult LoginAdmin(string user,string pwd)
+        {
+            if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return ApiResponse( 400,false,0,"false","");
+            // 查询用户信息
+            var ret = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
+            if (ret == null) return ApiResponse( 400,false,0,"false","");
+
+            // 生成token
+            string token = GenerateToken(ret);
+            ret.Ip = token;
+            return ApiResponse(data: ret);
+        }
 
         #region 主键查询
         /// <summary>
