@@ -98,7 +98,7 @@ namespace Snblog.Controllers
         /// <summary>
         /// 分页查询
         /// </summary>
-        /// <param name="identity">所有:0|分类:1|标签:2|用户名:3|子标签:4</param>
+        /// <param name="identity">所有:0|分类:1|用户名:3|子标签:4</param>
         /// <param name="type">查询参数(多条件以','分割)</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>

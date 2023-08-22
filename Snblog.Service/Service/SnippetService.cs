@@ -149,15 +149,14 @@
         /// <summary>
         /// 分页查询
         /// </summary>
-        /// <param name="identity">所有:0|分类:1|标签:2|用户名:3|子标签:4</param>
+        /// <param name="identity">所有:0|分类:1|用户名:3|子标签:4</param>
         /// <param name="type">查询参数(多条件以','分割)</param>
         /// <param name="pageIndex">当前页码</param>
         /// <param name="pageSize">每页记录条数</param>
         /// <param name="isDesc">排序</param>
         /// <param name="cache">缓存</param>
         /// <returns>list-entity</returns>
-        public async Task<List<SnippetDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
-            bool isDesc, bool cache)
+        public async Task<List<SnippetDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, bool isDesc, bool cache)
         {
             Common.CacheInfo($"{NAME}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
             if (cache)
@@ -169,7 +168,7 @@
             switch (identity)
             {
                 case 0:
-                    await GetPaging(pageIndex, pageSize, isDesc);
+                    await Paging(pageIndex, pageSize, isDesc);
                     break;
                 case 1:
                     if (isDesc)
@@ -186,13 +185,9 @@
                             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).SelectSnippet().ToListAsync();
                     }
-
-                    break;
-                case 2:
-                    await GetPagingTag(type, pageIndex, pageSize, isDesc);
                     break;
                 case 3:
-                    await GetPagingUser(type, pageIndex, pageSize, isDesc);
+                    await PagingUser(type, pageIndex, pageSize, isDesc);
                     break;
                 case 4:
                     if (isDesc)
@@ -209,7 +204,6 @@
                             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).SelectSnippet().ToListAsync();
                     }
-
                     break;
             }
 
@@ -218,7 +212,7 @@
             return _rDto.EntityList;
         }
 
-        private async Task GetPagingUser(string type, int pageIndex, int pageSize, bool isDesc)
+        private async Task PagingUser(string type, int pageIndex, int pageSize, bool isDesc)
         {
             if (isDesc)
             {
@@ -234,23 +228,7 @@
             }
         }
 
-        private async Task GetPagingTag(string type, int pageIndex, int pageSize, bool isDesc)
-        {
-            if (isDesc)
-            {
-                _rDto.EntityList = await _service.Snippets.Where(w => w.Tag.Name == type)
-                    .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize).SelectSnippet().ToListAsync();
-            }
-            else
-            {
-                _rDto.EntityList = await _service.Snippets.Where(w => w.Tag.Name == type)
-                    .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize).SelectSnippet().ToListAsync();
-            }
-        }
-
-        private async Task GetPaging(int pageIndex, int pageSize, bool isDesc)
+        private async Task Paging(int pageIndex, int pageSize, bool isDesc)
         {
             if (isDesc)
             {

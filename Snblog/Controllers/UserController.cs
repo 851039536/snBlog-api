@@ -199,7 +199,6 @@ namespace Snblog.Controllers
         {
             entity.TimeCreate = DateTime.Now;
             entity.TimeModified = DateTime.Now;
-
             var data = await _service.AddAsync(entity);
             return ApiResponse(data:data);
         }

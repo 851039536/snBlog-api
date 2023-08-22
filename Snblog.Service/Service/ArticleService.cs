@@ -229,6 +229,7 @@
                     _ret.EntityCount = await GetStatistic(type, c => c.User.Name == name);
                     break;
             }
+
             _cache.SetValue(Common.CacheKey, _ret.EntityCount);
             return _ret.EntityCount;
         }
