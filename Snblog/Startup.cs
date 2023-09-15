@@ -199,6 +199,7 @@ namespace Snblog
             services.AddScoped<IInterfaceService, InterfaceService>();
             services.AddScoped<ISnSetBlogService, SnSetBlogService>();
             services.AddScoped<ISnippetService, SnippetService>();
+            services.AddScoped<ISnippetVersionService, SnippetVersionService>();
             services.AddScoped<ISnippetTagService, SnippetTagService>();
             services.AddScoped<ISnippetTypeService, SnippetTypeService>();
             services.AddScoped<ISnippetTypeSubService, SnippetTypeSubService>();
@@ -227,8 +228,6 @@ namespace Snblog
             );
 
             #endregion
-
-
             services.AddControllers();
         }
 
