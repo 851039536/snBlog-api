@@ -39,7 +39,7 @@
             return await _service.SaveChangesAsync() > 0;
         }
 
-
+ 
         public async Task<ArticleDto> GetByIdAsync(int id, bool cache)
         {
             Common.CacheInfo($"{Name}{Common.Bid}{id}_{cache}");
@@ -153,7 +153,6 @@
                 _ => -1, //default
             };
         }
-
 
         /// <summary>
         /// 获取文章的数量
