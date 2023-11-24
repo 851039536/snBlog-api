@@ -70,7 +70,7 @@ namespace Snblog.Controllers
         /// <summary>
         /// 模糊查询
         /// </summary>
-        /// <param name="identity">所有:0|分类:1|标签:2|用户:3|标签+用户:4</param>
+        /// <param name="identity">所有:0|分类:1|标签:2|用户:3|标签,用户:4</param>
         /// <param name="type">查询参数(多条件以','分割)</param>
         /// <param name="name">查询字段</param>
         /// <param name="cache">缓存</param>

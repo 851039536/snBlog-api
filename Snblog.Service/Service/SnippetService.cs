@@ -185,6 +185,7 @@
                             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).SelectSnippet().ToListAsync();
                     }
+
                     break;
                 case 3:
                     await PagingUser(type, pageIndex, pageSize, isDesc);
@@ -204,6 +205,7 @@
                             .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                             .Take(pageSize).SelectSnippet().ToListAsync();
                     }
+
                     break;
             }
 
@@ -264,7 +266,7 @@
             //执行数据库操作
             return await _service.SaveChangesAsync() > 0;
         }
-        
+
         /// <summary>
         /// 模糊查询
         /// </summary>
@@ -278,7 +280,6 @@
         public async Task<List<SnippetDto>> GetContainsAsync(int identity, string type, string name, bool cache,
             int pageIndex, int pageSize)
         {
-            //将字符串转换为大写字母的操作移到查询之前进行，以减少每个查询条件的计算量；对多个查询条件之间的关系进行优化，避免重复计算
             var uppercaseName = name.ToUpper();
 
             Common.CacheInfo($"{NAME}{Common.Contains}{identity}_{type}_{name}_{cache}");
@@ -291,60 +292,35 @@
             switch (identity)
             {
                 case 0: //所有 查分类,标题,内容
-                    _rDto.EntityList = await _service.Snippets
-                        .Where(w => w.Name.ToUpper().Contains(uppercaseName) ||
-                                    w.TypeSub.Name.ToUpper()
-                                        .Contains(uppercaseName) ||
-                                    w.Text.ToUpper().Contains(uppercaseName))
-                        .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                        .Take(pageSize)
-                        .SelectSnippet().ToListAsync();
-
-                    break;
+                    return await Contains(pageIndex, pageSize, w => w.Name.ToUpper().Contains(uppercaseName) ||
+                                                                    w.TypeSub.Name.ToUpper()
+                                                                        .Contains(uppercaseName) ||
+                                                                    w.Text.ToUpper().Contains(uppercaseName));
                 case 1:
-                    _rDto.EntityList =
-                        await _service.Snippets
-                            .Where(l => l.Name.ToUpper().Contains(uppercaseName) && l.Type.Name == type)
-                            .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize)
-                            .SelectSnippet().ToListAsync();
-                    break;
+                    return await Contains(pageIndex, pageSize, l => l.Name.ToUpper().Contains(uppercaseName) && l.Type.Name == type);
                 case 2:
-                    _rDto.EntityList =
-                        await _service.Snippets
-                            .Where(l => l.Name.ToUpper().Contains(uppercaseName) && l.Tag.Name == type)
-                            .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize)
-                            .SelectSnippet().ToListAsync();
-                    break;
+                    return await Contains(pageIndex, pageSize, l => l.Name.ToUpper().Contains(uppercaseName) && l.Tag.Name == type);
                 case 3:
-                    _rDto.EntityList =
-                        await _service.Snippets
-                            .Where(l => l.Name.ToUpper().Contains(uppercaseName) && l.User.Name == type)
-                            .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize)
-                            .SelectSnippet().ToListAsync();
-                    break;
+                    return await Contains(pageIndex, pageSize, l => l.Name.ToUpper().Contains(uppercaseName) && l.User.Name == type);
                 case 4:
-                    _rDto.EntityList =
-                        await _service.Snippets
-                            .Where(l => l.Text.ToUpper().Contains(uppercaseName))
-                            .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize)
-                            .SelectSnippet().ToListAsync();
-                    break;
+                    return await Contains(pageIndex, pageSize, l => l.Text.ToUpper().Contains(uppercaseName));
                 case 5:
-                    _rDto.EntityList =
-                        await _service.Snippets
-                            .Where(l => l.Name.ToUpper().Contains(uppercaseName))
-                            .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize)
-                            .SelectSnippet().ToListAsync();
-                    break;
+                    return await Contains(pageIndex, pageSize, l => l.Name.ToUpper().Contains(uppercaseName));
                 default:
-                    return null;
+                    return await Contains(pageIndex, pageSize, w => w.Name.ToUpper().Contains(uppercaseName) ||
+                                                                    w.TypeSub.Name.ToUpper()
+                                                                        .Contains(uppercaseName) ||
+                                                                    w.Text.ToUpper().Contains(uppercaseName));
             }
+        }
 
+
+        private async Task<List<SnippetDto>> Contains(int pageIndex, int pageSize, Expression<Func<Snippet, bool>> predicate = null)
+        {
+            if (predicate != null)
+                _rDto.EntityList = await _service.Snippets.Where(predicate).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize)
+                    .SelectSnippet().ToListAsync();
             _cache.SetValue(Common.CacheKey, _rDto.EntityList);
             return _rDto.EntityList;
         }
