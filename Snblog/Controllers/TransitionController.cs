@@ -9,20 +9,7 @@
     [Route("transition")]
     public class TransitionController : ControllerBase {
 
-        // /// <summary>
-        // /// 拼音
-        // /// </summary>
-        // /// <param name="value"></param>
-        // /// <returns></returns>
-        // [HttpGet("pinyin")]
-        // public IActionResult ChineseToPinyin(string value) {
-        //     JsonSerializerOptions options = new();
-        //     options.Converters.Add(new PinYinConverter());
-        //     string output = JsonSerializer.Serialize(value,options);
-        //     Console.WriteLine(output); //输出： "hàn zì zhuǎn pīn yīn"
-        //     return Ok(output);
-        // }
-        //
+       
         /// <summary>
         /// ToBaseString
         /// </summary>

@@ -218,8 +218,6 @@ namespace Snblog
 
             #region 实体映射
 
-            //services.AddAutoMapper(typeof(MappingProfile));
-
             //自动化注册
             services.AddAutoMapper(
                 Assembly.Load("Snblog.Enties").GetTypes()
