@@ -52,8 +52,6 @@ namespace Snblog.Cache.CacheUtil
             }
             return result;
         }
-
-
         /// <summary>
         /// 读取缓存
         /// </summary>

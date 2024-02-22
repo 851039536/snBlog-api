@@ -5,7 +5,7 @@
         private readonly SnblogContext _service;//DB
         private readonly CacheUtil _cache;
         private int _resultInt;
-        private List<SnPictureType> _resultList;
+        private List<SnPictureType> _retList;
         public SnPictureTypeService(SnblogContext service, ICacheUtil cache)
         {
             _service = service;
@@ -21,14 +21,13 @@
 
         public async Task<List<SnPictureType>> GetAllAsync()
         {
-            _resultList = _cache.CacheString1("SnPictureType_GetAllAsync", _resultList);
-            if (_resultList != null)
-            {
-                return _resultList;
-            }
-            _resultList = await _service.SnPictureTypes.ToListAsync();
-            _cache.CacheString1("SnPictureType_GetAllAsync", _resultList);
-            return _resultList;
+            const string key = "SnPictureType_GetAllAsync";
+            _retList = _cache.CacheString(key, _retList,true);
+            if (_retList != null) return _retList;
+            
+            _retList = await _service.SnPictureTypes.ToListAsync();
+            _cache.CacheString(key, _retList,true);
+            return _retList;
         }
 
         public async Task<int> CountAsync()
@@ -73,14 +72,14 @@
 
         public async Task<List<SnPictureType>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            _resultList = _cache.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, _resultList);
-            if (_resultList != null)
+            _retList = _cache.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, _retList);
+            if (_retList != null)
             {
-                return _resultList;
+                return _retList;
             }
-            _resultList = await GetFyAll(pageIndex, pageSize, isDesc);
-            _cache.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, _resultList);
-            return _resultList;
+            _retList = await GetFyAll(pageIndex, pageSize, isDesc);
+            _cache.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, _retList);
+            return _retList;
         }
 
         private async Task<List<SnPictureType>> GetFyAll(int pageIndex, int pageSize, bool isDesc)
