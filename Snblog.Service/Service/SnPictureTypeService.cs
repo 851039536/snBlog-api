@@ -32,13 +32,13 @@
 
         public async Task<int> CountAsync()
         {
-            _resultInt = _cache.CacheNumber1("SnPictureType_CountAsync", _resultInt);
+            _resultInt = _cache.CacheNumber("SnPictureType_CountAsync", _resultInt,true);
             if (_resultInt != 0)
             {
                 return _resultInt;
             }
             _resultInt = await _service.SnPictureTypes.CountAsync();
-            _cache.CacheNumber1("SnPictureType_CountAsync", _resultInt);
+            _cache.CacheNumber("SnPictureType_CountAsync", _resultInt,true);
             return _resultInt;
         }
 
@@ -54,13 +54,7 @@
         public async Task<SnPictureType> GetByIdAsync(int id)
         {
             SnPictureType pictureType = default;
-            pictureType = _cache.CacheString1("SnPictureType_GetByIdAsync" + id, pictureType);
-            if (pictureType != null)
-            {
-                return pictureType;
-            }
             pictureType = await _service.SnPictureTypes.FindAsync(id);
-            _cache.CacheString1("SnPictureType_GetByIdAsync" + id, pictureType);
             return pictureType;
         }
 
@@ -72,13 +66,7 @@
 
         public async Task<List<SnPictureType>> GetFyAllAsync(int pageIndex, int pageSize, bool isDesc)
         {
-            _retList = _cache.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, _retList);
-            if (_retList != null)
-            {
-                return _retList;
-            }
             _retList = await GetFyAll(pageIndex, pageSize, isDesc);
-            _cache.CacheString1("SnPictureType_GetFyAllAsync" + pageIndex + pageSize + isDesc, _retList);
             return _retList;
         }
 

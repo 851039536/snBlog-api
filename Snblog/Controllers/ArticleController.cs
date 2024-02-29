@@ -14,6 +14,8 @@ namespace Snblog.Controllers
         //服务
         private readonly IArticleService _service;
         private readonly IValidator<Article> _validator;
+        
+        
 
         #region 构造函数
 

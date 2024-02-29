@@ -1,4 +1,4 @@
-﻿namespace Snblog.Cache.Cache
+﻿namespace Snblog.Cache.CacheUtil
 {
     public interface ICacheManager
     {
