@@ -1,20 +1,19 @@
-﻿namespace Snblog
+﻿namespace Snblog;
+
+public enum ApiVersion
 {
-    public enum ApiVersion
-    {
-        /// <summary>
-        /// v1版本
-        /// </summary>
-        V1 = 1,
+    /// <summary>
+    /// v1版本
+    /// </summary>
+    V1 = 1,
 
-        /// <summary>
-        /// v2版本
-        /// </summary>
-        V2 = 2,
+    /// <summary>
+    /// v2版本
+    /// </summary>
+    V2 = 2,
 
-        /// <summary>
-        /// Sql
-        /// </summary>
-        Sql = 3
-    }
+    /// <summary>
+    /// Sql
+    /// </summary>
+    Sql = 3
 }
