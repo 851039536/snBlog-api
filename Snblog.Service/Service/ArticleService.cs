@@ -3,15 +3,18 @@
 public class ArticleService : IArticleService
 {
     // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
-    const string Name = "Article_";
+    private const string Name = "Article_";
 
     private readonly EntityData<Article> _ret = new();
     private readonly EntityDataDto<ArticleDto> _retDto = new();
 
-    //服务
+    #region 服务
+
     private readonly SnblogContext _service;
     private readonly CacheUtil _cache;
 
+    #endregion
+   
     /// <summary>
     /// 使用了IServiceProvider接口来获取所需的服务
     ///它定义了一个方法GetRequiredService，该方法可以用于获取指定类型的服务
@@ -302,31 +305,18 @@ public class ArticleService : IArticleService
     private async Task<List<ArticleDto>> GetPaging(int pageIndex, int pageSize, string ordering, bool isDesc,
         Expression<Func<Article, bool>> predicate = null)
     {
-        IQueryable<Article> article = _service.Articles.AsQueryable();
+        var article = _service.Articles.AsQueryable();
 
-        // 查询条件,如果为空则无条件查询
-        if (predicate != null)
-        {
-            article = article.Where(predicate);
-        }
+        if (predicate != null) article = article.Where(predicate);
 
-        switch (ordering)
+        article = ordering switch
         {
-            case "id":
-                article = isDesc ? article.OrderByDescending(c => c.Id) : article.OrderBy(c => c.Id);
-                break;
-            case "data":
-                article = isDesc
-                    ? article.OrderByDescending(c => c.TimeCreate)
-                    : article.OrderBy(c => c.TimeCreate);
-                break;
-            case "read":
-                article = isDesc ? article.OrderByDescending(c => c.Read) : article.OrderBy(c => c.Read);
-                break;
-            case "give":
-                article = isDesc ? article.OrderByDescending(c => c.Give) : article.OrderBy(c => c.Give);
-                break;
-        }
+            "id" => isDesc ? article.OrderByDescending(c => c.Id) : article.OrderBy(c => c.Id),
+            "data" => isDesc ? article.OrderByDescending(c => c.TimeCreate) : article.OrderBy(c => c.TimeCreate),
+            "read" => isDesc ? article.OrderByDescending(c => c.Read) : article.OrderBy(c => c.Read),
+            "give" => isDesc ? article.OrderByDescending(c => c.Give) : article.OrderBy(c => c.Give),
+            _ => article
+        };
 
         var data = await article.Skip((pageIndex - 1) * pageSize).Take(pageSize)
             .SelectArticle().ToListAsync();

@@ -1,4 +1,6 @@
 ﻿using Snblog.Util.GlobalVar;
+using Snblog.Util.Paginated;
+
 namespace Snblog.Controllers;
 
 /// <summary>
@@ -62,6 +64,19 @@ public class ArticleTagController : BaseController
     {
         var data = await _service.GetPagingAsync(pageIndex,pageSize,isDesc,cache);
         return ApiResponse(cache: cache,data: data);
+    }
+    
+    /// <summary>
+    /// 分页测试(装分页通用类)
+    /// </summary>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
+    /// <returns></returns>
+    [HttpGet("pagingTest")]
+    public async Task<IActionResult> TestPaging(int page = 1, int pageSize = 10)  
+    {  
+        var data = await _service.GetPagingTest(page,pageSize);
+        return ApiResponse(data: data);
     }
     #endregion
 

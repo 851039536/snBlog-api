@@ -6,10 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Scrutor;
 using Snblog.Enties.Validator;
 using Snblog.Jwt;
 using Snblog.Service.AngleSharp;
 using Snblog.Util.Exceptions;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Snblog;
@@ -40,11 +42,11 @@ public class Startup
             //忽略循环引用
             option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         );
-            
+
         #region 限流
 
         services.AddRateLimiter(_ => _
-            .AddFixedWindowLimiter(policyName: "fixed", options =>
+            .AddFixedWindowLimiter(policyName: "fixed",options =>
             {
                 options.PermitLimit = 3; //窗口阈值，即每个窗口时间范围内，最多允许的请求个数。这里指定为最多允许4个请求。该值必须 > 0
                 options.Window = TimeSpan.FromSeconds(10); // 窗口大小，即时间长度。该值必须 > TimeSpan.Zero
@@ -69,10 +71,10 @@ public class Startup
             //遍历版本信息
             typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
             {
-                c.SwaggerDoc(version, new OpenApiInfo
+                c.SwaggerDoc(version,new OpenApiInfo
                 {
                     Title = "SN Blog API", //标题
-                    Description = "EFCore数据操作 ASP.NET Core Web API", 
+                    Description = "EFCore数据操作 ASP.NET Core Web API",
                     TermsOfService = new Uri("https://example.com/terms"), //服务条款
                     Contact = new OpenApiContact
                     {
@@ -91,15 +93,15 @@ public class Startup
             // 使用反射获取xml文件。并构造出文件的路径
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             // 获取xml文件的路径
-            var filePath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            var filePath = Path.Combine(AppContext.BaseDirectory,xmlFile);
             // 启用xml注释. 该方法第二个参数启用控制器的注释，默认为false.
-            c.IncludeXmlComments(filePath, true);
+            c.IncludeXmlComments(filePath,true);
 
             // 使用反射获取xml文件。并构造出文件的路径
             var xmlModel = Path.Combine("Snblog.Enties.xml");
             // 获取xml文件的路径
-            var modelPath = Path.Combine(AppContext.BaseDirectory, xmlModel);
-            c.IncludeXmlComments(modelPath, true);
+            var modelPath = Path.Combine(AppContext.BaseDirectory,xmlModel);
+            c.IncludeXmlComments(modelPath,true);
             // 可以解决相同类名会报错的问题
             c.CustomSchemaIds(type => type.FullName);
 
@@ -136,7 +138,7 @@ public class Startup
             };
 
             //注册到swagger中
-            c.AddSecurityDefinition("bearerAuth", securityScheme);
+            c.AddSecurityDefinition("bearerAuth",securityScheme);
             c.AddSecurityRequirement(securityRequirement);
 
             #endregion
@@ -165,7 +167,7 @@ public class Startup
 
         services.AddCors(c =>
         {
-            c.AddPolicy("AllRequests", policy =>
+            c.AddPolicy("AllRequests",policy =>
             {
                 policy
                     .AllowAnyOrigin()
@@ -178,40 +180,37 @@ public class Startup
 
         #region DI依赖注入配置
 
-        // 在ASP.NET Core中所有用到EF的Service 都需要注册成Scoped
-        services.AddScoped<IArticleService, ArticleService>(); //ioc
-        services.AddScoped<INavigationService, NavigationService>();
-        services.AddScoped<IPhotoGalleryService, PhotoGalleryService>();
-        services.AddScoped<IArticleTagService, ArticleTagService>();
-        services.AddScoped<IArticleTypeService, ArticleTypeService>();
-        services.AddScoped<IDiaryService, DiaryService>();
-        services.AddScoped<IVideoService, VideoService>();
-        services.AddScoped<ISnVideoTypeService, SnVideoTypeService>();
-        services.AddScoped<IUserTalkService, UserTalkService>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IDiaryTypeService, DiaryTypeService>();
-        services.AddScoped<ISnPictureService, SnPictureService>();
-        services.AddScoped<ISnPictureTypeService, SnPictureTypeService>();
-        services.AddScoped<ISnTalkService, SnTalkService>();
-        services.AddScoped<ISnTalkTypeService, SnTalkTypeService>();
-        services.AddScoped<INavigationTypeService, NavigationTypeService>();
-        services.AddScoped<IInterfaceService, InterfaceService>();
-        services.AddScoped<ISnSetBlogService, SnSetBlogService>();
-        services.AddScoped<ISnippetService, SnippetService>();
-        services.AddScoped<ISnippetVersionService, SnippetVersionService>();
-        services.AddScoped<ISnippetTagService, SnippetTagService>();
-        services.AddScoped<ISnippetTypeService, SnippetTypeService>();
-        services.AddScoped<ISnippetTypeSubService, SnippetTypeSubService>();
-        services.AddScoped<DataBaseSql, DataBaseSql>();
-            
+        //scrutor的方式
+        services.Scan(selector => selector
+            //加载ArticleService 类所在的程序集 , 将加载ArticleService所在的程序集中所有的类都注册进去
+            .FromAssemblyOf<ArticleService>()
+            // 过滤程序集中需要注册的类，只选择那些类名以"Service"结尾的类型  
+            .AddClasses(classes => classes.Where(t => t.Name.EndsWith("Service")))
+
+            // 暴露匹配的接口，即注册服务为其实现的接口，且接口名称与服务类名称相同（除了后缀"Service"）
+            .AsMatchingInterface()
+            // 注释中提到了其他几种暴露服务的方式，它们分别是：  
+            // .AsImplementedInterfaces() // 将服务注册为它实现的所有接口  
+            // .As(t => t.GetInterfaces()) // 同样是将服务注册为它实现的所有接口，但提供了更多的灵活性  
+            // .AsSelf() // 将服务注册为它自己，通常在没有接口的情况下使用  
+
+            // 设置服务的生命周期为Scoped，意味着在同一个请求范围内，服务实例将被重用 
+            .WithScopedLifetime()
+            );
+
+
+
+        services.AddScoped<DataBaseSql,DataBaseSql>();
+
         //IValidator
-        services.AddTransient<IValidator<Article>, ArticleValidator>();
-        services.AddTransient<IValidator<Snippet>, SnippetValidator>();
-        services.AddTransient<IValidator<UserTalk>, UserTalkValidator>();
-        services.AddTransient<IValidator<PhotoGallery>, PhotoGalleryValidator>();
+        services.AddTransient<IValidator<Article>,ArticleValidator>();
+        services.AddTransient<IValidator<Snippet>,SnippetValidator>();
+        services.AddTransient<IValidator<UserTalk>,UserTalkValidator>();
+        services.AddTransient<IValidator<PhotoGallery>,PhotoGalleryValidator>();
+
         //整个应用程序生命周期以内只创建一个实例 
-        services.AddSingleton<ICacheManager, CacheManager>();
-        services.AddSingleton<ICacheUtil, CacheUtil>();
+        services.AddSingleton<ICacheManager,CacheManager>();
+        services.AddSingleton<ICacheUtil,CacheUtil>();
 
         #endregion
 
@@ -234,26 +233,25 @@ public class Startup
     /// </summary>
     /// <param name="app"></param>
     /// <param name="env"></param>
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app,IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
             //对于开发模式，一旦报错就跳转到错误堆栈页面
             app.UseDeveloperExceptionPage();
-        }
-        else
+        } else
         {
             app.UseExceptionMiddleware();
         }
 
         app.UseRateLimiter();
-            
+
 
         #region Swagger+性能分析（MiniProfiler）+自定义页面
 
         app.UseMiniProfiler();
-            
-            
+
+
         //启用Swagger中间件,可以将Swagger的UI页面配置在Configure的开发环境之中
         app.UseSwagger();
 
@@ -267,7 +265,7 @@ public class Startup
                 ////设置首页为Swagger
                 c.RoutePrefix = string.Empty;
                 //自定义页面 集成性能分析
-                c.SwaggerEndpoint($"/swagger/{version}/swagger.json", version);
+                c.SwaggerEndpoint($"/swagger/{version}/swagger.json",version);
                 ////设置为none可折叠所有方法
                 c.DocExpansion(DocExpansion.None);
                 ////设置为-1 可不显示models

@@ -1,4 +1,6 @@
-﻿namespace Snblog.IService.IService;
+﻿using Snblog.Util.Paginated;
+
+namespace Snblog.IService.IService;
 
 /// <summary>
 /// 文章标签接口
@@ -21,8 +23,11 @@ public interface IArticleTagService
     /// <param name="isDesc">是否倒序</param>
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
-    Task<List<ArticleTagDto>> GetPagingAsync(int pageInde, int pageSize, bool isDesc, bool cache);
+    Task<List<ArticleTagDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache);
+    Task<PaginatedList<ArticleTagDto>> GetPagingTest(int pageIndex, int pageSize);
 
+    
+   
     /// <summary>
     /// 查询总数
     /// </summary>
@@ -45,4 +50,5 @@ public interface IArticleTagService
     /// 删除数据
     /// </summary>
     Task<bool> DeleteAsync(int id);
+ 
 }

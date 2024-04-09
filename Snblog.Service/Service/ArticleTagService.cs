@@ -1,8 +1,10 @@
-﻿namespace Snblog.Service.Service;
+﻿using Snblog.Util.Paginated;
+
+namespace Snblog.Service.Service;
 
 public class ArticleTagService : IArticleTagService
 {
-    const string NAME = "articleTag_";
+    private const string Name = "articleTag_";
 
     private readonly EntityData<ArticleTag> _ret = new();
     private readonly EntityDataDto<ArticleTagDto> _rDto = new();
@@ -10,7 +12,6 @@ public class ArticleTagService : IArticleTagService
     private readonly SnblogContext _service;
     private readonly CacheUtil _cache;
     private readonly IMapper _mapper;
-
 
     public ArticleTagService(SnblogContext service, ICacheUtil cache, IMapper mapper)
     {
@@ -22,9 +23,9 @@ public class ArticleTagService : IArticleTagService
 
     public async Task<bool> DeleteAsync(int id)
     {
-        Common.CacheInfo($"{NAME}{Common.Del}{id}");
+        Common.CacheInfo($"{Name}{Common.Del}{id}");
 
-        ArticleTag result = await _service.ArticleTags.FindAsync(id);
+        var result = await _service.ArticleTags.FindAsync(id);
 
         if (result == null) return false;
 
@@ -34,8 +35,7 @@ public class ArticleTagService : IArticleTagService
 
     public async Task<ArticleTagDto> GetByIdAsync(int id, bool cache)
     {
-
-        Common.CacheInfo($"{NAME}{Common.Bid}{id}_{cache}");
+        Common.CacheInfo($"{Name}{Common.Bid}{id}_{cache}");
         if (cache)
         {
             _rDto.Entity = _cache.GetValue<ArticleTagDto>(Common.CacheKey);
@@ -49,14 +49,14 @@ public class ArticleTagService : IArticleTagService
 
     public async Task<bool> AddAsync(ArticleTag entity)
     {
-        Common.CacheInfo($"{NAME}{Common.Add}{entity}");
+        Common.CacheInfo($"{Name}{Common.Add}{entity}");
         _service.ArticleTags.Add(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> UpdateAsync(ArticleTag entity)
     {
-        Common.CacheInfo( $"{NAME}{Common.Up}{entity}");
+        Common.CacheInfo($"{Name}{Common.Up}{entity}");
 
         _service.ArticleTags.Update(entity);
         return await _service.SaveChangesAsync() > 0;
@@ -72,7 +72,7 @@ public class ArticleTagService : IArticleTagService
     /// <returns>list-entity</returns>
     public async Task<List<ArticleTagDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
+        Common.CacheInfo($"{Name}{Common.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<ArticleTagDto>>(Common.CacheKey);
@@ -82,6 +82,12 @@ public class ArticleTagService : IArticleTagService
         await QPaging(pageIndex, pageSize, isDesc);
         _cache.SetValue(Common.CacheKey, _rDto.EntityList);
         return _rDto.EntityList;
+    }
+
+    public async Task<PaginatedList<ArticleTagDto>> GetPagingTest(int pageIndex, int pageSize)
+    {
+        return await _mapper.ProjectTo<ArticleTagDto>(_service.ArticleTags
+            .OrderBy(c => c.Id)).ToPaginatedListAsync(pageIndex, pageSize);
     }
 
     private async Task QPaging(int pageIndex, int pageSize, bool isDesc)
@@ -101,7 +107,7 @@ public class ArticleTagService : IArticleTagService
 
     public async Task<int> GetSumAsync(bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.Sum}{cache}");
+        Common.CacheInfo($"{Name}{Common.Sum}{cache}");
         if (cache)
         {
             _ret.EntityCount = _cache.GetValue<int>(Common.CacheKey);

@@ -26,10 +26,10 @@ public class Program
             .CreateLogger();
 
         try {
-            Log.Information("Starting web host");
+            Log.Information("启动虚拟主机");
             CreateHostBuilder(args).Build().Run();
         } catch (Exception ex) {
-            Log.Fatal(ex,"Host terminated unexpectedly");
+            Log.Fatal(ex,"虚拟主机意外终止...");
         } finally {
             Log.CloseAndFlush();
         }
