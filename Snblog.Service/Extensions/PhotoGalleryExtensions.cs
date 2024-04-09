@@ -4,9 +4,9 @@ namespace Snblog.Service.Extensions;
 
 public static class PhotoGalleryExtensions
 {
-    public static IQueryable<PhotoGalleryDto> SelectPhotoGallery(this IQueryable<PhotoGallery> photoGalleries)
+    public static IQueryable<PhotoGalleryDto> SelectPhotoGallery(this IQueryable<PhotoGallery> ret)
     {
-        return photoGalleries.Select(e => new PhotoGalleryDto {
+        return ret.AsNoTracking().Select(e => new PhotoGalleryDto {
             Id = e.Id,
             Name = e.Name,
             Description = e.Description,
@@ -25,7 +25,7 @@ public static class PhotoGalleryExtensions
             },
             TimeCreate = e.TimeCreate,
             TimeModified = e.TimeModified,
-        }).AsNoTracking();
+        });
     }
         
 }

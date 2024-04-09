@@ -7,9 +7,9 @@
 /// </summary>
 public static class UserTalkExtensions
 {
-    public static IQueryable<UserTalkDto> SelectUserTalk(this IQueryable<UserTalk> articles)
+    public static IQueryable<UserTalkDto> SelectUserTalk(this IQueryable<UserTalk> ret)
     {
-        return articles.Select(e => new UserTalkDto {
+        return ret.AsNoTracking().Select(e => new UserTalkDto {
             Id = e.Id,
             Text =e.Text,
             Read = e.Read,
@@ -22,6 +22,6 @@ public static class UserTalkExtensions
             },
             CommentId = e.CommentId
                
-        }).AsNoTracking();
+        });
     }
 }

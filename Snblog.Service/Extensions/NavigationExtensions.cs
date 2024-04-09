@@ -9,7 +9,7 @@ public static class NavigationExtensions
 {
     public static IQueryable<NavigationDto> SelectNavigation(this IQueryable<Navigation> ret)
     {
-        return ret.Select(e => new NavigationDto {
+        return ret.AsNoTracking().Select(e => new NavigationDto {
             Id = e.Id,
             Name = e.Name,
             Describe = e.Describe,
@@ -26,6 +26,6 @@ public static class NavigationExtensions
             Type = new NavigationType {
                 Name = e.Type.Name
             },
-        }).AsNoTracking();
+        });
     }
 }

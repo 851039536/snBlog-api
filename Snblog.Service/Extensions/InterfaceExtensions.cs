@@ -7,9 +7,9 @@
 /// </summary>
 public static class InterfaceExtensions
 {
-    public static IQueryable<InterfaceDto> SelectInterface(this IQueryable<Interface> interfaces)
+    public static IQueryable<InterfaceDto> SelectInterface(this IQueryable<Interface> ret)
     {
-        return interfaces.Select(e => new InterfaceDto {
+        return ret.AsNoTracking().Select(e => new InterfaceDto {
             Id = e.Id,
             Name = e.Name,
             Path = e.Path,
@@ -23,6 +23,6 @@ public static class InterfaceExtensions
             Type = new InterfaceType {
                 Name = e.Type.Name
             },
-        }).AsNoTracking();
+        });
     }
 }

@@ -9,9 +9,9 @@ namespace Snblog.Service.Extensions;
 /// </summary>
 public static class SnippetExtensions
 {
-    public static IQueryable<SnippetDto> SelectSnippet(this IQueryable<Snippet> snippets)
+    public static IQueryable<SnippetDto> SelectSnippet(this IQueryable<Snippet> ret)
     {
-        return snippets.Select(e => new SnippetDto {
+        return ret.AsNoTracking().Select(e => new SnippetDto {
             Id = e.Id,
             Name = e.Name,
             Text = e.Text,
@@ -40,6 +40,6 @@ public static class SnippetExtensions
             SnippetVersionId = e.SnippetVersionId,
             TimeCreate = e.TimeCreate,
             TimeUpdate = e.TimeUpdate,
-        }).AsNoTracking();
+        });
     }
 }

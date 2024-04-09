@@ -1,15 +1,16 @@
 ﻿namespace Snblog.Service.Extensions;
 
 /// <summary>
+/// 扩展IQueryable
 /// 封装Select返回ArticleDto实体
-/// 扩展EF Core以便在多个地方重复使用相同的代码
 /// 使用AsNoTracking方法来禁用跟踪
 /// </summary>
 public static class ArticleExtensions
 {
-    public static IQueryable<ArticleDto> SelectArticle(this IQueryable<Article> articles)
+    public static IQueryable<ArticleDto> SelectArticle(this IQueryable<Article> ret)
     {
-        return articles.Select(e => new ArticleDto {
+        // 首先调用AsNoTracking来禁用跟踪，然后再进行Select转换  
+        return ret.AsNoTracking().Select(e => new ArticleDto {
             Id = e.Id,
             Name = e.Name,
             Sketch = e.Sketch,
@@ -32,6 +33,6 @@ public static class ArticleExtensions
             Tag = new ArticleTag {
                 Name = e.Tag.Name
             },
-        }).AsNoTracking();
+        });
     }
 }

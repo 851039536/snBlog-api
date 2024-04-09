@@ -7,9 +7,9 @@
 /// </summary>
 public static class DiaryExtensions
 {
-    public static IQueryable<DiaryDto> SelectDiary(this IQueryable<Diary> diaries)
+    public static IQueryable<DiaryDto> SelectDiary(this IQueryable<Diary> ret)
     {
-        return diaries.Select(e => new DiaryDto {
+        return ret.AsNoTracking().Select(e => new DiaryDto {
             Id = e.Id,
             Name = e.Name,
             Text =e.Text,
@@ -29,6 +29,6 @@ public static class DiaryExtensions
                 Name = e.Type.Name
             },
               
-        }).AsNoTracking();
+        });
     }
 }
