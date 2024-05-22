@@ -1,0 +1,38 @@
+version: '3.8' # 指定Docker Compose文件的版本，这里使用的是3.8版本
+
+services: # 定义应用中的各个服务
+  snblog: # 服务名称，这里定义的是snblog服务
+    build:
+      context: . # 指定构建上下文的路径，这里是当前目录
+      dockerfile: Snblog/Dockerfile # 指定Dockerfile的路径，这里是Snblog目录下的Dockerfile
+    image: snblog:latest # 指定构建的镜像名称和标签
+    ports:
+      - "8088:80" # 将宿主机的8088端口映射到容器的80端口
+      - "443:443" # 将宿主机的443端口映射到容器的443端口
+    volumes:
+      - .:/src # 将宿主机的当前目录挂载到容器的/src目录，实现数据持久化
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development # 设置环境变量，指定运行环境为开发环境
+    depends_on:
+      - mysql # 定义依赖关系，snblog服务依赖于mysql服务
+    networks:
+      - dev # 指定服务所属的网络
+
+  mysql: # 定义mysql服务
+    image: mysql:8.0.24 # 使用官方的MySQL 8.0.24镜像
+    restart: always # 设置容器退出时的重启策略
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456 # 设置MySQL的root用户密码
+    volumes:
+      - mysql-data:/var/lib/mysql # 挂载数据卷，用于存储MySQL的数据
+    ports:
+      - "3307:3306" # 将宿主机的3307端口映射到容器的3306端口
+    networks:
+      - dev # 指定服务所属的网络
+
+volumes: # 定义数据卷
+  mysql-data: # 定义一个名为mysql-data的数据卷
+
+networks: # 定义网络
+  dev:
+    driver: bridge # 指定网络驱动为bridge，创建一个桥接网络

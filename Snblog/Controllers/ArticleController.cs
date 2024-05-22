@@ -19,7 +19,7 @@ public class ArticleController : BaseController
     #endregion
 
     #region 构造函数
-      
+
     public ArticleController(IServiceProvider service)
     {
         _service = service.GetRequiredService<IArticleService>();
@@ -31,7 +31,7 @@ public class ArticleController : BaseController
     #region 查询总数
 
     /// <summary>
-    /// 查询总数 
+    /// 查询总数
     /// </summary>
     /// <param name="identity">所有:0|分类:1|标签:2|用户3</param>
     /// <param name="type">条件</param>
@@ -39,7 +39,11 @@ public class ArticleController : BaseController
     /// <returns>int</returns>
     [EnableRateLimiting("fixed")]
     [HttpGet("sum")]
-    public async Task<IActionResult> GetSumAsync(int identity = 0, string type = null, bool cache = false)
+    public async Task<IActionResult> GetSumAsync(
+        int identity = 0,
+        string type = null,
+        bool cache = false
+    )
     {
         var data = await _service.GetSumAsync(identity, type, cache);
         return ApiResponse(cache: cache, data: data);
@@ -50,7 +54,7 @@ public class ArticleController : BaseController
     #region 查询所有
 
     /// <summary>
-    /// 查询所有 
+    /// 查询所有
     /// </summary>
     /// <param name="cache">是否开启缓存</param>
     /// <returns>list-entity</returns>
@@ -75,8 +79,12 @@ public class ArticleController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null",
-        string name = "winfrom", bool cache = false)
+    public async Task<IActionResult> GetContainsAsync(
+        int identity = 0,
+        string type = "null",
+        string name = "winfrom",
+        bool cache = false
+    )
     {
         var data = await _service.GetContainsAsync(identity, type, name, cache);
         return ApiResponse(cache: cache, data: data);
@@ -91,10 +99,7 @@ public class ArticleController : BaseController
     public IActionResult GetMlTest(string name)
     {
         //Load sample data
-        var sampleData = new TextMLModel.ModelInput()
-        {
-            Title = @name,
-        };
+        var sampleData = new TextMLModel.ModelInput() { Title = @name, };
         //Load model and predict output
         var result = TextMLModel.Predict(sampleData);
 
@@ -106,7 +111,7 @@ public class ArticleController : BaseController
     #region 主键查询
 
     /// <summary>
-    /// 主键查询 
+    /// 主键查询
     /// </summary>
     /// <param name="id">主键</param>
     /// <param name="cache">缓存</param>
@@ -129,7 +134,11 @@ public class ArticleController : BaseController
     /// <param name="type">类别</param>
     /// <param name="cache">缓存</param>
     [HttpGet("type")]
-    public async Task<IActionResult> GetTypeAsync(int identity = 1, string type = "null", bool cache = false)
+    public async Task<IActionResult> GetTypeAsync(
+        int identity = 1,
+        string type = "null",
+        bool cache = false
+    )
     {
         var data = await _service.GetTypeAsync(identity, type, cache);
         return ApiResponse(cache: cache, data: data);
@@ -148,8 +157,12 @@ public class ArticleController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>int</returns>
     [HttpGet("strSum")]
-    public async Task<IActionResult> GetStrSumAsync(int identity = 0, int type = 1, string name = "null",
-        bool cache = false)
+    public async Task<IActionResult> GetStrSumAsync(
+        int identity = 0,
+        int type = 1,
+        string name = "null",
+        bool cache = false
+    )
     {
         var data = await _service.GetStrSumAsync(identity, type, name, cache);
         return ApiResponse(cache: cache, data: data);
@@ -171,10 +184,25 @@ public class ArticleController : BaseController
     /// <param name="ordering">排序规则 data:时间|read:阅读|give:点赞|id:主键</param>
     /// <returns>list-entity</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int identity = 0, string type = "null", int pageIndex = 1,
-        int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(
+        int identity = 0,
+        string type = "null",
+        int pageIndex = 1,
+        int pageSize = 10,
+        string ordering = "id",
+        bool isDesc = true,
+        bool cache = false
+    )
     {
-        var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
+        var data = await _service.GetPagingAsync(
+            identity,
+            type,
+            pageIndex,
+            pageSize,
+            ordering,
+            isDesc,
+            cache
+        );
         return ApiResponse(cache: cache, data: data);
     }
 
@@ -194,7 +222,11 @@ public class ArticleController : BaseController
         var result = await _validator.ValidateAsync(entity);
         if (!result.IsValid)
         {
-            return ApiResponse(statusCode: 404, message: result.Errors[0].ErrorMessage, data: entity);
+            return ApiResponse(
+                statusCode: 404,
+                message: result.Errors[0].ErrorMessage,
+                data: entity
+            );
         }
 
         var data = await _service.AddAsync(entity);
