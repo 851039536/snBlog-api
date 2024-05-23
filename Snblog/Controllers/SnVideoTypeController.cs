@@ -61,7 +61,7 @@ public class SnVideoTypeController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpPost("AddAsync")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(SnVideoType entity)
     {
         var data = await _service.AddAsync(entity);
@@ -74,7 +74,7 @@ public class SnVideoTypeController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(SnVideoType entity)
     {
         var data = await  _service.DeleteAsync(entity);
@@ -87,7 +87,7 @@ public class SnVideoTypeController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(SnVideoType entity)
     {
         var data = await _service.UpdateAsync(entity);

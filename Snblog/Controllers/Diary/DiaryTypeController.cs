@@ -1,6 +1,6 @@
 ﻿using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Diary;
 
 /// <summary>
 /// 日记分类
@@ -96,7 +96,7 @@ public class DiaryTypeController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(DiaryType entity)
     {
         var data = await _service.AddAsync(entity);
@@ -112,7 +112,7 @@ public class DiaryTypeController : BaseController
     /// </summary>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         var data = await _service.DeleteAsync(id);
@@ -129,7 +129,7 @@ public class DiaryTypeController : BaseController
     /// <param name="entity">实体</param>
     /// <returns></returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(DiaryType entity)
     {
         var data = await _service.UpdateAsync(entity);

@@ -74,7 +74,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(SnippetVersion entity)
     {
@@ -88,7 +88,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPut("edit")]
     public async Task<IActionResult> UpdateAsync(SnippetVersion entity)
     {
@@ -102,7 +102,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {

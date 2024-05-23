@@ -104,7 +104,7 @@ public class SnippetTagController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(SnippetTag entity)
     {
         var data = await _service.AddAsync(entity);
@@ -119,7 +119,7 @@ public class SnippetTagController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(SnippetTag entity)
     {
         var data = await _service.UpdateAsync(entity);
@@ -134,7 +134,7 @@ public class SnippetTagController : BaseController
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         var data = await _service.DeleteAsync(id);

@@ -67,7 +67,7 @@ public class UserTalkController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(UserTalk entity)
     {
         var ret = await _validator.ValidateAsync(entity);
@@ -88,7 +88,7 @@ public class UserTalkController : BaseController
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DelAsync(int id)
     {
         var data = await _service.DelAsync(id);
@@ -104,7 +104,7 @@ public class UserTalkController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(UserTalk entity)
     {
         var data = await _service.UpdateAsync(entity);

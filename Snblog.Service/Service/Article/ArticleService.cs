@@ -1,5 +1,5 @@
-﻿namespace Snblog.Service.Service;
-
+﻿namespace Snblog.Service.Service.Article;
+using Snblog.Enties.Models;
 public class ArticleService : IArticleService
 {
     // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
@@ -11,61 +11,51 @@ public class ArticleService : IArticleService
     #region 服务
 
     private readonly SnblogContext _service;
-    private readonly CacheUtil _cache;
+    private readonly ServiceHelper _serviceHelper;
+    private readonly CacheUtils _cache;
 
     #endregion
-   
-    /// <summary>
-    /// 使用了IServiceProvider接口来获取所需的服务
-    ///它定义了一个方法GetRequiredService，该方法可以用于获取指定类型的服务
-    /// </summary>
-    /// <param name="serviceProvider"></param>
-    public ArticleService(IServiceProvider serviceProvider)
+
+    ///  <summary>
+    ///  使用了IServiceProvider接口来获取所需的服务
+    /// 它定义了一个方法GetRequiredService，该方法可以用于获取指定类型的服务
+    ///  </summary>
+    ///  <param name="serviceProvider"></param>
+    ///  <param name="serviceHelper"></param>
+    public ArticleService(IServiceProvider serviceProvider,ServiceHelper serviceHelper)
     {
+        _serviceHelper = serviceHelper;
         // 获取服务提供程序中的实例
         _service = serviceProvider.GetRequiredService<SnblogContext>();
-        _cache = (CacheUtil)serviceProvider.GetRequiredService<ICacheUtil>();
+        _cache = (CacheUtils)serviceProvider.GetRequiredService<ICacheUtil>();
     }
 
-    public async Task<bool> DelAsync(int id)
-    {
-        // 设置缓存键,记录日志
-        Common.CacheInfo($"{Name}{Common.Del}{id}");
-
-        // 通过id查找文章
-        var ret = await _service.Articles.FindAsync(id);
-        // 如果文章不存在，返回false
-        if (ret == null) return false;
-        _service.Articles.Remove(ret); //删除单个
-        _service.Remove(ret); //直接在context上Remove()方法传入model，它会判断类型
-        // 保存更改
-        return await _service.SaveChangesAsync() > 0;
-    }
+   
 
  
     public async Task<ArticleDto> GetByIdAsync(int id, bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.Bid}{id}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
         if (cache)
         {
-            _retDto.Entity = _cache.GetValue<ArticleDto>(Common.CacheKey);
+            _retDto.Entity = _cache.GetValue<ArticleDto>(ServiceConfig.CacheKey);
             if (_retDto.Entity != null) return _retDto.Entity;
         }
 
         _retDto.Entity = await _service.Articles
             .SelectArticle()
             .SingleOrDefaultAsync(b => b.Id == id);
-        _cache.SetValue(Common.CacheKey, _retDto.Entity);
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.Entity);
         return _retDto.Entity;
     }
 
     public async Task<List<ArticleDto>> GetTypeAsync(int identity, string type, bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.Condition}{identity}_{type}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Condition}{identity}_{type}_{cache}");
 
         if (cache)
         {
-            _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(Common.CacheKey);
+            _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(ServiceConfig.CacheKey);
             if (_retDto.EntityList != null)
             {
                 return _retDto.EntityList;
@@ -89,13 +79,13 @@ public class ArticleService : IArticleService
                 .ToListAsync();
         }
 
-        _cache.SetValue(Common.CacheKey, _retDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.EntityList);
         return _retDto.EntityList;
     }
 
     public async Task<bool> AddAsync(Article entity)
     {
-        Common.CacheInfo($"{Name}{Common.Add}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
 
         entity.TimeCreate = entity.TimeModified = DateTime.Now;
         //此方法中的异步添加改为同步添加，因为 SaveChangesAsync 方法已经是异步的，不需要再使用异步添加
@@ -105,7 +95,7 @@ public class ArticleService : IArticleService
 
     public async Task<bool> UpdateAsync(Article entity)
     {
-        Common.CacheInfo($"{Name}{Common.Up}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
 
         entity.TimeModified = DateTime.Now; //更新时间
 
@@ -131,44 +121,42 @@ public class ArticleService : IArticleService
         // 2. 使用 FirstOrDefaultAsync 方法代替 ToListAsync 方法，因为只需要查询一个字段。
     }
 
-
     public async Task<int> GetSumAsync(int identity, string type, bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.Sum}{identity}_{type}_{cache}");
-        if (cache)
+        // 1.先赋值缓存key
+        string cacheKey =$"{Name}{ServiceConfig.Sum}{identity}_{type}_{cache}";
+        
+        // 2.调用通用方法：检查是否需要缓存，并执行相应的逻辑
+        return await  _serviceHelper.CheckAndExecuteCacheAsync(cacheKey, cache, async () =>
         {
-            var sum = _cache.GetValue<int>(Common.CacheKey);
-            if (sum != 0)
+            // 3.根据当前方法执行逻辑
+            return identity switch
             {
-                return sum;
-            }
-        }
-        return identity switch
-        {
-            // 读取文章数量，无需筛选条件
-            0 => await GetArticleCountAsync(),
-            1 => await GetArticleCountAsync(c => c.Type.Name == type),
-            2 => await GetArticleCountAsync(c => c.Tag.Name == type),
-            3 => await GetArticleCountAsync(c => c.User.Name == type),
-            _ => -1, 
-        };
+                // 读取文章数量，无需筛选条件
+                0 => await GetArticleCountAsync(cacheKey),
+                1 => await GetArticleCountAsync(cacheKey,c => c.Type.Name == type),
+                2 => await GetArticleCountAsync(cacheKey,c => c.Tag.Name == type),
+                3 => await GetArticleCountAsync(cacheKey,c => c.User.Name == type),
+                var _ => -1, 
+            };
+        });
     }
 
     /// <summary>
     /// 获取文章的数量
     /// </summary>
+    /// <param name="cacheKey"></param>
     /// <param name="predicate">筛选文章的条件</param>
     /// <returns>返回文章的数量</returns>
-    private async Task<int> GetArticleCountAsync(Expression<Func<Article, bool>> predicate = null)
+    private async Task<int> GetArticleCountAsync(string cacheKey, Expression<Func<Article, bool>> predicate = null)
     {
         var query = _service.Articles.AsNoTracking();
         //如果有筛选条件
         if (predicate != null) query = query.Where(predicate);
-
         try
         {
             int count = await query.CountAsync();
-            _cache.SetValue(Common.CacheKey, count); //设置缓存
+            _cache.SetValue(cacheKey, count); //设置缓存
             return count;
         }
         catch
@@ -179,16 +167,16 @@ public class ArticleService : IArticleService
 
     public async Task<List<ArticleDto>> GetAllAsync(bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.All}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.All}{cache}");
 
         if (cache)
         {
-            _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(Common.CacheKey);
+            _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(ServiceConfig.CacheKey);
             if (_retDto.EntityList != null) return _retDto.EntityList;
         }
 
         var data = await _service.Articles.SelectArticle().ToListAsync();
-        _cache.SetValue(Common.CacheKey, _retDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.EntityList);
         return data;
     }
 
@@ -202,11 +190,11 @@ public class ArticleService : IArticleService
     /// <returns>int</returns>
     public async Task<int> GetStrSumAsync(int identity, int type, string name, bool cache)
     {
-        Common.CacheInfo($"{Name}统计{identity}_{type}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}统计{identity}_{type}_{name}_{cache}");
 
         if (cache)
         {
-            _ret.EntityCount = _cache.GetValue<int>(Common.CacheKey);
+            _ret.EntityCount = _cache.GetValue<int>(ServiceConfig.CacheKey);
             if (_ret.EntityCount != 0)
             {
                 return _ret.EntityCount;
@@ -229,7 +217,7 @@ public class ArticleService : IArticleService
                 break;
         }
 
-        _cache.SetValue(Common.CacheKey, _ret.EntityCount);
+        _cache.SetValue(ServiceConfig.CacheKey, _ret.EntityCount);
         return _ret.EntityCount;
     }
 
@@ -270,12 +258,12 @@ public class ArticleService : IArticleService
     public async Task<List<ArticleDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
         string ordering, bool isDesc, bool cache)
     {
-        Common.CacheInfo(
-            $"{Name}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo(
+            $"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
 
         if (cache)
         {
-            _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(Common.CacheKey);
+            _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(ServiceConfig.CacheKey);
             if (_retDto.EntityList != null)
             {
                 return _retDto.EntityList;
@@ -320,14 +308,14 @@ public class ArticleService : IArticleService
 
         var data = await article.Skip((pageIndex - 1) * pageSize).Take(pageSize)
             .SelectArticle().ToListAsync();
-        _cache.SetValue(Common.CacheKey, _retDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.EntityList);
         return data;
     }
 
 
     public async Task<bool> UpdatePortionAsync(Article entity, string type)
     {
-        Common.CacheInfo($"{Name}{Common.UpPortiog}{entity.Id}_{type}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.UpPortiog}{entity.Id}_{type}");
         var ret = await _service.Articles.FindAsync(entity.Id);
         if (ret == null) return false;
 
@@ -364,13 +352,13 @@ public class ArticleService : IArticleService
     /// <returns>list-entity</returns>
     public async Task<List<ArticleDto>> GetContainsAsync(int identity, string type, string name, bool cache)
     {
-        var upNames = name.ToUpper();
+        string upNames = name.ToUpper();
 
-        Common.CacheInfo($"{Name}{Common.Contains}{identity}_{type}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 
         if (cache)
         {
-            _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(Common.CacheKey);
+            _retDto.EntityList = _cache.GetValue<List<ArticleDto>>(ServiceConfig.CacheKey);
             if (_retDto.EntityList != null)
             {
                 return _retDto.EntityList;
@@ -397,7 +385,22 @@ public class ArticleService : IArticleService
             return _retDto.EntityList;
         }
         _retDto.EntityList = await _service.Articles.Where(predicate).SelectArticle().ToListAsync();
-        _cache.SetValue(Common.CacheKey, _retDto.EntityList); //设置缓存
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.EntityList); //设置缓存
         return _retDto.EntityList;
+    }
+    
+    public async Task<bool> DelAsync(int id)
+    {
+        // 设置缓存键,记录日志
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
+
+        // 通过id查找文章
+        var ret = await _service.Articles.FindAsync(id);
+        // 如果文章不存在，返回false
+        if (ret == null) return false;
+        _service.Articles.Remove(ret); //删除单个
+        _service.Remove(ret); //直接在context上Remove()方法传入model，它会判断类型
+        // 保存更改
+        return await _service.SaveChangesAsync() > 0;
     }
 }

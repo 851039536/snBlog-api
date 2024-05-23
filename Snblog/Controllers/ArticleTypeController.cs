@@ -88,7 +88,7 @@ public class ArticleTypeController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(ArticleType entity)
     {
         var data = await _service.AddAsync(entity);
@@ -118,7 +118,7 @@ public class ArticleTypeController : BaseController
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         var data = await _service.DeleteAsync(id);

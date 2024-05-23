@@ -3,7 +3,7 @@
 public class SnippetService : ISnippetService
 {
     private readonly SnblogContext _service;
-    private readonly CacheUtil _cache;
+    private readonly CacheUtils _cache;
     private readonly EntityData<Snippet> _ret = new();
     private readonly EntityDataDto<SnippetDto> _rDto = new();
 
@@ -12,12 +12,12 @@ public class SnippetService : ISnippetService
     public SnippetService(ICacheUtil cacheUtil, SnblogContext coreDbContext)
     {
         _service = coreDbContext;
-        _cache = (CacheUtil)cacheUtil;
+        _cache = (CacheUtils)cacheUtil;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        Common.CacheInfo($"{NAME}{Common.Del}{id}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Del}{id}");
 
         Snippet snippet = await _service.Snippets.FindAsync(id);
         if (snippet == null) return false;
@@ -34,15 +34,15 @@ public class SnippetService : ISnippetService
     /// <returns>entity</returns>
     public async Task<SnippetDto> GetByIdAsync(int id, bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.Bid}{id}_{cache}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Bid}{id}_{cache}");
         if (cache)
         {
-            _rDto.Entity = _cache.GetValue<SnippetDto>(Common.CacheKey);
+            _rDto.Entity = _cache.GetValue<SnippetDto>(ServiceConfig.CacheKey);
             if (_rDto.Entity != null) return _rDto.Entity;
         }
 
         _rDto.Entity = await _service.Snippets.SelectSnippet().AsNoTracking().SingleOrDefaultAsync(b => b.Id == id);
-        _cache.SetValue(Common.CacheKey, _rDto.Entity);
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.Entity);
 
         return _rDto.Entity;
     }
@@ -50,14 +50,14 @@ public class SnippetService : ISnippetService
 
     public async Task<bool> AddAsync(Snippet entity)
     {
-        Common.CacheInfo($"{NAME}{Common.Add}{entity}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Add}{entity}");
         await _service.Snippets.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> UpdateAsync(Snippet entity)
     {
-        Common.CacheInfo($"{NAME}{Common.Up}{entity.Id}_{entity}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Up}{entity.Id}_{entity}");
 
         //entity.TimeModified = DateTime.Now; //更新时间
         _service.Snippets.Update(entity);
@@ -66,11 +66,11 @@ public class SnippetService : ISnippetService
 
     public async Task<int> GetSumAsync(int identity, string type, bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.Sum}{identity}_{type}_{cache}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Sum}{identity}_{type}_{cache}");
 
         if (cache)
         {
-            _ret.EntityCount = _cache.GetValue<int>(Common.CacheKey);
+            _ret.EntityCount = _cache.GetValue<int>(ServiceConfig.CacheKey);
             if (_ret.EntityCount != 0) return _ret.EntityCount;
         }
 
@@ -90,7 +90,7 @@ public class SnippetService : ISnippetService
                 break;
         }
 
-        _cache.SetValue(Common.CacheKey, _ret.EntityCount);
+        _cache.SetValue(ServiceConfig.CacheKey, _ret.EntityCount);
 
         return _ret.EntityCount;
     }
@@ -104,11 +104,11 @@ public class SnippetService : ISnippetService
     /// <returns>int</returns>
     public async Task<int> GetStrSumAsync(int identity, string name, bool cache)
     {
-        Common.CacheInfo($"{NAME}统计_{identity}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{NAME}统计_{identity}_{name}_{cache}");
 
         if (cache)
         {
-            _ret.EntityCount = _cache.GetValue<int>(Common.CacheKey);
+            _ret.EntityCount = _cache.GetValue<int>(ServiceConfig.CacheKey);
             if (_ret.EntityCount != 0) return _ret.EntityCount;
         }
 
@@ -141,7 +141,7 @@ public class SnippetService : ISnippetService
                 break;
         }
 
-        _cache.SetValue(Common.CacheKey, _ret.EntityCount);
+        _cache.SetValue(ServiceConfig.CacheKey, _ret.EntityCount);
 
         return _ret.EntityCount;
     }
@@ -158,10 +158,10 @@ public class SnippetService : ISnippetService
     /// <returns>list-entity</returns>
     public async Task<List<SnippetDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, bool isDesc, bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<SnippetDto>>(Common.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<SnippetDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
@@ -209,7 +209,7 @@ public class SnippetService : ISnippetService
                 break;
         }
 
-        _cache.SetValue(Common.CacheKey, _rDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
 
         return _rDto.EntityList;
     }
@@ -248,7 +248,7 @@ public class SnippetService : ISnippetService
 
     public async Task<bool> UpdatePortionAsync(Snippet entity, string type)
     {
-        Common.CacheInfo($"{NAME}{Common.Paging} {entity.Id}_{type}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging} {entity.Id}_{type}");
         Snippet result = await _service.Snippets.FindAsync(entity.Id);
         if (result == null) return false;
         switch (type)
@@ -282,10 +282,10 @@ public class SnippetService : ISnippetService
     {
         var uppercaseName = name.ToUpper();
 
-        Common.CacheInfo($"{NAME}{Common.Contains}{identity}_{type}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<SnippetDto>>(Common.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<SnippetDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
@@ -321,7 +321,7 @@ public class SnippetService : ISnippetService
             _rDto.EntityList = await _service.Snippets.Where(predicate).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .SelectSnippet().ToListAsync();
-        _cache.SetValue(Common.CacheKey, _rDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
         return _rDto.EntityList;
     }
 }

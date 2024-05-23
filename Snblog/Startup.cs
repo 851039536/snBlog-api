@@ -13,6 +13,7 @@ using Snblog.Service.AngleSharp;
 using Snblog.Util.Exceptions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using ArticleService = Snblog.Service.Service.Article.ArticleService;
 
 namespace Snblog;
 
@@ -201,6 +202,7 @@ public class Startup
 
 
         services.AddScoped<DataBaseSql,DataBaseSql>();
+        services.AddScoped<ServiceHelper,ServiceHelper>();
 
         //IValidator
         services.AddTransient<IValidator<Article>,ArticleValidator>();
@@ -210,7 +212,7 @@ public class Startup
 
         //整个应用程序生命周期以内只创建一个实例 
         services.AddSingleton<ICacheManager,CacheManager>();
-        services.AddSingleton<ICacheUtil,CacheUtil>();
+        services.AddSingleton<ICacheUtil,CacheUtils>();
 
         #endregion
 

@@ -8,24 +8,24 @@ public class UserTalkService : IUserTalkService
 
     //服务
     private readonly SnblogContext _service;
-    private readonly CacheUtil _cache;
+    private readonly CacheUtils _cache;
     private readonly IMapper _mapper;
 
     public UserTalkService(SnblogContext service, ICacheUtil cache, IMapper mapper)
     {
         _service = service;
         _mapper = mapper;
-        _cache = (CacheUtil)cache;
+        _cache = (CacheUtils)cache;
     }
 
     public async Task<List<UserTalkDto>> GetContainsAsync(int identity, string type, string name, bool cache)
     {
         var upNames = name.ToUpper();
-        Common.CacheInfo($"{Name}{Common.Contains}{identity}_{type}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 
         if (cache)
         {
-            _retDto.EntityList = _cache.GetValue<List<UserTalkDto>>(Common.CacheKey);
+            _retDto.EntityList = _cache.GetValue<List<UserTalkDto>>(ServiceConfig.CacheKey);
             if (_retDto.EntityList != null)
             {
                 return _retDto.EntityList;
@@ -54,12 +54,12 @@ public class UserTalkService : IUserTalkService
     public async Task<List<UserTalkDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
         string ordering, bool isDesc, bool cache)
     {
-        Common.CacheInfo(
-            $"{Name}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo(
+            $"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
 
         if (cache)
         {
-            _retDto.EntityList = _cache.GetValue<List<UserTalkDto>>(Common.CacheKey);
+            _retDto.EntityList = _cache.GetValue<List<UserTalkDto>>(ServiceConfig.CacheKey);
             if (_retDto.EntityList != null)
             {
                 return _retDto.EntityList;
@@ -102,7 +102,7 @@ public class UserTalkService : IUserTalkService
 
         _retDto.EntityList = await userTalks.Skip((pageIndex - 1) * pageSize).Take(pageSize).SelectUserTalk()
             .ToListAsync();
-        _cache.SetValue(Common.CacheKey, _retDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.EntityList);
 
         // _retDto.EntityList = _mapper.Map<List<UserTalkDto>>(data);
         return _retDto.EntityList;
@@ -119,14 +119,14 @@ public class UserTalkService : IUserTalkService
             return _retDto.EntityList;
         }
         _retDto.EntityList = await _service.UserTalks.Where(predicate).SelectUserTalk().ToListAsync();
-        _cache.SetValue(Common.CacheKey, _retDto.EntityList); //设置缓存
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.EntityList); //设置缓存
         return _retDto.EntityList;
     }
 
 
     public async Task<bool> DelAsync(int id)
     {
-        Common.CacheInfo($"{Name}{Common.Del}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
         var ret = await _service.UserTalks.FindAsync(id);
         if (ret == null) return false;
         _service.UserTalks.Remove(ret);
@@ -136,7 +136,7 @@ public class UserTalkService : IUserTalkService
     public async Task<bool> AddAsync(UserTalk entity)
     {
             
-        Common.CacheInfo($"{Name}{Common.Add}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
         entity.TimeCreate = DateTime.Now; 
         _service.UserTalks.Add(entity);
         return await _service.SaveChangesAsync() > 0;
@@ -144,7 +144,7 @@ public class UserTalkService : IUserTalkService
 
     public async Task<bool> UpdateAsync(UserTalk entity)
     {
-        Common.CacheInfo($"{Name}{Common.Up}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
 
         _service.UserTalks.Update(entity);
         return await _service.SaveChangesAsync() > 0;

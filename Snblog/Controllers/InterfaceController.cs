@@ -79,7 +79,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(Interface entity)
     {
@@ -93,7 +93,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns></returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(Interface entity)
     {
@@ -108,7 +108,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {

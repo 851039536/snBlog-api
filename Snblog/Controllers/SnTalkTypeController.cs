@@ -72,7 +72,7 @@ public class SnTalkTypeController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPost("AddAsync")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(SnTalkType entity)
     {
         return Ok(await _service.AddAsync(entity));
@@ -83,7 +83,7 @@ public class SnTalkTypeController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpDelete("DelAsync")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         return Ok(await _service.DeleteAsync(id));
@@ -93,7 +93,7 @@ public class SnTalkTypeController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPut("UpdateAsync")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(SnTalkType entity)
     {
         return Ok(await _service.UpdateAsync(entity));

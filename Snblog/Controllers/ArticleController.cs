@@ -4,12 +4,12 @@ using Snblog.Util.GlobalVar;
 namespace Snblog.Controllers;
 
 /// <summary>
-/// 文章
+/// 文章api
 /// </summary>
 [ApiExplorerSettings(GroupName = "V1")] //版本控制
 [ApiController] //控制路由
 [Route("article")]
-public class ArticleController : BaseController
+public  class ArticleController : BaseController
 {
     #region 服务
 
@@ -39,16 +39,17 @@ public class ArticleController : BaseController
     /// <returns>int</returns>
     [EnableRateLimiting("fixed")]
     [HttpGet("sum")]
-    public async Task<IActionResult> GetSumAsync(
-        int identity = 0,
-        string type = null,
-        bool cache = false
-    )
+    public async Task<IActionResult> GetSumAsync(int identity = 0, string type = null, bool cache = false)
     {
-        var data = await _service.GetSumAsync(identity, type, cache);
-        return ApiResponse(cache: cache, data: data);
+        int data = await _service.GetSumAsync(identity, type, cache);
+        if(data==-1)
+        {
+            // 如果方法返回-1，表示失败，返回一个失败的API响应
+            return ApiResponseFailure<string>();
+        }
+        // 如果方法成功，返回一个成功的API响应
+        return ApiResponseSuccess(cache: cache, data: data);
     }
-
     #endregion
 
     #region 查询所有
@@ -79,31 +80,10 @@ public class ArticleController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(
-        int identity = 0,
-        string type = "null",
-        string name = "winfrom",
-        bool cache = false
-    )
+    public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "winfrom", bool cache = false)
     {
         var data = await _service.GetContainsAsync(identity, type, name, cache);
         return ApiResponse(cache: cache, data: data);
-    }
-
-    /// <summary>
-    /// ml
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    [HttpGet("ml")]
-    public IActionResult GetMlTest(string name)
-    {
-        //Load sample data
-        var sampleData = new TextMLModel.ModelInput() { Title = @name, };
-        //Load model and predict output
-        var result = TextMLModel.Predict(sampleData);
-
-        return ApiResponse(data: result.PredictedLabel);
     }
 
     #endregion
@@ -134,11 +114,7 @@ public class ArticleController : BaseController
     /// <param name="type">类别</param>
     /// <param name="cache">缓存</param>
     [HttpGet("type")]
-    public async Task<IActionResult> GetTypeAsync(
-        int identity = 1,
-        string type = "null",
-        bool cache = false
-    )
+    public async Task<IActionResult> GetTypeAsync(int identity = 1, string type = "null", bool cache = false)
     {
         var data = await _service.GetTypeAsync(identity, type, cache);
         return ApiResponse(cache: cache, data: data);
@@ -157,17 +133,11 @@ public class ArticleController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>int</returns>
     [HttpGet("strSum")]
-    public async Task<IActionResult> GetStrSumAsync(
-        int identity = 0,
-        int type = 1,
-        string name = "null",
-        bool cache = false
-    )
+    public async Task<IActionResult> GetStrSumAsync(int identity = 0, int type = 1, string name = "null", bool cache = false)
     {
-        var data = await _service.GetStrSumAsync(identity, type, name, cache);
+        int data = await _service.GetStrSumAsync(identity, type, name, cache);
         return ApiResponse(cache: cache, data: data);
     }
-
     #endregion
 
     #region 分页查询
@@ -194,15 +164,7 @@ public class ArticleController : BaseController
         bool cache = false
     )
     {
-        var data = await _service.GetPagingAsync(
-            identity,
-            type,
-            pageIndex,
-            pageSize,
-            ordering,
-            isDesc,
-            cache
-        );
+        var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
         return ApiResponse(cache: cache, data: data);
     }
 
@@ -215,21 +177,17 @@ public class ArticleController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(Article entity)
     {
         var result = await _validator.ValidateAsync(entity);
         if (!result.IsValid)
         {
-            return ApiResponse(
-                statusCode: 404,
-                message: result.Errors[0].ErrorMessage,
-                data: entity
-            );
+            return ApiResponse(statusCode: 404, message: result.Errors[0].ErrorMessage, data: entity);
         }
 
-        var data = await _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -242,11 +200,11 @@ public class ArticleController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(Article entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -259,11 +217,11 @@ public class ArticleController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var data = await _service.DelAsync(id);
+        bool data = await _service.DelAsync(id);
         return ApiResponse(data: data);
     }
 
@@ -280,7 +238,7 @@ public class ArticleController : BaseController
     [HttpPut("upPortion")]
     public async Task<IActionResult> UpdatePortionAsync(Article entity, string type)
     {
-        var data = await _service.UpdatePortionAsync(entity, type);
+        bool data = await _service.UpdatePortionAsync(entity, type);
         return ApiResponse(data: data);
     }
 

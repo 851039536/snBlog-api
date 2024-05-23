@@ -3,8 +3,10 @@
 /// <summary>
 /// 常量字符
 /// </summary>
-public static class Common
+public  class ServiceConfig
 {
+    
+    
     // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
     public const string Bid = "BYID_";
     public const string Sum = "SUM_";
@@ -16,7 +18,7 @@ public static class Common
     /// <summary>
     /// 更新
     /// </summary>
-    public const string Up = "UP_";
+    public  const string Up = "UP_";
     /// <summary>
     /// 更新单个字符
     /// </summary>
@@ -34,7 +36,7 @@ public static class Common
     public static string CacheInfo(string info)
     {
         CacheKey = info;
-        Log.Information(CacheKey);
+        Log.Information(CacheKey); //赋值给key，方便在是否使用缓存时做判断
         return CacheKey;
     }
 
@@ -42,4 +44,7 @@ public static class Common
     /// 缓存Key
     /// </summary>
     public static string CacheKey;
+
+
+   
 }

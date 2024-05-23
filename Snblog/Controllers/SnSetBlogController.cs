@@ -76,7 +76,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPost("AddAsync")]
     public async Task<IActionResult> AddAsync(SnSetblogDto entity)
     {
@@ -89,7 +89,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPut("UpdateAsync")]
     public async Task<IActionResult> UpdateAsync(SnSetblogDto entity)
     {
@@ -102,7 +102,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpDelete("DelAsync")]
     public async Task<IActionResult> DeleteAsync(int id)
     {

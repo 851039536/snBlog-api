@@ -2,14 +2,15 @@
 
 public class SnPictureService : ISnPictureService
 {
-    private readonly SnblogContext _service;//DB
-    private readonly CacheUtil _cacheutil;
+    private readonly SnblogContext _service; //DB
+    private readonly CacheUtils _cacheutil;
     private int result_Int;
     private List<SnPicture> result_List = default;
+
     public SnPictureService(SnblogContext service, ICacheUtil cacheutil)
     {
         _service = service;
-        _cacheutil = (CacheUtil)cacheutil;
+        _cacheutil = (CacheUtils)cacheutil;
     }
 
     public async Task<bool> AddAsync(SnPicture entity)
@@ -26,10 +27,11 @@ public class SnPictureService : ISnPictureService
 
     public async Task<int> CountAsync()
     {
-        result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int,true);
-        if (result_Int != 0)  return result_Int;
+        result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int, true);
+        if (result_Int != 0)
+            return result_Int;
         result_Int = await _service.SnPictures.CountAsync();
-        _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int,true);
+        _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int, true);
         return result_Int;
     }
 
@@ -41,7 +43,6 @@ public class SnPictureService : ISnPictureService
         var todoItem = await _service.SnPictures.FindAsync(id);
         _service.SnPictures.Remove(todoItem);
         return await _service.SaveChangesAsync() > 0;
-
     }
 
     public async Task<SnPicture> GetByIdAsync(int id)
@@ -67,7 +68,12 @@ public class SnPictureService : ISnPictureService
     {
         if (isDesc)
         {
-            return await _service.SnPictures.Where(s => true).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return await _service
+                .SnPictures.Where(s => true)
+                .OrderByDescending(c => c.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         return await _service.SnPictures.Where(s => true).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -83,23 +89,33 @@ public class SnPictureService : ISnPictureService
     {
         if (isDesc)
         {
-            return await _service.SnPictures.Where(s => s.TypeId == type).OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return await _service
+                .SnPictures.Where(s => s.TypeId == type)
+                .OrderByDescending(c => c.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
         else
         {
-            return await _service.SnPictures.Where(s => s.TypeId == type).OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return await _service
+                .SnPictures.Where(s => s.TypeId == type)
+                .OrderBy(c => c.Id)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
     }
 
     public async Task<int> CountAsync(int type)
     {
-        result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync" + type, result_Int,true);
+        result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync" + type, result_Int, true);
         if (result_Int != 0)
         {
             return result_Int;
         }
         result_Int = await _service.SnPictures.CountAsync(s => s.TypeId == type);
-        _cacheutil.CacheNumber("SnPicture_CountAsync" + type, result_Int,true);
+        _cacheutil.CacheNumber("SnPicture_CountAsync" + type, result_Int, true);
         return result_Int;
     }
 }

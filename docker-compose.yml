@@ -12,7 +12,7 @@ services: # 定义应用中的各个服务
     volumes:
       - .:/src # 将宿主机的当前目录挂载到容器的/src目录，实现数据持久化
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development # 设置环境变量，指定运行环境为开发环境
+      - ASPNETCORE_ENVIRONMENT=Production # 设置环境变量，指定运行环境为开发环境 Production，Development
     depends_on:
       - mysql # 定义依赖关系，snblog服务依赖于mysql服务
     networks:

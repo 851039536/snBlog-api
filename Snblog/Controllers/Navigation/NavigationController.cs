@@ -1,6 +1,6 @@
 ﻿using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Navigation;
 
 /// <summary>
 /// 导航
@@ -125,8 +125,8 @@ public class NavigationController : BaseController
     /// </summary>
     /// <returns></returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissions.Name)]
-    public async Task<IActionResult> AddAsync(Navigation entity)
+    [Authorize(Roles = Permissionss.Name)]
+    public async Task<IActionResult> AddAsync(Enties.Models.Navigation entity)
     {
         var data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
@@ -140,8 +140,8 @@ public class NavigationController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissions.Name)]
-    public async Task<IActionResult> UpdateAsync(Navigation entity)
+    [Authorize(Roles = Permissionss.Name)]
+    public async Task<IActionResult> UpdateAsync(Enties.Models.Navigation entity)
     {
         var data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
@@ -155,7 +155,7 @@ public class NavigationController : BaseController
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         var data = await _service.DeleteAsync(id);

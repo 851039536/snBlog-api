@@ -7,13 +7,13 @@ public class NavigationTypeService : INavigationTypeService
 
     private readonly ILogger<NavigationTypeService> _logger;
     private readonly SnblogContext _service;//DB
-    private readonly CacheUtil _cacheutil;
+    private readonly CacheUtils _cacheutil;
     private int result_Int;
     private List<NavigationType> result_List = null;
     public NavigationTypeService(SnblogContext service, ICacheUtil cacheutil, ILogger<NavigationTypeService> logger)
     {
         _service = service;
-        _cacheutil = (CacheUtil)cacheutil;
+        _cacheutil = (CacheUtils)cacheutil;
         _logger = logger;
     }
 

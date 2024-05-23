@@ -1,6 +1,6 @@
 ﻿using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Diary;
 
 /// <summary>
 ///日记
@@ -109,8 +109,8 @@ public class DiaryController : BaseController
     /// </summary>
     /// <returns></returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissions.Name)]
-    public async Task<IActionResult> AddAsync(Diary entity)
+    [Authorize(Roles = Permissionss.Name)]
+    public async Task<IActionResult> AddAsync(Enties.Models.Diary entity)
     {
         var data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
@@ -124,7 +124,7 @@ public class DiaryController : BaseController
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DelAsync(int id)
     {
         var data = await _service.DelAsync(id);
@@ -139,8 +139,8 @@ public class DiaryController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissions.Name)]
-    public async Task<IActionResult> UpdateAsync(Diary entity)
+    [Authorize(Roles = Permissionss.Name)]
+    public async Task<IActionResult> UpdateAsync(Enties.Models.Diary entity)
     {
         var data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
@@ -155,7 +155,7 @@ public class DiaryController : BaseController
     /// <param name="type">更新字段</param>
     /// <returns></returns>
     [HttpPut("upPortion")]
-    public async Task<IActionResult> UpdatePortionAsync(Diary entity, string type)
+    public async Task<IActionResult> UpdatePortionAsync(Enties.Models.Diary entity, string type)
     {
         var data = await _service.UpdatePortionAsync(entity, type);
         return ApiResponse(data: data);

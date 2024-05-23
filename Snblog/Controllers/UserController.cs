@@ -193,7 +193,7 @@ public class UserController : BaseController
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPost("add")]
     public async Task<IActionResult> Add(User entity)
     {
@@ -208,7 +208,7 @@ public class UserController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns></returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpDelete("del")]
     public async Task<IActionResult> Del(int id)
     {
@@ -221,7 +221,7 @@ public class UserController : BaseController
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(User user)
     {

@@ -5,7 +5,7 @@ namespace Snblog.Service.Service;
 public class SnSetBlogService : ISnSetBlogService
 {
     private readonly SnblogContext _service;
-    private readonly CacheUtil _cacheutil;
+    private readonly CacheUtils _cacheutil;
     private readonly ILogger<SnSetBlogService> _logger;
     readonly EntityData<SnSetblog> res = new();
     readonly EntityDataDto<SnSetblogDto> resDto = new();
@@ -13,7 +13,7 @@ public class SnSetBlogService : ISnSetBlogService
     public SnSetBlogService(ICacheUtil cacheUtil, SnblogContext coreDbContext, ILogger<SnSetBlogService> logger, IMapper mapper)
     {
         _service = coreDbContext;
-        _cacheutil = (CacheUtil)cacheUtil;
+        _cacheutil = (CacheUtils)cacheUtil;
         _logger = logger;
         _mapper = mapper;
     }
@@ -26,6 +26,11 @@ public class SnSetBlogService : ISnSetBlogService
         _service.SnSetblogs.Remove(reslult);//删除单个
         _service.Remove(reslult);//直接在context上Remove()方法传入model，它会判断类型
         return await _service.SaveChangesAsync() > 0;
+    }
+
+    public Task<List<Enties.Models.Article>> GetTypeIdAsync(int sortId,bool cache)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<List<SnSetblogDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
@@ -119,6 +124,26 @@ public class SnSetBlogService : ISnSetBlogService
         return resDto.EntityList;
     }
 
+    public Task<List<Enties.Models.Article>> GetfySortTestAsync(int type,int pageIndex,int pageSize,bool isDesc,bool cache)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Enties.Models.Article>> GetFyAsync(int type,int pageIndex,int pageSize,string name,bool isDesc,bool cache)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Enties.Models.Article>> GetFyTitleAsync(int pageIndex,int pageSize,bool isDesc,bool cache)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<Enties.Models.Article>> GetTagAsync(int tag,bool isDesc,bool cache)
+    {
+        throw new NotImplementedException();
+    }
+
 
     /// <summary>
     /// 添加数据
@@ -184,30 +209,7 @@ public class SnSetBlogService : ISnSetBlogService
         return resDto.Entity;
     }
 
-    public Task<List<Article>> GetTypeIdAsync(int sortId, bool cache)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Article>> GetfySortTestAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Article>> GetFyAsync(int type, int pageIndex, int pageSize, string name, bool isDesc, bool cache)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Article>> GetFyTitleAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Article>> GetTagAsync(int tag, bool isDesc, bool cache)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     public Task<int> GetConutSortAsync(int type, bool cache)
     {

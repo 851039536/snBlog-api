@@ -11,7 +11,7 @@ public class InterfaceService : IInterfaceService
 
 
     private readonly SnblogContext _service;
-    private readonly CacheUtil _cache;
+    private readonly CacheUtils _cache;
 
     private readonly IMapper _mapper;
     private readonly EntityDataDto<InterfaceDto> _rDto = new();
@@ -20,7 +20,7 @@ public class InterfaceService : IInterfaceService
     public InterfaceService(SnblogContext service,ICacheUtil cache,IMapper mapper)
     {
         _service = service;
-        _cache = (CacheUtil)cache;
+        _cache = (CacheUtils)cache;
         _mapper = mapper;
     }
 
@@ -33,7 +33,7 @@ public class InterfaceService : IInterfaceService
     ///  <param name="cache">缓存</param>
     public async Task<List<InterfaceDto>> GetConditionAsync(int identity,string userName,string type,bool cache)
     {
-        _cacheKey = $"{NAME}{Common.Contains}{identity}_{userName}_{type}_{cache}";
+        _cacheKey = $"{NAME}{ServiceConfig.Contains}{identity}_{userName}_{type}_{cache}";
         Log.Information(_cacheKey);
 
         if (cache)
@@ -93,7 +93,7 @@ public class InterfaceService : IInterfaceService
     public async Task<List<InterfaceDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,
         bool isDesc,bool cache)
     {
-        _cacheKey = $"{NAME}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}";
+        _cacheKey = $"{NAME}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}";
         Log.Information(_cacheKey);
 
         if (cache)
@@ -127,21 +127,21 @@ public class InterfaceService : IInterfaceService
 
     public async Task<bool> AddAsync(Interface entity)
     {
-        Log.Information($"{NAME}{Common.Add}");
+        Log.Information($"{NAME}{ServiceConfig.Add}");
         await _service.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> UpdateAsync(Interface entity)
     {
-        Log.Information($"{NAME}{Common.Up}{entity}");
+        Log.Information($"{NAME}{ServiceConfig.Up}{entity}");
         _service.Interfaces.Update(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        Log.Information($"{NAME}{Common.Del}{id}");
+        Log.Information($"{NAME}{ServiceConfig.Del}{id}");
         var ret = await _service.Interfaces.FindAsync(id);
         if (ret == null) return false;
         _service.Interfaces.Remove(ret); //删除单个
@@ -158,7 +158,7 @@ public class InterfaceService : IInterfaceService
     /// <returns>entity</returns>
     public async Task<InterfaceDto> GetByIdAsync(int id,bool cache)
     {
-        _cacheKey = $"{NAME}{Common.Bid}{id}_{cache}";
+        _cacheKey = $"{NAME}{ServiceConfig.Bid}{id}_{cache}";
         Log.Information(_cacheKey);
 
         if (cache)

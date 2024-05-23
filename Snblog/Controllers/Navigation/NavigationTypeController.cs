@@ -1,6 +1,6 @@
 ﻿using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Navigation;
 
 /// <summary>
 /// 导航表分类
@@ -87,7 +87,7 @@ public class NavigationTypeController : BaseController
     /// <param name="entity">实体类</param>
     /// <returns></returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(NavigationType entity)
     {
         var data = await _service.AddAsync(entity);
@@ -101,7 +101,7 @@ public class NavigationTypeController : BaseController
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         var data = await _service.DeleteAsync(id);
@@ -115,7 +115,7 @@ public class NavigationTypeController : BaseController
     /// <param name="entity">实体类</param>
     /// <returns></returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissions.Name)]
+    [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(NavigationType entity)
     {
         var data = await _service.UpdateAsync(entity);

@@ -9,20 +9,17 @@ public static class InterfaceExtensions
 {
     public static IQueryable<InterfaceDto> SelectInterface(this IQueryable<Interface> ret)
     {
-        return ret.AsNoTracking().Select(e => new InterfaceDto {
-            Id = e.Id,
-            Name = e.Name,
-            Path = e.Path,
-            Identity = e.Identity,
-            UserId = e.UserId,
-            User = new User {
-                Name = e.User.Name,
-                Nickname = e.User.Nickname
-            },
-            TypeId = e.TypeId,
-            Type = new InterfaceType {
-                Name = e.Type.Name
-            },
-        });
+        return ret.AsNoTracking()
+            .Select(e => new InterfaceDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Path = e.Path,
+                Identity = e.Identity,
+                UserId = e.UserId,
+                User = new User { Name = e.User.Name, Nickname = e.User.Nickname },
+                TypeId = e.TypeId,
+                Type = new InterfaceType { Name = e.Type.Name },
+            });
     }
 }

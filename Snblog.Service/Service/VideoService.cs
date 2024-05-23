@@ -3,7 +3,7 @@
 public class VideoService : IVideoService
 {
     private readonly SnblogContext _service;
-    private readonly CacheUtil _cache;
+    private readonly CacheUtils _cache;
     private readonly EntityData<Video> _ret = new();
     private readonly EntityDataDto<VideoDto> _rDto = new();
     private readonly IMapper _mapper;
@@ -13,35 +13,35 @@ public class VideoService : IVideoService
     public VideoService(SnblogContext service, ICacheUtil cache, IMapper mapper)
     {
         _service = service;
-        _cache = (CacheUtil)cache;
+        _cache = (CacheUtils)cache;
         _mapper = mapper;
     }
 
     public async Task<VideoDto> GetByIdAsync(int id, bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.Bid}{id}{cache}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Bid}{id}{cache}");
         if (cache)
         {
-            _rDto.Entity = _cache.GetValue<VideoDto>(Common.CacheKey);
+            _rDto.Entity = _cache.GetValue<VideoDto>(ServiceConfig.CacheKey);
             if (_rDto.Entity != null) return _rDto.Entity;
         }
 
         _rDto.Entity = _mapper.Map<VideoDto>(await _service.Videos.FindAsync(id));
-        _cache.SetValue(Common.CacheKey, _rDto.Entity);
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.Entity);
         return _rDto.Entity;
     }
 
     public async Task<List<VideoDto>> GetAllAsync(bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.All}{cache}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.All}{cache}");
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
         _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.AsNoTracking().ToListAsync());
-        _cache.SetValue(Common.CacheKey, _rDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
 
         return _rDto.EntityList;
     }
@@ -202,10 +202,10 @@ public class VideoService : IVideoService
 
     public async Task<List<VideoDto>> GetContainsAsync(int identity, string type, string name, bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.Contains}{identity}{type}{name}{cache}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Contains}{identity}{type}{name}{cache}");
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
@@ -231,7 +231,7 @@ public class VideoService : IVideoService
                 break;
         }
 
-        _cache.SetValue(Common.CacheKey, _rDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
 
         return _rDto.EntityList;
     }
@@ -264,10 +264,10 @@ public class VideoService : IVideoService
     public async Task<List<VideoDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
         bool isDesc, bool cache)
     {
-        Common.CacheInfo($"{NAME}{Common.Paging}{identity}{pageIndex}{pageSize}{isDesc}{cache}");
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging}{identity}{pageIndex}{pageSize}{isDesc}{cache}");
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
@@ -284,7 +284,7 @@ public class VideoService : IVideoService
                 break;
         }
 
-        _cache.SetValue(Common.CacheKey, _rDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
 
 
         return _rDto.EntityList;

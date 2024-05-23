@@ -3,13 +3,13 @@
 public class SnPictureTypeService : ISnPictureTypeService
 {
     private readonly SnblogContext _service;//DB
-    private readonly CacheUtil _cache;
+    private readonly CacheUtils _cache;
     private int _resultInt;
     private List<SnPictureType> _retList;
     public SnPictureTypeService(SnblogContext service, ICacheUtil cache)
     {
         _service = service;
-        _cache = (CacheUtil)cache;
+        _cache = (CacheUtils)cache;
     }
 
 

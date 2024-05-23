@@ -9,7 +9,7 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     //服务
     private readonly SnblogContext _service;
-    private readonly CacheUtil _cache;
+    private readonly CacheUtils _cache;
 
     /// <summary>
     /// 使用了IServiceProvider接口来获取所需的服务
@@ -20,13 +20,13 @@ public class PhotoGalleryService : IPhotoGalleryService
     {
         // 获取服务提供程序中的实例
         _service = serviceProvider.GetRequiredService<SnblogContext>();
-        _cache = (CacheUtil)serviceProvider.GetRequiredService<ICacheUtil>();
+        _cache = (CacheUtils)serviceProvider.GetRequiredService<ICacheUtil>();
     }
 
     public async Task<bool> DelAsync(int id)
     {
         // 设置缓存键,记录日志
-        Common.CacheInfo($"{Name}{Common.Del}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
 
         // 通过id查找文章
         var ret = await _service.PhotoGalleries.FindAsync(id);
@@ -41,24 +41,24 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<PhotoGalleryDto> GetByIdAsync(int id, bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.Bid}{id}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
         if (cache)
         {
-            _retDto.Entity = _cache.GetValue<PhotoGalleryDto>(Common.CacheKey);
+            _retDto.Entity = _cache.GetValue<PhotoGalleryDto>(ServiceConfig.CacheKey);
             if (_retDto.Entity != null) return _retDto.Entity;
         }
 
         _retDto.Entity = await _service.PhotoGalleries
             .SelectPhotoGallery()
             .SingleOrDefaultAsync(b => b.Id == id);
-        _cache.SetValue(Common.CacheKey, _retDto.Entity);
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.Entity);
         return _retDto.Entity;
     }
         
 
     public async Task<bool> AddAsync(PhotoGallery entity)
     {
-        Common.CacheInfo($"{Name}{Common.Add}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
 
         entity.TimeCreate = entity.TimeModified = DateTime.Now;
         //此方法中的异步添加改为同步添加，因为 SaveChangesAsync 方法已经是异步的，不需要再使用异步添加
@@ -68,7 +68,7 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<bool> UpdateAsync(PhotoGallery entity)
     {
-        Common.CacheInfo($"{Name}{Common.Up}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
 
         entity.TimeModified = DateTime.Now; //更新时间
 
@@ -97,11 +97,11 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<int> GetSumAsync(int identity, string type, bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.Sum}{identity}_{type}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{identity}_{type}_{cache}");
 
         if (cache)
         {
-            int sum = _cache.GetValue<int>(Common.CacheKey);
+            int sum = _cache.GetValue<int>(ServiceConfig.CacheKey);
             if (sum != 0)
             {
                 //通过entityInt 值是否为 0 判断结果是否被缓存
@@ -135,7 +135,7 @@ public class PhotoGalleryService : IPhotoGalleryService
         try
         {
             int count = await query.CountAsync();
-            _cache.SetValue(Common.CacheKey, count); //设置缓存
+            _cache.SetValue(ServiceConfig.CacheKey, count); //设置缓存
             return count;
         }
         catch
@@ -161,12 +161,12 @@ public class PhotoGalleryService : IPhotoGalleryService
     public async Task<List<PhotoGalleryDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
         string ordering, bool isDesc, bool cache)
     {
-        Common.CacheInfo(
-            $"{Name}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo(
+            $"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
 
         if (cache)
         {
-            _retDto.EntityList = _cache.GetValue<List<PhotoGalleryDto>>(Common.CacheKey);
+            _retDto.EntityList = _cache.GetValue<List<PhotoGalleryDto>>(ServiceConfig.CacheKey);
             if (_retDto.EntityList != null)
             {
                 return _retDto.EntityList;
@@ -221,14 +221,14 @@ public class PhotoGalleryService : IPhotoGalleryService
 
         var data = await articles.Skip((pageIndex - 1) * pageSize).Take(pageSize)
             .SelectPhotoGallery().ToListAsync();
-        _cache.SetValue(Common.CacheKey, _retDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.EntityList);
         return data;
     }
 
 
     public async Task<bool> UpdatePortionAsync(PhotoGallery entity, string type)
     {
-        Common.CacheInfo($"{Name}{Common.UpPortiog}{entity.Id}_{type}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.UpPortiog}{entity.Id}_{type}");
         var ret = await _service.PhotoGalleries.FindAsync(entity.Id);
         if (ret == null) return false;
 
@@ -252,11 +252,11 @@ public class PhotoGalleryService : IPhotoGalleryService
     {
         var upNames = name.ToUpper();
 
-        Common.CacheInfo($"{Name}{Common.Contains}{identity}_{type}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 
         if (cache)
         {
-            _retDto.EntityList = _cache.GetValue<List<PhotoGalleryDto>>(Common.CacheKey);
+            _retDto.EntityList = _cache.GetValue<List<PhotoGalleryDto>>(ServiceConfig.CacheKey);
             if (_retDto.EntityList != null)
             {
                 return _retDto.EntityList;
@@ -284,7 +284,7 @@ public class PhotoGalleryService : IPhotoGalleryService
         }
 
         _retDto.EntityList = await _service.PhotoGalleries.Where(predicate).SelectPhotoGallery().ToListAsync();
-        _cache.SetValue(Common.CacheKey, _retDto.EntityList); //设置缓存
+        _cache.SetValue(ServiceConfig.CacheKey, _retDto.EntityList); //设置缓存
         return _retDto.EntityList;
     }
 }

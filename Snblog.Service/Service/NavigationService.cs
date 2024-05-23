@@ -9,25 +9,25 @@ public class NavigationService : INavigationService
 
 
     private readonly SnblogContext _service; //DB
-    private readonly CacheUtil _cache;
+    private readonly CacheUtils _cache;
 
     private readonly IMapper _mapper;
 
     public NavigationService(SnblogContext service,ICacheUtil cache,IMapper mapper)
     {
         _service = service;
-        _cache = (CacheUtil)cache;
+        _cache = (CacheUtils)cache;
         _mapper = mapper;
     }
 
     public async Task<List<NavigationDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,
         string ordering,bool isDesc,bool cache)
     {
-        Common.CacheInfo(
-            $"{Name}{Common.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo(
+            $"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<NavigationDto>>(Common.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<NavigationDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
@@ -43,7 +43,7 @@ public class NavigationService : INavigationService
                 return await Paging(pageIndex,pageSize,ordering,isDesc,w => w.User.Name == type);
         }
 
-        _ret.EntityList = _cache.SetValue(Common.CacheKey,_ret.EntityList);
+        _ret.EntityList = _cache.SetValue(ServiceConfig.CacheKey,_ret.EntityList);
         return _rDto.EntityList;
     }
 
@@ -71,7 +71,7 @@ public class NavigationService : INavigationService
         }
 
         _rDto.EntityList = await navigation.Skip((pageIndex - 1) * pageSize).Take(pageSize).SelectNavigation().ToListAsync();
-        _cache.SetValue(Common.CacheKey,_rDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey,_rDto.EntityList);
         return _rDto.EntityList;
     }
 
@@ -84,7 +84,7 @@ public class NavigationService : INavigationService
     public async Task<bool> DeleteAsync(int id)
     {
 
-        Common.CacheInfo($"{Name}{Common.Del}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
         Navigation ret = await _service.Navigations.FindAsync(id);
         if (ret == null) return false;
         _service.Navigations.Remove(ret);
@@ -93,11 +93,11 @@ public class NavigationService : INavigationService
 
     public async Task<List<NavigationDto>> GetTypeAsync(int identity,string type,bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.Condition}{identity}_{type}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Condition}{identity}_{type}_{cache}");
 
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<NavigationDto>>(Common.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<NavigationDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
@@ -113,7 +113,7 @@ public class NavigationService : INavigationService
                 break;
         }
 
-        _cache.SetValue(Common.CacheKey,_rDto.EntityList);
+        _cache.SetValue(ServiceConfig.CacheKey,_rDto.EntityList);
 
         return _rDto.EntityList;
     }
@@ -125,7 +125,7 @@ public class NavigationService : INavigationService
     /// <returns></returns>
     public async Task<bool> AddAsync(Navigation entity)
     {
-        Common.CacheInfo($"{Name}{Common.Add}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
 
         entity.TimeCreate = DateTime.Now;
         entity.TimeModified = DateTime.Now;
@@ -135,7 +135,7 @@ public class NavigationService : INavigationService
 
     public async Task<bool> UpdateAsync(Navigation entity)
     {
-        Common.CacheInfo($"{Name}{Common.Up}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
 
         entity.TimeModified = DateTime.Now; //更新时间
         var ret = await _service.Navigations.Where(w => w.Id == entity.Id).Select(
@@ -179,13 +179,13 @@ public class NavigationService : INavigationService
     }
     public async Task<int> GetSumAsync(int identity,string type,bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.Sum}{identity}_{type}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{identity}_{type}_{cache}");
 
         IQueryable<Navigation> ret = _service.Navigations.AsQueryable().AsNoTracking();
 
         if (cache)
         {
-            int sum = _cache.GetValue<int>(Common.CacheKey);
+            int sum = _cache.GetValue<int>(ServiceConfig.CacheKey);
             if (sum != 0)
             {
                 //通过entityInt 值是否为 0 判断结果是否被缓存
@@ -207,7 +207,7 @@ public class NavigationService : INavigationService
 
                 break;
         }
-        _cache.SetValue(Common.CacheKey,_ret.EntityCount); //设置缓存
+        _cache.SetValue(ServiceConfig.CacheKey,_ret.EntityCount); //设置缓存
 
         return _ret.EntityCount;
     }
@@ -215,15 +215,15 @@ public class NavigationService : INavigationService
 
     public async Task<NavigationDto> GetByIdAsync(int id,bool cache)
     {
-        Common.CacheInfo($"{Name}{Common.Bid}{id}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
 
         if (cache)
         {
-            _rDto.Entity = _cache.GetValue<NavigationDto>(Common.CacheKey);
+            _rDto.Entity = _cache.GetValue<NavigationDto>(ServiceConfig.CacheKey);
             if (_rDto.Entity != null) return _rDto.Entity;
         }
         _rDto.Entity = _mapper.Map<NavigationDto>(await _service.Navigations.FindAsync(id));
-        _cache.SetValue(Common.CacheKey,_rDto.Entity);
+        _cache.SetValue(ServiceConfig.CacheKey,_rDto.Entity);
         return _rDto.Entity;
     }
 
@@ -239,11 +239,11 @@ public class NavigationService : INavigationService
     {
         var upNames = name.ToLower();
 
-        Common.CacheInfo($"{Name}{Common.Contains}{identity}_{type}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<NavigationDto>>(Common.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<NavigationDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null)
             {
                 return _rDto.EntityList;
@@ -274,7 +274,7 @@ public class NavigationService : INavigationService
         }
 
         _rDto.EntityList = await _service.Navigations.Where(predicate).SelectNavigation().AsNoTracking().ToListAsync();
-        _cache.SetValue(Common.CacheKey,_rDto.EntityList); //设置缓存
+        _cache.SetValue(ServiceConfig.CacheKey,_rDto.EntityList); //设置缓存
         return _rDto.EntityList;
     }
 }

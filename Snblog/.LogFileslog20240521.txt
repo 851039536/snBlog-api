@@ -1,3 +1,0 @@
-2024-05-21 10:42:51.435 +00:00 [INF] 启动虚拟主机
-2024-05-21 10:42:52.460 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
-2024-05-21 10:42:52.501 +00:00 [WRN] No XML encryptor configured. Key {71cd0cd2-b6bb-49b5-bcec-91250b17c006} may be persisted to storage in unencrypted form.
