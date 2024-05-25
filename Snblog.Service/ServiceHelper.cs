@@ -32,10 +32,8 @@ public class ServiceHelper
                 return cachedData;
             }
         }
-
         // 如果缓存中没有数据，或者不需要缓存，则异步获取数据
         var data = await fetchDataAsync();
-
         // 如果需要缓存，将数据存入缓存
         if (useCache)
         {

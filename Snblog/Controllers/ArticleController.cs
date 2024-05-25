@@ -52,33 +52,17 @@ public  class ArticleController : BaseController
     }
     #endregion
 
-    #region 查询所有
-
-    /// <summary>
-    /// 查询所有
-    /// </summary>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns>list-entity</returns>
-    //[ApiExplorerSettings(IgnoreApi = true)] //隐藏接口 或者直接对这个方法 private，也可以直接使用obsolete属性
-    [HttpGet("all")]
-    public async Task<IActionResult> GetAllAsync(bool cache = false)
-    {
-        var data = await _service.GetAllAsync(cache);
-        return ApiResponse(data: data);
-    }
-
-    #endregion
 
     #region 模糊查询
 
     /// <summary>
-    /// 模糊查询
+    /// 执行模糊查询操作，根据不同的标识和类型筛选文章。
     /// </summary>
-    /// <param name="identity">所有:0|分类:1|标签:2|用户:3|标签,用户:4</param>
-    /// <param name="type">查询参数(多条件以','分割)</param>
-    /// <param name="name">查询字段</param>
-    /// <param name="cache">缓存</param>
-    /// <returns>list-entity</returns>
+    /// <param name="identity">查询的标识类型，具体值含义：所有:0|分类:1|标签:2|用户:3|标签,用户:4</param>
+    /// <param name="type">查询的类型参数，用于进一步筛选文章。多条件以','分割。</param>
+    /// <param name="name">查询的关键字段，用于模糊匹配文章名称。</param>
+    /// <param name="cache">是否使用缓存。如果为true，则优先从缓存中获取结果。</param>
+    /// <returns>包含匹配文章的列表。</returns>
     [HttpGet("contains")]
     public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "winfrom", bool cache = false)
     {
@@ -94,8 +78,8 @@ public  class ArticleController : BaseController
     /// 主键查询
     /// </summary>
     /// <param name="id">主键</param>
-    /// <param name="cache">缓存</param>
-    /// <returns>entity</returns>
+    /// <param name="cache">是否使用缓存</param>
+    /// <returns>ArticleDto对象</returns>
     [HttpGet("bid")]
     public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
     {
@@ -127,11 +111,11 @@ public  class ArticleController : BaseController
     /// <summary>
     /// 内容统计
     /// </summary>
-    /// <param name="identity">所有:0|分类:1|标签:2|用户:3</param>
-    /// <param name="type">内容:1|阅读:2|点赞:3</param>
-    /// <param name="name">查询参数</param>
-    /// <param name="cache">缓存</param>
-    /// <returns>int</returns>
+    /// <param name="identity">统计的类型：所有:0|分类:1|标签:2|用户:3</param>
+    /// <param name="type">统计的内容类型：内容:1|阅读:2|点赞:3</param>
+    /// <param name="name">查询参数，如分类名、标签名或用户名</param>
+    /// <param name="cache">是否使用缓存</param>
+    /// <returns>统计结果，整数类型</returns>
     [HttpGet("strSum")]
     public async Task<IActionResult> GetStrSumAsync(int identity = 0, int type = 1, string name = "null", bool cache = false)
     {
@@ -145,14 +129,14 @@ public  class ArticleController : BaseController
     /// <summary>
     /// 分页查询
     /// </summary>
-    /// <param name="identity">所有:0|分类:1|标签:2|用户:3|标签+用户:4</param>
-    /// <param name="type">查询参数(多条件以','分割)</param>
+    /// <param name="identity">查询的类型：所有:0|分类:1|标签:2|用户:3|标签+用户:4</param>
+    /// <param name="type">查询参数，多条件以','分割</param>
     /// <param name="pageIndex">当前页码</param>
     /// <param name="pageSize">每页记录条数</param>
-    /// <param name="isDesc">排序</param>
-    /// <param name="cache">缓存</param>
-    /// <param name="ordering">排序规则 data:时间|read:阅读|give:点赞|id:主键</param>
-    /// <returns>list-entity</returns>
+    /// <param name="ordering">排序规则：data:时间|read:阅读|give:点赞|id:主键</param>
+    /// <param name="isDesc">排序方式：true为降序，false为升序</param>
+    /// <param name="cache">是否使用缓存</param>
+    /// <returns>分页查询结果，List ArticleDto类型</returns>
     [HttpGet("paging")]
     public async Task<IActionResult> GetPagingAsync(
         int identity = 0,
@@ -164,8 +148,8 @@ public  class ArticleController : BaseController
         bool cache = false
     )
     {
-        var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
-        return ApiResponse(cache: cache, data: data);
+        var ret = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
+        return ApiResponse(cache: cache, data: ret);
     }
 
     #endregion
@@ -173,7 +157,7 @@ public  class ArticleController : BaseController
     #region 新增
 
     /// <summary>
-    ///  新增
+    /// 新增
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
@@ -186,7 +170,6 @@ public  class ArticleController : BaseController
         {
             return ApiResponse(statusCode: 404, message: result.Errors[0].ErrorMessage, data: entity);
         }
-
         bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
@@ -207,6 +190,23 @@ public  class ArticleController : BaseController
         bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
+    
+    #region 条件更新
+
+    /// <summary>
+    /// 条件更新
+    /// </summary>
+    /// <param name="entity">实体</param>
+    /// <param name="type">更新字段: Read | Give | Comment</param>
+    /// <returns>bool</returns>
+    [HttpPut("upPortion")]
+    public async Task<IActionResult> UpdatePortionAsync(Article entity, string type)
+    {
+        bool data = await _service.UpdatePortionAsync(entity, type);
+        return ApiResponse(data: data);
+    }
+
+    #endregion
 
     #endregion
 
@@ -226,21 +226,5 @@ public  class ArticleController : BaseController
     }
 
     #endregion
-
-    #region 条件更新
-
-    /// <summary>
-    /// 条件更新
-    /// </summary>
-    /// <param name="entity">实体</param>
-    /// <param name="type">更新字段: Read | Give | Comment</param>
-    /// <returns>bool</returns>
-    [HttpPut("upPortion")]
-    public async Task<IActionResult> UpdatePortionAsync(Article entity, string type)
-    {
-        bool data = await _service.UpdatePortionAsync(entity, type);
-        return ApiResponse(data: data);
-    }
-
-    #endregion
+    
 }

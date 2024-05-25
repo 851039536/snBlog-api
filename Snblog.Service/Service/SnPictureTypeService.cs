@@ -2,16 +2,38 @@
 
 public class SnPictureTypeService : ISnPictureTypeService
 {
-    private readonly SnblogContext _service;//DB
+    private const string Name = "PictureType_";
+    private readonly ServiceHelper _serviceHelper;
+    private readonly SnblogContext _service;
     private readonly CacheUtils _cache;
     private int _resultInt;
     private List<SnPictureType> _retList;
-    public SnPictureTypeService(SnblogContext service, ICacheUtil cache)
+    public SnPictureTypeService(SnblogContext service, ICacheUtil cache,ServiceHelper serviceHelper)
     {
         _service = service;
+        _serviceHelper = serviceHelper;
         _cache = (CacheUtils)cache;
     }
+    public async Task<int> CountAsync()
+    {
+        const string cacheKey = $"{Name}{ServiceConfig.Sum}";
+        return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,false,async () =>
+        {
+            int sum= await _service.SnPictureTypes.CountAsync();
+            _cache.SetValue(cacheKey,sum);
+            return sum;
+        });
 
+
+        // _resultInt = _cache.CacheNumber("SnPictureType_CountAsync", _resultInt,true);
+        // if (_resultInt != 0)
+        // {
+        //     return _resultInt;
+        // }
+        // _resultInt = await _service.SnPictureTypes.CountAsync();
+        // _cache.CacheNumber("SnPictureType_CountAsync", _resultInt,true);
+        // return _resultInt;
+    }
 
     public async Task<bool> AddAsync(SnPictureType entity)
     {
@@ -30,17 +52,7 @@ public class SnPictureTypeService : ISnPictureTypeService
         return _retList;
     }
 
-    public async Task<int> CountAsync()
-    {
-        _resultInt = _cache.CacheNumber("SnPictureType_CountAsync", _resultInt,true);
-        if (_resultInt != 0)
-        {
-            return _resultInt;
-        }
-        _resultInt = await _service.SnPictureTypes.CountAsync();
-        _cache.CacheNumber("SnPictureType_CountAsync", _resultInt,true);
-        return _resultInt;
-    }
+   
 
     public async Task<bool> DeleteAsync(int id)
     {
