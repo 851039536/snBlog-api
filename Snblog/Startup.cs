@@ -13,7 +13,7 @@ using Snblog.Service.AngleSharp;
 using Snblog.Util.Exceptions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using ArticleService = Snblog.Service.Service.Article.ArticleService;
+using ArticleService = Snblog.Service.Service.Articles.ArticleService;
 
 namespace Snblog;
 

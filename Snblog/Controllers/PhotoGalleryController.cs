@@ -47,7 +47,6 @@ public class PhotoGalleryController : BaseController
 
     #endregion
 
-
     #region 模糊查询
 
     /// <summary>
@@ -84,7 +83,6 @@ public class PhotoGalleryController : BaseController
     }
 
     #endregion
-        
 
     #region 分页查询
 
@@ -126,7 +124,7 @@ public class PhotoGalleryController : BaseController
             return ApiResponse(statusCode: 404, message: result.Errors[0].ErrorMessage, data: entity);
         }
 
-        var data = await _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
 

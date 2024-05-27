@@ -1,6 +1,7 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.IService.IService.Articles;
+using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Articles;
 
 /// <summary>
 /// 文章标签
@@ -20,6 +21,8 @@ public class ArticleTagController : BaseController
     {
         _service = service;
     }
+    
+    
     #region 查询总数
     /// <summary>
     /// 查询总数
@@ -29,7 +32,7 @@ public class ArticleTagController : BaseController
     [HttpGet("sum")]
     public async Task<IActionResult> GetSumAsync(bool cache = false)
     {
-        var data = await _service.GetSumAsync(cache);
+        int data = await _service.GetSumAsync(cache);
         return ApiResponse(cache: cache,data: data);
     }
     #endregion

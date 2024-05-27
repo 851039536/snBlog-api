@@ -1,6 +1,6 @@
-﻿namespace Snblog.Service.Service.Article;
+﻿using Snblog.IService.IService.Articles;
 
-using Snblog.Enties.Models;
+namespace Snblog.Service.Service.Articles;
 
 public class ArticleService : IArticleService
 {
@@ -69,7 +69,6 @@ public class ArticleService : IArticleService
         try
         {
             int count = await query.CountAsync();
-            _cache.SetValue(cacheKey,count); //设置缓存
             return count;
         }
         catch
@@ -116,7 +115,6 @@ public class ArticleService : IArticleService
     private async Task<List<ArticleDto>> Contains(string key,Expression<Func<Article,bool>> predicate)
     {
         var ret = await _service.Articles.Where(predicate).SelectArticle().ToListAsync();
-        _cache.SetValue(key,ret); //设置缓存
         return ret;
     }
 
@@ -145,7 +143,6 @@ public class ArticleService : IArticleService
             var ret = await _service.Articles
                                     .SelectArticle()
                                     .SingleOrDefaultAsync(b => b.Id == id);
-            _cache.SetValue(cacheKey,ret);
             return ret;
         });
     }
@@ -166,7 +163,6 @@ public class ArticleService : IArticleService
                                         .SelectArticle()
                                         .Where(s => s.Type.Name == type)
                                         .ToListAsync();
-                _cache.SetValue(cacheKey,ret);
                 return ret;
             } else
             {
@@ -175,7 +171,6 @@ public class ArticleService : IArticleService
                                         .SelectArticle()
                                         .Where(s => s.Tag.Name == type)
                                         .ToListAsync();
-                _cache.SetValue(cacheKey,ret);
                 return ret;
             }
         });
@@ -206,7 +201,6 @@ public class ArticleService : IArticleService
                 3 => await GetStatistic(type,c => c.User.Name == name),
                 _ => 0
             };
-            _cache.SetValue(cacheKey,ret);
             return ret;
         });
     }
@@ -295,7 +289,6 @@ public class ArticleService : IArticleService
 
         var ret = await article.Skip((pageIndex - 1) * pageSize).Take(pageSize)
                                .SelectArticle().ToListAsync();
-        _cache.SetValue(key,ret);
         return ret;
     }
 

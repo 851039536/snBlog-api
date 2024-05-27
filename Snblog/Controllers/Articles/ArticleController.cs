@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
+using Snblog.IService.IService.Articles;
 using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Articles;
 
 /// <summary>
 /// 文章api
@@ -51,7 +52,6 @@ public  class ArticleController : BaseController
         return ApiResponseSuccess(cache: cache, data: data);
     }
     #endregion
-
 
     #region 模糊查询
 

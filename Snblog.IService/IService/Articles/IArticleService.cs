@@ -1,4 +1,4 @@
-﻿namespace Snblog.IService.IService;
+﻿namespace Snblog.IService.IService.Articles;
 
 /// <summary>
 /// 文章接口

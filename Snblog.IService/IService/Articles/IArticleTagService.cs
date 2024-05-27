@@ -1,6 +1,6 @@
 ﻿using Snblog.Util.Paginated;
 
-namespace Snblog.IService.IService;
+namespace Snblog.IService.IService.Articles;
 
 /// <summary>
 /// 文章标签接口

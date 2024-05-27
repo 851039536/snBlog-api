@@ -19,7 +19,9 @@
     <EmbeddedResource Include="index.html" />
     <EmbeddedResource Remove="models2\**" />
   </ItemGroup>
+   
   <ItemGroup>
+   
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
@@ -46,7 +48,6 @@
     <ProjectReference Include="..\Snblog.Util\Snblog.Util.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\Article\" />
     <Folder Include="LogFiles\" />
     <Folder Include="mysql\" />
   </ItemGroup>
