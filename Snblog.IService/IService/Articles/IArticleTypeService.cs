@@ -1,17 +1,27 @@
-﻿namespace Snblog.IService.IService;
+﻿namespace Snblog.IService.IService.Articles;
 
 /// <summary>
 /// 文章分类接口
 /// </summary>
 public interface IArticleTypeService
 {
+   
+
+    
+    /// <summary>
+    /// 查询总数
+    /// </summary>
+    /// <param name="cache">缓存</param>
+    /// <returns>int</returns>
+    Task<int> GetSumAsync(bool cache);
+    
     /// <summary>
     /// 查询所有
     /// </summary>
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
     Task<List<ArticleTypeDto>> GetAllAsync(bool cache);
-
+    
     /// <summary>
     /// 主键查询
     /// </summary>
@@ -31,12 +41,7 @@ public interface IArticleTypeService
     /// <returns>list-entity</returns>
     Task<List<ArticleTypeDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache);
 
-    /// <summary>
-    /// 查询总数
-    /// </summary>
-    /// <param name="cache">缓存</param>
-    /// <returns>int</returns>
-    Task<int> GetSumAsync(bool cache);
+   
 
     /// <summary>
     ///  添加

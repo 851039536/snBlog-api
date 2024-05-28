@@ -6,10 +6,7 @@ namespace Snblog.Service.Service.Articles;
 public class ArticleTagService : IArticleTagService
 {
     private const string Name = "articleTag_";
-
-    private readonly EntityDataDto<ArticleTagDto> _rDto = new();
     private readonly ServiceHelper _serviceHelper;
-
     private readonly SnblogContext _service;
     private readonly IMapper _mapper;
 
@@ -70,33 +67,27 @@ public class ArticleTagService : IArticleTagService
 
     public async Task<bool> DeleteAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
-
-        var result = await _service.ArticleTags.FindAsync(id);
-
-        if(result == null) return false;
-
-        _service.ArticleTags.Remove(result);
+        Log.Information($"{Name}{ServiceConfig.Del}{id}");
+        var ret = await _service.ArticleTags.FindAsync(id);
+        if(ret == null) return false;
+        _service.ArticleTags.Remove(ret);
         return await _service.SaveChangesAsync() > 0;
     }
 
-
     public async Task<bool> AddAsync(ArticleTag entity)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Add}{entity}");
         _service.ArticleTags.Add(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> UpdateAsync(ArticleTag entity)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Up}{entity}");
 
         _service.ArticleTags.Update(entity);
         return await _service.SaveChangesAsync() > 0;
     }
-
-   
 
     public async Task<PaginatedList<ArticleTagDto>> GetPagingTest(int pageIndex,int pageSize)
     {
@@ -112,7 +103,7 @@ public class ArticleTagService : IArticleTagService
                                                                               .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                                                                               .Take(pageSize).ToListAsync());
         }
-        return  _rDto.EntityList = _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderBy(c => c.Id)
+        return   _mapper.Map<List<ArticleTagDto>>(await _service.ArticleTags.OrderBy(c => c.Id)
                                                                                   .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
     }
 }

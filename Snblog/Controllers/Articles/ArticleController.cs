@@ -5,7 +5,7 @@ using Snblog.Util.GlobalVar;
 namespace Snblog.Controllers.Articles;
 
 /// <summary>
-/// 文章api
+/// 文章API
 /// </summary>
 [ApiExplorerSettings(GroupName = "V1")] //版本控制
 [ApiController] //控制路由
@@ -21,6 +21,10 @@ public  class ArticleController : BaseController
 
     #region 构造函数
 
+    /// <summary>
+    /// 初始化实例
+    /// </summary>
+    /// <param name="service">接口实例</param>
     public ArticleController(IServiceProvider service)
     {
         _service = service.GetRequiredService<IArticleService>();
