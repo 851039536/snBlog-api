@@ -1,21 +1,20 @@
 ﻿using FluentValidation;
 
-namespace Snblog.Enties.Validator
+namespace Snblog.Enties.Validator;
+
+/// <summary>
+/// 数据校验
+/// </summary>
+public class ArticleValidator :AbstractValidator<Article>
 {
     /// <summary>
-    /// 数据校验
+    /// Article数据校验
     /// </summary>
-    public class ArticleValidator :AbstractValidator<Article>
+    public ArticleValidator()
     {
-        /// <summary>
-        /// Article数据校验
-        /// </summary>
-        public ArticleValidator()
-        {
-            RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.Sketch).NotEmpty();
-            RuleFor(x => x.Text).NotEmpty().MinimumLength(10);
-            RuleFor(x => x.Img).NotEmpty();
-        }
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.Sketch).NotEmpty();
+        RuleFor(x => x.Text).NotEmpty().MinimumLength(10);
+        RuleFor(x => x.Img).NotEmpty();
     }
 }

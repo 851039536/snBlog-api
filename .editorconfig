@@ -1,175 +1,1265 @@
-﻿[*.cs]
+﻿# 如果要从更高级别的目录继承 .editorconfig 设置，请删除以下行
+# root = true表示这是根文件，不会继承父级目录的.editorconfig文件，
+# 如果不设置root=true，则会继承父级目录的.editorconfig文件，
+# 如果父级目录没有.editorconfig文件，则会继承更高级别的目录的.editorconfig文件，直到根目录，
+# 如果根目录没有.editorconfig文件，则会继承全局的.editorconfig文件，
+# 如果全局的.editorconfig文件也没有，则会继承默认的.editorconfig文件，
+# 如果没有默认的.editorconfig文件，则会使用默认的编码规则，即tab键缩进，4个空格为一个tab键，换行符为lf，文件末尾插入一个空行，不使用BOM，即UTF-8编码等等。
+root = true
 
-# CA2254: Template should be a static expression
-dotnet_diagnostic.CA2254.severity = none
-
+# c# 文件
 [*.cs]
+
+#### Core EditorConfig 选项 ####
+
+# 表示缩进的空格数，一般为2或4，默认为4，即一个tab键为4个空格
+indent_size = 4
+# 表示缩进风格，有tab和space两种，tab表示使用tab键缩进，space表示使用空格缩进，默认为tab
+indent_style = space
+# 表示一个tab键代表的空格数，默认为4，即一个tab键为4个空格。
+tab_width = 4
+# CSharpier 支持通过文件进行配置。同一目录中的文件将优先
+# Non-configurable behaviors
+max_line_length = 150
+
+# 新行首选项，即换行符的风格，有lf和crlf两种，lf表示换行符为\n，crlf表示换行符为\r\n，默认为lf，即\n，即Unix和Linux系统的换行符，Windows系统的换行符为\r\n，即crlf。
+
+# 表示换行符的风格，有lf和crlf两种
+end_of_line = crlf
+# 表示是否在文件末尾插入一个空行，有true和false两种，默认为true，即在文件末尾插入一个空行，如果设置为false，则不在文件末尾插入一个空行。
+insert_final_newline = false
+
+#### .NET 编码约定 #### 
+
+# using分组
+# 如果设置为 false，则不分组,如果设置为 true，则分组
+dotnet_separate_import_directive_groups = false
+
+# 将系统using放在最前面，
+# 如果设置为 false，则不排序，如果设置为 true，则排序
+dotnet_sort_system_directives_first = false
+# 文件头模板，如果设置为 unset，
+# 则不使用文件头模板，如果设置为其他值，则使用文件头模板。
+file_header_template = unset
+
+
+# 表示是否使用 this. 或 Me. 限定符来引用事件，
+# 如果设置为 true，则应该使用 this. 或 Me. 限定符，
+# 如果设置为 false，则不应该使用 this. 或 Me. 限定符
+dotnet_style_qualification_for_event = false:suggestion
+# 表示是否使用 this. 或 Me. 限定符来引用字段，
+# 如果设置为 true，则应该使用 this. 或 Me. 限定符，
+# 如果设置为 false，则不应该使用 this. 或 Me. 限定符
+dotnet_style_qualification_for_field = false:silent
+# 表示是否使用 this. 或 Me. 限定符来引用方法，
+# 如果设置为 true，则应该使用 this. 或 Me. 限定符，
+# 如果设置为 false，则不应该使用 this. 或 Me. 限定符
+dotnet_style_qualification_for_method = false:suggestion
+# 表示是否使用 this. 或 Me. 限定符来引用属性，
+# 如果设置为 true，则应该使用 this. 或 Me. 限定符，
+# 如果设置为 false，则不应该使用 this. 或 Me. 限定符
+dotnet_style_qualification_for_property = false:suggestion
+
+
+# 语言关键字与 bcl 类型首选项，即使用语言关键字还是 BCL 类型来声明局部变量、参数和成员，
+# 如使用 int 还是 System.Int32，使用 string 还是 System.String 等，
+# 有 true 和 false 两种，true 表示使用语言关键字，false 表示使用 BCL 类型，默认为 true，即使用语言关键字。
+
+# 表示是否使用语言关键字还是 BCL 类型来声明局部变量、参数和成员
+dotnet_style_predefined_type_for_locals_parameters_members = true:warning
+
+# 表示是否使用语言关键字还是 BCL 类型来访问成员，
+# 如使用 int.ToString() 还是 System.Int32.ToString()，使用 string.Empty 还是 System.String.Empty 等
+dotnet_style_predefined_type_for_member_access = true:warning
+
+# 括号首选项，即在哪些地方使用括号
+
+# 表示是否在算术二元运算符周围使用括号，如 a + b * c，
+# 如果设置为 always_for_clarity，则应该写成 a + (b * c)，
+# 如果设置为 never_if_unnecessary，则应该写成 a + b * c
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:error
+# 表示是否在其他二元运算符周围使用括号，如 a | b & c，
+# 如果设置为 always_for_clarity，则应该写成 a | (b & c)，
+# 如果设置为 never_if_unnecessary，则应该写成 a | b & c
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:error
+# 表示是否在其他运算符周围使用括号，如 a && b || c，
+# 如果设置为 always_for_clarity，则应该写成 (a && b) || c，
+# 如果设置为 never_if_unnecessary，则应该写成 a && b || c
+dotnet_style_parentheses_in_other_operators = always_for_clarity:error
+# 表示是否在关系二元运算符周围使用括号，如 a == b < c，
+# 如果设置为 always_for_clarity，则应该写成 a == (b < c)，
+# 如果设置为 never_if_unnecessary，则应该写成 a == b < c
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:error
+
+# 修饰符首选项 , 首选可访问性修饰符，公共接口成员除外，以提高可读性，可维护性和代码一致性以及减少错误，
+
+# 表示是否要求为所有非接口成员指定访问性修饰符，
+# 如 public、private、internal、protected、protected internal，如果设置为 for_non_interface_members，则只对非接口成员进行检查，
+# 如果设置为 for_non_interface_elements，则对所有成员进行检查，如果设置为 for_non_interface_members，则只对非接口成员进行检查，
+# 如果设置为 for_non_interface_members，则只对非接口成员进行检查
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+
+# 表达式级首选项，首选使用简化的表达式，如使用 null 合并运算符而不是条件运算符，使用 nameof 运算符而不是字符串字面量，使用表达式体成员而不是语句体成员等
+
+# 表示是否使用 null 合并运算符而不是条件运算符，如 a ?? b 而不是 a != null ? a : b，
+# 如果设置为 true，则应该使用 null 合并运算符，如果设置为 false，则应该使用条件运算符
+dotnet_style_coalesce_expression = true:warning
+# 表示是否使用集合初始化器，如 new List<int> { 1, 2, 3 } 而不是 new List<int> { 1, 2, 3 }.ToArray()
+dotnet_style_collection_initializer = true:suggestion
+# 表示是否使用 nameof 运算符而不是字符串字面量，如 nameof(Foo) 而不是 "Foo"
+dotnet_style_explicit_tuple_names = true:suggestion
+# 表示是否将命名空间与文件夹匹配，如命名空间为 MyNamespace，则文件夹也应该为 MyNamespace
+dotnet_style_namespace_match_folder = true:suggestion
+
+# 空判断表达式，如使用 null 条件运算符而不是条件运算符，使用 null 合并运算符而不是条件运算符，使用 null 合并赋值运算符而不是条件赋值运算符等。
+
+# 表示是否使用 null 条件运算符而不是条件运算符，
+# 如 a?.Length 而不是 a != null ? a.Length : 0。
+dotnet_style_null_forgiving_operator = true:warning
+# 表示是否使用 null 合并运算符而不是条件运算符，
+# 如 a ?? b 而不是 a != null ? a : b
+dotnet_style_null_propagation = true:warning
+
+# 表示是否使用自动实现的属性，
+# 如 public int Foo { get; set; } 而不是 private int foo; public int Foo { get { return foo; } set { foo = value; } }
+dotnet_style_prefer_auto_properties = true:silent
+
+# 表示是否使用复合赋值运算符，
+# 如 a += b 而不是 a = a + b，a &= b 而不是 a = a & b，a <<= b 而不是 a = a << b 等。
+dotnet_style_prefer_compound_assignment = true:suggestion
+
+# 表示是否使用条件运算符而不是赋值语句，
+# 如 a = b ? c : d 而不是 if (b) { a = c; } else { a = d; }
+dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
+
+# 表示是否使用对象初始化器，
+# 如 new Foo { Bar = 1 } 而不是 var foo = new Foo(); foo.Bar = 1;
+dotnet_style_object_initializer = true:warning
+
+# 表示是否使用匿名类型成员的推断名称，
+# 如 new { Foo = 1 } 而不是 new { Foo = 1 }
+dotnet_style_prefer_inferred_anonymous_type_member_names = false:suggestion
+
+# 表示是否使用推断的元组名称
+dotnet_style_prefer_inferred_tuple_names = true:suggestion
+
+# 表示是否使用 is null 检查而不是引用相等方法，
+# 如 a is null 而不是 a == null
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:warning
+
+# 表示是否使用简化的布尔表达式，
+# 如 !b 而不是 b == false
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+
+# 表示是否使用简化的插值，
+# 如 $"{Foo}" 而不是 string.Format("{0}", Foo);
+dotnet_style_prefer_simplified_interpolation = true:suggestion
+
+# 示是否使用简化的 switch 表达式，
+# 如 switch (a) { case 1: return "One"; case 2: return "Two"; default: return "Many"; } 
+# 而不是 a switch { 1 => "One", 2 => "Two", _ => "Many" }
+dotnet_style_prefer_simplified_switch_expression = true:suggestion
+
+# 表示是否使用简化的 using 语句，
+# 如 using (var stream = new FileStream("file.txt", FileMode.Open))
+# 而不是 var stream = new FileStream("file.txt", FileMode.Open); using (stream);
+dotnet_style_prefer_simplified_using_statement = true:suggestion
+
+# 表示是否使用条件运算符而不是 return 语句，
+# 如 b ? c : d 而不是 if (b) { return c; } else { return d; }
+# dotnet_style_prefer_ternary_expression_over_return = true:suggestion
+
+# 表示是否使用 throw 表达式而不是 throw 语句，
+# 如 throw new ArgumentNullException("foo") 而不是 throw new ArgumentNullException("foo");
+# dotnet_style_prefer_throw_expression = true:suggestion
+
+# 表示是否使用类型转换表达式而不是类型转换语句，如 (int)foo 而不是 int foo;
+# dotnet_style_prefer_type_cast_expression = true:suggestion
+
+# dotnet_style_prefer_type_check_over_as_with_null_check表示是否使用类型检查而不是 as 运算符，
+# 如 foo is Bar 而不是 foo as Bar != null;
+# dotnet_style_prefer_type_check_over_as_with_null_check = true:suggestion
+
+# dotnet_style_prefer_using_expression表示是否使用 using 表达式而不是 using 语句，
+# 如 using (var stream = new FileStream("file.txt", FileMode.Open)) 而不是 using (var stream = new FileStream("file.txt", FileMode.Open)) { }
+# dotnet_style_prefer_using_expression = true:suggestion
+
+# dotnet_style_prefer_when_type_over_condition_with_type表示是否使用 when 类型而不是条件类型，
+# 如 case int i when i > 10 而不是 case int i: if (i > 10)
+# dotnet_style_prefer_when_type_over_condition_with_type = true:suggestion
+
+#表示在换行时运算符的位置，如 + 在行首还是行尾，如 a + b 在行首还是 a + b，在行尾，
+# 如果设置为 beginning_of_line，则运算符应该在行首，
+# 如果设置为 end_of_line，则运算符应该在行尾，默认为 beginning_of_line，即运算符应该在行首，即 a + b，在行首
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+
+# 自动实现的属性
+
+# 表示是否使用集合表达式，
+# 如 new List<int> { 1, 2, 3 } 而不是 new List<int> { 1, 2, 3 }.ToArray()
+dotnet_style_prefer_collection_expression = when_types_loosely_match:suggestion
+
+# 表示是否使用条件运算符而不是赋值语句，
+# 如 a = b ? c : d 而不是 if (b) { a = c; } else { a = d; }
+dotnet_style_prefer_conditional_expression_over_return = true:suggestion
+
+# 表示是否在 foreach 循环中使用显式转换，
+# 如 foreach (var item in (IEnumerable<int>)collection) 而不是 foreach (var item in collection)，
+# 如果设置为 when_strongly_typed，则应该在强类型集合中使用显式转换，如果设置为 when_needed，则应该在需要时使用显式转换，
+# 如果设置为 when_possible，则应该在可能时使用显式转换，
+# 如果设置为 never，则不应该使用显式转换，
+# 默认为 when_strongly_typed，即在强类型集合中使用显式转换，即 foreach (var item in (IEnumerable<int>)collection)，
+# 在强类型集合中使用显式转换，即 foreach (var item in (IEnumerable<int>)collection)，
+dotnet_style_prefer_foreach_explicit_cast_in_source = when_strongly_typed
+
+
+# 字段首选项，即字段的可访问性修饰符，字段的可读性修饰符，字段的初始化方式，字段的只读性修饰符等。
+
+# 表示是否将字段设置为只读，
+# 如 private readonly int foo = 42; 而不是 private int foo = 42;
+dotnet_style_readonly_field = true:suggestion
+
+# 参数首选项，即参数的可访问性修饰符，参数的引用修饰符，参数的默认值，参数的可空性修饰符等。
+
+# 表示是否检测未使用的参数，
+# 如果设置为 all，则检测所有未使用的参数，
+# 如果设置为 non_public，则只检测非公共未使用的参数
+dotnet_code_quality_unused_parameters = all:warning
+
+# 禁止显示首选项
+
+# 表示是否移除不必要的抑制
+# 如果设置为 none，则不移除不必要的抑制，
+# 如果设置为 all，则移除所有不必要的抑制。
+dotnet_remove_unnecessary_suppression_exclusions = none
+
+# 新行首选项
+
+# 表示是否允许多个空行
+# 如果设置为 true，则允许多个空行，
+# 如果设置为 false，则不允许多个空行。
+# dotnet_style_allow_multiple_blank_lines = false:warning
+
+# 表示是否允许多个空行
+# 如果设置为 true，则允许多个空行，如果设置为 false，则不允许多个空行。
+dotnet_style_allow_multiple_blank_lines_experimental = false:warning
+
+# 表示是否允许在块之后立即使用语句，
+# 如果设置为 true，则允许在块之后立即使用语句，
+# 如果设置为 false，则不允许在块之后立即使用语句。
+# dotnet_style_allow_statement_immediately_after_block = false:warning
+
+# 表示是否允许在块之后立即使用语句，
+# 如果设置为 true，则允许在块之后立即使用语句，
+# 如果设置为 false，则不允许在块之后立即使用语句。
+dotnet_style_allow_statement_immediately_after_block_experimental = true:suggestion
+
+#### c# 编码约定 ####
+
+# var 首选项，即是否使用 var 关键字
+# 如果设置为 true，则应该使用 var 关键字，
+# 如果设置为 false，则不应该使用 var 关键字。
+csharp_style_var_elsewhere = true:warning
+
+# 声明字段显示转换否则报错
+
+# 表示是否使用 var 关键字来声明内置类型，
+# 如果设置为 true，则应该使用 var 关键字来声明内置类型，
+# 如果设置为 false，则不应该使用 var 关键字来声明内置类型。
+csharp_style_var_for_built_in_types = false:warning
+
+# 表示是否使用 var 关键字当类型是明显的，
+# 如果设置为 true，则应该使用 var 关键字当类型是明显的，
+# 如果设置为 false，则不应该使用 var 关键字当类型是明显的。
+csharp_style_var_when_type_is_apparent = true:warning
+
+# Expression-bodied表示是否使用表达式体成员，
+# 如果设置为 true，则应该使用表达式体成员，
+# 如果设置为 false，则不应该使用表达式体成员。
+
+# 表示是否使用表达式体访问器
+# 如果设置为 true，则应该使用表达式体访问器，
+# 如果设置为 false，则不应该使用表达式体访问器。
+csharp_style_expression_bodied_accessors = true
+
+# 表示是否使用表达式体构造函数
+# 如果设置为 true，则应该使用表达式体构造函数，
+# 如果设置为 false，则不应该使用表达式体构造函数。
+csharp_style_expression_bodied_constructors = false
+
+# 表示是否使用表达式体委托
+# 如果设置为 true，则应该使用表达式体委托，
+# 如果设置为 false，则不应该使用表达式体委托。
+# csharp_style_expression_bodied_delegates = true
+
+# 表示是否使用表达式体索引器
+# 如果设置为 true，则应该使用表达式体索引器，如果设置为 false，则不应该使用表达式体索引器。
+csharp_style_expression_bodied_indexers = true
+
+# 表示是否使用表达式体 lambda
+# 如果设置为 true，则应该使用表达式体 lambda，如果设置为 false，则不应该使用表达式体 lambda。
+csharp_style_expression_bodied_lambdas = true:suggestion
+
+# 表示是否使用表达式体本地函数，
+# 如果设置为 true，则应该使用表达式体本地函数，
+# 如果设置为 false，则不应该使用表达式体本地函数。
+csharp_style_expression_bodied_local_functions = true:suggestion
+
+# 表示是否使用表达式体方法
+# 如果设置为 true，则应该使用表达式体方法，
+# 如果设置为 false，则不应该使用表达式体方法。
+csharp_style_expression_bodied_methods = false:suggestion
+
+# 表示是否使用表达式体运算符
+# 如果设置为 true，则应该使用表达式体运算符，
+# 如果设置为 false，则不应该使用表达式体运算符。
+csharp_style_expression_bodied_operators = false
+
+# 表示是否使用表达式体属性
+# 如果设置为 true，则应该使用表达式体属性，
+# 如果设置为 false，则不应该使用表达式体属性。
+csharp_style_expression_bodied_properties = false
+
+# 模式匹配首选项
+
+# 表示是否使用模式匹配而不是 as 运算符和空检查
+# 如果设置为 true，则应该使用模式匹配而不是 as 运算符和空检查，
+# 如果设置为 false，则不应该使用模式匹配而不是 as 运算符和空检查。
+csharp_style_pattern_matching_over_as_with_null_check = true
+
+# 表示是否使用模式匹配而不是 is 运算符和强制转换检查
+# 如果设置为 true，则应该使用模式匹配而不是 is 运算符和强制转换检查，
+# 如果设置为 false，则不应该使用模式匹配而不是 is 运算符和强制转换检查。
+csharp_style_pattern_matching_over_is_with_cast_check = true
+
+# 表示是否使用索引运算符而不是调用方法
+# 如果设置为 true，则应该使用索引运算符而不是调用方法，
+# 如果设置为 false，则不应该使用索引运算符而不是调用方法。
+csharp_style_prefer_index_operator = true:warning
+
+# 表示是否使用 is null 检查而不是引用相等方法
+# 如果设置为 true，则应该使用 is null 检查而不是引用相等方法，
+# 如果设置为 false，则不应该使用 is null 检查而不是引用相等方法。
+# csharp_style_prefer_is_null_check_over_reference_equality_method = true
+
+# 表示是否使用扩展属性模式
+# 如果设置为 true，则应该使用扩展属性模式，如果设置为 false，则不应该使用扩展属性模式。
+csharp_style_prefer_extended_property_pattern = true
+
+# 表示是否使用非模式
+# 如果设置为 true，则应该使用非模式，如果设置为 false，则不应该使用非模式。
+csharp_style_prefer_not_pattern = true
+
+# 表示是否使用模式匹配
+# 如果设置为 true，则应该使用模式匹配，如果设置为 false。
+csharp_style_prefer_pattern_matching = true:suggestion
+
+# 表示是否使用 switch 表达式
+# 如果设置为 true，则应该使用 switch 表达式，如果设置为 false，则不应该使用 switch 表达式。
+csharp_style_prefer_switch_expression = true
+
+# Null 检查首选项
+
+# 表示是否使用 throw 表达式
+# 如果设置为 true，则应该使用 throw 表达式，如果设置为 false，则不应该使用 throw 表达式。
+# csharp_style_prefer_throw_expression = true
+
+# 表示是否使用条件委托调用
+# 如果设置为 true，则应该使用条件委托调用，如果设置为 false，则不应该使用条件委托调用。
+csharp_style_conditional_delegate_call = true:warning
+
+# 修饰符首选项
+
+# 表示是否使用静态本地函数
+# 如果设置为 true，则应该使用静态本地函数，如果设置为 false，则不应该使用静态本地函数。
+csharp_prefer_static_local_function = true
+
+# 表示首选修饰符的顺序
+# 如果设置为 public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async，则应该按照这个顺序来排列修饰符
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+
+# 表示事件的首选修饰符的顺序
+#csharp_preferred_modifier_order_for_events = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+
+# 表示字段的首选修饰符的顺序
+#csharp_preferred_modifier_order_for_fields = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+
+# 表示索引器的首选修饰符的顺序
+#csharp_preferred_modifier_order_for_indexers = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+
+# 表示方法的首选修饰符的顺序
+#csharp_preferred_modifier_order_for_methods = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+
+# 表示参数的首选修饰符的顺序
+#csharp_preferred_modifier_order_for_parameters = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+
+# 表示属性的首选修饰符的顺序
+#csharp_preferred_modifier_order_for_properties = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+
+# 表示是否使用只读结构
+# 如果设置为 true，则应该使用只读结构，
+# 如果设置为 false，则不应该使用只读结构。
+csharp_style_prefer_readonly_struct = true
+
+# 表示是否使用只读结构成员
+# 如果设置为 true，则应该使用只读结构成员，
+# 如果设置为 false，则不应该使用只读结构成员。
+csharp_style_prefer_readonly_struct_member = true
+
+# 代码块首选项
+
+# 表示是否使用大括号
+# 如果设置为 when_multiline:suggestion，则应该使用大括号，
+# 如果设置为 when_multiline:warning，则应该使用大括号，
+# 如果设置为 when_multiline:error，则应该使用大括号，
+# 默认为 when_multiline:suggestion，即应该使用大括号。
+csharp_prefer_braces = when_multiline:suggestion
+
+# 表示是否使用简单的 using 语句，
+# 如果设置为 true，则应该使用简单的 using 语句，
+# 如果设置为 false，则不应该使用简单的 using 语句。
+csharp_prefer_simple_using_statement = true
+
+# 表示是否允许内联注释
+# 如果设置为 true，则允许内联注释，如果设置为 false，则不允许内联注释。
+#csharp_style_allow_block_body_inline_comments = true
+
+# 表示是否允许单行注释
+# 如果设置为 true，则允许单行注释，如果设置为 false，则不允许单行注释。
+#csharp_style_allow_single_line_comments = true
+
+# 表示是否允许单行 using 指令，
+# 如果设置为 true，则允许单行 using 指令，
+# 如果设置为 false，则不允许单行 using 指令。
+#csharp_style_allow_single_line_using_directive = true
+
+# 表示是否需要返回类型
+# 果设置为 true，则需要返回类型，
+# 如果设置为 false，则不需要返回类型。
+#csharp_style_require_return_type = true
+
+# 表示是否需要抛出异常注释
+# 如果设置为 true，则需要抛出异常注释，
+# 如果设置为 false，则不需要抛出异常注释。
+#csharp_style_require_throwing_exception_comments = true
+
+# 表示是否需要对象创建的变量声明
+# 如果设置为 true，则需要对象创建的变量声明，
+# 如果设置为 false，则不需要对象创建的变量声明。
+# csharp_style_require_variable_declaration_for_object_creation = true
+
+# 表示命名空间声明
+# 如果设置为 block_scoped:suggestion，则应该命名空间声明，
+# 如果设置为 block_scoped:warning，则应该命名空间声明，
+# 如果设置为 block_scoped:error，则应该命名空间声明。
+csharp_style_namespace_declarations = block_scoped:suggestion
+
+# 表示当类型明显时是否使用隐式对象创建，
+# 如果设置为 true，则应该当类型明显时使用隐式对象创建，
+# 如果设置为 false，则不应该当类型明显时使用隐式对象创建。
+csharp_style_implicit_object_creation_when_type_is_apparent = true
+
+# 表示是否使用自动属性
+# 如果设置为 true，则应该使用自动属性，
+# 如果设置为 false，则不应该使用自动属性。
+# csharp_style_prefer_auto_properties = true
+
+# 表示是否使用内联变量声明
+# 如果设置为 true，则应该使用内联变量声明，
+# 如果设置为 false，则不应该使用内联变量声明。
+# csharp_style_prefer_inlined_variable_declaration = true
+
+# 表示是否使用静态本地函数
+# 如果设置为 true，则应该使用静态本地函数，
+# 如果设置为 false，则不应该使用静态本地函数。
+# csharp_style_prefer_static_local_functions = true
+
+# 表示是否使用方法组转换
+# 如果设置为 true，则应该使用方法组转换，
+# 如果设置为 false，则不应该使用方法组转换。
+csharp_style_prefer_method_group_conversion = true:suggestion
+
+# 表示是否使用简单的默认表达式
+# 如果设置为 true，则应该使用简单的默认表达式，
+# 如果设置为 false，则不应该使用简单的默认表达式。
+# csharp_style_prefer_simple_default_expression = true
+
+# 表示是否使用主构造函数
+# 如果设置为 true，则应该使用主构造函数，
+# 如果设置为 false，则不应该使用主构造函数。
+csharp_style_prefer_primary_constructors = true
+
+# 表示是否使用静态只读字段
+# 如果设置为 true，则应该使用静态只读字段，
+# 如果设置为 false，则不应该使用静态只读字段。
+# csharp_style_prefer_static_readonly_field = true
+
+# 表示是否使用顶级语句，
+# 如果设置为 true，则应该使用顶级语句，
+# 如果设置为 false，则不应该使用顶级语句。
+csharp_style_prefer_top_level_statements = false:suggestion
+
+# 表达式级首选项
+
+# 表示是否使用简单的默认表达式
+# 如果设置为 true，则应该使用简单的默认表达式，
+# 如果设置为 false，则不应该使用简单的默认表达式。
+csharp_prefer_simple_default_expression = true
+
+# 表示是否使用解构变量声明，
+# 如果设置为 true，则应该使用解构变量声明，
+# 如果设置为 false，则不应该使用解构变量声明。
+csharp_style_deconstructed_variable_declaration = true
+
+# 表示是否使用内联变量声明，
+# 如果设置为 true，则应该使用内联变量声明，
+# 如果设置为 false，则不应该使用内联变量声明。
+csharp_style_inlined_variable_declaration = true:warning
+
+# 表示是否使用本地而不是匿名函数，
+# 如果设置为 true，则应该使用本地而不是匿名函数，
+# 如果设置为 false，则不应该使用本地而不是匿名函数。
+csharp_style_prefer_local_over_anonymous_function = true
+
+# 表示是否使用 null，
+# 如果设置为 true，则应该使用 null，
+# 如果设置为 false，则不应该使用 null。
+# csharp_style_prefer_null = true
+
+# 表示是否使用 null 检查而不是类型检查
+# 如果设置为 true，则应该使用 null 检查而不是类型检查，
+# 如果设置为 false，则不应该使用 null 检查而不是类型检查。
+csharp_style_prefer_null_check_over_type_check = true:warning
+
+# 表示是否使用范围运算符，
+# 如果设置为 true，则应该使用范围运算符，
+# 如果设置为 false，则不应该使用范围运算符。
+csharp_style_prefer_range_operator = true:warning
+
+# 表示是否使用简化的插值，
+# 如果设置为 true，则应该使用简化的插值，
+# 如果设置为 false，则不应该使用简化的插值。
+# csharp_style_prefer_simplified_interpolation = true
+
+# 表示是否使用简化的 switch 表达式，
+# 如果设置为 true，则应该使用简化的 switch 表达式，
+# 如果设置为 false，则不应该使用简化的 switch 表达式。
+# csharp_style_prefer_simplified_switch_expression = true
+
+# 表示是否使用三元表达式
+# 如果设置为 true，则应该使用三元表达式，
+# 如果设置为 false，则不应该使用三元表达式。
+# csharp_style_prefer_ternary_expression = true:warning
+
+# 表示是否使用元组
+# 如果设置为 true，则应该使用元组，
+# 如果设置为 false，则不应该使用元组
+# csharp_style_prefer_tuple = true
+
+# 表示是否使用元组交换
+# 如果设置为 true，则应该使用元组交换，
+# 如果设置为 false，则不应该使用元组交换。
+csharp_style_prefer_tuple_swap = true
+
+# 表示是否使用类型检查而不是 as 运算符，
+# 如果设置为 true，则应该使用类型检查而不是 as 运算符，
+# 如果设置为 false，则不应该使用类型检查而不是 as 运算符。
+# csharp_style_prefer_type_check_over_as = true:warning
+
+# 表示是否使用类型检查而不是 is 运算符，
+# 如果设置为 true，则应该使用类型检查而不是 is 运算符，
+# 如果设置为 false，则不应该使用类型检查而不是 is 运算符。
+# csharp_style_prefer_type_check_over_is = true:warning
+
+# 表示是否使用 using 表达式，
+# 如果设置为 true，则应该使用 using 表达式，
+# 如果设置为 false，则不应该使用 using 表达式。
+# csharp_style_prefer_using_expression = true
+
+# 表示是否使用 UTF-8 字符串文字
+# 如果设置为 true，则应该使用 UTF-8 字符串文字，
+# 如果设置为 false，则不应该使用 UTF-8 字符串文字。
+csharp_style_prefer_utf8_string_literals = true
+
+# 表示是否使用类型明显时
+# 如果设置为 true，则应该使用类型明显时，
+# 如果设置为 false，则不应该使用类型明显时。
+# csharp_style_prefer_when_type_is_apparent = true
+
+# 表示是否使用 throw 表达式
+# 如果设置为 true，则应该使用 throw 表达式，
+# 如果设置为 false，则不应该使用 throw 表达式。
+csharp_style_throw_expression = true
+
+# 表示未使用的值赋值首选项
+# 如果设置为 discard_variable:suggestion，则应该 discard_variable:suggestion，
+# 如果设置为 discard_variable:warning，则应该 discard_variable:warning，
+# 如果设置为 discard_variable:error，则应该 discard_variable:error。
+csharp_style_unused_value_assignment_preference = discard_variable:error
+
+# 表示未使用的值表达式语句首选项
+# 如果设置为 discard_variable:suggestion，则应该 discard_variable:suggestion，
+# 如果设置为 discard_variable:warning，则应该 discard_variable:warning，
+# 如果设置为 discard_variable:error，则应该 discard_variable:error
+csharp_style_unused_value_expression_statement_preference = discard_variable:warning
+
+# 表示 using 指令的放置
+# 如果设置为 outside_namespace:suggestion，则应该 using 指令的放置，
+# 如果设置为 outside_namespace:warning，则应该 using 指令的放置，
+# 如果设置为 outside_namespace:error，则应该 using 指令的放置
+csharp_using_directive_placement = outside_namespace:warning
+
+
+# 新行首选项
+
+# 表示是否允许在构造函数初始化器中的冒号后插入空行
+# 如果设置为 true，则允许在构造函数初始化器中的冒号后插入空行，
+# 如果设置为 false，则不允许在构造函数初始化器中的冒号后插入空行。
+csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimental = false:suggestion
+
+# 表示是否允许在内联表达式后插入空行
+# 如果设置为 true，则允许在内联表达式后插入空行，
+# 如果设置为 false，则不允许在内联表达式后插入空行。
+# csharp_style_allow_blank_line_after_inline_expression_experimental = false:suggestion
+
+# 表示是否允许在成员开括号后插入空行
+# 如果设置为 true，则允许在成员开括号后插入空行，
+# 如果设置为 false，则不允许在成员开括号后插入空行。
+# csharp_style_allow_blank_line_after_member_open_brace_experimental = false:suggestion
+
+# 表示是否允许在对象初始化器中的成员后插入空行，
+# 如果设置为 true，则允许在对象初始化器中的成员后插入空行，
+# 如果设置为 false，则不允许在对象初始化器中的成员后插入空行。
+# csharp_style_allow_blank_line_after_members_in_object_initializers_experimental = false:suggestion
+
+# 表示是否允许在命名空间声明后插入空行
+# 如果设置为 true，则允许在命名空间声明后插入空行，
+# 如果设置为 false，则不允许在命名空间声明后插入空行。
+# csharp_style_allow_blank_line_after_namespace_declaration_experimental = false:suggestion
+
+# 表示是否允许在数组创建中的 new 后插入空行
+# 如果设置为 true，则允许在数组创建中的 new 后插入空行，
+# 如果设置为 false，则不允许在数组创建中的 new 后插入空行。
+# csharp_style_allow_blank_line_after_new_in_array_creation_experimental = false:suggestion
+
+# 表示是否允许在开括号后插入空行
+# 如果设置为 true，则允许在开括号后插入空行，
+# 如果设置为 false，则不允许在开括号后插入空行。
+# csharp_style_allow_blank_line_after_open_brace_experimental = false:suggestion
+
+# 表示是否允许在表达式中的 sizeof 后插入空行
+# 如果设置为 true，则允许在表达式中的 sizeof 后插入空行，
+# 如果设置为 false，则不允许在表达式中的 sizeof 后插入空行。
+# csharp_style_allow_blank_line_after_sizeof_in_expression_experimental = false:suggestion
+
+# 表示是否允许在 using 指令后插入空行
+# 如果设置为 true，则允许在 using 指令后插入空行，
+# 如果设置为 false，则不允许在 using 指令后插入空行。
+# csharp_style_allow_blank_line_after_using_directive_experimental = false:suggestion
+
+# 表示是否允许在结束区域指令前插入空行
+# 如果设置为 true，则允许在结束区域指令前插入空行，
+# 如果设置为 false，则不允许在结束区域指令前插入空行。
+#csharp_style_allow_blank_line_before_end_region_directive_experimental = false:suggestion
+
+# 表示是否允许在 else 前插入空行
+# 如果设置为 true，则允许在 else 前插入空行，
+# 如果设置为 false，则不允许在 else 前插入空行。
+#csharp_style_allow_blank_line_before_else_experimental = false:suggestion
+
+# 表示是否允许在结束区域指令前插入空行
+# 如果设置为 true，则允许在结束区域指令前插入空行，
+# 如果设置为 false，则不允许在结束区域指令前插入空行。
+# csharp_style_allow_blank_line_before_end_region_directive_experimental = false:suggestion
+
+# 表示是否允许在成员关闭括号前插入空行
+# 如果设置为 true，则允许在成员关闭括号前插入空行，
+# 如果设置为 false，则不允许在成员关闭括号前插入空行。
+#csharp_style_allow_blank_line_before_member_close_brace_experimental = false:suggestion
+
+# 表示是否允许在对象初始化器中的成员前插入空行
+# 如果设置为 true，则允许在对象初始化器中的成员前插入空行，
+# 如果设置为 false，则不允许在对象初始化器中的成员前插入空行。
+#csharp_style_allow_blank_line_before_members_in_object_initializers_experimental = false:suggestion
+
+# 表示是否允许在命名空间声明前插入空行
+# 如果设置为 true，则允许在命名空间声明前插入空行，
+# 如果设置为 false，则不允许在命名空间声明前插入空行。
+#csharp_style_allow_blank_line_before_namespace_declaration_experimental = false:suggestion
+
+# 表示是否允许在数组创建中的 new 前插入空行
+# 如果设置为 true，则允许在数组创建中的 new 前插入空行，
+# 如果设置为 false，则不允许在数组创建中的 new 前插入空行
+#csharp_style_allow_blank_line_before_new_in_array_creation_experimental = false:suggestion
+
+# 表示是否允许在开括号前插入空行
+# 如果设置为 true，则允许在开括号前插入空行，
+# 如果设置为 false，则不允许在开括号前插入空行
+#csharp_style_allow_blank_line_before_open_brace_experimental = false:suggestion
+
+# 表示是否允许在表达式中的 sizeof 前插入空行
+# 如果设置为 true，则允许在表达式中的 sizeof 前插入空行，
+# 如果设置为 false，则不允许在表达式中的 sizeof 前插入空行。
+#csharp_style_allow_blank_line_before_sizeof_in_expression_experimental = false:suggestion
+
+# 表示是否允许在 using 指令前插入空行
+# 如果设置为 true，则允许在 using 指令前插入空行，
+# 如果设置为 false，则不允许在 using 指令前插入空行。
+#csharp_style_allow_blank_line_before_using_directive_experimental = false:suggestion
+
+# 表示是否允许在连续大括号之间插入空行
+# 如果设置为 true，则允许在连续大括号之间插入空行，
+# 如果设置为 false，则不允许在连续大括号之间插入空行。
+#csharp_style_allow_blank_line_between_consecutive_braces_experimental = false:suggestion
+
+# 表示是否允许在同一行上嵌入语句
+# 如果设置为 true，则允许在同一行上嵌入语句，
+# 如果设置为 false，则不允许在同一行上嵌入语句。
+#csharp_style_allow_embedded_statements_on_same_line_experimental = true:suggestion
+
+# 表示是否允许在箭头表达式子句中的标记后插入空行
+# 如果设置为 true，则允许在箭头表达式子句中的标记后插入空行，
+# 如果设置为 false，则不允许在箭头表达式子句中的标记后插入空行。
+csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = true:suggestion
+
+# 表示是否允许在条件表达式中的标记后插入空行
+# 如果设置为 true，则允许在条件表达式中的标记后插入空行，
+# 如果设置为 false，则不允许在条件表达式中的标记后插入空行。
+csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental = false:warning
+
+# 表示是否允许在表达式中的标记后插入空行
+# 如果设置为 true，则允许在表达式中的标记后插入空行，
+# 如果设置为 false，则不允许在表达式中的标记后插入空行。
+# csharp_style_allow_blank_line_after_token_in_expression_experimental = false:warning
+
+# 表示是否允许在方法声明中的标记后插入空行
+# 如果设置为 true，则允许在方法声明中的标记后插入空行，
+# 如果设置为 false，则不允许在方法声明中的标记后插入空行。
+# csharp_style_allow_blank_line_after_token_in_method_declaration_experimental = false:warning
+
+# 表示是否允许在方法调用参数中的标记后插入空行
+# 如果设置为 true，则允许在方法调用参数中的标记后插入空行，
+# 如果设置为 false，则不允许在方法调用参数中的标记后插入空行。
+# csharp_style_allow_blank_line_after_token_in_method_invocation_argument_experimental = false:warning
+
+# 表示是否允许在方法调用参数列表中的标记后插入空行，
+# 如果设置为 true，则允许在方法调用参数列表中的标记后插入空行，
+# 如果设置为 false，则不允许在方法调用参数列表中的标记后插入空行。
+# csharp_style_allow_blank_line_after_token_in_method_invocation_argument_list_experimental = false:warning
+
+# 表示是否允许在方法调用括号中的标记后插入空行
+# 如果设置为 true，则允许在方法调用括号中的标记后插入空行，
+# 如果设置为 false，则不允许在方法调用括号中的标记后插入空行。
+# csharp_style_allow_blank_line_after_token_in_method_invocation_parentheses_experimental = false:warning
+
+# 表示是否允许在方法签名中的标记后插入空行，
+# 如果设置为 true，则允许在方法签名中的标记后插入空行，
+# 如果设置为 false，则不允许在方法签名中的标记后插入空行，
+# csharp_style_allow_blank_line_after_token_in_method_signature_experimental = false:warning
+
+# 表示是否允许在对象创建参数中的标记后插入空行
+# 如果设置为 true，则允许在对象创建参数中的标记后插入空行，
+# 如果设置为 false，则不允许在对象创建参数中的标记后插入空行
+# csharp_style_allow_blank_line_after_token_in_object_creation_argument_experimental = false:warning
+
+# 表示是否允许在对象创建参数列表中的标记后插入空行
+# 如果设置为 true，则允许在对象创建参数列表中的标记后插入空行，
+# 如果设置为 false，则不允许在对象创建参数列表中的标记后插入空行，
+# csharp_style_allow_blank_line_after_token_in_object_creation_argument_list_experimental = false:warning
+
+# 表示是否允许在对象创建括号中的标记后插入空行
+# 如果设置为 true，则允许在对象创建括号中的标记后插入空行，
+# 如果设置为 false，则不允许在对象创建括号中的标记后插入空行
+# csharp_style_allow_blank_line_after_token_in_object_creation_parentheses_experimental = false:warning
+
+# 表示是否允许在对象初始化器中的标记后插入空行
+# 如果设置为 true，则允许在对象初始化器中的标记后插入空行，
+# 如果设置为 false，则不允许在对象初始化器中的标记后插入空行
+# csharp_style_allow_blank_line_after_token_in_object_initializer_experimental = false:warning
+
+# 表示是否允许在查询子句中的标记后插入空行
+# 如果设置为 true，则允许在查询子句中的标记后插入空行，
+# 如果设置为 false，则不允许在查询子句中的标记后插入空行
+# csharp_style_allow_blank_line_after_token_in_query_clause_experimental = false:warning
+
+# 表示是否允许在查询表达式中的标记后插入空行
+# 如果设置为 true，则允许在查询表达式中的标记后插入空行，
+# 如果设置为 false，则不允许在查询表达式中的标记后插入空行
+# csharp_style_allow_blank_line_after_token_in_query_expression_experimental = false:warning
+
+# 表示是否允许在查询表达式子句中的标记后插入空行
+# 如果设置为 true，则允许在查询表达式子句中的标记后插入空行，
+# 如果设置为 false，则不允许在查询表达式子句中的标记后插入空行
+# csharp_style_allow_blank_line_after_token_in_query_expression_clause_experimental = false:warning
+
+# 表示是否允许在连续大括号之间插入空行
+# 如果设置为 true，则允许在连续大括号之间插入空行，
+# 如果设置为 false，则不允许在连续大括号之间插入空行
+csharp_style_allow_blank_lines_between_consecutive_braces_experimental = false:warning
+
+# 表示是否允许在同一行上嵌入语句
+# 如果设置为 true，则允许在同一行上嵌入语句，
+# 如果设置为 false，则不允许在同一行上嵌入语句
+csharp_style_allow_embedded_statements_on_same_line_experimental = true:suggestion
+
+
+#### C# 格式规则 ####
+
+# 新行首选项
+
+# 表示在 catch 关键字之前应该插入一个新行
+# 如果设置为 true，则在 catch 关键字之前应该插入一个新行，
+# 如果设置为 false，则在 catch 关键字之前不应该插入一个新行
+csharp_new_line_before_catch = true
+
+# 表示在 else 关键字之前应该插入一个新行
+# 如果设置为 true，则在 else 关键字之前应该插入一个新行，
+# 如果设置为 false，则在 else 关键字之前不应该插入一个新行
+csharp_new_line_before_else = false
+
+# 表示在 finally 关键字之前应该插入一个新行
+# 如果设置为 true，则在 finally 关键字之前应该插入一个新行，
+# 如果设置为 false，则在 finally 关键字之前不应该插入一个新行
+csharp_new_line_before_finally = true
+
+# 表示在对象初始化器中的成员之前应该插入一个新行
+# 如果设置为 true，则在对象初始化器中的成员之前应该插入一个新行，
+# 如果设置为 false，则在对象初始化器中的成员之前不应该插入一个新行
+csharp_new_line_before_members_in_anonymous_types = true
+
+# 在 finally 关键字之前应该插入一个新行，用于异常处理中的 try-catch-finally 结构。
+csharp_new_line_before_members_in_object_initializers = true
+
+# 配置项用于确定在C#代码中哪些构造的大括号前应该放置一个新行
+
+# 表示在所有构造的大括号前应该放置一个新行
+# 如果设置为 all，则在所有构造的大括号前应该放置一个新行，
+# 如果设置为 none，则在所有构造的大括号前不应该放置一个新行
+csharp_new_line_before_open_brace = all
+
+
+# 在LINQ查询表达式的各个子句之间应该插入新行。例如，在 from, where, select 等子句之间会有新行，以提高代码的可读性。
+# 表示在查询表达式的各个子句之间应该插入新行
+# 如果设置为 true，则在查询表达式的各个子句之间应该插入新行，
+# 如果设置为 false，则在查询表达式的各个子句之间不应该插入新行
+csharp_new_line_between_query_expression_clauses = true
+
+# 缩进首选项
+
+# 表示应该缩进块内容，
+# 如果设置为 true，则应该缩进块内容，
+# 如果设置为 false，则不应该缩进块内容。
+csharp_indent_block_contents = true
+
+# 表示应该缩进大括号，
+# 如果设置为 true，则应该缩进大括号，
+# 如果设置为 false，则不应该缩进大括号。
+csharp_indent_braces = false
+
+# 表示应该缩进 case 内容，如应该缩进 case 内容，
+# 如果设置为 true，则应该缩进 case 内容，
+# 如果设置为 false，则不应该缩进 case 内容。
+csharp_indent_case_contents = false
+
+# 表示应该缩进 case 内容
+# 如果设置为 true，则应该缩进 case 内容
+# 如果设置为 false，则不应该缩进 case 内容
+csharp_indent_case_contents_when_block = false
+
+# 表示应该缩进标签
+# 如果设置为 one_less_than_current，表示应该缩进一个级别少于当前级别，
+# 如果设置为 no_change，则不应该缩进标签。
+csharp_indent_labels = no_change
+
+# 表示应该缩进 switch 标签
+# 如果设置为 true，则应该缩进 switch 标签，
+# 如果设置为 false，则不应该缩进 switch 标签。
+csharp_indent_switch_labels = false
+
+# 空格键首选项
+
+# 如在强制转换后应该插入空格，
+# 如果设置为 true，则在强制转换后应该插入空格，
+# 如果设置为 false，则在强制转换后不应该插入空格。
+csharp_space_after_cast = false
+
+# 表示在继承子句中的冒号后应该插入空格
+# 如果设置为 true，则在继承子句中的冒号后应该插入空格，
+# 如果设置为 false，则在继承子句中的冒号后不应该插入空格。
+csharp_space_after_colon_in_inheritance_clause = true
+
+# 表示在逗号后应该插入空格
+# 如果设置为 true，则在逗号后应该插入空格，
+# 如果设置为 false，则在逗号后不应该插入空格。
+csharp_space_after_comma = false
+
+# 表示在点号后应该插入空格
+# 如果设置为 true，则在点号后应该插入空格，
+# 如果设置为 false，则在点号后不应该插入空格。
+csharp_space_after_dot = false
+
+# 表示在控制流语句中的关键字后应该插入空格
+# 如果设置为 true，则在控制流语句中的关键字后应该插入空格，
+# 如果设置为 false，则在控制流语句中的关键字后不应该插入空格。
+csharp_space_after_keywords_in_control_flow_statements = false
+
+# 表示在 for 语句中的分号后应该插入空格
+# 如果设置为 true，则在 for 语句中的分号后应该插入空格，
+# 如果设置为 false，则在 for 语句中的分号后不应该插入空格。
+csharp_space_after_semicolon_in_for_statement = true
+
+# 表示在二元运算符周围应该插入空格
+# 如果设置为 before_and_after，则在二元运算符周围应该插入空格，
+# 如果设置为 before，表示在二元运算符之前应该插入空格，
+# 如果设置为 after，则在二元运算符之后应该插入空格。
+csharp_space_around_binary_operators = before_and_after
+
+# 表示在声明语句周围应该插入空格
+# 如果设置为 true，则在声明语句周围应该插入空格，
+# 如果设置为 false，则在声明语句周围不应该插入空格。
+csharp_space_around_declaration_statements = false
+
+# 表示在继承子句中的冒号前应该插入空格
+# 如果设置为 true，则在继承子句中的冒号前应该插入空格，
+# 如果设置为 false，则在继承子句中的冒号前不应该插入空格。
+csharp_space_before_colon_in_inheritance_clause = true
+
+# 表示在逗号前应该插入空格
+# 如果设置为 true，则在逗号前应该插入空格，
+# 如果设置为 false，则在逗号前不应该插入空格。
+csharp_space_before_comma = false
+
+# 表示在点号前应该插入空格
+# 如果设置为 true，则在点号前应该插入空格，
+# 如果设置为 false，则在点号前不应该插入空格。
+csharp_space_before_dot = false
+
+# 表示在开方括号前应该插入空格
+# 如果设置为 true，则在开方括号前应该插入空格，
+# 如果设置为 false，则在开方括号前不应该插入空格。
+csharp_space_before_open_square_brackets = false
+
+# 表示在 for 语句中的分号前应该插入空格
+# 如果设置为 true，则在 for 语句中的分号前应该插入空格，
+# 如果设置为 false，则在 for 语句中的分号前不应该插入空格。
+csharp_space_before_semicolon_in_for_statement = true
+
+# 表示在方法调用的空参数列表括号之间应该插入空格
+# 如果设置为 true，则在方法调用的空参数列表括号之间应该插入空格，
+# 如果设置为 false，则在方法调用的空参数列表括号之间不应该插入空格。
+csharp_space_between_method_call_empty_parameter_list_parentheses = false
+
+# 表示在方法调用名称和开括号之间应该插入空格
+# 如果设置为 true，则在方法调用名称和开括号之间应该插入空格，
+# 如果设置为 false，则在方法调用名称和开括号之间不应该插入空格。
+csharp_space_between_method_call_name_and_opening_parenthesis = false
+
+# 表示在方法声明的空参数列表括号之间应该插入空格
+# 如果设置为 true，则在方法声明的空参数列表括号之间应该插入空格，
+# 如果设置为 false，则在方法声明的空参数列表括号之间不应该插入空格。
+csharp_space_between_method_declaration_empty_parameter_list_parentheses = false
+
+# 表示在方法声明名称和开括号之间应该插入空格
+# 如果设置为 true，则在方法声明名称和开括号之间应该插入空格，
+# 如果设置为 false，则在方法声明名称和开括号之间不应该插入空格。
+csharp_space_between_method_declaration_name_and_open_parenthesis = false
+
+# 表示在括号之间应该插入空格，如在括号之间应该插入空格，
+# 如果设置为 true，则在括号之间应该插入空格，如果设置为 false，则在括号之间不应该插入空格。
+csharp_space_between_parentheses = false
+
+# 表示在方括号之间应该插入空格
+# 如果设置为 true，则在方括号之间应该插入空格，
+# 如果设置为 false，则在方括号之间不应该插入空格。
+csharp_space_between_square_brackets = false
+
+# 表示在空方括号之间应该插入空格
+# 如果设置为 true，则在空方括号之间应该插入空格，
+# 如果设置为 false，则在空方括号之间不应该插入空格。
+csharp_space_between_empty_square_brackets = false
+
+# 表示在方法调用参数列表括号之间应该插入空格，
+# 如果设置为 true，则在方法调用参数列表括号之间应该插入空格，
+# 如果设置为 false，则在方法调用参数列表括号之间不应该插入空格。
+csharp_space_between_method_call_parameter_list_parentheses = false
+
+# 表示在方法声明参数列表括号之间应该插入空格
+# 如果设置为 true，则在方法声明参数列表括号之间应该插入空格，
+# 如果设置为 false，则在方法声明参数列表括号之间不应该插入空格。
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+
+# 包装首选项
+# 表示应该保留单行块
+# 如果设置为 true，则应该保留单行块，
+# 如果设置为 false，则不应该保留单行块。
+csharp_preserve_single_line_blocks = true
+
+# 表示应该保留单行语句
+# 如果设置为 true，则应该保留单行语句，
+# 如果设置为 false，则不应该保留单行语句。
+csharp_preserve_single_line_statements = false
+
 #### 命名样式 ####
 
-# 命名规则
+# 命名规则用于定义命名约定，例如类名应该以大写字母开头，接口名应该以 I 开头等，命名规则由命名风格和命名符号组成。，命名风格用于定义命名的格式，例如大小写、前缀、后缀等，命名符号用于定义哪些符号将受到命名规则的约束。
 
-dotnet_naming_rule.interface_should_be_begins_with_i.severity = suggestion
+# 表示接口名应该以 I 开头，如果接口名不以 I 开头，则会产生错误
+# 如果设置为 suggestion，则会产生建议
+# 如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.interface_should_be_begins_with_i.severity = error
+
+# 表示接口名应该以 I 开头，如果符号是接口，则应该以 I 开头。
 dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
+
+# 表示接口名应该以 I 开头，如果接口名不以 I 开头，则会产生错误，
+# 如果设置为 pascal_case，则接口名应该以大写字母开头，
+# 如果设置为 camel_case，则接口名应该以小写字母开头，
+# 如果设置为 upper_case，则接口名应该全大写，
+# 如果设置为 lower_case，则接口名应该全小写。，
+# 如果设置为 begins_with_i，则接口名应该以 I 开头，
+# 如果设置为 does_not_begin_with_i，则接口名不应该以 I 开头，
+# 默认为 pascal_case，即接口名应该以大写字母开头，如
+# 果接口名不以 I 开头，则会产生错误，如果设置为 suggestion，则会产生建议，
+# 如果设置为 silent，则不会产生任何提示，如果设置为 none，则不会产生任何提示，
+# 如果设置为 error，则会产生错误，如果设置为 warning，则会产生警告。
 dotnet_naming_rule.interface_should_be_begins_with_i.style = begins_with_i
 
+# 表示类型名应该以大写字母开头，如果类型名不以大写字母开头，则会产生建议，
+# 如果设置为 suggestion，则会产生建议，
+# 如果设置为 silent，则不会产生任何提示。
 dotnet_naming_rule.types_should_be_pascal_case.severity = suggestion
+
+# 表示类型名应该以大写字母开头，
+# 如果符号是类型，则应该以大写字母开头。
 dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+
+# 表示类型名应该以大写字母开头，
+# 如果类型名不以大写字母开头，则会产生建议
 dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
 
+# 表示非字段成员应该以大写字母开头，
+# 如果非字段成员不以大写字母开头，则会产生建议，
+# 如果设置为 suggestion，则会产生建议，
+# 如果设置为 silent，则不会产生任何提示。
 dotnet_naming_rule.non_field_members_should_be_pascal_case.severity = suggestion
+
+# 表示非字段成员应该以大写字母开头，如果符号是非字段成员，则应该以大写字母开头。
 dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_members
+
+# 表示非字段成员应该以大写字母开头，如果非字段成员不以大写字母开头，则会产生建议
 dotnet_naming_rule.non_field_members_should_be_pascal_case.style = pascal_case
 
-# 符号规范
+# 表示方法名应该以大写字母开头，如果方法名不以大写字母开头，则会产生错误，
+# 如果设置为 suggestion，则会产生建议，
+# 如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.method_should_be_pascal_case.severity = error
 
+# 表示方法名应该以大写字母开头，如果符号是方法，则应该以大写字母开头。
+dotnet_naming_rule.method_should_be_pascal_case.symbols = method
+
+# 表示方法名应该以大写字母开头，如果方法名不以大写字母开头，则会产生错误 ，
+# 如果设置为 suggestion，则会产生建议，如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.method_should_be_pascal_case.style = pascal_case
+
+# 表示类名应该以大写字母开头，如果类名不以大写字母开头，则会产生错误，
+# 如果设置为 suggestion，则会产生建议，
+# 如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.class_should_be_pascal_case.severity = error
+
+# 表示类名应该以大写字母开头，如果符号是类，则应该以大写字母开头。
+dotnet_naming_rule.class_should_be_pascal_case.symbols = class
+
+# 表示类名应该以大写字母开头，如果类名不以大写字母开头，则会产生错误，
+# 如果设置为 suggestion，则会产生建议，
+# 如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.class_should_be_pascal_case.style = pascal_case
+
+# 表示静态方法名应该以大写字母开头，如果静态方法名不以大写字母开头，则会产生错误，
+# 如果设置为 suggestion，则会产生建议，
+# 如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.static_method_should_be_pascal_case.severity = error
+
+# 表示静态方法名应该以大写字母开头，如果符号是静态方法，则应该以大写字母开头。
+dotnet_naming_rule.static_method_should_be_pascal_case.symbols = static_method
+
+# 表示静态方法名应该以大写字母开头，如果静态方法名不以大写字母开头，则会产生错误，
+# 如果设置为 suggestion，则会产生建议，
+# 如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.static_method_should_be_pascal_case.style = pascal_case
+
+# 表示私有方法名应该以大写字母开头，如果私有方法名不以大写字母开头，则会产生错误，
+# 如果设置为 suggestion，则会产生建议，如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.private_method_should_be_pascal_case.severity = error
+
+# 表示私有方法名应该以大写字母开头，如果符号是私有方法，则应该以大写字母开头。
+dotnet_naming_rule.private_method_should_be_pascal_case.symbols = private_method
+
+# 表示私有方法名应该以大写字母开头，如果私有方法名不以大写字母开头，则会产生错误，
+# 如果设置为 suggestion，则会产生建议，如果设置为 silent，则不会产生任何提示。
+dotnet_naming_rule.private_method_should_be_pascal_case.style = pascal_case
+
+# 符号规范,命名约定如类、接口、枚举等应该受到特定的命名规则的约束
+# 定义哪些符号将受到命名规则的约束
+
+# 表示类应该受到命名规则的约束，如果符号是类，则应该受到命名规则的约束。
+dotnet_naming_symbols.class.applicable_kinds = class
+
+#  = public, internal, private, protected, protected_internal, private_protected表示类的访问级别应该受到命名规则的约束，
+# 如果类的访问级别是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+dotnet_naming_symbols.class.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+
+# 由于没有特定的“required_modifiers”配置项，我们通常不在.editorconfig中直接设置它  
+# 如果你想强制类的某些修饰符，你可能需要使用其他工具，如Roslyn分析器或StyleCop  
+# dotnet_naming_symbols.class.required_modifiers表示类的修饰符应该受到命名规则的约束，如果类的修饰符是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+dotnet_naming_symbols.class.required_modifiers =
+
+# 表示枚举应该受到命名规则的约束，如果符号是枚举，则应该受到命名规则的约束。
+# dotnet_naming_symbols.enum.applicable_kinds = enum
+# 表示枚举的访问级别应该受到命名规则的约束，如果枚举的访问级别是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+# dotnet_naming_symbols.enum.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+
+# dotnet_naming_symbols.enum.required_modifiers表示枚举的修饰符应该受到命名规则的约束，如果枚举的修饰符是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+# dotnet_naming_symbols.enum.required_modifiers =
+
+
+# 表示接口应该受到命名规则的约束，如果符号是接口，则应该受到命名规则的约束。
 dotnet_naming_symbols.interface.applicable_kinds = interface
+
+# public, internal, private, protected, protected_internal, private_protected表示接口的访问级别应该受到命名规则的约束，如果接口的访问级别是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.interface.required_modifiers = 
 
+# dotnet_naming_symbols.interface.required_modifiers表示接口的修饰符应该受到命名规则的约束，如果接口的修饰符是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+dotnet_naming_symbols.interface.required_modifiers =
+
+# 表示方法应该受到命名规则的约束，如果符号是方法，则应该受到命名规则的约束。
+dotnet_naming_symbols.method.applicable_kinds = method
+
+# 表示方法的访问级别应该受到命名规则的约束，如果方法的访问级别是 public，则应该受到命名规则的约束。
+dotnet_naming_symbols.method.applicable_accessibilities = public
+# dotnet_naming_symbols.method.required_modifiers表示方法的修饰符应该受到命名规则的约束，如果方法的修饰符是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+dotnet_naming_symbols.method.required_modifiers =
+
+# 表示私有方法应该受到命名规则的约束，如果符号是私有方法，则应该受到命名规则的约束。
+dotnet_naming_symbols.private_method.applicable_kinds = method
+
+# 表示私有方法的访问级别应该受到命名规则的约束，如果私有方法的访问级别是 private，则应该受到命名规则的约束。
+dotnet_naming_symbols.private_method.applicable_accessibilities = private
+
+# dotnet_naming_symbols.private_method.required_modifiers表示私有方法的修饰符应该受到命名规则的约束，如果私有方法的修饰符是 private，则应该受到命名规则的约束。
+dotnet_naming_symbols.private_method.required_modifiers =
+
+# 表示静态方法应该受到命名规则的约束，如果符号是静态方法，则应该受到命名规则的约束。
+dotnet_naming_symbols.static_method.applicable_kinds = method
+# 表示静态方法的访问级别应该受到命名规则的约束，如果静态方法的访问级别是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+dotnet_naming_symbols.static_method.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+# 表示静态方法的修饰符应该受到命名规则的约束，如果静态方法的修饰符是 static，则应该受到命名规则的约束。
+dotnet_naming_symbols.static_method.required_modifiers = static
+
+# 表示类型应该受到命名规则的约束，如果符号是类型，则应该受到命名规则的约束。
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
+# 表示类型的访问级别应该受到命名规则的约束，如果类型的访问级别是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.types.required_modifiers = 
+# 表示类型的修饰符应该受到命名规则的约束，如果类型的修饰符是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+dotnet_naming_symbols.types.required_modifiers =
 
+# 表示非字段成员应该受到命名规则的约束，如果符号是非字段成员，则应该受到命名规则的约束。
 dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
+# 表示非字段成员的访问级别应该受到命名规则的约束，如果非字段成员的访问级别是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
 dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.non_field_members.required_modifiers = 
+# 表示非字段成员的修饰符应该受到命名规则的约束，如果非字段成员的修饰符是 public, internal, private, protected, protected_internal, private_protected，则应该受到命名规则的约束。
+dotnet_naming_symbols.non_field_members.required_modifiers =
 
-# 命名样式
+# 定义命名风格
+# 关于 required_prefix 和 required_suffix，这些配置项允许你指定命名中必须包含的前缀或后缀。
+# required_prefix 和 required_suffix 留空，表示没有强制的前缀或后缀要求。
+# required_prefix，例如想要所有的接口名称都以 I 开头，那么你可以设置 required_prefix = I。
+# required_suffix，例如想要所有的委托名称都以 Handler 结尾，那么你可以设置 required_suffix = Handler。
+# word_separator 用于指定单词之间的分隔符，例如下划线或驼峰命名法，如果留空，则表示没有分隔符。如果你想要强制使用驼峰命名法，你可以设置 word_separator = _。
+# capitalization 用于指定命名的大小写规则，例如大驼峰、小驼峰或全大写。pascal_case（首字母都应该大写） camel_case（首字母小写，其余单词的首字母大写）upper_case（全大写） lower_case（全小写）
 
+# 表示命名应该以大写字母开头，如果命名不以大写字母开头，则会产生错误，如设置为 I，则命名应该以 I 开头，如果命名不以 I 开头，则会产生错误。
+dotnet_naming_style.pascal_case.required_prefix =
+# 表示命名应该以大写字母结尾，如果命名不以大写字母结尾，则会产生错误，如设置为 Handler，则命名应该以 Handler 结尾，如果命名不以 Handler 结尾，则会产生错误。
+dotnet_naming_style.pascal_case.required_suffix =
+# 表示命名中的单词之间应该使用下划线分隔，如果设置为 _，则命名中的单词之间应该使用下划线分隔。如设置为 -，则命名中的单词之间应该使用 - 分隔。
+dotnet_naming_style.pascal_case.word_separator =
+
+# dotnet_naming_style.pascal_case.capitalization = pascal
+# 表示命名应该以大写字母开头，如果命名不以大写字母开头，则会产生错误，
+# 如果设置为 pascal_case，则命名应该以大写字母开头，如果命名不以大写字母开头，则会产生错误，
+# 如果设置为 camel_case，则命名应该以小写字母开头，如果命名不以小写字母开头，则会产生错误，
+# 如果设置为 upper_case，则命名应该全大写，如果命名不全大写，则会产生错误，
+# 如果设置为 lower_case，则命名应该全小写，如果命名不全小写，则会产生错误。
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+
+
+# 配置接口必须I开头，如IUser，IOrder等，如果不是I开头则会报错
+
+# 表示接口名应该以 I 开头，如果接口名不以 I 开头，则会产生错误，如设置为 I，则接口名应该以 I 开头，如果接口名不以 I 开头，则会产生错误。
 dotnet_naming_style.begins_with_i.required_prefix = I
-dotnet_naming_style.begins_with_i.required_suffix = 
-dotnet_naming_style.begins_with_i.word_separator = 
+# 表示接口名应该以 I 结尾，如果接口名不以 I 结尾，则会产生错误，如设置为 Handler，则接口名应该以 Handler 结尾，如果接口名不以 Handler 结尾，则会产生错误。
+dotnet_naming_style.begins_with_i.required_suffix =
+# 表示接口名中的单词之间应该使用下划线分隔，如果设置为 _，则接口名中的单词之间应该使用下划线分隔。如设置为 -，则接口名中的单词之间应该使用 - 分隔。
+dotnet_naming_style.begins_with_i.word_separator =
+# 表示接口名应该以 I 开头，如果接口名不以 I 开头，则会产生错误，
+# 如果设置为 pascal_case，则接口名应该以大写字母开头，如果接口名不以大写字母开头，则会产生错误，
+# 如果设置为 camel_case，则接口名应该以小写字母开头，如果接口名不以小写字母开头，则会产生错误，
+# 如果设置为 upper_case，则接口名应该全大写，如果接口名不全大写，则会产生错误，
+# 如果设置为 lower_case，则接口名应该全小写，如果接口名不全小写，则会产生错误。
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
-dotnet_naming_style.pascal_case.required_prefix = 
-dotnet_naming_style.pascal_case.required_suffix = 
-dotnet_naming_style.pascal_case.word_separator = 
-dotnet_naming_style.pascal_case.capitalization = pascal_case
 
-dotnet_naming_style.pascal_case.required_prefix = 
-dotnet_naming_style.pascal_case.required_suffix = 
-dotnet_naming_style.pascal_case.word_separator = 
-dotnet_naming_style.pascal_case.capitalization = pascal_case
-csharp_using_directive_placement = outside_namespace:silent
-csharp_style_expression_bodied_methods = false:silent
-csharp_style_expression_bodied_constructors = false:silent
-csharp_style_expression_bodied_operators = false:silent
-csharp_style_expression_bodied_properties = true:silent
-csharp_style_expression_bodied_indexers = true:silent
-csharp_style_expression_bodied_accessors = true:silent
-csharp_style_expression_bodied_lambdas = true:silent
-csharp_style_expression_bodied_local_functions = false:silent
-csharp_style_conditional_delegate_call = true:suggestion
-csharp_style_var_for_built_in_types = false:silent
-csharp_style_var_when_type_is_apparent = false:silent
-csharp_style_var_elsewhere = false:silent
-csharp_prefer_simple_using_statement = true:suggestion
-csharp_prefer_braces = true:silent
-csharp_style_namespace_declarations = block_scoped:silent
-csharp_style_prefer_method_group_conversion = true:silent
-csharp_style_prefer_top_level_statements = true:silent
-csharp_prefer_static_local_function = true:suggestion
-csharp_style_prefer_readonly_struct = true:suggestion
-csharp_style_allow_blank_lines_between_consecutive_braces_experimental = true:silent
-csharp_style_allow_embedded_statements_on_same_line_experimental = true:silent
-csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimental = true:silent
-csharp_style_prefer_switch_expression = true:suggestion
-csharp_style_prefer_pattern_matching = true:silent
-csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
-csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
-csharp_style_prefer_not_pattern = true:suggestion
-csharp_style_prefer_extended_property_pattern = true:suggestion
-csharp_style_throw_expression = true:suggestion
-csharp_style_prefer_null_check_over_type_check = true:suggestion
-csharp_prefer_simple_default_expression = true:suggestion
-csharp_style_prefer_local_over_anonymous_function = true:suggestion
-csharp_style_prefer_index_operator = true:suggestion
-csharp_style_prefer_range_operator = true:suggestion
-csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
-csharp_style_prefer_tuple_swap = true:suggestion
-csharp_style_prefer_utf8_string_literals = true:suggestion
-csharp_style_inlined_variable_declaration = true:suggestion
-csharp_style_deconstructed_variable_declaration = true:suggestion
-csharp_style_unused_value_assignment_preference = discard_variable:suggestion
-csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+# 自定义规则
 
-[*.vb]
-#### 命名样式 ####
+# CS0168: 声明了变量，但从未使用过
+dotnet_diagnostic.CS0168.severity = warning
+
+# IDE0059: 不需要对属性赋值
+# dotnet_diagnostic.IDE0059.severity = error
+
+# IDE0011: 添加大括号
+dotnet_diagnostic.IDE0011.severity = warning
+
+#类型名称不应与命名空间一致
+dotnet_diagnostic.CA1724.severity = error
+
+# IDE0004: 删除不必要的转换
+dotnet_diagnostic.IDE0004.severity = error
+
+# 删除不必要的using引用
+dotnet_diagnostic.IDE0005.severity = error
+
+# IDE0047: 删除不必要的括号
+dotnet_diagnostic.IDE0047.severity = error
+
+# 大括号
+dotnet_diagnostic.IDE0011.severity = error
+
+#  删除无法访问的代码
+dotnet_diagnostic.IDE0035.severity = error
+
+# 可删除不必要的名称限定，以简化代码、提高可读性
+dotnet_diagnostic.IDE0001.severity = error
+
+# CS0162: 检测到无法访问的代码
+dotnet_diagnostic.CS0162.severity = error
+
+# IDE0059: 不需要赋值
+dotnet_diagnostic.IDE0059.severity = warning
 
 # 命名规则
+dotnet_diagnostic.IDE1006.severity = error
 
-dotnet_naming_rule.interface_should_be_以_i_开始.severity = suggestion
-dotnet_naming_rule.interface_should_be_以_i_开始.symbols = interface
-dotnet_naming_rule.interface_should_be_以_i_开始.style = 以_i_开始
+# 代码空格格式
+dotnet_diagnostic.IDE0055.severity = none
 
-dotnet_naming_rule.类型_should_be_帕斯卡拼写法.severity = suggestion
-dotnet_naming_rule.类型_should_be_帕斯卡拼写法.symbols = 类型
-dotnet_naming_rule.类型_should_be_帕斯卡拼写法.style = 帕斯卡拼写法
 
-dotnet_naming_rule.非字段成员_should_be_帕斯卡拼写法.severity = suggestion
-dotnet_naming_rule.非字段成员_should_be_帕斯卡拼写法.symbols = 非字段成员
-dotnet_naming_rule.非字段成员_should_be_帕斯卡拼写法.style = 帕斯卡拼写法
+# IDE0058: 永远不会使用表达式值
+dotnet_diagnostic.IDE0058.severity = warning
 
-# 符号规范
+# IDE0008: 使用显式类型
+dotnet_diagnostic.IDE0008.severity = warning
 
-dotnet_naming_symbols.interface.applicable_kinds = interface
-dotnet_naming_symbols.interface.applicable_accessibilities = public, friend, private, protected, protected_friend, private_protected
-dotnet_naming_symbols.interface.required_modifiers = 
-
-dotnet_naming_symbols.类型.applicable_kinds = class, struct, interface, enum
-dotnet_naming_symbols.类型.applicable_accessibilities = public, friend, private, protected, protected_friend, private_protected
-dotnet_naming_symbols.类型.required_modifiers = 
-
-dotnet_naming_symbols.非字段成员.applicable_kinds = property, event, method
-dotnet_naming_symbols.非字段成员.applicable_accessibilities = public, friend, private, protected, protected_friend, private_protected
-dotnet_naming_symbols.非字段成员.required_modifiers = 
-
-# 命名样式
-
-dotnet_naming_style.以_i_开始.required_prefix = I
-dotnet_naming_style.以_i_开始.required_suffix = 
-dotnet_naming_style.以_i_开始.word_separator = 
-dotnet_naming_style.以_i_开始.capitalization = pascal_case
-
-dotnet_naming_style.帕斯卡拼写法.required_prefix = 
-dotnet_naming_style.帕斯卡拼写法.required_suffix = 
-dotnet_naming_style.帕斯卡拼写法.word_separator = 
-dotnet_naming_style.帕斯卡拼写法.capitalization = pascal_case
-
-dotnet_naming_style.帕斯卡拼写法.required_prefix = 
-dotnet_naming_style.帕斯卡拼写法.required_suffix = 
-dotnet_naming_style.帕斯卡拼写法.word_separator = 
-dotnet_naming_style.帕斯卡拼写法.capitalization = pascal_case
-
-[*.{cs,vb}]
-end_of_line = crlf
-dotnet_style_qualification_for_field = false:silent
-dotnet_style_qualification_for_property = false:silent
-dotnet_style_qualification_for_method = false:silent
-dotnet_style_qualification_for_event = false:silent
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
-dotnet_code_quality_unused_parameters = all:suggestion
-dotnet_style_readonly_field = true:suggestion
-dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
-dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
-dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
-dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
-dotnet_style_allow_multiple_blank_lines_experimental = true:silent
-dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
-dotnet_style_coalesce_expression = true:suggestion
-dotnet_style_null_propagation = true:suggestion
-dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
-dotnet_style_prefer_auto_properties = true:silent
-dotnet_style_object_initializer = true:suggestion
-dotnet_style_collection_initializer = true:suggestion
-dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
-dotnet_style_explicit_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
-dotnet_style_prefer_compound_assignment = true:suggestion
-dotnet_style_prefer_simplified_interpolation = true:suggestion
-dotnet_style_namespace_match_folder = true:suggestion
-dotnet_style_predefined_type_for_locals_parameters_members = true:silent
-dotnet_style_predefined_type_for_member_access = true:silent
+# IDE0040: 添加可访问性修饰符
+dotnet_diagnostic.IDE0040.severity = warning

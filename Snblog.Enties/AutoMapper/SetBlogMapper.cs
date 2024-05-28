@@ -1,20 +1,19 @@
-﻿namespace Snblog.Enties.AutoMapper
+﻿namespace Snblog.Enties.AutoMapper;
+
+/// <summary>
+/// SetBlog对象映射关系
+/// </summary>
+public class SetBlogMapper : Profile
 {
     /// <summary>
-    /// SetBlog对象映射关系
+    /// 配置构造函数，用来创建关系映射
     /// </summary>
-    public class SetBlogMapper : Profile
+    public SetBlogMapper()
     {
-        /// <summary>
-        /// 配置构造函数，用来创建关系映射
-        /// </summary>
-        public SetBlogMapper()
-        {
-            //构建实体映射规则添加映射对象  
-            //如两个实体字段一致可直接映射关系
-            //SnUser原对象类型，SnUserDto 目标对象类型  ReverseMap，可相互转换
-            CreateMap<SnSetblog, SnSetblogDto>().ReverseMap();
+        //构建实体映射规则添加映射对象  
+        //如两个实体字段一致可直接映射关系
+        //SnUser原对象类型，SnUserDto 目标对象类型  ReverseMap，可相互转换
+        CreateMap<SnSetblog, SnSetblogDto>().ReverseMap();
 
-        }
     }
 }

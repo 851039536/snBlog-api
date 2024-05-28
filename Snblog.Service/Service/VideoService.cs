@@ -1,300 +1,373 @@
-﻿namespace Snblog.Service.Service
+﻿namespace Snblog.Service.Service;
+
+public class VideoService : IVideoService
 {
-    public class VideoService : IVideoService
+    private readonly SnblogContext _service;
+    private readonly CacheUtils _cache;
+    private readonly EntityData<Video> _ret = new();
+    private readonly EntityDataDto<VideoDto> _rDto = new();
+    private readonly IMapper _mapper;
+
+    const string NAME = "video_";
+
+    public VideoService(SnblogContext service, ICacheUtil cache, IMapper mapper)
     {
-        private readonly snblogContext _service;
-        private readonly CacheUtil _cache;
-        private readonly EntityData<Video> _ret = new();
-        private readonly EntityDataDto<VideoDto> _rDto = new();
-        private readonly IMapper _mapper;
+        _service = service;
+        _cache = (CacheUtils)cache;
+        _mapper = mapper;
+    }
 
-        const string NAME = "video_";
-
-        public VideoService(snblogContext service, ICacheUtil cache, IMapper mapper)
+    public async Task<VideoDto> GetByIdAsync(int id, bool cache)
+    {
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Bid}{id}{cache}");
+        if (cache)
         {
-            _service = service;
-            _cache = (CacheUtil)cache;
-            _mapper = mapper;
+            _rDto.Entity = _cache.GetValue<VideoDto>(ServiceConfig.CacheKey);
+            if (_rDto.Entity != null) return _rDto.Entity;
         }
 
-        public async Task<VideoDto> GetByIdAsync(int id, bool cache)
-        {
-            Common.CacheInfo($"{NAME}{Common.Bid}{id}{cache}");
-            if (cache)
-            {
-                _rDto.Entity = _cache.GetValue<VideoDto>(Common.CacheKey);
-                if (_rDto.Entity != null) return _rDto.Entity;
-            }
+        _rDto.Entity = _mapper.Map<VideoDto>(await _service.Videos.FindAsync(id));
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.Entity);
+        return _rDto.Entity;
+    }
 
-            _rDto.Entity = _mapper.Map<VideoDto>(await _service.Videos.FindAsync(id));
-            _cache.SetValue(Common.CacheKey, _rDto.Entity);
-            return _rDto.Entity;
+    public async Task<List<VideoDto>> GetAllAsync(bool cache)
+    {
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.All}{cache}");
+        if (cache)
+        {
+            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);
+            if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
-        public async Task<List<VideoDto>> GetAllAsync(bool cache)
+        _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.AsNoTracking().ToListAsync());
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
+
+        return _rDto.EntityList;
+    }
+
+    public async Task<List<Video>> GetFyAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
+    {
+        Log.Information("分页查询 _SnVideo:" + type + pageIndex + pageSize + isDesc + cache);
+        _ret.EntityList = _cache.CacheString("GetPagingAsync" + type + pageIndex + pageSize + isDesc + cache,
+            _ret.EntityList, cache);
+        if (_ret.EntityList == null)
         {
-            Common.CacheInfo($"{NAME}{Common.All}{cache}");
-            if (cache)
-            {
-                _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
-                if (_rDto.EntityList != null) return _rDto.EntityList;
-            }
-
-            _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.AsNoTracking().ToListAsync());
-            _cache.SetValue(Common.CacheKey, _rDto.EntityList);
-
-            return _rDto.EntityList;
+            _ret.EntityList = await GetPaging(type, pageIndex, pageSize, isDesc);
+            _cache.CacheString("GetPagingAsync" + type + pageIndex + pageSize + isDesc + cache, _ret.EntityList,
+                cache);
         }
 
-        public async Task<List<Video>> GetFyAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
-        {
-            Log.Information("分页查询 _SnVideo:" + type + pageIndex + pageSize + isDesc + cache);
-            _ret.EntityList = _cache.CacheString("GetPagingAsync" + type + pageIndex + pageSize + isDesc + cache,
-                _ret.EntityList, cache);
-            if (_ret.EntityList == null)
-            {
-                _ret.EntityList = await GetPaging(type, pageIndex, pageSize, isDesc);
-                _cache.CacheString("GetPagingAsync" + type + pageIndex + pageSize + isDesc + cache, _ret.EntityList,
-                    cache);
-            }
+        return _ret.EntityList;
+    }
 
-            return _ret.EntityList;
-        }
-
-        private async Task<List<Video>> GetPaging(int type, int pageIndex, int pageSize, bool isDesc)
+    private async Task<List<Video>> GetPaging(int type, int pageIndex, int pageSize, bool isDesc)
+    {
+        if (type == 9999)
         {
-            if (type == 9999)
+            if (isDesc)
             {
-                if (isDesc)
-                {
-                    _ret.EntityList = await _service.Videos.OrderByDescending(c => c.Id)
-                        .Skip((pageIndex - 1) * pageSize)
-                        .Take(pageSize).ToListAsync();
-                }
-                else
-                {
-                    _ret.EntityList = await _service.Videos.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                        .Take(pageSize).ToListAsync();
-                }
+                _ret.EntityList = await _service.Videos.OrderByDescending(c => c.Id)
+                    .Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize).ToListAsync();
             }
             else
             {
-                if (isDesc)
-                {
-                    _ret.EntityList = await _service.Videos.Where(s => s.TypeId == type).OrderByDescending(c => c.Id)
-                        .Skip((pageIndex - 1) * pageSize)
-                        .Take(pageSize).ToListAsync();
-                }
-                else
-                {
-                    _ret.EntityList = await _service.Videos.Where(s => s.TypeId == type).OrderBy(c => c.Id)
-                        .Skip((pageIndex - 1) * pageSize)
-                        .Take(pageSize).ToListAsync();
-                }
+                _ret.EntityList = await _service.Videos.OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize).ToListAsync();
             }
-
-            return _ret.EntityList;
         }
-
-        public async Task<int> GetSumAsync(int identity, string type, bool cache)
+        else
         {
-            Log.Information("查询总数_SnVideo=>" + identity + cache + type + cache);
-            _ret.EntityCount = _cache.CacheNumber("Count_SnVideo", _ret.EntityCount, cache);
-            if (_ret.EntityCount == 0)
+            if (isDesc)
             {
-                switch (identity)
-                {
-                    case 0:
-                        _ret.EntityCount = await _service.Videos.AsNoTracking().CountAsync();
-                        break;
-                    case 1:
-                        _ret.EntityCount = await _service.Videos.Where(w => w.Type.Name == type).AsNoTracking()
-                            .CountAsync();
-                        break;
-                    case 2:
-                        _ret.EntityCount = await _service.Videos.Where(w => w.User.Name == type).AsNoTracking()
-                            .CountAsync();
-                        break;
-                }
-
-                _cache.CacheNumber("Count_SnVideo", _ret.EntityCount, cache);
+                _ret.EntityList = await _service.Videos.Where(s => s.TypeId == type).OrderByDescending(c => c.Id)
+                    .Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize).ToListAsync();
             }
-
-            return _ret.EntityCount;
-        }
-
-        public async Task<int> GetTypeCount(int type, bool cache)
-        {
-            Log.Information("条件查总数 :" + type);
-            //读取缓存值
-            _ret.EntityCount = _cache.CacheNumber("GetTypeCount_SnVideo" + type + cache, _ret.EntityCount, cache);
-            if (_ret.EntityCount == 0)
+            else
             {
-                _ret.EntityCount = await _service.Videos.CountAsync(c => c.TypeId == type);
-                _cache.CacheNumber("GetTypeCount_SnVideo" + type + cache, _ret.EntityCount, cache);
+                _ret.EntityList = await _service.Videos.Where(s => s.TypeId == type).OrderBy(c => c.Id)
+                    .Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize).ToListAsync();
             }
-
-            return _ret.EntityCount;
         }
 
-        public async Task<List<Video>> GetTypeAllAsync(int type, bool cache)
+        return _ret.EntityList;
+    }
+
+    public async Task<int> GetSumAsync(int identity, string type, bool cache)
+    {
+        Log.Information("查询总数_SnVideo=>" + identity + cache + type + cache);
+        _ret.EntityCount = _cache.CacheNumber("Count_SnVideo", _ret.EntityCount, cache);
+        if (_ret.EntityCount == 0)
         {
-            Log.Information("分类查询:_SnVideo" + type + cache);
-            _ret.EntityList = _cache.CacheString("GetTypeAllAsync_SnVideo" + type + cache, _ret.EntityList, cache);
-            if (_ret.EntityList == null)
-            {
-                _ret.EntityList = await _service.Videos.Where(s => s.TypeId == type).ToListAsync();
-                _cache.CacheString("GetTypeAllAsync_SnVideo" + type + cache, _ret.EntityList, cache);
-            }
-
-            return _ret.EntityList;
-        }
-
-        public async Task<bool> AddAsync(Video entity)
-        {
-            Log.Information("添加数据_SnVideo :" + entity);
-            await _service.Videos.AddAsync(entity);
-            return await _service.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> UpdateAsync(Video entity)
-        {
-            Log.Information("删除数据_SnVideo :" + entity);
-            _service.Videos.Update(entity);
-            return await _service.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            Log.Information("删除数据_SnVideo:" + id);
-            var todoItem = await _service.Videos.FindAsync(id);
-            if (todoItem == null)
-            {
-                return false;
-            }
-
-            _service.Videos.Remove(todoItem);
-            return await _service.SaveChangesAsync() > 0;
-        }
-
-        public async Task<int> GetSumAsync(bool cache)
-        {
-            Log.Information("统计标题数量_SnVideo：" + cache);
-            _ret.EntityCount = _cache.CacheNumber("GetSumAsync_SnVideo" + cache, _ret.EntityCount, cache);
-            if (_ret.EntityCount == 0)
-            {
-                _ret.EntityCount = await GetSum();
-                _cache.CacheNumber("GetSumAsync_SnVideo" + cache, _ret.EntityCount, cache);
-            }
-
-            return _ret.EntityCount;
-        }
-
-        /// <summary>
-        /// 统计字段数
-        /// </summary>
-        /// <returns></returns>
-        private async Task<int> GetSum()
-        {
-            var text = await _service.Videos.Select(c => c.Name).ToListAsync();
-            return text.Sum(t => t.Length);
-        }
-
-        public async Task<List<VideoDto>> GetContainsAsync(int identity, string type, string name, bool cache)
-        {
-            Common.CacheInfo($"{NAME}{Common.Contains}{identity}{type}{name}{cache}");
-            if (cache)
-            {
-                _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
-                if (_rDto.EntityList != null) return _rDto.EntityList;
-            }
-
             switch (identity)
             {
                 case 0:
-                    _rDto.EntityList = _mapper.Map<List<VideoDto>>(
-                        await _service.Videos
-                            .Where(l => l.Name.Contains(name))
-                            .AsNoTracking().ToListAsync());
+                    _ret.EntityCount = await _service.Videos.AsNoTracking().CountAsync();
                     break;
                 case 1:
-                    _rDto.EntityList = _mapper.Map<List<VideoDto>>(
-                        await _service.Videos
-                            .Where(l => l.Name.Contains(name) && l.Type.Name == type)
-                            .AsNoTracking().ToListAsync());
+                    _ret.EntityCount = await _service.Videos.Where(w => w.Type.Name == type).AsNoTracking()
+                        .CountAsync();
                     break;
                 case 2:
-                    _rDto.EntityList = _mapper.Map<List<VideoDto>>(
-                        await _service.Videos
-                            .Where(l => l.Name.Contains(name) && l.User.Name == type)
-                            .AsNoTracking().ToListAsync());
+                    _ret.EntityCount = await _service.Videos.Where(w => w.User.Name == type).AsNoTracking()
+                        .CountAsync();
                     break;
             }
 
-            _cache.SetValue(Common.CacheKey, _rDto.EntityList);
-
-            return _rDto.EntityList;
+            _cache.CacheNumber("Count_SnVideo", _ret.EntityCount, cache);
         }
 
-        public async Task<List<VideoDto>> GetTypeAsync(int identity, string type, bool cache)
+        return _ret.EntityCount;
+    }
+
+    public async Task<int> GetTypeCount(int type, bool cache)
+    {
+        Log.Information("条件查总数 :" + type);
+        //读取缓存值
+        _ret.EntityCount = _cache.CacheNumber("GetTypeCount_SnVideo" + type + cache, _ret.EntityCount, cache);
+        if (_ret.EntityCount == 0)
         {
-            Log.Information($"SnVideoDto条件查询=>{identity}{type}{cache}");
-            _rDto.EntityList = _cache.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache, _rDto.EntityList,
-                cache);
-            if (_rDto.EntityList == null)
+            _ret.EntityCount = await _service.Videos.CountAsync(c => c.TypeId == type);
+            _cache.CacheNumber("GetTypeCount_SnVideo" + type + cache, _ret.EntityCount, cache);
+        }
+
+        return _ret.EntityCount;
+    }
+
+    public async Task<List<Video>> GetTypeAllAsync(int type, bool cache)
+    {
+        Log.Information("分类查询:_SnVideo" + type + cache);
+        _ret.EntityList = _cache.CacheString("GetTypeAllAsync_SnVideo" + type + cache, _ret.EntityList, cache);
+        if (_ret.EntityList == null)
+        {
+            _ret.EntityList = await _service.Videos.Where(s => s.TypeId == type).ToListAsync();
+            _cache.CacheString("GetTypeAllAsync_SnVideo" + type + cache, _ret.EntityList, cache);
+        }
+
+        return _ret.EntityList;
+    }
+
+    public async Task<bool> AddAsync(Video entity)
+    {
+        Log.Information("添加数据_SnVideo :" + entity);
+        await _service.Videos.AddAsync(entity);
+        return await _service.SaveChangesAsync() > 0;
+    }
+
+    public async Task<bool> UpdateAsync(Video entity)
+    {
+        Log.Information("删除数据_SnVideo :" + entity);
+        _service.Videos.Update(entity);
+        return await _service.SaveChangesAsync() > 0;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        Log.Information("删除数据_SnVideo:" + id);
+        var todoItem = await _service.Videos.FindAsync(id);
+        if (todoItem == null)
+        {
+            return false;
+        }
+
+        _service.Videos.Remove(todoItem);
+        return await _service.SaveChangesAsync() > 0;
+    }
+
+    public async Task<int> GetSumAsync(bool cache)
+    {
+        Log.Information("统计标题数量_SnVideo：" + cache);
+        _ret.EntityCount = _cache.CacheNumber("GetSumAsync_SnVideo" + cache, _ret.EntityCount, cache);
+        if (_ret.EntityCount == 0)
+        {
+            _ret.EntityCount = await GetSum();
+            _cache.CacheNumber("GetSumAsync_SnVideo" + cache, _ret.EntityCount, cache);
+        }
+
+        return _ret.EntityCount;
+    }
+
+    /// <summary>
+    /// 统计字段数
+    /// </summary>
+    /// <returns></returns>
+    private async Task<int> GetSum()
+    {
+        var text = await _service.Videos.Select(c => c.Name).ToListAsync();
+        return text.Sum(t => t.Length);
+    }
+
+    public async Task<List<VideoDto>> GetContainsAsync(int identity, string type, string name, bool cache)
+    {
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Contains}{identity}{type}{name}{cache}");
+        if (cache)
+        {
+            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);
+            if (_rDto.EntityList != null) return _rDto.EntityList;
+        }
+
+        switch (identity)
+        {
+            case 0:
+                _rDto.EntityList = _mapper.Map<List<VideoDto>>(
+                    await _service.Videos
+                        .Where(l => l.Name.Contains(name))
+                        .AsNoTracking().ToListAsync());
+                break;
+            case 1:
+                _rDto.EntityList = _mapper.Map<List<VideoDto>>(
+                    await _service.Videos
+                        .Where(l => l.Name.Contains(name) && l.Type.Name == type)
+                        .AsNoTracking().ToListAsync());
+                break;
+            case 2:
+                _rDto.EntityList = _mapper.Map<List<VideoDto>>(
+                    await _service.Videos
+                        .Where(l => l.Name.Contains(name) && l.User.Name == type)
+                        .AsNoTracking().ToListAsync());
+                break;
+        }
+
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
+
+        return _rDto.EntityList;
+    }
+
+    public async Task<List<VideoDto>> GetTypeAsync(int identity, string type, bool cache)
+    {
+        Log.Information($"SnVideoDto条件查询=>{identity}{type}{cache}");
+        _rDto.EntityList = _cache.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache, _rDto.EntityList,
+            cache);
+        if (_rDto.EntityList == null)
+        {
+            switch (identity)
             {
-                switch (identity)
+                case 1:
+                    _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos
+                        .Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
+                    break;
+                case 2:
+                    _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos
+                        .Where(s => s.User.Name == type).AsNoTracking().ToListAsync());
+                    break;
+            }
+
+            _cache.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache, _rDto.EntityList, cache);
+        }
+
+        return _rDto.EntityList;
+    }
+
+    public async Task<List<VideoDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
+        bool isDesc, bool cache)
+    {
+        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging}{identity}{pageIndex}{pageSize}{isDesc}{cache}");
+        if (cache)
+        {
+            _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);
+            if (_rDto.EntityList != null) return _rDto.EntityList;
+        }
+
+        switch (identity) //查询条件
+        {
+            case 0:
+                await QPagingAll(pageIndex, pageSize, isDesc);
+                break;
+            case 1:
+                await GetFyType(type, pageIndex, pageSize, isDesc);
+                break;
+            case 2:
+                await GetUser(type, pageIndex, pageSize, isDesc);
+                break;
+        }
+
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
+
+
+        return _rDto.EntityList;
+    }
+
+    private async Task GetUser(string type, int pageIndex, int pageSize, bool isDesc)
+    {
+        if (isDesc) //降序
+        {
+            _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.User.Name == type)
+                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize).Select(e => new VideoDto
                 {
-                    case 1:
-                        _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos
-                            .Where(s => s.Type.Name == type).AsNoTracking().ToListAsync());
-                        break;
-                    case 2:
-                        _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos
-                            .Where(s => s.User.Name == type).AsNoTracking().ToListAsync());
-                        break;
-                }
-
-                _cache.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache, _rDto.EntityList, cache);
-            }
-
-            return _rDto.EntityList;
+                    Id = e.Id,
+                    Name = e.Name,
+                    Img = e.Img,
+                    User = e.User,
+                    Url = e.Url,
+                    TimeCreate = e.TimeCreate,
+                    TimeModified = e.TimeModified,
+                    Type = e.Type
+                }).AsNoTracking().ToListAsync());
         }
-
-        public async Task<List<VideoDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
-            bool isDesc, bool cache)
+        else //升序
         {
-            Common.CacheInfo($"{NAME}{Common.Paging}{identity}{pageIndex}{pageSize}{isDesc}{cache}");
-            if (cache)
-            {
-                _rDto.EntityList = _cache.GetValue<List<VideoDto>>(Common.CacheKey);
-                if (_rDto.EntityList != null) return _rDto.EntityList;
-            }
-
-            switch (identity) //查询条件
-            {
-                case 0:
-                    await QPagingAll(pageIndex, pageSize, isDesc);
-                    break;
-                case 1:
-                    await GetFyType(type, pageIndex, pageSize, isDesc);
-                    break;
-                case 2:
-                    await GetUser(type, pageIndex, pageSize, isDesc);
-                    break;
-            }
-
-            _cache.SetValue(Common.CacheKey, _rDto.EntityList);
-
-
-            return _rDto.EntityList;
+            _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.User.Name == type)
+                .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize).Select(e => new VideoDto
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Img = e.Img,
+                    User = e.User,
+                    Url = e.Url,
+                    TimeCreate = e.TimeCreate,
+                    TimeModified = e.TimeModified,
+                    Type = e.Type
+                }).AsNoTracking().ToListAsync());
         }
+    }
 
-        private async Task GetUser(string type, int pageIndex, int pageSize, bool isDesc)
+    private async Task GetFyType(string type, int pageIndex, int pageSize, bool isDesc)
+    {
+        if (isDesc) //降序
         {
-            if (isDesc) //降序
-            {
-                _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.User.Name == type)
+            _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.Type.Name == type)
+                .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize).Select(e => new VideoDto
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Img = e.Img,
+                    User = e.User,
+                    Url = e.Url,
+                    TimeCreate = e.TimeCreate,
+                    TimeModified = e.TimeModified,
+                    Type = e.Type
+                }).AsNoTracking().ToListAsync());
+        }
+        else //升序
+        {
+            _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.Type.Name == type)
+                .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize).Select(e => new VideoDto
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Img = e.Img,
+                    User = e.User,
+                    Url = e.Url,
+                    TimeCreate = e.TimeCreate,
+                    TimeModified = e.TimeModified,
+                    Type = e.Type
+                }).AsNoTracking().ToListAsync());
+        }
+    }
+
+    private async Task QPagingAll(int pageIndex, int pageSize, bool isDesc)
+    {
+        if (isDesc) //降序
+        {
+            _rDto.EntityList = _mapper.Map<List<VideoDto>>(
+                await _service.Videos
                     .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
                     .Take(pageSize).Select(e => new VideoDto
                     {
@@ -307,10 +380,11 @@
                         TimeModified = e.TimeModified,
                         Type = e.Type
                     }).AsNoTracking().ToListAsync());
-            }
-            else //升序
-            {
-                _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.User.Name == type)
+        }
+        else //升序
+        {
+            _rDto.EntityList = _mapper.Map<List<VideoDto>>(
+                await _service.Videos
                     .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
                     .Take(pageSize).Select(e => new VideoDto
                     {
@@ -323,81 +397,6 @@
                         TimeModified = e.TimeModified,
                         Type = e.Type
                     }).AsNoTracking().ToListAsync());
-            }
-        }
-
-        private async Task GetFyType(string type, int pageIndex, int pageSize, bool isDesc)
-        {
-            if (isDesc) //降序
-            {
-                _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.Type.Name == type)
-                    .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize).Select(e => new VideoDto
-                    {
-                        Id = e.Id,
-                        Name = e.Name,
-                        Img = e.Img,
-                        User = e.User,
-                        Url = e.Url,
-                        TimeCreate = e.TimeCreate,
-                        TimeModified = e.TimeModified,
-                        Type = e.Type
-                    }).AsNoTracking().ToListAsync());
-            }
-            else //升序
-            {
-                _rDto.EntityList = _mapper.Map<List<VideoDto>>(await _service.Videos.Where(w => w.Type.Name == type)
-                    .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize).Select(e => new VideoDto
-                    {
-                        Id = e.Id,
-                        Name = e.Name,
-                        Img = e.Img,
-                        User = e.User,
-                        Url = e.Url,
-                        TimeCreate = e.TimeCreate,
-                        TimeModified = e.TimeModified,
-                        Type = e.Type
-                    }).AsNoTracking().ToListAsync());
-            }
-        }
-
-        private async Task QPagingAll(int pageIndex, int pageSize, bool isDesc)
-        {
-            if (isDesc) //降序
-            {
-                _rDto.EntityList = _mapper.Map<List<VideoDto>>(
-                    await _service.Videos
-                        .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                        .Take(pageSize).Select(e => new VideoDto
-                        {
-                            Id = e.Id,
-                            Name = e.Name,
-                            Img = e.Img,
-                            User = e.User,
-                            Url = e.Url,
-                            TimeCreate = e.TimeCreate,
-                            TimeModified = e.TimeModified,
-                            Type = e.Type
-                        }).AsNoTracking().ToListAsync());
-            }
-            else //升序
-            {
-                _rDto.EntityList = _mapper.Map<List<VideoDto>>(
-                    await _service.Videos
-                        .OrderBy(c => c.Id).Skip((pageIndex - 1) * pageSize)
-                        .Take(pageSize).Select(e => new VideoDto
-                        {
-                            Id = e.Id,
-                            Name = e.Name,
-                            Img = e.Img,
-                            User = e.User,
-                            Url = e.Url,
-                            TimeCreate = e.TimeCreate,
-                            TimeModified = e.TimeModified,
-                            Type = e.Type
-                        }).AsNoTracking().ToListAsync());
-            }
         }
     }
 }

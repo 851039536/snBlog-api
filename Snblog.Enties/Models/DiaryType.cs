@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Snblog.Enties.Models;
 
-#nullable disable
-
-namespace Snblog.Enties.Models
+public partial class DiaryType
 {
-    public partial class DiaryType
+    public DiaryType()
     {
-        public DiaryType()
-        {
-            Diaries = new HashSet<Diary>();
-        }
-
-        public int Id { get; set; }
-        public string Name { get; set; }
-
-        public virtual ICollection<Diary> Diaries { get; set; }
+        Diaries = new HashSet<Diary>();
     }
+
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    public virtual ICollection<Diary> Diaries { get; set; }
 }
