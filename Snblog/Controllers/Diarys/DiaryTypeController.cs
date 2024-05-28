@@ -1,9 +1,10 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.IService.IService.Diarys;
+using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers.Diary;
+namespace Snblog.Controllers.Diarys;
 
 /// <summary>
-/// 日记分类
+/// 日记分类API
 /// </summary>
 [ApiExplorerSettings(GroupName = "V1")]
 [ApiController]
@@ -82,7 +83,7 @@ public class DiaryTypeController : BaseController
     [HttpGet("sum")]
     public async Task<IActionResult> CountAsync(bool cache)
     {
-        var data = await _service.GetSumAsync(cache);
+        int data = await _service.GetSumAsync(cache);
         return ApiResponse(data: data, cache: cache);
     }
 
@@ -99,7 +100,7 @@ public class DiaryTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(DiaryType entity)
     {
-        var data = await _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -115,7 +116,7 @@ public class DiaryTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var data = await _service.DeleteAsync(id);
+        bool data = await _service.DeleteAsync(id);
         return ApiResponse(data: data);
     }
 
@@ -132,7 +133,7 @@ public class DiaryTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(DiaryType entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
 

@@ -1,4 +1,4 @@
-﻿namespace Snblog.IService.IService;
+﻿namespace Snblog.IService.IService.Diarys;
 
 /// <summary>
 /// 日记接口
@@ -22,13 +22,6 @@ public interface IDiaryService
     /// <returns>int</returns>
     Task<int> GetSumAsync(int identity, string type, bool cache);
 
-    /// <summary>
-    /// 条件查询总数量
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="cache"></param>
-    /// <returns></returns>
-    Task<int> CountTypeAsync(int type, bool cache);
 
     /// <summary>
     /// 主键查询
@@ -74,14 +67,13 @@ public interface IDiaryService
     /// <summary>
     /// 更新
     /// </summary>
-    /// <param name="one"></param>
     /// <returns></returns>
     Task<bool> UpdateAsync(Diary diary);
 
     /// <summary>
     /// 更新点赞[ give ]
     /// </summary>
-    /// <param name="Diary"></param>
+    /// <param name="diary"></param>
     /// <param name="type">更新的字段</param>
     /// <returns></returns>
     Task<bool> UpdatePortionAsync(Diary diary, string type);

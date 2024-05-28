@@ -10,7 +10,6 @@ public class ArticleService : IArticleService
     private const string Name = "Article_";
     private readonly SnblogContext _service;
     private readonly ServiceHelper _serviceHelper;
-    private readonly CacheUtils _cache;
 
     #endregion
 
@@ -27,7 +26,6 @@ public class ArticleService : IArticleService
         _serviceHelper = serviceHelper;
         // 获取服务提供程序中的实例
         _service = serviceProvider.GetRequiredService<SnblogContext>();
-        _cache = (CacheUtils)serviceProvider.GetRequiredService<ICacheUtil>();
     }
 
     #endregion
@@ -46,10 +44,10 @@ public class ArticleService : IArticleService
             return identity switch
             {
                 // 读取文章数量，无需筛选条件
-                0 => await GetArticleCountAsync(cacheKey),
-                1 => await GetArticleCountAsync(cacheKey,c => c.Type.Name == type),
-                2 => await GetArticleCountAsync(cacheKey,c => c.Tag.Name == type),
-                3 => await GetArticleCountAsync(cacheKey,c => c.User.Name == type),
+                0 => await GetArticleCountAsync(),
+                1 => await GetArticleCountAsync(c => c.Type.Name == type),
+                2 => await GetArticleCountAsync(c => c.Tag.Name == type),
+                3 => await GetArticleCountAsync(c => c.User.Name == type),
                 var _ => -1,
             };
         });
@@ -58,10 +56,9 @@ public class ArticleService : IArticleService
     /// <summary>
     /// 获取文章的数量
     /// </summary>
-    /// <param name="cacheKey"></param>
     /// <param name="predicate">筛选文章的条件</param>
     /// <returns>返回文章的数量</returns>
-    private async Task<int> GetArticleCountAsync(string cacheKey,Expression<Func<Article,bool>> predicate = null)
+    private async Task<int> GetArticleCountAsync(Expression<Func<Article,bool>> predicate = null)
     {
         var query = _service.Articles.AsNoTracking();
         //如果有筛选条件
@@ -99,10 +96,10 @@ public class ArticleService : IArticleService
         {
             return identity switch
             {
-                0 => await Contains(cacheKey,l => l.Name.ToUpper().Contains(upNames)),
-                1 => await Contains(cacheKey,l => l.Name.ToUpper().Contains(upNames) && l.Type.Name == type),
-                2 => await Contains(cacheKey,l => l.Name.ToUpper().Contains(upNames) && l.Tag.Name == type),
-                var _ => await Contains(cacheKey,l => l.Name.ToUpper().Contains(upNames)),
+                0 => await Contains(l => l.Name.ToUpper().Contains(upNames)),
+                1 => await Contains(l => l.Name.ToUpper().Contains(upNames) && l.Type.Name == type),
+                2 => await Contains(l => l.Name.ToUpper().Contains(upNames) && l.Tag.Name == type),
+                var _ => await Contains(l => l.Name.ToUpper().Contains(upNames)),
             };
         });
     }
@@ -110,9 +107,8 @@ public class ArticleService : IArticleService
     /// <summary>
     /// 执行模糊查询操作，根据提供的条件筛选文章。
     /// </summary>
-    /// <param name="key"></param>
     /// <param name="predicate">筛选文章的条件表达式。如果为null，则返回所有文章。</param>
-    private async Task<List<ArticleDto>> Contains(string key,Expression<Func<Article,bool>> predicate)
+    private async Task<List<ArticleDto>> Contains(Expression<Func<Article,bool>> predicate)
     {
         var ret = await _service.Articles.Where(predicate).SelectArticle().ToListAsync();
         return ret;
@@ -254,25 +250,25 @@ public class ArticleService : IArticleService
             switch(identity)
             {
             case 0:
-                return await GetPaging(cacheKey,pageIndex,pageSize,ordering,isDesc);
+                return await GetPaging(pageIndex,pageSize,ordering,isDesc);
             case 1:
-                return await GetPaging(cacheKey,pageIndex,pageSize,ordering,isDesc,w => w.Type.Name == type);
+                return await GetPaging(pageIndex,pageSize,ordering,isDesc,w => w.Type.Name == type);
             case 2:
-                return await GetPaging(cacheKey,pageIndex,pageSize,ordering,isDesc,w => w.Tag.Name == type);
+                return await GetPaging(pageIndex,pageSize,ordering,isDesc,w => w.Tag.Name == type);
             case 3:
-                return await GetPaging(cacheKey,pageIndex,pageSize,ordering,isDesc,w => w.User.Name == type);
+                return await GetPaging(pageIndex,pageSize,ordering,isDesc,w => w.User.Name == type);
             case 4:
               string[] name = type.Split(',');
-                return await GetPaging(cacheKey,pageIndex,pageSize,ordering,isDesc,w =>
+                return await GetPaging(pageIndex,pageSize,ordering,isDesc,w =>
                     w.Tag.Name == name[0]
                     && w.User.Name == name[1]);
             default:
-                return await GetPaging(cacheKey,pageIndex,pageSize,ordering,isDesc);
+                return await GetPaging(pageIndex,pageSize,ordering,isDesc);
             }
         });
     }
 
-    private async Task<List<ArticleDto>> GetPaging(string key,int pageIndex,int pageSize,string ordering,bool isDesc,
+    private async Task<List<ArticleDto>> GetPaging(int pageIndex,int pageSize,string ordering,bool isDesc,
                                                    Expression<Func<Article,bool>> predicate = null)
     {
         var article = _service.Articles.AsQueryable();

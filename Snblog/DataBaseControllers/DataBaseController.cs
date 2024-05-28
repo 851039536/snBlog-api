@@ -42,7 +42,7 @@ public class DataBaseController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("token")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Roles = "kai,1")]
     public ActionResult CheckToken()
     {
         return Ok();

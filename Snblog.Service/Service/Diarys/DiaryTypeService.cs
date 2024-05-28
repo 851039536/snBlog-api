@@ -1,4 +1,6 @@
-﻿namespace Snblog.Service.Service;
+﻿using Snblog.IService.IService.Diarys;
+
+namespace Snblog.Service.Service.Diarys;
 
 public class DiaryTypeService : IDiaryTypeService
 {
@@ -6,9 +8,9 @@ public class DiaryTypeService : IDiaryTypeService
     private readonly CacheUtils _cache;
     private int _rInt;
 
-    readonly EntityData<DiaryType> _ret = new();
+    private readonly EntityData<DiaryType> _ret = new();
 
-    const string NAME = "diaryType_";
+    private const string Name = "diaryType_";
     private string _cacheKey;
 
     public DiaryTypeService(SnblogContext service, ICacheUtil cache)
@@ -19,7 +21,7 @@ public class DiaryTypeService : IDiaryTypeService
 
     public async Task<bool> AddAsync(DiaryType entity)
     {
-        Log.Information($"{NAME}{ServiceConfig.Add}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Add}{entity}");
 
         await _service.DiaryTypes.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
@@ -27,7 +29,7 @@ public class DiaryTypeService : IDiaryTypeService
 
     public async Task<int> GetSumAsync(bool cache)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Sum}{cache}";
+        _cacheKey = $"{Name}{ServiceConfig.Sum}{cache}";
         Log.Information(_cacheKey);
 
 
@@ -44,7 +46,7 @@ public class DiaryTypeService : IDiaryTypeService
 
     public async Task<bool> DeleteAsync(int id)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Del}{id}";
+        _cacheKey = $"{Name}{ServiceConfig.Del}{id}";
         Log.Information(_cacheKey);
 
         var ret = await _service.DiaryTypes.FindAsync(id);
@@ -56,7 +58,7 @@ public class DiaryTypeService : IDiaryTypeService
 
     public async Task<List<DiaryType>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}";
+        _cacheKey = $"{Name}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}";
         Log.Information(_cacheKey);
 
         if (cache)
@@ -86,7 +88,7 @@ public class DiaryTypeService : IDiaryTypeService
 
     public async Task<DiaryType> GetByIdAsync(int id, bool cache)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Bid}{id}_{cache}";
+        _cacheKey = $"{Name}{ServiceConfig.Bid}{id}_{cache}";
         Log.Information(_cacheKey);
         DiaryType diaryType;
 
@@ -103,7 +105,7 @@ public class DiaryTypeService : IDiaryTypeService
 
     public async Task<DiaryType> GetTypeAsync(int type, bool cache)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Bid}{type}_{cache}";
+        _cacheKey = $"{Name}{ServiceConfig.Bid}{type}_{cache}";
         Log.Information(_cacheKey);
 
         DiaryType diaryType;
@@ -120,7 +122,7 @@ public class DiaryTypeService : IDiaryTypeService
 
     public async Task<bool> UpdateAsync(DiaryType entity)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Up}{entity.Id}";
+        _cacheKey = $"{Name}{ServiceConfig.Up}{entity.Id}";
         Log.Information(_cacheKey);
 
         _service.DiaryTypes.Update(entity);
