@@ -8,7 +8,7 @@ public interface IInterfaceService
     /// <summary>
     ///条件查询 
     /// </summary>
-    /// <param name="identity">用户&分类: 0 | 用户: 1 | 分类: 2</param>
+    /// <param name="identity">用户分类: 0 | 用户: 1 | 分类: 2</param>
     /// <param name="userName">用户名称</param>
     /// <param name="type">类别</param>
     /// <param name="cache">缓存</param>

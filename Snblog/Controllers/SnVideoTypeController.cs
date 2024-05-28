@@ -51,7 +51,7 @@ public class SnVideoTypeController : BaseController
     [HttpGet("CountAsync")]
     public async Task<IActionResult> CountAsync()
     {
-        var data = await _service.CountAsync();
+        int data = await _service.CountAsync();
         return ApiResponse(data: data);
     }
 
@@ -64,7 +64,7 @@ public class SnVideoTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(SnVideoType entity)
     {
-        var data = await _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data:data);
     }
 
@@ -77,7 +77,7 @@ public class SnVideoTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(SnVideoType entity)
     {
-        var data = await  _service.DeleteAsync(entity);
+        bool data = await  _service.DeleteAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -90,7 +90,7 @@ public class SnVideoTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(SnVideoType entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return  ApiResponse(data: data);
     }
 }

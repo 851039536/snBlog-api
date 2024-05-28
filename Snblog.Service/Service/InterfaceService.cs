@@ -5,7 +5,7 @@
 /// </summary>
 public class InterfaceService : IInterfaceService
 {
-    const string NAME = "Interface_";
+    private const string Name = "Interface_";
 
     private string _cacheKey;
 
@@ -33,7 +33,7 @@ public class InterfaceService : IInterfaceService
     ///  <param name="cache">缓存</param>
     public async Task<List<InterfaceDto>> GetConditionAsync(int identity,string userName,string type,bool cache)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Contains}{identity}_{userName}_{type}_{cache}";
+        _cacheKey = $"{Name}{ServiceConfig.Contains}{identity}_{userName}_{type}_{cache}";
         Log.Information(_cacheKey);
 
         if (cache)
@@ -66,7 +66,7 @@ public class InterfaceService : IInterfaceService
     private async Task<List<InterfaceDto>> GetInterfacesPaging(int pageIndex,int pageSize,bool isDesc,
         Expression<Func<Interface,bool>> predicate = null)
     {
-        IQueryable<Interface> interfaces = _service.Interfaces.AsQueryable();
+        var interfaces = _service.Interfaces.AsQueryable();
 
         if (predicate != null)
         {
@@ -93,7 +93,7 @@ public class InterfaceService : IInterfaceService
     public async Task<List<InterfaceDto>> GetPagingAsync(int identity,string type,int pageIndex,int pageSize,
         bool isDesc,bool cache)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}";
+        _cacheKey = $"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}";
         Log.Information(_cacheKey);
 
         if (cache)
@@ -127,21 +127,21 @@ public class InterfaceService : IInterfaceService
 
     public async Task<bool> AddAsync(Interface entity)
     {
-        Log.Information($"{NAME}{ServiceConfig.Add}");
+        Log.Information($"{Name}{ServiceConfig.Add}");
         await _service.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> UpdateAsync(Interface entity)
     {
-        Log.Information($"{NAME}{ServiceConfig.Up}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Up}{entity}");
         _service.Interfaces.Update(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        Log.Information($"{NAME}{ServiceConfig.Del}{id}");
+        Log.Information($"{Name}{ServiceConfig.Del}{id}");
         var ret = await _service.Interfaces.FindAsync(id);
         if (ret == null) return false;
         _service.Interfaces.Remove(ret); //删除单个
@@ -158,7 +158,7 @@ public class InterfaceService : IInterfaceService
     /// <returns>entity</returns>
     public async Task<InterfaceDto> GetByIdAsync(int id,bool cache)
     {
-        _cacheKey = $"{NAME}{ServiceConfig.Bid}{id}_{cache}";
+        _cacheKey = $"{Name}{ServiceConfig.Bid}{id}_{cache}";
         Log.Information(_cacheKey);
 
         if (cache)

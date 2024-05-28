@@ -29,7 +29,7 @@ public class SnippetTypeSubController : BaseController
     [HttpGet("sum")]
     public async Task<IActionResult> GetSumAsync(bool cache = false)
     {
-        var data = await _service.GetSumAsync(cache);
+        int data = await _service.GetSumAsync(cache);
         return ApiResponse(cache: cache, data: data);
     }
     #endregion
@@ -107,7 +107,7 @@ public class SnippetTypeSubController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(SnippetTypeSub entity)
     {
-        var data = await _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
     #endregion
@@ -122,7 +122,7 @@ public class SnippetTypeSubController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(SnippetTypeSub entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
     #endregion
@@ -137,7 +137,7 @@ public class SnippetTypeSubController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var data = await _service.DeleteAsync(id);
+        bool data = await _service.DeleteAsync(id);
         return ApiResponse(data: data);
     }
     #endregion

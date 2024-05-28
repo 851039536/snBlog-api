@@ -91,7 +91,7 @@ public class UserTalkController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DelAsync(int id)
     {
-        var data = await _service.DelAsync(id);
+        bool data = await _service.DelAsync(id);
         return ApiResponse(data: data);
     }
 
@@ -107,7 +107,7 @@ public class UserTalkController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(UserTalk entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
 

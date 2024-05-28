@@ -83,7 +83,7 @@ public class InterfaceController : BaseController
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(Interface entity)
     {
-        var data = await _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -97,7 +97,7 @@ public class InterfaceController : BaseController
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(Interface entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
     #endregion
@@ -112,7 +112,7 @@ public class InterfaceController : BaseController
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var data = await _service.DeleteAsync(id);
+        bool data = await _service.DeleteAsync(id);
         return ApiResponse(data: data);
     }
     #endregion

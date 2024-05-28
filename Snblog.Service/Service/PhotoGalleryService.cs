@@ -3,7 +3,7 @@
 public class PhotoGalleryService : IPhotoGalleryService
 {
     // 常量字符串。这些常量字符串可以在代码中多次使用，而不必担心它们的值会被修改。
-    const string Name = "PhotoGallery_";
+    private const string Name = "PhotoGallery_";
 
     private readonly EntityDataDto<PhotoGalleryDto> _retDto = new();
 
@@ -196,7 +196,7 @@ public class PhotoGalleryService : IPhotoGalleryService
     private async Task<List<PhotoGalleryDto>> GetPaging(int pageIndex, int pageSize, string ordering, bool isDesc,
         Expression<Func<PhotoGallery, bool>> predicate = null)
     {
-        IQueryable<PhotoGallery> articles = _service.PhotoGalleries.AsQueryable();
+        var articles = _service.PhotoGalleries.AsQueryable();
 
         // 查询条件,如果为空则无条件查询
         if (predicate != null)
@@ -250,7 +250,7 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<List<PhotoGalleryDto>> GetContainsAsync(int identity, string type, string name, bool cache)
     {
-        var upNames = name.ToUpper();
+        string upNames = name.ToUpper();
 
         ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 

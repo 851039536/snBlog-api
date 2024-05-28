@@ -5,22 +5,17 @@ namespace Snblog.Service.Service.Diarys;
 public class DiaryService : IDiaryService
 {
     private string _cacheKey;
-    const string Name = "diary_";
+    private const string Name = "diary_";
 
     private readonly ServiceHelper _serviceHelper;
 
-    private readonly EntityData<Diary> _ret = new();
-    private readonly EntityDataDto<DiaryDto> _rDto = new();
-
-    private readonly CacheUtils _cache;
     private readonly SnblogContext _service;
 
 
-    public DiaryService(SnblogContext service,ICacheUtil cache,ServiceHelper serviceHelper)
+    public DiaryService(SnblogContext service,ServiceHelper serviceHelper)
     {
         _service = service;
         _serviceHelper = serviceHelper;
-        _cache = (CacheUtils)cache;
     }
 
     #region 查询总数

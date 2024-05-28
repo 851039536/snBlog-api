@@ -1,5 +1,4 @@
 ﻿using Snblog.Service.AngleSharp;
-using Snblog.Util.GlobalVar;
 
 namespace Snblog.DataBaseControllers;
 
@@ -14,7 +13,6 @@ public class DataBaseController : ControllerBase
     /// <summary>
     /// 数据备份
     /// </summary>
-    /// <param name="path">备份路径默认null</param>
     /// <returns></returns>
     [HttpPost("SqlBackups")]
     public ActionResult SqlBackups()

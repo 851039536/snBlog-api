@@ -9,7 +9,7 @@ public class SnippetTagService : ISnippetTagService
     private readonly EntityDataDto<SnippetTagDto> _rDto = new();
     private readonly IMapper _mapper;
 
-    const string NAME = "SnippetTag_";
+    private const string Name = "SnippetTag_";
 
     public SnippetTagService(SnblogContext service, ICacheUtil cache, IMapper mapper)
     {
@@ -25,7 +25,7 @@ public class SnippetTagService : ISnippetTagService
     /// <returns>bool</returns>
     public async Task<bool> DeleteAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Del}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
 
         var snippetTag = await _service.SnippetTags.FindAsync(id);
         if (snippetTag == null) return false;
@@ -41,7 +41,7 @@ public class SnippetTagService : ISnippetTagService
     /// <returns>entity</returns>
     public async Task<SnippetTagDto> GetByIdAsync(int id, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Bid}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}");
         if (cache)
         {
             _rDto.Entity = _cache.GetValue<SnippetTagDto>(ServiceConfig.CacheKey);
@@ -55,7 +55,7 @@ public class SnippetTagService : ISnippetTagService
         
     public async Task<SnippetTagDto> GetByTitle(string name, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Bid}{name}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{name}");
         if (cache)
         {
             _rDto.Entity = _cache.GetValue<SnippetTagDto>(ServiceConfig.CacheKey);
@@ -75,7 +75,7 @@ public class SnippetTagService : ISnippetTagService
     /// <returns>bool</returns>
     public async Task<bool> AddAsync(SnippetTag entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Add}{entity.Id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity.Id}");
         await _service.SnippetTags.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
     }
@@ -87,7 +87,7 @@ public class SnippetTagService : ISnippetTagService
     /// <returns>bool</returns>
     public async Task<bool> UpdateAsync(SnippetTag entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Up}{entity.Id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity.Id}");
 
         _service.SnippetTags.Update(entity);
         return await _service.SaveChangesAsync() > 0;
@@ -103,7 +103,7 @@ public class SnippetTagService : ISnippetTagService
     /// <returns>list-entity</returns>
     public async Task<List<SnippetTagDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<SnippetTagDto>>(ServiceConfig.CacheKey);
@@ -132,7 +132,7 @@ public class SnippetTagService : ISnippetTagService
     /// <returns>list-entity</returns>
     public async Task<List<SnippetTagDto>> GetAllAsync(bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.All}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.All}{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<SnippetTagDto>>(ServiceConfig.CacheKey);
@@ -152,7 +152,7 @@ public class SnippetTagService : ISnippetTagService
     /// <returns>int</returns>
     public async Task<int> GetSumAsync(bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Sum}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{cache}");
         if (cache)
         {
             _ret.EntityCount = _cache.GetValue<int>(ServiceConfig.CacheKey);

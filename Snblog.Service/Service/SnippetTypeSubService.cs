@@ -9,7 +9,7 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     private readonly EntityDataDto<SnippetTypeSubDto> _rDto = new();
     private readonly IMapper _mapper;
 
-    const string NAME = "SnippetTypeSub_";
+    private const string Name = "SnippetTypeSub_";
 
     public SnippetTypeSubService(SnblogContext service,ICacheUtil cache,IMapper mapper)
     {
@@ -25,7 +25,7 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     /// <returns>bool</returns>
     public async Task<bool> DeleteAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Del}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
 
         var ret = await _service.SnippetTypes.FindAsync(id);
         if (ret == null) return false;
@@ -42,7 +42,7 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     /// <returns>entity</returns>
     public async Task<SnippetTypeSubDto> GetByIdAsync(int id,bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Bid}{id}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
         if (cache)
         {
             _rDto.Entity = _cache.GetValue<SnippetTypeSubDto>(ServiceConfig.CacheKey);
@@ -62,7 +62,7 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     /// <returns>bool</returns>
     public async Task<bool> AddAsync(SnippetTypeSub entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Add}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
 
         await _service.SnippetTypeSubs.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
@@ -75,7 +75,7 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     /// <returns>bool</returns>
     public async Task<bool> UpdateAsync(SnippetTypeSub entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Up}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
         _service.SnippetTypeSubs.Update(entity);
         return await _service.SaveChangesAsync() > 0;
     }
@@ -90,7 +90,7 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     /// <returns>list-entity</returns>
     public async Task<List<SnippetTypeSubDto>> GetPagingAsync(int pageIndex,int pageSize,bool isDesc,bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<SnippetTypeSubDto>>(ServiceConfig.CacheKey);
@@ -118,7 +118,7 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     /// <returns>list-entity</returns>
     public async Task<List<SnippetTypeSubDto>> GetAllAsync(bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.All}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.All}{cache}");
 
         if (cache)
         {
@@ -139,7 +139,7 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     /// <returns>int</returns>
     public async Task<int> GetSumAsync(bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Sum}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{cache}");
 
         if (cache)
         {
@@ -157,10 +157,11 @@ public class SnippetTypeSubService : ISnippetTypeSubService
     /// 根据主表类别id查询
     /// </summary>
     /// <param name="snippetTypeId"></param>
+    /// <param name="cache"></param>
     /// <returns></returns>
     public async Task<List<SnippetTypeSubDto>> GetCondition(int snippetTypeId,bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Condition}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Condition}{cache}");
 
         if (cache)
         {

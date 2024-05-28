@@ -34,7 +34,7 @@ public class CacheUtils : ICacheUtil
     /// <returns>返回传入的格式数据</returns>
     public T GetValue<T>(string key)
     {
-        T value = _cache.Get<T>(key);
+        var value = _cache.Get<T>(key);
         return value;
     }
     /// <summary>

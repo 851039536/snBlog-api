@@ -65,7 +65,7 @@ public class SnPictureTypeService : ISnPictureTypeService
 
     public async Task<SnPictureType> GetByIdAsync(int id)
     {
-        SnPictureType pictureType = default;
+        SnPictureType pictureType;
         pictureType = await _service.SnPictureTypes.FindAsync(id);
         return pictureType;
     }

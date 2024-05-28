@@ -2,25 +2,22 @@
 
 public class UserTalkService : IUserTalkService
 {
-    const string Name = "userTalk_";
-    private readonly EntityData<UserTalk> _ret = new();
+    private const string Name = "userTalk_";
     private readonly EntityDataDto<UserTalkDto> _retDto = new();
 
     //服务
     private readonly SnblogContext _service;
     private readonly CacheUtils _cache;
-    private readonly IMapper _mapper;
 
-    public UserTalkService(SnblogContext service, ICacheUtil cache, IMapper mapper)
+    public UserTalkService(SnblogContext service, ICacheUtil cache)
     {
         _service = service;
-        _mapper = mapper;
         _cache = (CacheUtils)cache;
     }
 
     public async Task<List<UserTalkDto>> GetContainsAsync(int identity, string type, string name, bool cache)
     {
-        var upNames = name.ToUpper();
+        string upNames = name.ToUpper();
         ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 
         if (cache)
@@ -80,7 +77,7 @@ public class UserTalkService : IUserTalkService
     private async Task<List<UserTalkDto>> GetPaging(int pageIndex, int pageSize, string ordering, bool isDesc,
         Expression<Func<UserTalk, bool>> predicate = null)
     {
-        IQueryable<UserTalk> userTalks = _service.UserTalks.AsQueryable();
+        var userTalks = _service.UserTalks.AsQueryable();
 
         // 查询条件,如果为空则无条件查询
         if (predicate != null)

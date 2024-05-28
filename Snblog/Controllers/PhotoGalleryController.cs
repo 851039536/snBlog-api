@@ -141,7 +141,7 @@ public class PhotoGalleryController : BaseController
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(PhotoGallery entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -158,7 +158,7 @@ public class PhotoGalleryController : BaseController
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var data = await _service.DelAsync(id);
+        bool data = await _service.DelAsync(id);
         return ApiResponse(data: data);
     }
 
@@ -175,7 +175,7 @@ public class PhotoGalleryController : BaseController
     [HttpPut("upPortion")]
     public async Task<IActionResult> UpdatePortionAsync(PhotoGallery entity, string type)
     {
-        var data = await _service.UpdatePortionAsync(entity, type);
+        bool data = await _service.UpdatePortionAsync(entity, type);
         return ApiResponse(data: data);
     }
 

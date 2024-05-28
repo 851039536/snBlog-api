@@ -50,7 +50,7 @@ public class NavigationService : INavigationService
     private async Task<List<NavigationDto>> Paging(int pageIndex,int pageSize,string ordering,bool isDesc,
         Expression<Func<Navigation,bool>> predicate = null)
     {
-        IQueryable<Navigation> navigation = _service.Navigations.AsQueryable();
+        var navigation = _service.Navigations.AsQueryable();
 
         // 查询条件,如果为空则无条件查询
         if (predicate != null)
@@ -85,7 +85,7 @@ public class NavigationService : INavigationService
     {
 
         ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
-        Navigation ret = await _service.Navigations.FindAsync(id);
+        var ret = await _service.Navigations.FindAsync(id);
         if (ret == null) return false;
         _service.Navigations.Remove(ret);
         return await _service.SaveChangesAsync() > 0;
@@ -160,7 +160,7 @@ public class NavigationService : INavigationService
     {
         // 获取所有记录ID
         var allIds = _service.Navigations.Select(entity => entity.Id).ToList();
-        foreach (var id in allIds)
+        foreach (int id in allIds)
         {
             // 根据记录ID获取实体对象
             var entity = _service.Navigations.FirstOrDefault(e => e.Id == id);
@@ -168,7 +168,7 @@ public class NavigationService : INavigationService
             Random random = new();
             if (entity != null)
             {
-                var num = random.Next(minValue,maxValue); // 生成1到10的随机数
+                int num = random.Next(minValue,maxValue); // 生成1到10的随机数
                 // 更新"Img"字段的值
                 entity.Img = num + ".jpg";
                 // 保存更改
@@ -181,7 +181,7 @@ public class NavigationService : INavigationService
     {
         ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{identity}_{type}_{cache}");
 
-        IQueryable<Navigation> ret = _service.Navigations.AsQueryable().AsNoTracking();
+        var ret = _service.Navigations.AsQueryable().AsNoTracking();
 
         if (cache)
         {
@@ -237,7 +237,7 @@ public class NavigationService : INavigationService
     /// <returns></returns>
     public async Task<List<NavigationDto>> GetContainsAsync(int identity,string type,string name,bool cache)
     {
-        var upNames = name.ToLower();
+        string upNames = name.ToLower();
 
         ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 

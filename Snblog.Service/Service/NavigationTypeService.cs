@@ -1,20 +1,15 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Snblog.Service.Service;
+﻿namespace Snblog.Service.Service;
 
 public class NavigationTypeService : INavigationTypeService
 {
-
-    private readonly ILogger<NavigationTypeService> _logger;
     private readonly SnblogContext _service;//DB
     private readonly CacheUtils _cacheutil;
     private int result_Int;
-    private List<NavigationType> result_List = null;
-    public NavigationTypeService(SnblogContext service, ICacheUtil cacheutil, ILogger<NavigationTypeService> logger)
+    private List<NavigationType> result_List;
+    public NavigationTypeService(SnblogContext service, ICacheUtil cacheutil)
     {
         _service = service;
         _cacheutil = (CacheUtils)cacheutil;
-        _logger = logger;
     }
 
     public async Task<bool> AddAsync(NavigationType entity)

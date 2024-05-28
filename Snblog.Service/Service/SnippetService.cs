@@ -7,7 +7,7 @@ public class SnippetService : ISnippetService
     private readonly EntityData<Snippet> _ret = new();
     private readonly EntityDataDto<SnippetDto> _rDto = new();
 
-    const string NAME = "Snippet_";
+    private const string Name = "Snippet_";
 
     public SnippetService(ICacheUtil cacheUtil, SnblogContext coreDbContext)
     {
@@ -17,9 +17,9 @@ public class SnippetService : ISnippetService
 
     public async Task<bool> DeleteAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Del}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
 
-        Snippet snippet = await _service.Snippets.FindAsync(id);
+        var snippet = await _service.Snippets.FindAsync(id);
         if (snippet == null) return false;
         _service.Snippets.Remove(snippet); //删除单个
         _service.Remove(snippet); //直接在context上Remove()方法传入model，它会判断类型
@@ -34,7 +34,7 @@ public class SnippetService : ISnippetService
     /// <returns>entity</returns>
     public async Task<SnippetDto> GetByIdAsync(int id, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Bid}{id}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
         if (cache)
         {
             _rDto.Entity = _cache.GetValue<SnippetDto>(ServiceConfig.CacheKey);
@@ -50,14 +50,14 @@ public class SnippetService : ISnippetService
 
     public async Task<bool> AddAsync(Snippet entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Add}{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
         await _service.Snippets.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> UpdateAsync(Snippet entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Up}{entity.Id}_{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity.Id}_{entity}");
 
         //entity.TimeModified = DateTime.Now; //更新时间
         _service.Snippets.Update(entity);
@@ -66,7 +66,7 @@ public class SnippetService : ISnippetService
 
     public async Task<int> GetSumAsync(int identity, string type, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Sum}{identity}_{type}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{identity}_{type}_{cache}");
 
         if (cache)
         {
@@ -104,7 +104,7 @@ public class SnippetService : ISnippetService
     /// <returns>int</returns>
     public async Task<int> GetStrSumAsync(int identity, string name, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}统计_{identity}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}统计_{identity}_{name}_{cache}");
 
         if (cache)
         {
@@ -116,26 +116,26 @@ public class SnippetService : ISnippetService
         switch (identity)
         {
             case 0:
-                List<string> all = await _service.Snippets.Select(c => c.Text).ToListAsync();
+                var all = await _service.Snippets.Select(c => c.Text).ToListAsync();
                 num += all.Sum(t => t.Length);
 
                 _ret.EntityCount = num;
                 break;
             case 1:
-                List<string> types = await _service.Snippets.Where(w => w.Type.Name == name).Select(c => c.Text)
-                    .ToListAsync();
+                var types = await _service.Snippets.Where(w => w.Type.Name == name).Select(c => c.Text)
+                                          .ToListAsync();
                 num += types.Sum(t => t.Length);
                 _ret.EntityCount = num;
                 break;
             case 2:
-                List<string> tags = await _service.Snippets.Where(w => w.Tag.Name == name)
-                    .Select(c => c.Text).ToListAsync();
+                var tags = await _service.Snippets.Where(w => w.Tag.Name == name)
+                                         .Select(c => c.Text).ToListAsync();
                 num += tags.Sum(t => t.Length);
                 _ret.EntityCount = num;
                 break;
             case 3:
-                List<string> users = await _service.Snippets.Where(w => w.User.Name == name).Select(c => c.Text)
-                    .ToListAsync();
+                var users = await _service.Snippets.Where(w => w.User.Name == name).Select(c => c.Text)
+                                          .ToListAsync();
                 num += users.Sum(t => t.Length);
                 _ret.EntityCount = num;
                 break;
@@ -158,7 +158,7 @@ public class SnippetService : ISnippetService
     /// <returns>list-entity</returns>
     public async Task<List<SnippetDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize, bool isDesc, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{isDesc}_{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<SnippetDto>>(ServiceConfig.CacheKey);
@@ -248,8 +248,8 @@ public class SnippetService : ISnippetService
 
     public async Task<bool> UpdatePortionAsync(Snippet entity, string type)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging} {entity.Id}_{type}");
-        Snippet result = await _service.Snippets.FindAsync(entity.Id);
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Paging} {entity.Id}_{type}");
+        var result = await _service.Snippets.FindAsync(entity.Id);
         if (result == null) return false;
         switch (type)
         {
@@ -280,9 +280,9 @@ public class SnippetService : ISnippetService
     public async Task<List<SnippetDto>> GetContainsAsync(int identity, string type, string name, bool cache,
         int pageIndex, int pageSize)
     {
-        var uppercaseName = name.ToUpper();
+        string uppercaseName = name.ToUpper();
 
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<SnippetDto>>(ServiceConfig.CacheKey);

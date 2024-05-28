@@ -5,7 +5,7 @@ public class SnPictureService : ISnPictureService
     private readonly SnblogContext _service; //DB
     private readonly CacheUtils _cacheutil;
     private int result_Int;
-    private List<SnPicture> result_List = default;
+    private List<SnPicture> result_List;
 
     public SnPictureService(SnblogContext service, ICacheUtil cacheutil)
     {
@@ -47,7 +47,7 @@ public class SnPictureService : ISnPictureService
 
     public async Task<SnPicture> GetByIdAsync(int id)
     {
-        SnPicture ret = default;
+        SnPicture ret;
         ret = await _service.SnPictures.FindAsync(id);
         return ret;
     }

@@ -15,8 +15,8 @@ public class CacheManager:ICacheManager
     {
         // 判断是否存在
         bool found = _cache.TryGetValue(key,out string result);
-        List<string> keys = GetAllKeys();
-        foreach (var i in keys)
+        var keys = GetAllKeys();
+        foreach (string i in keys)
         {
             if (i == key) return true;
         }
@@ -30,7 +30,7 @@ public class CacheManager:ICacheManager
     public List<string> GetAllKeys()
     {
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
-        var entries = _cache.GetType().GetField("_entries", flags)?.GetValue(_cache);
+        object entries = _cache.GetType().GetField("_entries", flags)?.GetValue(_cache);
         var cacheItems = entries as IDictionary;
         var keys = new List<string>();
         if (cacheItems == null) return keys;
@@ -48,7 +48,7 @@ public class CacheManager:ICacheManager
     public List<T> GetAllValues<T>()
     {
         var cacheKeys = GetAllKeys();
-        List<T> vals = new List<T>();
+        var vals = new List<T>();
         cacheKeys.ForEach(i =>
         {
             T t;
@@ -82,8 +82,7 @@ public class CacheManager:ICacheManager
         if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
 
-        T v;
-        if (_cache.TryGetValue(key, out v))
+        if (_cache.TryGetValue(key, out T _))
             _cache.Remove(key);
         _cache.Set(key, value);
     }
@@ -93,13 +92,13 @@ public class CacheManager:ICacheManager
     /// </summary>
     /// <param name="key">关键字</param>
     /// <param name="value">缓存值</param>
+    /// <param name="span"></param>
     public void Set_SlidingExpire<T>(string key, T value, TimeSpan span)
     {
         if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
 
-        T v;
-        if (_cache.TryGetValue(key, out v))
+        if (_cache.TryGetValue(key, out T _))
             _cache.Remove(key);
         _cache.Set(key, value, new MemoryCacheEntryOptions()
         {
@@ -112,6 +111,7 @@ public class CacheManager:ICacheManager
     /// </summary>
     /// <param name="key">关键字</param>
     /// <param name="value">缓存值</param>
+    /// <param name="span"></param>
     public void Set_AbsoluteExpire<T>(string key, T value, TimeSpan span)
     {
         _cache.Remove(key);
@@ -130,8 +130,7 @@ public class CacheManager:ICacheManager
         if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
 
-        T v;
-        if (_cache.TryGetValue(key, out v))
+        if (_cache.TryGetValue(key, out T _))
             _cache.Remove(key);
         _cache.Set(key, value, new MemoryCacheEntryOptions()
         {

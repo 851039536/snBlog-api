@@ -73,7 +73,7 @@ public class UserController : BaseController
             new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
         });
         // 获取当前时间
-        DateTime now = DateTime.UtcNow;
+        var now = DateTime.UtcNow;
         //生成token
         var jwtSecurityToken = new JwtSecurityToken(
             issuer: _jwtModel.Issuer, //签发者
@@ -172,7 +172,7 @@ public class UserController : BaseController
     [HttpGet("sum")]
     public async Task<IActionResult> GetSumAsync(bool cache = false)
     {
-        var data = await _service.GetSumAsync(cache);
+        int data = await _service.GetSumAsync(cache);
         return ApiResponse(cache:cache,data:data);
     }
     //TODO 查询失败
@@ -199,7 +199,7 @@ public class UserController : BaseController
     {
         entity.TimeCreate = DateTime.Now;
         entity.TimeModified = DateTime.Now;
-        var data = await _service.AddAsync(entity);
+        int data = await _service.AddAsync(entity);
         return ApiResponse(data:data);
     }
 
@@ -212,7 +212,7 @@ public class UserController : BaseController
     [HttpDelete("del")]
     public async Task<IActionResult> Del(int id)
     {
-        var data = await _service.DelAsync(id);
+        bool data = await _service.DelAsync(id);
         return ApiResponse(data:data);
     }
 
@@ -226,7 +226,7 @@ public class UserController : BaseController
     public async Task<IActionResult> UpdateAsync(User user)
     {
         user.TimeModified = DateTime.Now;
-        var data = await _service.UpdateAsync(user);
+        bool data = await _service.UpdateAsync(user);
         return ApiResponse(data:data);
     }
 

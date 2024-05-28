@@ -7,7 +7,7 @@ public class SnippetVersionService : ISnippetVersionService
     private readonly EntityData<SnippetVersion> _ret = new();
     private readonly EntityDataDto<SnippetVersionDto> _rDto = new();
     private readonly IMapper _mapper;
-    const string name = "SnippetVersion_";
+    private const string Name = "SnippetVersion_";
 
     public SnippetVersionService(ICacheUtil cacheUtil, SnblogContext coreDbContext, IMapper mapper)
     {
@@ -18,7 +18,7 @@ public class SnippetVersionService : ISnippetVersionService
 
     public async Task<List<SnippetVersionDto>> GetAllBySnId(int id, bool cache)
     {
-        ServiceConfig.CacheInfo($"{name}{ServiceConfig.Condition}{id}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Condition}{id}{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<SnippetVersionDto>>(ServiceConfig.CacheKey);
@@ -32,7 +32,7 @@ public class SnippetVersionService : ISnippetVersionService
 
     public async Task<bool> DeleteAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{name}{ServiceConfig.Del}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
 
         var ret = await _service.SnippetVersions.FindAsync(id);
         if (ret == null) return false;
@@ -42,8 +42,8 @@ public class SnippetVersionService : ISnippetVersionService
     }
     public async Task<bool> AddAsync(SnippetVersion entity)
     {
-        ServiceConfig.CacheInfo($"{name}{ServiceConfig.Add}{entity}");
-        var num = await GetSumAsync(1, entity.SnippetId, false);
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
+        int num = await GetSumAsync(1, entity.SnippetId, false);
         entity.Count = num += 1;
         entity.TimeCreate = DateTime.Now;
         await _service.SnippetVersions.AddAsync(entity);
@@ -51,7 +51,7 @@ public class SnippetVersionService : ISnippetVersionService
     }
     public async Task<bool> UpdateAsync(SnippetVersion entity)
     {
-        ServiceConfig.CacheInfo($"{name}{ServiceConfig.Up}{entity.Id}_{entity}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity.Id}_{entity}");
 
         //entity.TimeModified = DateTime.Now; //更新时间
         _service.SnippetVersions.Update(entity);
@@ -59,7 +59,7 @@ public class SnippetVersionService : ISnippetVersionService
     }
     public async Task<int> GetSumAsync(int identity, int snId, bool cache)
     {
-        ServiceConfig.CacheInfo($"{name}{ServiceConfig.Sum}{identity}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{identity}{cache}");
 
         if (cache)
         {
@@ -83,8 +83,8 @@ public class SnippetVersionService : ISnippetVersionService
 
     public async Task<bool> UpdatePortionAsync(SnippetVersion entity, string type)
     {
-        ServiceConfig.CacheInfo($"{name}{ServiceConfig.Paging} {entity.Id}_{type}");
-        Snippet result = await _service.Snippets.FindAsync(entity.Id);
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Paging} {entity.Id}_{type}");
+        var result = await _service.Snippets.FindAsync(entity.Id);
         if (result == null) return false;
         switch (type)
         {
@@ -104,7 +104,7 @@ public class SnippetVersionService : ISnippetVersionService
 
     public async Task<SnippetVersionDto> GetByIdAsync(int id, bool cache)
     {
-        ServiceConfig.CacheInfo($"{name}{ServiceConfig.Bid}{id}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
         if (cache)
         {
             _rDto.Entity = _cache.GetValue<SnippetVersionDto>(ServiceConfig.CacheKey);

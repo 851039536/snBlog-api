@@ -90,7 +90,7 @@ public class SnTalkController : Controller
     [HttpGet("CountTypeAsync")]
     public async Task<IActionResult> CountAsync(int type)
     {
-        var data = await _service.CountAsync(type);
+        int data = await _service.CountAsync(type);
         return Ok(data);
     }
 

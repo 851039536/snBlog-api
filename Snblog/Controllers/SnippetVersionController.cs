@@ -18,7 +18,6 @@ public class SnippetVersionController : BaseController
     /// 构造函数
     /// </summary>
     /// <param name="service">service</param>
-    /// <param name="validator">validator</param>
     public SnippetVersionController(ISnippetVersionService service)
     {
         _service = service ?? throw new ArgumentNullException(nameof(service));

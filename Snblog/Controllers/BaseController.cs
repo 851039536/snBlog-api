@@ -42,7 +42,7 @@ public abstract class BaseController : ControllerBase
     /// <returns>一个封装了响应信息的JsonResult对象。</returns>
     protected IActionResult ApiResponseSuccess<T>(T data = default,bool cache = false, string message = "successful")
     {
-        return ApiResponse<T>(200, cache, 0, message, data);
+        return ApiResponse(200, cache, 0, message, data);
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public abstract class BaseController : ControllerBase
     /// <returns>一个封装了响应信息的JsonResult对象。</returns>
     protected IActionResult ApiResponseFailure<T>(int statusCode = 400, string message = "failed")
     {
-        return ApiResponse<T>(statusCode, false, 0, message, default);
+        return ApiResponse<T>(statusCode, false, 0, message);
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public abstract class BaseController : ControllerBase
     /// <returns>一个封装了响应信息的JsonResult对象。</returns>
     protected IActionResult ApiResponseNotFound<T>(string message = "Resource not found")
     {
-        return ApiResponse<T>(404, false, 0, message, default);
+        return ApiResponse<T>(404, false, 0, message);
     }
 
     /// <summary>
@@ -76,6 +76,6 @@ public abstract class BaseController : ControllerBase
     /// <returns>一个封装了响应信息的JsonResult对象。</returns>
     protected IActionResult ApiResponseInternalServerError<T>(string message = "Internal server error")
     {
-        return ApiResponse<T>(500, false, 0, message, default);
+        return ApiResponse<T>(500, false, 0, message);
     }
 }
