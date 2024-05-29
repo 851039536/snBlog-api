@@ -1,6 +1,7 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.IService.IService.Navigations;
+using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers.Navigation;
+namespace Snblog.Controllers.Navigations;
 
 /// <summary>
 /// 导航
@@ -13,6 +14,7 @@ public class NavigationController : BaseController
     private readonly INavigationService _service;
 
     #region 构造函数
+
     /// <summary>
     /// 构造函数
     /// </summary>
@@ -21,9 +23,11 @@ public class NavigationController : BaseController
     {
         _service = service;
     }
+
     #endregion
 
     #region 查询总数
+
     /// <summary>
     /// 查询总数 
     /// </summary>
@@ -37,10 +41,28 @@ public class NavigationController : BaseController
         int data = await _service.GetSumAsync(identity,type,cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
+    #region 主键查询
+
+    /// <summary>
+    /// 主键查询
+    /// </summary>
+    /// <param name="id">主键</param>
+    /// <param name="cache">是否开启缓存</param>
+    /// <returns></returns>
+    [HttpGet("bid")]
+    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
+    {
+        var data = await _service.GetByIdAsync(id,cache);
+        return ApiResponse(cache: cache,data: data);
+    }
+
+    #endregion
 
     #region 模糊查询
+
     /// <summary>
     /// 模糊查询
     /// </summary>
@@ -55,24 +77,11 @@ public class NavigationController : BaseController
         var data = await _service.GetContainsAsync(identity,type,name,cache);
         return ApiResponse(cache: cache,data: data);
     }
-    #endregion
 
-    #region 主键查询
-    /// <summary>
-    /// 主键查询
-    /// </summary>
-    /// <param name="id">主键</param>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns></returns>
-    [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
-    {
-        var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache: cache,data: data);
-    }
     #endregion
 
     #region 条件查询
+
     /// <summary>
     ///条件查询(可删除，同分页查询)
     /// </summary>
@@ -85,9 +94,11 @@ public class NavigationController : BaseController
         var data = await _service.GetTypeAsync(identity,type,cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     #region 分页查询
+
     /// <summary>
     /// 分页查询
     /// </summary>
@@ -99,12 +110,16 @@ public class NavigationController : BaseController
     /// <param name="cache">是否开启缓存</param>
     /// <param name="ordering">排序条件[data:时间 按id排序]</param>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetFyAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",bool isDesc = true,bool cache = false)
+    public async Task<IActionResult> GetFyAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",
+                                                bool isDesc = true,bool cache = false)
     {
         var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
+
+    #region 生成随机图片导航
 
     /// <summary>
     /// 生成随机图片导航
@@ -115,25 +130,30 @@ public class NavigationController : BaseController
     [HttpPost("randomImg")]
     public async Task<IActionResult> RandomImg(int minValue = 1,int maxValue = 11)
     {
-        return Ok(await _service.RandomImg(minValue,maxValue));
+        bool ret = await _service.RandomImg(minValue,maxValue);
+        return ApiResponse(data: ret);
     }
 
+    #endregion
 
     #region 添加
+
     /// <summary>
     /// 添加
     /// </summary>
     /// <returns></returns>
     [HttpPost("add")]
     [Authorize(Roles = Permissionss.Name)]
-    public async Task<IActionResult> AddAsync(Enties.Models.Navigation entity)
+    public async Task<IActionResult> AddAsync(Navigation entity)
     {
-        var data = await _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
+
     #endregion
 
     #region 更新
+
     /// <summary>
     /// 更新
     /// </summary>
@@ -141,14 +161,16 @@ public class NavigationController : BaseController
     /// <returns></returns>
     [HttpPut("update")]
     [Authorize(Roles = Permissionss.Name)]
-    public async Task<IActionResult> UpdateAsync(Enties.Models.Navigation entity)
+    public async Task<IActionResult> UpdateAsync(Navigation entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
+
     #endregion
 
     #region 删除
+
     /// <summary>
     /// 删除数据
     /// </summary>
@@ -158,8 +180,9 @@ public class NavigationController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var data = await _service.DeleteAsync(id);
+        bool data = await _service.DeleteAsync(id);
         return ApiResponse(data: data);
     }
+
     #endregion
 }

@@ -1,4 +1,6 @@
-﻿namespace Snblog.Service.Service;
+﻿using Snblog.IService.IService.Navigations;
+
+namespace Snblog.Service.Service.Navigations;
 
 public class NavigationTypeService : INavigationTypeService
 {

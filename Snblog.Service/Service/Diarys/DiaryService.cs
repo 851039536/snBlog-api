@@ -6,9 +6,7 @@ public class DiaryService : IDiaryService
 {
     private string _cacheKey;
     private const string Name = "diary_";
-
     private readonly ServiceHelper _serviceHelper;
-
     private readonly SnblogContext _service;
 
 

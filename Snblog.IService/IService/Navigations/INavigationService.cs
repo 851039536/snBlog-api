@@ -1,4 +1,4 @@
-﻿namespace Snblog.IService.IService;
+﻿namespace Snblog.IService.IService.Navigations;
 
 /// <summary>
 /// 业务类接口

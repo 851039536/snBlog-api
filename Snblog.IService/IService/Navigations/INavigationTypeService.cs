@@ -1,4 +1,4 @@
-﻿namespace Snblog.IService.IService;
+﻿namespace Snblog.IService.IService.Navigations;
 
 public interface INavigationTypeService
 {

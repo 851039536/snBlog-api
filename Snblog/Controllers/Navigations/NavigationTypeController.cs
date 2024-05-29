@@ -1,6 +1,7 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.IService.IService.Navigations;
+using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers.Navigation;
+namespace Snblog.Controllers.Navigations;
 
 /// <summary>
 /// 导航表分类
@@ -90,7 +91,7 @@ public class NavigationTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(NavigationType entity)
     {
-        var data = await _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
     #endregion
@@ -104,7 +105,7 @@ public class NavigationTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var data = await _service.DeleteAsync(id);
+        bool data = await _service.DeleteAsync(id);
         return ApiResponse(data: data);
     }
     #endregion
@@ -118,7 +119,7 @@ public class NavigationTypeController : BaseController
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(NavigationType entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
     #endregion

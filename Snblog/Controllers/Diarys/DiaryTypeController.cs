@@ -21,32 +21,30 @@ public class DiaryTypeController : BaseController
     {
         _service = service;
     }
-        
-    #region 分页查询 
-    /// <summary>
-    /// 分页查询 
-    /// </summary>
-    /// <param name="pageIndex">当前页码</param>
-    /// <param name="pageSize">每页记录条数</param>
-    /// <param name="isDesc">是否倒序</param>
-    /// <param name="cache">缓存</param>
-    /// <returns>list-entity</returns>
-    [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
-    {
-        var data = await _service.GetPagingAsync(pageIndex,pageSize,isDesc,cache);
-        return ApiResponse(cache: cache,data: data);
-    }
-    #endregion
+    #region 查询总数
 
+    /// <summary>
+    /// 查询总数
+    /// </summary>
+    /// <param name="cache">是否使用缓存查询结果</param>
+    /// <returns>日记分类的总数</returns>
+    [HttpGet("sum")]
+    public async Task<IActionResult> CountAsync(bool cache)
+    {
+        int data = await _service.GetSumAsync(cache);
+        return ApiResponse(data: data, cache: cache);
+    }
+
+    #endregion
+        
     #region 主键查询
 
     /// <summary>
     /// 主键查询
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns></returns>
+    /// <param name="id">日记分类的主键ID</param>
+    /// <param name="cache">是否使用缓存查询结果</param>
+    /// <returns>日记分类信息</returns>
     [HttpGet("byId")]
     public async Task<IActionResult> GetByIdAsync(int id, bool cache)
     {
@@ -55,14 +53,15 @@ public class DiaryTypeController : BaseController
     }
 
     #endregion
-
+    
     #region 类别查询
 
     /// <summary>
     /// 类别查询
     /// </summary>
-    /// <param name="type">分类</param>
-    /// <param name="cache">是否开启缓存</param>
+    /// <param name="type">日记分类的类型</param>
+    /// <param name="cache">是否使用缓存查询结果</param>
+    /// <returns>日记分类信息</returns>
     /// <returns></returns>
     [HttpGet("type")]
     public async Task<IActionResult> GetTypeAsync(int type, bool cache)
@@ -72,21 +71,22 @@ public class DiaryTypeController : BaseController
     }
 
     #endregion
-
-    #region 查询总数
-
+    
+    #region 分页查询 
     /// <summary>
-    /// 查询总数
+    /// 分页查询 
     /// </summary>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns></returns>
-    [HttpGet("sum")]
-    public async Task<IActionResult> CountAsync(bool cache)
+    /// <param name="pageIndex">当前页码，默认为1</param>
+    /// <param name="pageSize">每页显示的记录数，默认为10</param>
+    /// <param name="isDesc">是否按降序排列，默认为true</param>
+    /// <param name="cache">是否使用缓存查询结果</param>
+    /// <returns>分页的日记分类信息列表</returns>
+    [HttpGet("paging")]
+    public async Task<IActionResult> GetPagingAsync(int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
     {
-        int data = await _service.GetSumAsync(cache);
-        return ApiResponse(data: data, cache: cache);
+        var data = await _service.GetPagingAsync(pageIndex,pageSize,isDesc,cache);
+        return ApiResponse(cache: cache,data: data);
     }
-
     #endregion
 
     #region 添加
@@ -94,8 +94,8 @@ public class DiaryTypeController : BaseController
     /// <summary>
     /// 添加
     /// </summary>
-    /// <param name="entity"></param>
-    /// <returns></returns>
+    /// <param name="entity">要添加的日记分类实体</param>
+    /// <returns>操作是否成功</returns>
     [HttpPost("add")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(DiaryType entity)
@@ -111,7 +111,8 @@ public class DiaryTypeController : BaseController
     /// <summary>
     /// 删除
     /// </summary>
-    /// <returns></returns>
+    /// <param name="id">要删除的日记分类的主键ID</param>
+    /// <returns>操作是否成功</returns>
     [HttpDelete("del")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)
@@ -127,8 +128,8 @@ public class DiaryTypeController : BaseController
     /// <summary>
     /// 更新
     /// </summary>
-    /// <param name="entity">实体</param>
-    /// <returns></returns>
+    /// <param name="entity">包含更新信息的日记分类实体</param>
+    /// <returns>操作是否成功</returns>
     [HttpPut("update")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(DiaryType entity)
