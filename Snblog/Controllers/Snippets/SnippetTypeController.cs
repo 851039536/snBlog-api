@@ -1,6 +1,7 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.IService.IService.Snippets;
+using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Snippets;
 
 /// <summary>
 /// 片段标签

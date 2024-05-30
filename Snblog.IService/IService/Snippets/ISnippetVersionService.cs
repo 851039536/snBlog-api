@@ -1,5 +1,5 @@
 ﻿
-namespace Snblog.IService.IService;
+namespace Snblog.IService.IService.Snippets;
 
 /// <summary>
 /// 版本片段接口

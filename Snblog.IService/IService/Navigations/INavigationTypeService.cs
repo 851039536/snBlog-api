@@ -2,6 +2,14 @@
 
 public interface INavigationTypeService
 {
+    
+    /// <summary>
+    ///  查询总数
+    /// </summary>
+    /// <param name="cache">是否开启缓存</param>
+    /// <returns></returns>
+    Task<int> GetSumAsync(bool cache);
+    
     /// <summary>
     /// 查询所有
     /// </summary>
@@ -28,12 +36,7 @@ public interface INavigationTypeService
     /// <returns></returns>
     Task<List<NavigationType>> GetPagingAsync(string type, int pageIndex, int pageSize, bool isDesc,bool cache);
 
-    /// <summary>
-    ///  查询总数
-    /// </summary>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns></returns>
-    Task<int> GetSumAsync(bool cache);
+   
 
     /// <summary>
     /// 添加数据

@@ -12,6 +12,10 @@ public  class ServiceConfig
     public const string Sum = "SUM_";
     public const string Contains = "CONTAINS_";
     public const string Paging = "PAGING_";
+    /// <summary>
+    /// 统计
+    /// </summary>
+    public const string Statistics = "Statistics_";
     public const string All = "ALL_";
     public const string Del = "DEL_";
     public const string Add = "ADD_";

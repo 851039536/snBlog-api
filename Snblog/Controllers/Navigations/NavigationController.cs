@@ -4,7 +4,7 @@ using Snblog.Util.GlobalVar;
 namespace Snblog.Controllers.Navigations;
 
 /// <summary>
-/// 导航
+/// 导航API
 /// </summary>
 [Route("navigation")]
 [ApiExplorerSettings(GroupName = "V1")] //版本控制
@@ -31,10 +31,10 @@ public class NavigationController : BaseController
     /// <summary>
     /// 查询总数 
     /// </summary>
-    /// <param name="identity">所有:0 || 分类:1 || 用户:2  </param>
-    /// <param name="type">条件(identity为0则填0) </param>
-    /// <param name="cache"></param>
-    /// <returns></returns>
+    /// <param name="identity">查询类型标识（所有:0, 分类:1, 用户:2）</param>
+    /// <param name="type">查询条件</param>
+    /// <param name="cache">是否使用缓存</param>
+    /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("sum")]
     public async Task<IActionResult> GetSumAsync(int identity = 0,string type = "null",bool cache = false)
     {
@@ -50,8 +50,8 @@ public class NavigationController : BaseController
     /// 主键查询
     /// </summary>
     /// <param name="id">主键</param>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns></returns>
+    /// <param name="cache">是否使用缓存</param>
+    /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("bid")]
     public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
     {
@@ -66,11 +66,11 @@ public class NavigationController : BaseController
     /// <summary>
     /// 模糊查询
     /// </summary>
-    /// <param name="identity">匹配描述，标题，URL:0 || 分类:1 || 用户:2</param>
-    /// <param name="type">查询条件:用户||分类</param>
+    /// <param name="identity">查询类型标识</param>
+    /// <param name="type">查询条件</param>
     /// <param name="name">查询字段</param>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns></returns>
+    /// <param name="cache">是否使用缓存</param>
+    /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("contains")]
     public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false)
     {
@@ -85,9 +85,10 @@ public class NavigationController : BaseController
     /// <summary>
     ///条件查询(可删除，同分页查询)
     /// </summary>
-    /// <param name="identity">分类:1 || 用户:2</param>
+    /// <param name="identity">查询类型标识</param>
     /// <param name="type">查询条件</param>
-    /// <param name="cache">是否开启缓存</param>
+    /// <param name="cache">是否使用缓存</param>
+    /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("type")]
     public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false)
     {
@@ -103,12 +104,13 @@ public class NavigationController : BaseController
     /// 分页查询
     /// </summary>
     /// <param name="identity">所有:0 || 分类:1 || 用户:2</param>
-    /// <param name="type">类别参数, identity 0 可不填</param>
+    /// <param name="type">查询条件</param>
     /// <param name="pageIndex">当前页码</param>
     /// <param name="pageSize">每页记录条数</param>
-    /// <param name="isDesc">是否倒序[true/false]</param>
-    /// <param name="cache">是否开启缓存</param>
-    /// <param name="ordering">排序条件[data:时间 按id排序]</param>
+    /// <param name="isDesc">是否倒序</param>
+    /// <param name="cache">是否使用缓存</param>
+    /// <param name="ordering">排序条件</param>
+    /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("paging")]
     public async Task<IActionResult> GetFyAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",
                                                 bool isDesc = true,bool cache = false)
@@ -124,9 +126,9 @@ public class NavigationController : BaseController
     /// <summary>
     /// 生成随机图片导航
     /// </summary>
-    /// <param name="minValue">1</param>
-    /// <param name="maxValue">11</param>
-    /// <returns></returns>
+    /// <param name="minValue">随机数最小值</param>
+    /// <param name="maxValue">随机数最大值</param>
+    /// <returns>返回操作结果</returns>
     [HttpPost("randomImg")]
     public async Task<IActionResult> RandomImg(int minValue = 1,int maxValue = 11)
     {
@@ -141,7 +143,8 @@ public class NavigationController : BaseController
     /// <summary>
     /// 添加
     /// </summary>
-    /// <returns></returns>
+    /// <param name="entity">导航数据实体</param>
+    /// <returns>返回操作结果</returns>
     [HttpPost("add")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(Navigation entity)
@@ -157,8 +160,8 @@ public class NavigationController : BaseController
     /// <summary>
     /// 更新
     /// </summary>
-    /// <param name="entity"></param>
-    /// <returns></returns>
+    /// <param name="entity">导航数据实体</param>
+    /// <returns>返回操作结果</returns>
     [HttpPut("update")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(Navigation entity)
@@ -175,7 +178,7 @@ public class NavigationController : BaseController
     /// 删除数据
     /// </summary>
     /// <param name="id">主键</param>
-    /// <returns></returns>
+    /// <returns>返回操作结果</returns>
     [HttpDelete("del")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)

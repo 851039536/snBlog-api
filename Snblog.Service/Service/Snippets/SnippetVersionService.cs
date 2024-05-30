@@ -1,4 +1,6 @@
-﻿namespace Snblog.Service.Service;
+﻿using Snblog.IService.IService.Snippets;
+
+namespace Snblog.Service.Service.Snippets;
 
 public class SnippetVersionService : ISnippetVersionService
 {

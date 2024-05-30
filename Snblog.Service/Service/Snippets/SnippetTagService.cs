@@ -1,20 +1,19 @@
-﻿using Microsoft.Extensions.Logging;
-using Snblog.IService;
+﻿using Snblog.IService.IService.Snippets;
 
-namespace Snblog.Service.Service;
+namespace Snblog.Service.Service.Snippets;
 
-public class SnippetTypeService : ISnippetTypeService
+public class SnippetTagService : ISnippetTagService
 {
     private readonly SnblogContext _service;
     private readonly CacheUtils _cache;
 
-    private readonly EntityData<SnippetType> _ret = new();
-    private readonly EntityDataDto<SnippetTypeDto> _rDto = new();
+    private readonly EntityData<SnippetTag> _ret = new();
+    private readonly EntityDataDto<SnippetTagDto> _rDto = new();
     private readonly IMapper _mapper;
 
-    const string NAME = "SnippetType_";
+    private const string Name = "SnippetTag_";
 
-    public SnippetTypeService(SnblogContext service, ICacheUtil cache, IMapper mapper)
+    public SnippetTagService(SnblogContext service, ICacheUtil cache, IMapper mapper)
     {
         _service = service;
         _cache = (CacheUtils)cache;
@@ -28,14 +27,13 @@ public class SnippetTypeService : ISnippetTypeService
     /// <returns>bool</returns>
     public async Task<bool> DeleteAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Del}{id}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
 
-        var result = await _service.SnippetTypes.FindAsync(id);
-        if (result == null) return false;
-        _service.SnippetTypes.Remove(result);
+        var snippetTag = await _service.SnippetTags.FindAsync(id);
+        if (snippetTag == null) return false;
+        _service.SnippetTags.Remove(snippetTag);
         return await _service.SaveChangesAsync() > 0;
     }
-
 
     /// <summary>
     /// 主键查询
@@ -43,16 +41,31 @@ public class SnippetTypeService : ISnippetTypeService
     /// <param name="id">主键</param>
     /// <param name="cache">缓存</param>
     /// <returns>entity</returns>
-    public async Task<SnippetTypeDto> GetByIdAsync(int id, bool cache)
+    public async Task<SnippetTagDto> GetByIdAsync(int id, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Bid}{id}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}");
         if (cache)
         {
-            _rDto.Entity = _cache.GetValue<SnippetTypeDto>(ServiceConfig.CacheKey);
+            _rDto.Entity = _cache.GetValue<SnippetTagDto>(ServiceConfig.CacheKey);
             if (_rDto.Entity != null) return _rDto.Entity;
         }
 
-        _rDto.Entity = _mapper.Map<SnippetTypeDto>(await _service.SnippetTypes.FindAsync(id));
+        _rDto.Entity = _mapper.Map<SnippetTagDto>(await _service.SnippetTags.FindAsync(id));
+        _cache.SetValue(ServiceConfig.CacheKey, _rDto.Entity);
+        return _rDto.Entity;
+    }     
+        
+    public async Task<SnippetTagDto> GetByTitle(string name, bool cache)
+    {
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{name}");
+        if (cache)
+        {
+            _rDto.Entity = _cache.GetValue<SnippetTagDto>(ServiceConfig.CacheKey);
+            if (_rDto.Entity != null) return _rDto.Entity;
+        }
+
+        var ret = await _service.SnippetTags.Where(w => w.Name == name).FirstAsync();
+        _rDto.Entity = _mapper.Map<SnippetTagDto>(ret);
         _cache.SetValue(ServiceConfig.CacheKey, _rDto.Entity);
         return _rDto.Entity;
     }
@@ -62,10 +75,10 @@ public class SnippetTypeService : ISnippetTypeService
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    public async Task<bool> AddAsync(SnippetType entity)
+    public async Task<bool> AddAsync(SnippetTag entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Add}{entity.Id}");
-        await _service.SnippetTypes.AddAsync(entity);
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity.Id}");
+        await _service.SnippetTags.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
@@ -74,10 +87,11 @@ public class SnippetTypeService : ISnippetTypeService
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    public async Task<bool> UpdateAsync(SnippetType entity)
+    public async Task<bool> UpdateAsync(SnippetTag entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Up}{entity.Id}");
-        _service.SnippetTypes.Update(entity);
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity.Id}");
+
+        _service.SnippetTags.Update(entity);
         return await _service.SaveChangesAsync() > 0;
     }
 
@@ -89,23 +103,23 @@ public class SnippetTypeService : ISnippetTypeService
     /// <param name="isDesc">是否倒序</param>
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
-    public async Task<List<SnippetTypeDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
+    public async Task<List<SnippetTagDto>> GetPagingAsync(int pageIndex, int pageSize, bool isDesc, bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}");
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<SnippetTypeDto>>(ServiceConfig.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<SnippetTagDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
         if (isDesc)
         {
-            _rDto.EntityList = _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes
+            _rDto.EntityList = _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags
                 .OrderByDescending(c => c.Id).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
         }
         else
         {
-            _rDto.EntityList = _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes.OrderBy(c => c.Id)
+            _rDto.EntityList = _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags.OrderBy(c => c.Id)
                 .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync());
         }
 
@@ -118,17 +132,17 @@ public class SnippetTypeService : ISnippetTypeService
     /// </summary>
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
-    public async Task<List<SnippetTypeDto>> GetAllAsync(bool cache)
+    public async Task<List<SnippetTagDto>> GetAllAsync(bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.All}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.All}{cache}");
         if (cache)
         {
-            _rDto.EntityList = _cache.GetValue<List<SnippetTypeDto>>(ServiceConfig.CacheKey);
+            _rDto.EntityList = _cache.GetValue<List<SnippetTagDto>>(ServiceConfig.CacheKey);
             if (_rDto.EntityList != null) return _rDto.EntityList;
         }
 
         _rDto.EntityList =
-            _mapper.Map<List<SnippetTypeDto>>(await _service.SnippetTypes.AsNoTracking().ToListAsync());
+            _mapper.Map<List<SnippetTagDto>>(await _service.SnippetTags.AsNoTracking().ToListAsync());
         _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
         return _rDto.EntityList;
     }
@@ -140,14 +154,14 @@ public class SnippetTypeService : ISnippetTypeService
     /// <returns>int</returns>
     public async Task<int> GetSumAsync(bool cache)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Sum}{cache}");
+        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{cache}");
         if (cache)
         {
             _ret.EntityCount = _cache.GetValue<int>(ServiceConfig.CacheKey);
             if (_ret.EntityCount != 0) return _ret.EntityCount;
         }
 
-        _ret.EntityCount = await _service.SnippetTypes.AsNoTracking().CountAsync();
+        _ret.EntityCount = await _service.SnippetTags.AsNoTracking().CountAsync();
         _cache.SetValue(ServiceConfig.CacheKey, _ret.EntityCount);
         return _ret.EntityCount;
     }

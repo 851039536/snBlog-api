@@ -1,4 +1,4 @@
-﻿namespace Snblog.IService.IService;
+﻿namespace Snblog.IService.IService.Snippets;
 
 public interface ISnippetTypeService
 {

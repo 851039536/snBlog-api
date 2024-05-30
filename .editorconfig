@@ -20,7 +20,7 @@ indent_style = space
 tab_width = 4
 # CSharpier 支持通过文件进行配置。同一目录中的文件将优先
 # Non-configurable behaviors
-max_line_length = 150
+max_line_length = 130
 
 # 新行首选项，即换行符的风格，有lf和crlf两种，lf表示换行符为\n，crlf表示换行符为\r\n，默认为lf，即\n，即Unix和Linux系统的换行符，Windows系统的换行符为\r\n，即crlf。
 

@@ -1,25 +1,25 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.IService.IService.Snippets;
+using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Snippets;
 
 /// <summary>
-/// 分类子类
+/// 片段标签
 /// </summary>
-[ApiExplorerSettings(GroupName = "V1")] 
+[ApiExplorerSettings(GroupName = "V1")]
 [ApiController]
-[Route("snippetTypeSub")]
-public class SnippetTypeSubController : BaseController
+[Route("snippetTag")]
+public class SnippetTagController : BaseController
 {
-    private readonly ISnippetTypeSubService _service; 
+    private readonly ISnippetTagService _service;
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="service"></param>
-    public SnippetTypeSubController(ISnippetTypeSubService service)
+    public SnippetTagController(ISnippetTagService service)
     {
         _service = service;
     }
-        
     #region 查询总数
     /// <summary>
     /// 查询总数
@@ -30,7 +30,7 @@ public class SnippetTypeSubController : BaseController
     public async Task<IActionResult> GetSumAsync(bool cache = false)
     {
         int data = await _service.GetSumAsync(cache);
-        return ApiResponse(cache: cache, data: data);
+        return ApiResponse(data: data,cache: cache);
     }
     #endregion
 
@@ -44,27 +44,10 @@ public class SnippetTypeSubController : BaseController
     public async Task<IActionResult> GetAllAsync(bool cache = false)
     {
         var data = await _service.GetAllAsync(cache);
-        return ApiResponse(cache: cache, data: data);
-    }
-
-
-    #endregion
-
-
-    #region 根据主表类别id查询
-    /// <summary>
-    /// 根据主表类别id查询
-    /// </summary>
-    /// <param name="snippetTypeId">主表类别id</param>
-    /// <param name="cache">缓存</param>
-    /// <returns>list-entity</returns>
-    [HttpGet("condition")]
-    public async Task<IActionResult> GetCondition(int snippetTypeId,bool cache =false)
-    {
-        var data = await _service.GetCondition(snippetTypeId,cache);
-        return ApiResponse(cache: cache,data: data);
+        return ApiResponse(data: data,cache: cache);
     }
     #endregion
+
     #region 主键查询
     /// <summary>
     /// 主键查询
@@ -73,12 +56,30 @@ public class SnippetTypeSubController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>entity</returns>
     [HttpGet("byId")]
-    public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
     {
-        var data = await _service.GetByIdAsync(id, cache);
-        return ApiResponse(cache: cache, data: data);
+        var data = await _service.GetByIdAsync(id,cache);
+        return ApiResponse(data: data,cache: cache);
     }
     #endregion
+        
+    #region 按名称查询
+        
+    /// <summary>
+    /// 按名称查询
+    /// </summary>
+    /// <param name="name">标题</param>
+    /// <param name="cache">缓存</param>
+    /// <returns>entity</returns>
+    [HttpGet("byTitle")]
+    public async Task<IActionResult> GetByTitle(string name,bool cache = false)
+    {
+        var data = await _service.GetByTitle(name,cache);
+        return ApiResponse(data: data,cache: cache);
+    }
+    #endregion
+        
+        
 
     #region 分页查询 
     /// <summary>
@@ -90,10 +91,10 @@ public class SnippetTypeSubController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetFyAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
+    public async Task<IActionResult> GetFyAsync(int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
     {
-        var data = await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache);
-        return ApiResponse(cache: cache, data: data);
+        var data = await _service.GetPagingAsync(pageIndex,pageSize,isDesc,cache);
+        return ApiResponse(data: data,cache: cache);
     }
     #endregion
 
@@ -105,7 +106,7 @@ public class SnippetTypeSubController : BaseController
     /// <returns>bool</returns>
     [HttpPost("add")]
     [Authorize(Roles = Permissionss.Name)]
-    public async Task<IActionResult> AddAsync(SnippetTypeSub entity)
+    public async Task<IActionResult> AddAsync(SnippetTag entity)
     {
         bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
@@ -120,7 +121,7 @@ public class SnippetTypeSubController : BaseController
     /// <returns>bool</returns>
     [HttpPut("update")]
     [Authorize(Roles = Permissionss.Name)]
-    public async Task<IActionResult> UpdateAsync(SnippetTypeSub entity)
+    public async Task<IActionResult> UpdateAsync(SnippetTag entity)
     {
         bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
