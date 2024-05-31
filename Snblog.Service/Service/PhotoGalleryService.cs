@@ -144,10 +144,6 @@ public class PhotoGalleryService : IPhotoGalleryService
         }
     }
 
- 
-
-
-
     /// <summary>
     /// 分页查询
     /// </summary>

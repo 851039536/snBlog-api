@@ -15,5 +15,5 @@ public enum ApiVersion
     /// <summary>
     /// Sql
     /// </summary>
-    Sql = 3
+    mysql = 3
 }
