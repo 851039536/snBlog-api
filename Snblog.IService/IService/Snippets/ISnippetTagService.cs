@@ -3,6 +3,13 @@
 public interface ISnippetTagService
 {
     /// <summary>
+    /// 查询总数
+    /// </summary>
+    /// <param name="cache">缓存</param>
+    /// <returns>int</returns>
+    Task<int> GetSumAsync(bool cache);
+
+    /// <summary>
     /// 查询所有
     /// </summary>
     /// <param name="cache">缓存</param>
@@ -16,8 +23,9 @@ public interface ISnippetTagService
     /// <param name="id">主键</param>
     /// <param name="cache">缓存</param>
     /// <returns>entity</returns>
-    Task<SnippetTagDto> GetByIdAsync(int id, bool cache);
-    Task<SnippetTagDto> GetByTitle(string name, bool cache);
+    Task<SnippetTagDto> GetByIdAsync(int id,bool cache);
+
+    Task<SnippetTagDto> GetByTitle(string name,bool cache);
 
     /// <summary>
     /// 分页查询 
@@ -27,26 +35,23 @@ public interface ISnippetTagService
     /// <param name="isDesc">是否倒序</param>
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
-    Task<List<SnippetTagDto>> GetPagingAsync(int pageInde, int pageSize, bool isDesc, bool cache);
+    Task<List<SnippetTagDto>> GetPagingAsync(int pageIndex,int pageSize,bool isDesc,bool cache);
 
-    /// <summary>
-    /// 查询总数
-    /// </summary>
-    /// <param name="cache">缓存</param>
-    /// <returns>int</returns>
-    Task<int> GetSumAsync(bool cache);
+
     /// <summary>
     ///  添加 
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     Task<bool> AddAsync(SnippetTag entity);
+
     /// <summary>
     /// 更新
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     Task<bool> UpdateAsync(SnippetTag entity);
+
     /// <summary>
     /// 删除
     /// </summary>

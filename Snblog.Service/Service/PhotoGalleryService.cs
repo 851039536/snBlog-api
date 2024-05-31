@@ -26,7 +26,7 @@ public class PhotoGalleryService : IPhotoGalleryService
     public async Task<bool> DelAsync(int id)
     {
         // 设置缓存键,记录日志
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
+        Log.Information($"{Name}{ServiceConfig.Del}{id}");
 
         // 通过id查找文章
         var ret = await _service.PhotoGalleries.FindAsync(id);
@@ -41,7 +41,7 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<PhotoGalleryDto> GetByIdAsync(int id, bool cache)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
+        Log.Information($"{Name}{ServiceConfig.Bid}{id}_{cache}");
         if (cache)
         {
             _retDto.Entity = _cache.GetValue<PhotoGalleryDto>(ServiceConfig.CacheKey);
@@ -58,7 +58,7 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<bool> AddAsync(PhotoGallery entity)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Add}{entity}");
 
         entity.TimeCreate = entity.TimeModified = DateTime.Now;
         //此方法中的异步添加改为同步添加，因为 SaveChangesAsync 方法已经是异步的，不需要再使用异步添加
@@ -68,7 +68,7 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<bool> UpdateAsync(PhotoGallery entity)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Up}{entity}");
 
         entity.TimeModified = DateTime.Now; //更新时间
 
@@ -97,7 +97,7 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<int> GetSumAsync(int identity, string type, bool cache)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{identity}_{type}_{cache}");
+        Log.Information($"{Name}{ServiceConfig.Sum}{identity}_{type}_{cache}");
 
         if (cache)
         {
@@ -161,7 +161,7 @@ public class PhotoGalleryService : IPhotoGalleryService
     public async Task<List<PhotoGalleryDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
         string ordering, bool isDesc, bool cache)
     {
-        ServiceConfig.CacheInfo(
+        Log.Information(
             $"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
 
         if (cache)
@@ -228,7 +228,7 @@ public class PhotoGalleryService : IPhotoGalleryService
 
     public async Task<bool> UpdatePortionAsync(PhotoGallery entity, string type)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.UpPortiog}{entity.Id}_{type}");
+        Log.Information($"{Name}{ServiceConfig.UpPortiog}{entity.Id}_{type}");
         var ret = await _service.PhotoGalleries.FindAsync(entity.Id);
         if (ret == null) return false;
 
@@ -252,7 +252,7 @@ public class PhotoGalleryService : IPhotoGalleryService
     {
         string upNames = name.ToUpper();
 
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
+        Log.Information($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 
         if (cache)
         {

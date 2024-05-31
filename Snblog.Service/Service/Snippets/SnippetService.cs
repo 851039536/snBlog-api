@@ -45,7 +45,7 @@ public class SnippetService : ISnippetService
     /// <returns>entity</returns>
     public async Task<SnippetDto> GetByIdAsync(int id,bool cache)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
+       
 
         string cacheKey = $"{Name}{ServiceConfig.Bid}{id}_{cache}";
         return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>

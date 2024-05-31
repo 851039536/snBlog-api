@@ -4,15 +4,15 @@ using Snblog.Util.GlobalVar;
 namespace Snblog.Controllers.Snippets;
 
 /// <summary>
-/// 代码片段(历史版本)
+/// 代码片段(历史版本)API,存储历史版本数据
 /// </summary>
-[ApiExplorerSettings(GroupName = "V1")] //版本控制
+[ApiExplorerSettings(GroupName = "V1")]
 [ApiController]
 [Route("snippetVersion")]
 public class SnippetVersionController : BaseController
 {
-    private readonly ISnippetVersionService _service; 
-        
+    private readonly ISnippetVersionService _service;
+
     #region 构造函数
 
     /// <summary>
@@ -23,24 +23,29 @@ public class SnippetVersionController : BaseController
     {
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
+
     #endregion
 
     #region 查询总数
+
     /// <summary>
     ///  查询总数
     /// </summary>
     /// <param name="identity">1:根据snId查询 0:默认</param>
-    /// <param name="snId"></param>
+    /// <param name="snippetId"></param>
     /// <param name="cache"></param>
     /// <returns></returns>
     [HttpGet("sum")]
-    public async Task<IActionResult> GetSumAsync(int identity,int snId, bool cache = false)
+    public async Task<IActionResult> GetSumAsync(int identity,int snippetId,bool cache = false)
     {
-        return Ok(await _service.GetSumAsync(identity,snId,cache));
+        int ret = await _service.GetSumAsync(identity,snippetId,cache);
+        return ApiResponse(data: ret,cache: cache);
     }
+
     #endregion
 
-    #region 主键查询 
+    #region 主键查询
+
     /// <summary>
     /// 主键查询 
     /// </summary>
@@ -48,27 +53,33 @@ public class SnippetVersionController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>entity</returns>
     [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
     {
-        return Ok(await _service.GetByIdAsync(id, cache));
+        var ret = await _service.GetByIdAsync(id,cache);
+        return ApiResponse(data: ret,cache: cache);
     }
+
     #endregion
 
-    #region 条件查询 
+    #region 根据snippet表的主键查询
+
     /// <summary>
     /// 根据snippet表的主键查询
     /// </summary>
-    /// <param name="id">主键</param>
+    /// <param name="snippetId">主键</param>
     /// <param name="cache">缓存</param>
     /// <returns>entity</returns>
-    [HttpGet("bysnid")]
-    public async Task<IActionResult> GetAllBySnId(int id, bool cache = false)
+    [HttpGet("snippetId")]
+    public async Task<IActionResult> GetAllBySnId(int snippetId,bool cache = false)
     {
-        return Ok(await _service.GetAllBySnId(id, cache));
+        var ret = await _service.GetAllBySnId(snippetId,cache);
+        return ApiResponse(data: ret,cache: cache);
     }
+
     #endregion
 
     #region 新增
+
     /// <summary>
     ///  新增(自动累加次数)
     /// </summary>
@@ -80,9 +91,11 @@ public class SnippetVersionController : BaseController
     {
         return ApiResponse(data: await _service.AddAsync(entity));
     }
+
     #endregion
 
     #region 更新数据
+
     /// <summary>
     /// 更新
     /// </summary>
@@ -92,11 +105,14 @@ public class SnippetVersionController : BaseController
     [HttpPut("edit")]
     public async Task<IActionResult> UpdateAsync(SnippetVersion entity)
     {
-        return Ok(await _service.UpdateAsync(entity));
+        bool ret = await _service.UpdateAsync(entity);
+        return ApiResponse(data: ret);
     }
+
     #endregion
 
     #region 删除
+
     /// <summary>
     /// 删除
     /// </summary>
@@ -106,11 +122,14 @@ public class SnippetVersionController : BaseController
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        return Ok(await _service.DeleteAsync(id));
+        bool ret = await _service.DeleteAsync(id);
+        return ApiResponse(data: ret);
     }
+
     #endregion
 
     #region 条件更新
+
     /// <summary>
     /// 条件更新(错误的)
     /// </summary>
@@ -118,10 +137,11 @@ public class SnippetVersionController : BaseController
     /// <param name="type">更新字段: name | text</param>
     /// <returns>bool</returns>
     [HttpPut("upPortion")]
-    public async Task<IActionResult> UpdatePortionAsync(SnippetVersion entity, string type)
+    public async Task<IActionResult> UpdatePortionAsync(SnippetVersion entity,string type)
     {
-        return Ok(await _service.UpdatePortionAsync(entity, type));
+        bool ret = await _service.UpdatePortionAsync(entity,type);
+        return ApiResponse(data: ret);
     }
-    #endregion
 
+    #endregion
 }

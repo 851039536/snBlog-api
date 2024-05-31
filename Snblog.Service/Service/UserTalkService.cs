@@ -18,7 +18,7 @@ public class UserTalkService : IUserTalkService
     public async Task<List<UserTalkDto>> GetContainsAsync(int identity, string type, string name, bool cache)
     {
         string upNames = name.ToUpper();
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
+        Log.Information($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 
         if (cache)
         {
@@ -51,7 +51,7 @@ public class UserTalkService : IUserTalkService
     public async Task<List<UserTalkDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
         string ordering, bool isDesc, bool cache)
     {
-        ServiceConfig.CacheInfo(
+        Log.Information(
             $"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
 
         if (cache)
@@ -123,7 +123,7 @@ public class UserTalkService : IUserTalkService
 
     public async Task<bool> DelAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
+        Log.Information($"{Name}{ServiceConfig.Del}{id}");
         var ret = await _service.UserTalks.FindAsync(id);
         if (ret == null) return false;
         _service.UserTalks.Remove(ret);
@@ -133,7 +133,7 @@ public class UserTalkService : IUserTalkService
     public async Task<bool> AddAsync(UserTalk entity)
     {
             
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Add}{entity}");
         entity.TimeCreate = DateTime.Now; 
         _service.UserTalks.Add(entity);
         return await _service.SaveChangesAsync() > 0;
@@ -141,7 +141,7 @@ public class UserTalkService : IUserTalkService
 
     public async Task<bool> UpdateAsync(UserTalk entity)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Up}{entity}");
 
         _service.UserTalks.Update(entity);
         return await _service.SaveChangesAsync() > 0;

@@ -33,16 +33,7 @@ public  class ServiceConfig
     public const string Condition = "Condition";
 
 
-    /// <summary>
-    /// 输出log并对CacheKey赋值
-    /// </summary>
-    /// <param name="info"></param>
-    public static string CacheInfo(string info)
-    {
-        CacheKey = info;
-        Log.Information(CacheKey); //赋值给key，方便在是否使用缓存时做判断
-        return CacheKey;
-    }
+  
 
     /// <summary>
     /// 缓存Key

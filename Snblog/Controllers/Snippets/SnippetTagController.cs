@@ -4,7 +4,7 @@ using Snblog.Util.GlobalVar;
 namespace Snblog.Controllers.Snippets;
 
 /// <summary>
-/// 片段标签
+/// 片段标签API
 /// </summary>
 [ApiExplorerSettings(GroupName = "V1")]
 [ApiController]
@@ -24,8 +24,8 @@ public class SnippetTagController : BaseController
     /// <summary>
     /// 查询总数
     /// </summary>
-    /// <param name="cache">缓存</param>
-    /// <returns>int</returns>
+    /// <param name="cache">是否使用缓存数据。</param>
+    /// <returns>返回片段标签的总数。</returns>
     [HttpGet("sum")]
     public async Task<IActionResult> GetSumAsync(bool cache = false)
     {
@@ -38,8 +38,8 @@ public class SnippetTagController : BaseController
     /// <summary>
     /// 查询所有
     /// </summary>
-    /// <param name="cache">缓存</param>
-    /// <returns>list-entity</returns>
+    /// <param name="cache">是否使用缓存数据。</param>
+    /// <returns>返回所有片段标签的列表。</returns>
     [HttpGet("all")]
     public async Task<IActionResult> GetAllAsync(bool cache = false)
     {
@@ -52,9 +52,9 @@ public class SnippetTagController : BaseController
     /// <summary>
     /// 主键查询
     /// </summary>
-    /// <param name="id">主键</param>
-    /// <param name="cache">缓存</param>
-    /// <returns>entity</returns>
+    /// <param name="id">要查询的片段标签的主键。</param>
+    /// <param name="cache">是否使用缓存数据。</param>
+    /// <returns>返回匹配的片段标签实体。</returns>
     [HttpGet("byId")]
     public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
     {
@@ -68,9 +68,9 @@ public class SnippetTagController : BaseController
     /// <summary>
     /// 按名称查询
     /// </summary>
-    /// <param name="name">标题</param>
-    /// <param name="cache">缓存</param>
-    /// <returns>entity</returns>
+    /// <param name="name">要查询的片段标签的名称。</param>
+    /// <param name="cache">是否使用缓存数据。</param>
+    /// <returns>返回匹配的片段标签实体。</returns>
     [HttpGet("byTitle")]
     public async Task<IActionResult> GetByTitle(string name,bool cache = false)
     {
@@ -78,18 +78,16 @@ public class SnippetTagController : BaseController
         return ApiResponse(data: data,cache: cache);
     }
     #endregion
-        
-        
 
     #region 分页查询 
     /// <summary>
     /// 分页查询 
     /// </summary>
-    /// <param name="pageIndex">当前页码</param>
-    /// <param name="pageSize">每页记录条数</param>
-    /// <param name="isDesc">是否倒序</param>
-    /// <param name="cache">缓存</param>
-    /// <returns>list-entity</returns>
+    /// <param name="pageIndex">当前页码。</param>
+    /// <param name="pageSize">每页显示的记录数。</param>
+    /// <param name="isDesc">是否按倒序排列。</param>
+    /// <param name="cache">是否使用缓存数据。</param>
+    /// <returns>返回分页的片段标签列表。</returns>
     [HttpGet("paging")]
     public async Task<IActionResult> GetFyAsync(int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
     {
@@ -102,8 +100,8 @@ public class SnippetTagController : BaseController
     /// <summary>
     ///  添加 
     /// </summary>
-    /// <param name="entity">实体</param>
-    /// <returns>bool</returns>
+    /// <param name="entity">要添加的片段标签实体。</param>
+    /// <returns>操作是否成功。</returns>
     [HttpPost("add")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(SnippetTag entity)
@@ -117,8 +115,8 @@ public class SnippetTagController : BaseController
     /// <summary>
     /// 更新
     /// </summary>
-    /// <param name="entity">实体</param>
-    /// <returns>bool</returns>
+    /// <param name="entity">包含更新信息的片段标签实体。</param>
+    /// <returns>操作是否成功。</returns>
     [HttpPut("update")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(SnippetTag entity)
@@ -132,8 +130,8 @@ public class SnippetTagController : BaseController
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="id">主键</param>
-    /// <returns>bool</returns>
+    /// <param name="id">要删除的片段标签的主键。</param>
+    /// <returns>操作是否成功。</returns>
     [HttpDelete("del")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)

@@ -146,8 +146,13 @@ public class SnippetController : BaseController
     [HttpPut("edit")]
     public async Task<IActionResult> UpdateAsync(Snippet entity)
     {
-        var  ret =await  _validator.ValidateAsync(entity);
-        return ApiResponse(data: ret);
+        var  va =await  _validator.ValidateAsync(entity);
+        if (!va.IsValid)
+        {
+            return ApiResponse(statusCode: 404, message: va.Errors[0].ErrorMessage, data: entity);
+        }
+        var ent=  _service.UpdateAsync(entity);
+        return ApiResponse(data: ent);
     }
     #endregion
 

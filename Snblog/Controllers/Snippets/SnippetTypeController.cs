@@ -4,14 +4,14 @@ using Snblog.Util.GlobalVar;
 namespace Snblog.Controllers.Snippets;
 
 /// <summary>
-/// 片段标签
+/// 片段分类API
 /// </summary>
 [ApiExplorerSettings(GroupName = "V1")] //版本控制
 [ApiController]
 [Route("snippetType")]
 public class SnippetTypeController : BaseController
 {
-    private readonly ISnippetTypeService _service; //IOC依赖注入
+    private readonly ISnippetTypeService _service; 
 
     /// <summary>
     /// 构造函数
@@ -80,7 +80,7 @@ public class SnippetTypeController : BaseController
     /// <param name="pageSize">每页记录条数</param>
     /// <param name="isDesc">是否倒序</param>
     /// <param name="cache">缓存</param>
-    /// <returns>list-entity</returns>
+    /// <returns>列表</returns>
     [HttpGet("paging")]
     public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true,
         bool cache = false)
@@ -97,7 +97,7 @@ public class SnippetTypeController : BaseController
     ///  添加 
     /// </summary>
     /// <param name="entity">实体</param>
-    /// <returns>bool</returns>
+    /// <returns>操作是否成功。</returns>
     [HttpPost("add")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> AddAsync(SnippetType entity)
@@ -114,7 +114,7 @@ public class SnippetTypeController : BaseController
     /// 更新
     /// </summary>
     /// <param name="entity">实体</param>
-    /// <returns>bool</returns>
+    /// <returns>操作是否成功。</returns>
     [HttpPut("update")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> UpdateAsync(SnippetType entity)
@@ -131,7 +131,7 @@ public class SnippetTypeController : BaseController
     /// 删除
     /// </summary>
     /// <param name="id">主键</param>
-    /// <returns>bool</returns>
+    /// <returns>操作是否成功。</returns>
     [HttpDelete("del")]
     [Authorize(Roles = Permissionss.Name)]
     public async Task<IActionResult> DeleteAsync(int id)

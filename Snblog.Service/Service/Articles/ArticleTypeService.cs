@@ -5,25 +5,16 @@ namespace Snblog.Service.Service.Articles;
 public class ArticleTypeService : IArticleTypeService
 {
     private readonly SnblogContext _service;
-    private readonly CacheUtils _cache;
     private readonly ServiceHelper _serviceHelper;
-
-    private readonly EntityData<ArticleType> _ret = new();
-    private readonly EntityDataDto<ArticleTypeDto> _retDto = new();
 
     private readonly IMapper _mapper;
 
-    /// <summary>
-    /// 缓存Key
-    /// </summary>
-    private string _cacheKey;
 
-    const string NAME = "ArticleType_";
+    private const string Name = "ArticleType_";
 
-    public ArticleTypeService(SnblogContext service,ICacheUtil cache,IMapper mapper,ServiceHelper serviceHelper)
+    public ArticleTypeService(SnblogContext service,IMapper mapper,ServiceHelper serviceHelper)
     {
         _service = service;
-        _cache = (CacheUtils)cache;
         _mapper = mapper;
         _serviceHelper = serviceHelper;
     }
@@ -37,7 +28,7 @@ public class ArticleTypeService : IArticleTypeService
     /// <returns>int</returns>
     public async Task<int> GetSumAsync(bool cache)
     {
-        string cacheKey = $"{NAME}{ServiceConfig.Sum}{cache}";
+        string cacheKey = $"{Name}{ServiceConfig.Sum}{cache}";
 
         return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
         {
@@ -51,7 +42,7 @@ public class ArticleTypeService : IArticleTypeService
 
     public async Task<List<ArticleTypeDto>> GetAllAsync(bool cache)
     {
-        string cacheKey = $"{NAME}{ServiceConfig.All}{cache}";
+        string cacheKey = $"{Name}{ServiceConfig.All}{cache}";
 
         return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
         {
@@ -66,7 +57,7 @@ public class ArticleTypeService : IArticleTypeService
     public async Task<ArticleTypeDto> GetByIdAsync(int id,bool cache)
     {
         // 生成缓存键
-        string cacheKey = $"{NAME}{ServiceConfig.Bid}{id}_{cache}";
+        string cacheKey = $"{Name}{ServiceConfig.Bid}{id}_{cache}";
         // 检查是否需要缓存，并执行相应的逻辑
         return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
         {
@@ -92,7 +83,7 @@ public class ArticleTypeService : IArticleTypeService
     /// <returns>list-entity</returns>
     public async Task<List<ArticleTypeDto>> GetPagingAsync(int pageIndex,int pageSize,bool isDesc,bool cache)
     {
-        string cacheKey = $"{NAME}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}";
+        string cacheKey = $"{Name}{ServiceConfig.Paging}{pageIndex}_{pageSize}_{isDesc}_{cache}";
 
         return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
         {
@@ -119,7 +110,7 @@ public class ArticleTypeService : IArticleTypeService
     /// <returns></returns>
     public async Task<bool> DeleteAsync(int id)
     {
-        Log.Information($"{NAME}{ServiceConfig.Del}{id}");
+        Log.Information($"{Name}{ServiceConfig.Del}{id}");
 
         var ret = await _service.ArticleTypes.FindAsync(id);
         if(ret == null) return false;
@@ -136,7 +127,7 @@ public class ArticleTypeService : IArticleTypeService
     /// <returns>bool</returns>
     public async Task<bool> AddAsync(ArticleType entity)
     {
-        Log.Information("{ArticleType}{Add}{@Entity}",NAME,ServiceConfig.Add,entity);
+        Log.Information("{ArticleType}{Add}{@Entity}",Name,ServiceConfig.Add,entity);
 
         await _service.ArticleTypes.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
@@ -144,7 +135,7 @@ public class ArticleTypeService : IArticleTypeService
 
     public async Task<bool> UpdateAsync(ArticleType entity)
     {
-        Log.Information($"{NAME}{ServiceConfig.Up}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Up}{entity}");
 
         _service.ArticleTypes.Update(entity);
         return await _service.SaveChangesAsync() > 0;

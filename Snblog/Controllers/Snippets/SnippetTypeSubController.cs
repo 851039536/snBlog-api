@@ -4,7 +4,7 @@ using Snblog.Util.GlobalVar;
 namespace Snblog.Controllers.Snippets;
 
 /// <summary>
-/// 分类子类
+/// 片段分类的子类API
 /// </summary>
 [ApiExplorerSettings(GroupName = "V1")] 
 [ApiController]
@@ -51,7 +51,6 @@ public class SnippetTypeSubController : BaseController
 
     #endregion
 
-
     #region 根据主表类别id查询
     /// <summary>
     /// 根据主表类别id查询
@@ -66,6 +65,7 @@ public class SnippetTypeSubController : BaseController
         return ApiResponse(cache: cache,data: data);
     }
     #endregion
+    
     #region 主键查询
     /// <summary>
     /// 主键查询

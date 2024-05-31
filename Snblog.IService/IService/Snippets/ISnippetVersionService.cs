@@ -1,12 +1,19 @@
-﻿
-namespace Snblog.IService.IService.Snippets;
+﻿namespace Snblog.IService.IService.Snippets;
 
 /// <summary>
 /// 版本片段接口
 /// </summary>
 public interface ISnippetVersionService
 {
-  
+    /// <summary>
+    /// 查询总数 
+    /// </summary>
+    /// <param name="snippetId"></param>
+    /// <param name="cache">缓存</param>
+    /// <param name="identity"></param>
+    /// <returns>int</returns>
+    Task<int> GetSumAsync(int identity,int snippetId,bool cache);
+
     /// <summary>
     /// 主键查询 
     /// </summary>
@@ -14,8 +21,14 @@ public interface ISnippetVersionService
     /// <param name="cache">缓存</param>
     /// <returns>entity</returns>
     Task<SnippetVersionDto> GetByIdAsync(int id,bool cache);
-        
-    Task <List<SnippetVersionDto>> GetAllBySnId(int id,bool cache);
+
+    /// <summary>
+    /// 根据snippet表的主键查询
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cache"></param>
+    /// <returns></returns>
+    Task<List<SnippetVersionDto>> GetAllBySnId(int id,bool cache);
 
 
     /// <summary>
@@ -45,11 +58,4 @@ public interface ISnippetVersionService
     /// <param name="type">更新字段: Read | Give | Comment</param>
     /// <returns>bool</returns>
     Task<bool> UpdatePortionAsync(SnippetVersion entity,string type);
-
-    /// <summary>
-    /// 查询总数 
-    /// </summary>
-    /// <param name="cache">缓存</param>
-    /// <returns>int</returns>
-    Task<int> GetSumAsync(int identity,int snId,bool cache);
 }

@@ -28,7 +28,7 @@ public class UserService : IUserService
 
     public async Task<bool> DelAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Del}{id}");
+        Log.Information($"{NAME}{ServiceConfig.Del}{id}");
 
         // 通过id查找文章
         var user = await _service.Users.FindAsync(id);
@@ -77,7 +77,7 @@ public class UserService : IUserService
 
     public async Task<bool> UpdateAsync(User entity)
     {
-        ServiceConfig.CacheInfo($"{NAME}{ServiceConfig.Up}{entity}");
+        Log.Information($"{NAME}{ServiceConfig.Up}{entity}");
         _service.Users.Update(entity);
         return await _service.SaveChangesAsync() > 0;
     }

@@ -19,7 +19,7 @@ public class VideoService : IVideoService
 
     public async Task<VideoDto> GetByIdAsync(int id, bool cache)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}{cache}");
+        Log.Information($"{Name}{ServiceConfig.Bid}{id}{cache}");
         if (cache)
         {
             _rDto.Entity = _cache.GetValue<VideoDto>(ServiceConfig.CacheKey);
@@ -33,7 +33,7 @@ public class VideoService : IVideoService
 
     public async Task<List<VideoDto>> GetAllAsync(bool cache)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.All}{cache}");
+        Log.Information($"{Name}{ServiceConfig.All}{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);
@@ -202,7 +202,7 @@ public class VideoService : IVideoService
 
     public async Task<List<VideoDto>> GetContainsAsync(int identity, string type, string name, bool cache)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}{type}{name}{cache}");
+        Log.Information($"{Name}{ServiceConfig.Contains}{identity}{type}{name}{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);
@@ -264,7 +264,7 @@ public class VideoService : IVideoService
     public async Task<List<VideoDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
         bool isDesc, bool cache)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Paging}{identity}{pageIndex}{pageSize}{isDesc}{cache}");
+        Log.Information($"{Name}{ServiceConfig.Paging}{identity}{pageIndex}{pageSize}{isDesc}{cache}");
         if (cache)
         {
             _rDto.EntityList = _cache.GetValue<List<VideoDto>>(ServiceConfig.CacheKey);

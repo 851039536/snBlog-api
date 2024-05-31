@@ -5,117 +5,114 @@ namespace Snblog.Service.Service.Snippets;
 public class SnippetVersionService : ISnippetVersionService
 {
     private readonly SnblogContext _service;
-    private readonly CacheUtils _cache;
-    private readonly EntityData<SnippetVersion> _ret = new();
-    private readonly EntityDataDto<SnippetVersionDto> _rDto = new();
+    private readonly ServiceHelper _serviceHelper;
     private readonly IMapper _mapper;
-    private const string Name = "SnippetVersion_";
+    private const string Name = "snippetVersion_";
 
-    public SnippetVersionService(ICacheUtil cacheUtil, SnblogContext coreDbContext, IMapper mapper)
+    public SnippetVersionService(SnblogContext coreDbContext,IMapper mapper,ServiceHelper serviceHelper)
     {
         _service = coreDbContext;
         _mapper = mapper;
-        _cache = (CacheUtils)cacheUtil;
+        _serviceHelper = serviceHelper;
     }
 
-    public async Task<List<SnippetVersionDto>> GetAllBySnId(int id, bool cache)
+    #region 查询总数
+
+    public async Task<int> GetSumAsync(int identity,int snippetId,bool cache)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Condition}{id}{cache}");
-        if (cache)
+        string cacheKey = $"{Name}{ServiceConfig.Sum}{identity}{cache}";
+
+        return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
         {
-            _rDto.EntityList = _cache.GetValue<List<SnippetVersionDto>>(ServiceConfig.CacheKey);
-            if (_rDto.EntityList != null) return _rDto.EntityList;
-        }
-        var ent = await _service.SnippetVersions.Where(s => s.SnippetId == id).AsNoTracking().ToListAsync();
-        var ret = _mapper.Map<List<SnippetVersionDto>>(ent);
-        _cache.SetValue(ServiceConfig.CacheKey, _rDto.EntityList);
-        return ret;
+            if(identity != 1)
+            {
+                return await _service.SnippetVersions.AsNoTracking().CountAsync();
+            }
+
+            return await _service.SnippetVersions.AsNoTracking().CountAsync(c => c.SnippetId == snippetId);
+        });
     }
+
+    #endregion
+
+    #region 主键查询
+
+    public async Task<SnippetVersionDto> GetByIdAsync(int id,bool cache)
+    {
+        string cacheKey = $"{Name}{ServiceConfig.Bid}{id}_{cache}";
+        return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
+        {
+            var ret = await _service.SnippetVersions.AsNoTracking().SingleOrDefaultAsync(b => b.Id == id);
+            return _mapper.Map<SnippetVersionDto>(ret);
+        });
+    }
+
+    #endregion
+
+    #region 根据snippet表的主键查询
+
+    public async Task<List<SnippetVersionDto>> GetAllBySnId(int id,bool cache)
+    {
+        string cacheKey = $"{Name}{ServiceConfig.Bid}{id}{cache}";
+
+        return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
+        {
+            var ret = await _service.SnippetVersions.Where(s => s.SnippetId == id).AsNoTracking().ToListAsync();
+            return _mapper.Map<List<SnippetVersionDto>>(ret);
+        });
+    }
+
+    #endregion
 
     public async Task<bool> DeleteAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
+        Log.Information($"{Name}{ServiceConfig.Del}{id}");
 
         var ret = await _service.SnippetVersions.FindAsync(id);
-        if (ret == null) return false;
+        if(ret == null) return false;
         _service.SnippetVersions.Remove(ret); //删除单个
         _service.Remove(ret); //直接在context上Remove()方法传入model，它会判断类型
         return await _service.SaveChangesAsync() > 0;
     }
+
     public async Task<bool> AddAsync(SnippetVersion entity)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
-        int num = await GetSumAsync(1, entity.SnippetId, false);
-        entity.Count = num += 1;
+        Log.Information($"{Name}{ServiceConfig.Add}{entity}");
+        int num = await GetSumAsync(1,entity.SnippetId,false);
+        entity.Count = num + 1;
         entity.TimeCreate = DateTime.Now;
         await _service.SnippetVersions.AddAsync(entity);
         return await _service.SaveChangesAsync() > 0;
     }
+
     public async Task<bool> UpdateAsync(SnippetVersion entity)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity.Id}_{entity}");
+        Log.Information($"{Name}{ServiceConfig.Up}{entity.Id}_{entity}");
 
         //entity.TimeModified = DateTime.Now; //更新时间
         _service.SnippetVersions.Update(entity);
         return await _service.SaveChangesAsync() > 0;
     }
-    public async Task<int> GetSumAsync(int identity, int snId, bool cache)
+
+
+    public async Task<bool> UpdatePortionAsync(SnippetVersion entity,string type)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Sum}{identity}{cache}");
-
-        if (cache)
-        {
-            _ret.EntityCount = _cache.GetValue<int>(ServiceConfig.CacheKey);
-            if (_ret.EntityCount != 0) return _ret.EntityCount;
-        }
-
-        if (identity != 1)
-        {
-            _ret.EntityCount = await _service.SnippetVersions.AsNoTracking().CountAsync();
-        }
-        else
-        {
-            _ret.EntityCount = await _service.SnippetVersions.AsNoTracking().CountAsync(c => c.SnippetId == snId);
-        }
-
-        _cache.SetValue(ServiceConfig.CacheKey, _ret.EntityCount);
-        return _ret.EntityCount;
-    }
-
-
-    public async Task<bool> UpdatePortionAsync(SnippetVersion entity, string type)
-    {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Paging} {entity.Id}_{type}");
+        Log.Information($"{Name}{ServiceConfig.Paging} {entity.Id}_{type}");
         var result = await _service.Snippets.FindAsync(entity.Id);
-        if (result == null) return false;
-        switch (type)
+        if(result == null) return false;
+        switch(type)
         {
-            //指定字段进行更新操作
-            case "text":
-                //修改属性，被追踪的league状态属性就会变为Modify
-                result.Text = entity.Text;
-                break;
-            case "name":
-                result.Name = entity.Name;
-                break;
+        //指定字段进行更新操作
+        case "text":
+            //修改属性，被追踪的league状态属性就会变为Modify
+            result.Text = entity.Text;
+            break;
+        case "name":
+            result.Name = entity.Name;
+            break;
         }
 
         //执行数据库操作
         return await _service.SaveChangesAsync() > 0;
-    }
-
-    public async Task<SnippetVersionDto> GetByIdAsync(int id, bool cache)
-    {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Bid}{id}_{cache}");
-        if (cache)
-        {
-            _rDto.Entity = _cache.GetValue<SnippetVersionDto>(ServiceConfig.CacheKey);
-            if (_rDto.Entity != null) return _rDto.Entity;
-        }
-
-        _ret.Entity = await _service.SnippetVersions.AsNoTracking().SingleOrDefaultAsync(b => b.Id == id);
-        _rDto.Entity = _mapper.Map<SnippetVersionDto>(_ret.Entity);
-        _cache.SetValue(ServiceConfig.CacheKey, _rDto.Entity);
-        return _rDto.Entity;
     }
 }
