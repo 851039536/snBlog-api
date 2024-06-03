@@ -10,10 +10,10 @@ public class VideoService : IVideoService
 
     private const string Name = "video_";
 
-    public VideoService(SnblogContext service, ICacheUtil cache, IMapper mapper)
+    public VideoService(SnblogContext service, CacheUtils cache, IMapper mapper)
     {
         _service = service;
-        _cache = (CacheUtils)cache;
+        _cache = cache;
         _mapper = mapper;
     }
 
@@ -49,13 +49,13 @@ public class VideoService : IVideoService
     public async Task<List<Video>> GetFyAsync(int type, int pageIndex, int pageSize, bool isDesc, bool cache)
     {
         Log.Information("分页查询 _SnVideo:" + type + pageIndex + pageSize + isDesc + cache);
-        _ret.EntityList = _cache.CacheString("GetPagingAsync" + type + pageIndex + pageSize + isDesc + cache,
-            _ret.EntityList, cache);
+        // _ret.EntityList = _cache.CacheString("GetPagingAsync" + type + pageIndex + pageSize + isDesc + cache,
+        //     _ret.EntityList, cache);
         if (_ret.EntityList == null)
         {
             _ret.EntityList = await GetPaging(type, pageIndex, pageSize, isDesc);
-            _cache.CacheString("GetPagingAsync" + type + pageIndex + pageSize + isDesc + cache, _ret.EntityList,
-                cache);
+            // _cache.CacheString("GetPagingAsync" + type + pageIndex + pageSize + isDesc + cache, _ret.EntityList,
+            //     cache);
         }
 
         return _ret.EntityList;
@@ -99,7 +99,7 @@ public class VideoService : IVideoService
     public async Task<int> GetSumAsync(int identity, string type, bool cache)
     {
         Log.Information("查询总数_SnVideo=>" + identity + cache + type + cache);
-        _ret.EntityCount = _cache.CacheNumber("Count_SnVideo", _ret.EntityCount, cache);
+        // _ret.EntityCount = _cache.CacheNumber("Count_SnVideo", _ret.EntityCount, cache);
         if (_ret.EntityCount == 0)
         {
             switch (identity)
@@ -117,7 +117,7 @@ public class VideoService : IVideoService
                     break;
             }
 
-            _cache.CacheNumber("Count_SnVideo", _ret.EntityCount, cache);
+            // _cache.CacheNumber("Count_SnVideo", _ret.EntityCount, cache);
         }
 
         return _ret.EntityCount;
@@ -127,11 +127,11 @@ public class VideoService : IVideoService
     {
         Log.Information("条件查总数 :" + type);
         //读取缓存值
-        _ret.EntityCount = _cache.CacheNumber("GetTypeCount_SnVideo" + type + cache, _ret.EntityCount, cache);
+        // _ret.EntityCount = _cache.CacheNumber("GetTypeCount_SnVideo" + type + cache, _ret.EntityCount, cache);
         if (_ret.EntityCount == 0)
         {
             _ret.EntityCount = await _service.Videos.CountAsync(c => c.TypeId == type);
-            _cache.CacheNumber("GetTypeCount_SnVideo" + type + cache, _ret.EntityCount, cache);
+            // _cache.CacheNumber("GetTypeCount_SnVideo" + type + cache, _ret.EntityCount, cache);
         }
 
         return _ret.EntityCount;
@@ -140,11 +140,11 @@ public class VideoService : IVideoService
     public async Task<List<Video>> GetTypeAllAsync(int type, bool cache)
     {
         Log.Information("分类查询:_SnVideo" + type + cache);
-        _ret.EntityList = _cache.CacheString("GetTypeAllAsync_SnVideo" + type + cache, _ret.EntityList, cache);
+        // _ret.EntityList = _cache.CacheString("GetTypeAllAsync_SnVideo" + type + cache, _ret.EntityList, cache);
         if (_ret.EntityList == null)
         {
             _ret.EntityList = await _service.Videos.Where(s => s.TypeId == type).ToListAsync();
-            _cache.CacheString("GetTypeAllAsync_SnVideo" + type + cache, _ret.EntityList, cache);
+            // _cache.CacheString("GetTypeAllAsync_SnVideo" + type + cache, _ret.EntityList, cache);
         }
 
         return _ret.EntityList;
@@ -180,11 +180,11 @@ public class VideoService : IVideoService
     public async Task<int> GetSumAsync(bool cache)
     {
         Log.Information("统计标题数量_SnVideo：" + cache);
-        _ret.EntityCount = _cache.CacheNumber("GetSumAsync_SnVideo" + cache, _ret.EntityCount, cache);
+        // _ret.EntityCount = _cache.CacheNumber("GetSumAsync_SnVideo" + cache, _ret.EntityCount, cache);
         if (_ret.EntityCount == 0)
         {
             _ret.EntityCount = await GetSum();
-            _cache.CacheNumber("GetSumAsync_SnVideo" + cache, _ret.EntityCount, cache);
+            // _cache.CacheNumber("GetSumAsync_SnVideo" + cache, _ret.EntityCount, cache);
         }
 
         return _ret.EntityCount;
@@ -239,8 +239,8 @@ public class VideoService : IVideoService
     public async Task<List<VideoDto>> GetTypeAsync(int identity, string type, bool cache)
     {
         Log.Information($"SnVideoDto条件查询=>{identity}{type}{cache}");
-        _rDto.EntityList = _cache.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache, _rDto.EntityList,
-            cache);
+        // _rDto.EntityList = _cache.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache, _rDto.EntityList,
+        //     cache);
         if (_rDto.EntityList == null)
         {
             switch (identity)
@@ -255,7 +255,7 @@ public class VideoService : IVideoService
                     break;
             }
 
-            _cache.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache, _rDto.EntityList, cache);
+            // _cache.CacheString("GetTypeAsync_SnVideoDto" + identity + type + cache, _rDto.EntityList, cache);
         }
 
         return _rDto.EntityList;

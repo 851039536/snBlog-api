@@ -19,11 +19,11 @@ public class UserService : IUserService
     const string ADD = "ADD";
     const string UPDATE = "UPDATE_";
 
-    public UserService(SnblogContext service, IMapper mapper, ICacheUtil cache)
+    public UserService(SnblogContext service, IMapper mapper, CacheUtils cache)
     {
         _service = service;
         _mapper = mapper;
-        _cache = (CacheUtils)cache;
+        _cache = cache;
     }
 
     public async Task<bool> DelAsync(int id)
@@ -47,11 +47,11 @@ public class UserService : IUserService
     public async Task<UserDto> GetByIdAsync(int id, bool cache)
     {
         Log.Information($"{NAME}{BYID}{id}_{cache}");
-        _rDto = _cache.CacheString($"{NAME}{BYID}{id}_{cache}", _rDto, cache);
+        // _rDto = _cache.CacheString($"{NAME}{BYID}{id}_{cache}", _rDto, cache);
         if (_rDto == null)
         {
             _rDto = _mapper.Map<UserDto>(await _service.Users.FindAsync(id));
-            _cache.CacheString($"{NAME}{BYID}{id}_{cache}", _rDto, cache);
+            // _cache.CacheString($"{NAME}{BYID}{id}_{cache}", _rDto, cache);
         }
         return _rDto;
     }
@@ -85,11 +85,11 @@ public class UserService : IUserService
     public async Task<int> GetSumAsync(bool cache)
     {
         Log.Information($"{NAME}{SUM}{cache}");
-        _rInt = _cache.CacheString($"{NAME}{SUM}{cache}", _rInt, cache);
+        // _rInt = _cache.CacheString($"{NAME}{SUM}{cache}", _rInt, cache);
         if (_rInt == 0)
         {
             _rInt = await _service.Users.CountAsync();
-            _cache.CacheString($"{NAME}{SUM}{cache}", _rInt, cache);
+            // _cache.CacheString($"{NAME}{SUM}{cache}", _rInt, cache);
         }
         return _rInt;
     }
@@ -97,12 +97,12 @@ public class UserService : IUserService
     public async Task<List<UserDto>> GetContainsAsync(string name, bool cache)
     {
         Log.Information($"{NAME}{CONTAINS}{name}{cache}");
-        _rListDto = _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}", _rListDto, cache);
+        // _rListDto = _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}", _rListDto, cache);
         if (_rListDto == null)
         {
             var res = await _service.Users.Where(u => u.Name.Contains(name) || u.Nickname.Contains(name)).AsNoTracking().ToListAsync();
             _rListDto = _mapper.Map<List<UserDto>>(res);
-            _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}", _rListDto, cache);
+            // _cache.CacheString($"{NAME}{CONTAINS}{name}{cache}", _rListDto, cache);
         }
         return _rListDto;
     }

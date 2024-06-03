@@ -1,6 +1,6 @@
 ﻿namespace Snblog.Cache.CacheUtil;
 
-public class CacheUtils : ICacheUtil
+public class CacheUtils 
 {
     //创建内存缓存对象
     private readonly CacheManager _cache;
@@ -8,24 +8,7 @@ public class CacheUtils : ICacheUtil
     {
         _cache = (CacheManager)cache;
     }
-    /// <summary>
-    /// 设置并返回缓存值(值类型)
-    /// </summary>
-    /// <typeparam name="T">返回类型</typeparam>
-    /// <param name="key">缓存键值</param>
-    /// <param name="value">要缓存的值</param>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns>result</returns>
-    public T CacheNumber<T>(string key,T value,bool cache)
-    {
-        T ret = default;
-        if (cache) {
-            if (!value.Equals(0)) {
-                _cache.Set_AbsoluteExpire(key,value,_cache.Time);
-            }
-        }
-        return ret;
-    }
+ 
     /// <summary>
     /// 读取缓存
     /// </summary>
@@ -34,8 +17,8 @@ public class CacheUtils : ICacheUtil
     /// <returns>返回传入的格式数据</returns>
     public T GetValue<T>(string key)
     {
-        var value = _cache.Get<T>(key);
-        return value;
+        var ret = _cache.Get<T>(key);
+        return ret;
     }
     /// <summary>
     /// 设置缓存
@@ -50,26 +33,5 @@ public class CacheUtils : ICacheUtil
         _cache.Set_AbsoluteExpire(key,value,_cache.Time);
         return ret;
     }
-    /// <summary>
-    /// 设置并返回缓存值(字符串)
-    /// </summary>
-    /// <typeparam name="T">返回类型</typeparam>
-    /// <param name="key">缓存键值</param>
-    /// <param name="value">要缓存的值</param>
-    /// <param name="cache">是否开启缓存</param>
-    public T CacheString<T>(string key,T value,bool cache)
-    {
-        T result = default;
-        if (cache) {
-            if (_cache.IsInCache(key)) //如果存在缓存取值
-            {
-                result = _cache.Get<T>(key);
-            } else {
-                if (value != null) {
-                    _cache.Set_AbsoluteExpire(key,value,_cache.Time);
-                }
-            }
-        }
-        return result;
-    }
+    
 }

@@ -7,10 +7,10 @@ public class SnSetBlogService : ISnSetBlogService
     readonly EntityData<SnSetblog> _res = new();
     readonly EntityDataDto<SnSetblogDto> _resDto = new();
     private readonly IMapper _mapper;
-    public SnSetBlogService(ICacheUtil cacheUtil, SnblogContext coreDbContext, IMapper mapper)
+    public SnSetBlogService(CacheUtils cacheUtil, SnblogContext coreDbContext, IMapper mapper)
     {
         _service = coreDbContext;
-        _cacheutil = (CacheUtils)cacheUtil;
+        _cacheutil = cacheUtil;
         _mapper = mapper;
     }
 
@@ -32,7 +32,7 @@ public class SnSetBlogService : ISnSetBlogService
     public async Task<List<SnSetblogDto>> GetFyAsync(int identity, string type, int pageIndex, int pageSize, string ordering, bool isDesc, bool cache)
     {
         Log.Information("SnSetBlogDto分页查询=>" + type + pageIndex + pageSize + isDesc + cache);
-        _resDto.EntityList = _cacheutil.CacheString("GetfyAsync_SnSetBlogDto" + type + pageIndex + pageSize + isDesc + cache, _resDto.EntityList, cache);
+        // _resDto.EntityList = _cacheutil.CacheString("GetfyAsync_SnSetBlogDto" + type + pageIndex + pageSize + isDesc + cache, _resDto.EntityList, cache);
 
         if (_resDto.EntityList == null)
         {
@@ -115,7 +115,7 @@ public class SnSetBlogService : ISnSetBlogService
                     }
                     break;
             }
-            _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, _resDto.EntityList, cache);
+            // _cacheutil.CacheString("GetFyAsync_SnArticle" + identity + pageIndex + pageSize + ordering + isDesc + cache, _resDto.EntityList, cache);
         }
         return _resDto.EntityList;
     }
@@ -196,11 +196,11 @@ public class SnSetBlogService : ISnSetBlogService
     public async Task<SnSetblogDto> GetByIdAsync(int id, bool cache)
     {
         Log.Information("SnSetBlogDto主键查询=>" + id + cache);
-        _resDto.Entity = _cacheutil.CacheString("GetByIdAsync_SnSetBlogDto" + id + cache, _resDto.Entity, cache);
+        // _resDto.Entity = _cacheutil.CacheString("GetByIdAsync_SnSetBlogDto" + id + cache, _resDto.Entity, cache);
         if (_resDto.Entity == null)
         {
             _resDto.Entity = _mapper.Map<SnSetblogDto>(await _service.SnSetblogs.FindAsync(id));
-            _cacheutil.CacheString("GetByIdAsync_SnSetBlogDto" + id + cache, _resDto.Entity, cache);
+            // _cacheutil.CacheString("GetByIdAsync_SnSetBlogDto" + id + cache, _resDto.Entity, cache);
         }
         return _resDto.Entity;
     }
@@ -220,7 +220,7 @@ public class SnSetBlogService : ISnSetBlogService
     public async Task<int> GetCountAsync(int identity, string type, bool cache)
     {
         Log.Information("SnSetBlogDto查询总数=>" + cache);
-        _res.EntityCount = _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, _res.EntityCount, cache);
+        // _res.EntityCount = _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, _res.EntityCount, cache);
         if (_res.EntityCount == 0)
         {
             switch (identity)
@@ -235,7 +235,7 @@ public class SnSetBlogService : ISnSetBlogService
                     _res.EntityCount = await _service.SnSetblogs.Where(w => w.User.Name == type).AsNoTracking().CountAsync();
                     break;
             }
-            _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, _res.EntityCount, cache);
+            // _cacheutil.CacheNumber("CountAsync_SnSetBlogDto" + cache, _res.EntityCount, cache);
         }
         return _res.EntityCount;
     }

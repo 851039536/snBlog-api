@@ -14,6 +14,5 @@ public class ArticleMapper : Profile
         //如两个实体字段一致可直接映射关系
         //Article原对象类型，ArticleDto 目标对象类型  ReverseMap，可相互转换
         CreateMap<Article, ArticleDto>().ReverseMap(); 
-
     }
 }

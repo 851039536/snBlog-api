@@ -20,7 +20,7 @@ public class PhotoGalleryService : IPhotoGalleryService
     {
         // 获取服务提供程序中的实例
         _service = serviceProvider.GetRequiredService<SnblogContext>();
-        _cache = (CacheUtils)serviceProvider.GetRequiredService<ICacheUtil>();
+        _cache = serviceProvider.GetRequiredService<CacheUtils>();
     }
 
     public async Task<bool> DelAsync(int id)

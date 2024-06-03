@@ -16,21 +16,22 @@ public class Program
     public static void Main(string[] args)
     {
         // 读取 appsettings.json 配置文件
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
+        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
         // 配置 Serilog
-        Log.Logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
-            .CreateLogger();
+        Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 
-        try {
+        try
+        {
             Log.Information("启动虚拟主机");
             CreateHostBuilder(args).Build().Run();
-        } catch (Exception ex) {
-            Log.Fatal(ex,"虚拟主机意外终止...");
-        } finally {
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "虚拟主机意外终止...");
+        }
+        finally
+        {
             Log.CloseAndFlush();
         }
     }
@@ -42,7 +43,7 @@ public class Program
     /// <returns></returns>
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .UseSerilog()  // 使用 Serilog 作为日志提供程序
+            .UseSerilog() // 使用 Serilog 作为日志提供程序
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();

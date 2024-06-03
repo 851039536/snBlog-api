@@ -9,10 +9,10 @@ public class UserTalkService : IUserTalkService
     private readonly SnblogContext _service;
     private readonly CacheUtils _cache;
 
-    public UserTalkService(SnblogContext service, ICacheUtil cache)
+    public UserTalkService(SnblogContext service,CacheUtils cache)
     {
         _service = service;
-        _cache = (CacheUtils)cache;
+        _cache = cache;
     }
 
     public async Task<List<UserTalkDto>> GetContainsAsync(int identity, string type, string name, bool cache)
