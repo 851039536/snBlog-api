@@ -212,7 +212,7 @@ public class Startup
         _ = services.AddTransient<IValidator<PhotoGallery>, PhotoGalleryValidator>();
 
         //整个应用程序生命周期以内只创建一个实例
-        _ = services.AddSingleton<ICacheManager, CacheManager>();
+         _ = services.AddSingleton<ICacheManager, CacheManager>();
          _ = services.AddSingleton<CacheUtils, CacheUtils>();
 
         #endregion

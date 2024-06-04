@@ -6,7 +6,7 @@ public class CacheUtils
     private readonly CacheManager _cache;
     public CacheUtils(ICacheManager cache)
     {
-        _cache = (CacheManager)cache;
+        _cache = cache as CacheManager;
     }
  
     /// <summary>
@@ -20,18 +20,16 @@ public class CacheUtils
         var ret = _cache.Get<T>(key);
         return ret;
     }
+
     /// <summary>
-    /// 设置缓存
+    /// 设置缓存，使用绝对时间过期策略。一旦缓存被设置，它将在指定的时间段后自动过期，无论期间是否有访问。
     /// </summary>
     /// <typeparam name="T">传入返回格式</typeparam>
-    /// <param name="key">键</param>
-    /// <param name="value">值</param>
+    /// <param name="key">用于检索缓存的唯一标识符</param>
+    /// <param name="value">要存储在缓存中的数据</param>
     /// <returns></returns>
-    public T SetValue<T>(string key,T value)
+    public void SetValue<T>(string key,T value)
     {
-        T ret = default;
-        _cache.Set_AbsoluteExpire(key,value,_cache.Time);
-        return ret;
+        _cache.Set_AbsoluteExpire(key,value,_cache.AbsoluteExpiration);
     }
-    
 }
