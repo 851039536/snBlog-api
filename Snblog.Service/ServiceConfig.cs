@@ -20,6 +20,10 @@ public  class ServiceConfig
     public const string Del = "DEL_";
     public const string Add = "ADD_";
     /// <summary>
+    /// 条件查询
+    /// </summary>
+    public const string Types = "Types_";
+    /// <summary>
     /// 更新
     /// </summary>
     public  const string Up = "UP_";

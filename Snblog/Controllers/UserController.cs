@@ -105,13 +105,13 @@ public class UserController : BaseController
     {
         if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
         // 查询用户信息
-        var res = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
-        if (res == null) return BadRequest("用户或密码错误");
+        var ret = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
+        if (ret == null) return BadRequest("用户或密码错误");
 
         // 生成token
-        string token = GenerateToken(res);
-        res.Ip = token;
-        return Ok(res);
+        string token = GenerateToken(ret);
+        ret.Ip = token;
+        return Ok(ret);
     }
     #endregion
         
@@ -130,7 +130,6 @@ public class UserController : BaseController
         var ret = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
         if (ret == null) return ApiResponse( 400,false,0,"false","");
 
-        // 生成token
         string token = GenerateToken(ret);
         ret.Ip = token;
         return ApiResponse(data: ret);

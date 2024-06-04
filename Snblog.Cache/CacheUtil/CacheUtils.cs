@@ -1,4 +1,6 @@
-﻿namespace Snblog.Cache.CacheUtil;
+﻿
+
+namespace Snblog.Cache.CacheUtil;
 
 public class CacheUtils 
 {

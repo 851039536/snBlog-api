@@ -1,6 +1,7 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.IService.Videos;
+using Snblog.Util.GlobalVar;
 
-namespace Snblog.Controllers;
+namespace Snblog.Controllers.Videos;
 
 /// <summary>
 /// 视频
@@ -10,7 +11,7 @@ namespace Snblog.Controllers;
 [Route("video")]
 public class VideoController : BaseController
 {
-    private readonly IVideoService _service; 
+    private readonly IVideoService _service;
 
     /// <summary>
     /// 构造函数
@@ -22,6 +23,7 @@ public class VideoController : BaseController
     }
 
     #region 查询总数
+
     /// <summary>
     /// 查询总数 
     /// </summary>
@@ -35,9 +37,11 @@ public class VideoController : BaseController
         int data = await _service.GetSumAsync(identity,type,cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     #region 查询所有
+
     /// <summary>
     /// 查询所有
     /// </summary>
@@ -50,9 +54,11 @@ public class VideoController : BaseController
         var data = await _service.GetAllAsync(cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     #region 模糊查询
+
     /// <summary>
     /// 模糊查询
     /// </summary>
@@ -66,9 +72,11 @@ public class VideoController : BaseController
         var data = await _service.GetContainsAsync(identity,type,name,cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     #region 主键查询
+
     /// <summary>
     /// 主键查询
     /// </summary>
@@ -80,9 +88,11 @@ public class VideoController : BaseController
         var data = await _service.GetByIdAsync(id,cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
-    #region  条件查询
+    #region 条件查询
+
     /// <summary>
     ///条件查询 
     /// </summary>
@@ -95,9 +105,11 @@ public class VideoController : BaseController
         var data = await _service.GetTypeAsync(identity,type,cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     #region 分页查询
+
     /// <summary>
     /// 分页查询
     /// </summary>
@@ -109,14 +121,17 @@ public class VideoController : BaseController
     /// <param name="cache">是否开启缓存</param>
     /// <returns></returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,
+                                                    bool isDesc = true,bool cache = false)
     {
         var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,isDesc,cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     #region 读取[字段/阅读/点赞]总数量
+
     /// <summary>
     /// 统计标题字数
     /// </summary>
@@ -127,6 +142,7 @@ public class VideoController : BaseController
         int data = await _service.GetSumAsync(cache);
         return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     /// <summary>
@@ -162,6 +178,6 @@ public class VideoController : BaseController
     public async Task<IActionResult> UpdateAsync(Video entity)
     {
         bool data = await _service.UpdateAsync(entity);
-        return ApiResponse(data:data);
+        return ApiResponse(data: data);
     }
 }
