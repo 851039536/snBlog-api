@@ -1,15 +1,20 @@
+using System.Net.Http;
+using System.Text;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Snblog.Enties.Validator;
 using Snblog.Jwt;
 using Snblog.Service.Service.DataBases;
 using Snblog.Util.Exceptions;
+using SnBlogCore.Jwt;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using ArticleService = Snblog.Service.Service.Articles.ArticleService;
 
@@ -161,10 +166,37 @@ public class Startup
 
         #region JWT身份授权
 
-        services.ConfigureJwt(Configuration);
-        //注入JWT配置文件
-        _ = services.Configure<JwtConfig>(Configuration.GetSection("Authentication:JwtBearer"));
+        _ = services
+            .AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true, //是否验证Issuer
+                    ValidIssuer = Configuration["Jwt:Issuer"], //发行人Issuer
+                    ValidateAudience = true, //是否验证Audience
+                    ValidAudience = Configuration["Jwt:Audience"], //订阅人Audience
+                    ValidateIssuerSigningKey = true, //是否验证SecurityKey
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])), //SecurityKey
+                    ValidateLifetime = true, //是否验证失效时间
+                    ClockSkew = TimeSpan.FromSeconds(30), //过期时间容错值，解决服务器端时间不同步问题（秒）
+                    RequireExpirationTime = true,
+                };
+            });
+        #region 配置动态授权服务
+        _ = services.AddAuthorization(options =>
+        {
+            //定义是否有编辑策略
+            options.AddPolicy("EditPolicy", policy => policy.Requirements.Add(new DynamicAuthorizationRequirement("Edit")));
+        });
+        _ = services.AddSingleton<IAuthorizationHandler, DynamicAuthorizationHandler>();
+        #endregion
 
+        //将 JwtHelper 注册为单例模式
+        _ = services.AddSingleton(new JwtHelper(Configuration));
         #endregion
 
         #region Cors跨域请求
@@ -212,8 +244,9 @@ public class Startup
         _ = services.AddTransient<IValidator<PhotoGallery>, PhotoGalleryValidator>();
 
         //整个应用程序生命周期以内只创建一个实例
-         _ = services.AddSingleton<ICacheManager, CacheManager>();
-         _ = services.AddSingleton<CacheUtils, CacheUtils>();
+        _ = services.AddSingleton<ICacheManager, CacheManager>();
+        _ = services.AddSingleton<CacheUtils, CacheUtils>();
+        _ = services.AddSingleton<HttpClient, HttpClient>();
 
         #endregion
 
@@ -292,6 +325,7 @@ public class Startup
         _ = app.UseAuthorization();
 
         #endregion
+
 
         _ = app.UseEndpoints(endpoints =>
         {

@@ -5,5 +5,8 @@
 /// </summary>
 public static class Permissionss
 {
+    /// <summary>
+    /// 需动态加载权限，待更改
+    /// </summary>
     public const string Name = "kai,1";
 }

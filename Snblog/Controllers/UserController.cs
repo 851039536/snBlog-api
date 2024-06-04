@@ -1,11 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Snblog.Jwt;
+﻿using System.Net.Http;
 using Microsoft.AspNetCore.Http;
+using NuGet.Common;
+using Snblog.Jwt;
 using Snblog.Util.GlobalVar;
+using SnBlogCore.Jwt;
 
 namespace Snblog.Controllers;
 
@@ -19,19 +17,52 @@ public class UserController : BaseController
 {
     private readonly SnblogContext _coreDbContext;
     private readonly IUserService _service;
-    private readonly JwtConfig _jwtModel;
+    private readonly JwtHelper _jwt;
+    private readonly HttpClient _httpClient;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="service"></param>
     /// <param name="coreDbContext"></param>
-    /// <param name="jwtModel"></param>
-    public UserController(IUserService service,SnblogContext coreDbContext,IOptions<JwtConfig> jwtModel)
+    /// <param name="jwt"></param>
+    public UserController(IUserService service, SnblogContext coreDbContext, JwtHelper jwt, HttpClient httpClient)
     {
         _service = service;
         _coreDbContext = coreDbContext;
-        _jwtModel = jwtModel.Value;
+        _jwt = jwt;
+        _httpClient = httpClient;
+    }
+
+    [Authorize(Policy = "EditPolicy")]
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        return Ok("已授予对这一动态资源的访问权限");
+    }
+
+    /// <summary>
+    /// 验证Token
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("checkToken")]
+    public async Task<IActionResult> CheckToken()
+    {
+        string token = _jwt.CreateToken("1", "admin");
+
+        _httpClient.SetBearerToken(token);
+        // 发送请求
+        var response = await _httpClient.GetAsync("http://localhost:5002/user/test");
+        // 处理响应
+        if (response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            return Ok(content);
+        }
+        else
+        {
+            return StatusCode((int)response.StatusCode);
+        }
     }
 
     #region 登录
@@ -39,55 +70,34 @@ public class UserController : BaseController
     /// <summary>
     /// 登录
     /// </summary>
-    /// <param name="user">用户</param>
+    /// <param name="userName">用户</param>
     /// <param name="pwd">密码</param>
     /// <returns>Nickname,token,id,name</returns>
     [HttpGet("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public IActionResult Login(string user,string pwd)
+    public IActionResult Login(string userName, string pwd)
     {
         // 如果用户名和密码为空，则返回错误信息
-        if(string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
+        if (string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(pwd))
+            return Ok("用户密码不能为空");
         // 查询用户信息
-        var res = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
-        if(res == null) return BadRequest("用户或密码错误");
+        var ret = _coreDbContext.Users.FirstOrDefault(u => u.Name == userName && u.Pwd == pwd);
+        if (ret == null)
+            return BadRequest("用户或密码错误");
 
-        string token = GenerateToken(res);
-        return Ok(new { res.Nickname,Token = token,res.Id,res.Name });
-    }
-
-    private string GenerateToken(User user)
-    {
-        // 创建声明列表
-        var claims = new List<Claim>();
-        // 添加声明
-        claims.AddRange(new[]
-        {
-            new Claim("UserName",user.Name),new Claim(ClaimTypes.Role,user.Name),
-            new Claim(JwtRegisteredClaimNames.Sub,user.Name),new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat,DateTimeOffset.Now.ToUnixTimeSeconds().ToString(),ClaimValueTypes.Integer64)
-        });
-        // 获取当前时间
-        var now = DateTime.UtcNow;
-        //生成token
-        var jwtSecurityToken = new JwtSecurityToken(
-            issuer: _jwtModel.Issuer, //签发者
-            audience: _jwtModel.Audience, //生成token
-            claims: claims, //jwt令牌数据体
-            notBefore: now,
-            expires: now.Add(TimeSpan.FromMinutes(_jwtModel.Expiration)), //令牌过期时间
-            //为数字签名定义SecurityKey                                    
-            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtModel.SecurityKey)),
-                SecurityAlgorithms.HmacSha256)
+        string token = _jwt.CreateToken(userName, "admin");
+        return Ok(
+            new
+            {
+                ret.Nickname,
+                Token = token,
+                ret.Id,
+                ret.Name
+            }
         );
-        // 将token转换为字符串
-        string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-
-        return token;
     }
-
 
     /// <summary>
     /// 登录2
@@ -97,23 +107,23 @@ public class UserController : BaseController
     /// <returns>token</returns>
     [HttpPost("login2")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public IActionResult Login2(string user,string pwd)
+    public IActionResult Login2(string user, string pwd)
     {
-        if(string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
+        if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd))
+            return Ok("用户密码不能为空");
         // 查询用户信息
         var ret = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
-        if(ret == null) return BadRequest("用户或密码错误");
+        if (ret == null)
+            return BadRequest("用户或密码错误");
 
-        // 生成token
-        string token = GenerateToken(ret);
+        string token = _jwt.CreateToken(user, "admin");
         ret.Ip = token;
         return Ok(ret);
     }
 
     #endregion
-
 
     /// <summary>
     /// admin后台
@@ -122,14 +132,16 @@ public class UserController : BaseController
     /// <param name="pwd">密码</param>
     /// <returns>token</returns>
     [HttpPost("loginAdmin")]
-    public IActionResult LoginAdmin(string user,string pwd)
+    public IActionResult LoginAdmin(string user, string pwd)
     {
-        if(string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return ApiResponse(400,false,0,"false","");
+        if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd))
+            return ApiResponse(400, false, 0, "false", "");
         // 查询用户信息
         var ret = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
-        if(ret == null) return ApiResponse(400,false,0,"false","");
+        if (ret == null)
+            return ApiResponse(400, false, 0, "false", "");
 
-        string token = GenerateToken(ret);
+        string token = _jwt.CreateToken(user, "admin");
         ret.Ip = token;
         return ApiResponse(data: ret);
     }
@@ -142,10 +154,10 @@ public class UserController : BaseController
     /// <param name="id">主键</param>
     /// <param name="cache">缓存</param>
     [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id = 0,bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id = 0, bool cache = false)
     {
-        var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetByIdAsync(id, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -158,10 +170,10 @@ public class UserController : BaseController
     /// <param name="name">查询字段</param>
     /// <param name="cache">缓存</param>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(string name = "c",bool cache = false)
+    public async Task<IActionResult> GetContainsAsync(string name = "c", bool cache = false)
     {
-        var data = await _service.GetContainsAsync(name,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetContainsAsync(name, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -175,7 +187,7 @@ public class UserController : BaseController
     public async Task<IActionResult> GetSumAsync(bool cache = false)
     {
         int data = await _service.GetSumAsync(cache);
-        return ApiResponse(cache: cache,data: data);
+        return ApiResponse(cache: cache, data: data);
     }
 
     //TODO 查询失败
@@ -185,9 +197,9 @@ public class UserController : BaseController
     /// <param name="pageIndex">当前页码</param>
     /// <param name="pageSize">记录条数</param>
     [HttpGet("paging")]
-    public IActionResult GetPagingAsync(int pageIndex = 1,int pageSize = 10)
+    public IActionResult GetPagingAsync(int pageIndex = 1, int pageSize = 10)
     {
-        var data = _service.GetPagingAsync(pageIndex,pageSize);
+        var data = _service.GetPagingAsync(pageIndex, pageSize);
         return ApiResponse(data: data);
     }
 
