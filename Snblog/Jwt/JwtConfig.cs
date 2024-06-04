@@ -1,7 +1,7 @@
 ﻿namespace Snblog.Jwt;
 
 /// <summary>
-/// JwtConfig
+/// 配置
 /// </summary>
 public class JwtConfig
 {

@@ -31,10 +31,11 @@ public class UserController : BaseController
     {
         _service = service;
         _coreDbContext = coreDbContext;
-        this._jwtModel = jwtModel.Value;
+        _jwtModel = jwtModel.Value;
     }
 
     #region 登录
+
     /// <summary>
     /// 登录
     /// </summary>
@@ -48,14 +49,12 @@ public class UserController : BaseController
     public IActionResult Login(string user,string pwd)
     {
         // 如果用户名和密码为空，则返回错误信息
-        if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
+        if(string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
         // 查询用户信息
         var res = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
-        if (res == null) return BadRequest("用户或密码错误");
+        if(res == null) return BadRequest("用户或密码错误");
 
-        // 生成token
         string token = GenerateToken(res);
-        // 返回用户信息和token
         return Ok(new { res.Nickname,Token = token,res.Id,res.Name });
     }
 
@@ -66,11 +65,9 @@ public class UserController : BaseController
         // 添加声明
         claims.AddRange(new[]
         {
-            new Claim("UserName", user.Name),
-            new Claim(ClaimTypes.Role,user.Name),
-            new Claim(JwtRegisteredClaimNames.Sub,user.Name),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+            new Claim("UserName",user.Name),new Claim(ClaimTypes.Role,user.Name),
+            new Claim(JwtRegisteredClaimNames.Sub,user.Name),new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat,DateTimeOffset.Now.ToUnixTimeSeconds().ToString(),ClaimValueTypes.Integer64)
         });
         // 获取当前时间
         var now = DateTime.UtcNow;
@@ -80,9 +77,10 @@ public class UserController : BaseController
             audience: _jwtModel.Audience, //生成token
             claims: claims, //jwt令牌数据体
             notBefore: now,
-            expires: now.Add(TimeSpan.FromMinutes(_jwtModel.Expiration)),//令牌过期时间
+            expires: now.Add(TimeSpan.FromMinutes(_jwtModel.Expiration)), //令牌过期时间
             //为数字签名定义SecurityKey                                    
-            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtModel.SecurityKey)),SecurityAlgorithms.HmacSha256)
+            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtModel.SecurityKey)),
+                SecurityAlgorithms.HmacSha256)
         );
         // 将token转换为字符串
         string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
@@ -103,19 +101,20 @@ public class UserController : BaseController
     [ProducesDefaultResponseType]
     public IActionResult Login2(string user,string pwd)
     {
-        if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
+        if(string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return Ok("用户密码不能为空");
         // 查询用户信息
         var ret = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
-        if (ret == null) return BadRequest("用户或密码错误");
+        if(ret == null) return BadRequest("用户或密码错误");
 
         // 生成token
         string token = GenerateToken(ret);
         ret.Ip = token;
         return Ok(ret);
     }
+
     #endregion
-        
-        
+
+
     /// <summary>
     /// admin后台
     /// </summary>
@@ -125,10 +124,10 @@ public class UserController : BaseController
     [HttpPost("loginAdmin")]
     public IActionResult LoginAdmin(string user,string pwd)
     {
-        if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return ApiResponse( 400,false,0,"false","");
+        if(string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pwd)) return ApiResponse(400,false,0,"false","");
         // 查询用户信息
         var ret = _coreDbContext.Users.FirstOrDefault(u => u.Name == user && u.Pwd == pwd);
-        if (ret == null) return ApiResponse( 400,false,0,"false","");
+        if(ret == null) return ApiResponse(400,false,0,"false","");
 
         string token = GenerateToken(ret);
         ret.Ip = token;
@@ -136,6 +135,7 @@ public class UserController : BaseController
     }
 
     #region 主键查询
+
     /// <summary>
     /// 主键查询
     /// </summary>
@@ -145,11 +145,13 @@ public class UserController : BaseController
     public async Task<IActionResult> GetByIdAsync(int id = 0,bool cache = false)
     {
         var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache:cache,data:data);
+        return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     #region 模糊查询
+
     /// <summary>
     /// 模糊查询
     /// </summary>
@@ -159,8 +161,9 @@ public class UserController : BaseController
     public async Task<IActionResult> GetContainsAsync(string name = "c",bool cache = false)
     {
         var data = await _service.GetContainsAsync(name,cache);
-        return ApiResponse(cache:cache,data:data);
+        return ApiResponse(cache: cache,data: data);
     }
+
     #endregion
 
     /// <summary>
@@ -172,8 +175,9 @@ public class UserController : BaseController
     public async Task<IActionResult> GetSumAsync(bool cache = false)
     {
         int data = await _service.GetSumAsync(cache);
-        return ApiResponse(cache:cache,data:data);
+        return ApiResponse(cache: cache,data: data);
     }
+
     //TODO 查询失败
     /// <summary>
     /// 分页查询
@@ -184,7 +188,7 @@ public class UserController : BaseController
     public IActionResult GetPagingAsync(int pageIndex = 1,int pageSize = 10)
     {
         var data = _service.GetPagingAsync(pageIndex,pageSize);
-        return ApiResponse(data:data);
+        return ApiResponse(data: data);
     }
 
     /// <summary>
@@ -199,7 +203,7 @@ public class UserController : BaseController
         entity.TimeCreate = DateTime.Now;
         entity.TimeModified = DateTime.Now;
         int data = await _service.AddAsync(entity);
-        return ApiResponse(data:data);
+        return ApiResponse(data: data);
     }
 
     /// <summary>
@@ -212,7 +216,7 @@ public class UserController : BaseController
     public async Task<IActionResult> Del(int id)
     {
         bool data = await _service.DelAsync(id);
-        return ApiResponse(data:data);
+        return ApiResponse(data: data);
     }
 
     /// <summary>
@@ -226,7 +230,6 @@ public class UserController : BaseController
     {
         user.TimeModified = DateTime.Now;
         bool data = await _service.UpdateAsync(user);
-        return ApiResponse(data:data);
+        return ApiResponse(data: data);
     }
-
 }

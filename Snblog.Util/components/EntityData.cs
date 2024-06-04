@@ -7,7 +7,6 @@
 /// <typeparam name="T"></typeparam>
 public class EntityData<T>
 {
-    public List<T> EntityList { get; set; } = new List<T>();
     public int EntityCount { get; set; }
 }
     

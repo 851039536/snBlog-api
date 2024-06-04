@@ -4,7 +4,7 @@ public class SnSetBlogService : ISnSetBlogService
 {
     private readonly SnblogContext _service;
     private readonly CacheUtils _cacheutil;
-    readonly EntityData<SnSetblog> _res = new();
+    private readonly EntityData<SnSetblog> _res = new();
     readonly EntityDataDto<SnSetblogDto> _resDto = new();
     private readonly IMapper _mapper;
     public SnSetBlogService(CacheUtils cacheUtil, SnblogContext coreDbContext, IMapper mapper)
