@@ -11,7 +11,7 @@ namespace Snblog.Controllers.Snippets;
 [Route("snippetType")]
 public class SnippetTypeController : BaseController
 {
-    private readonly ISnippetTypeService _service; 
+    private readonly ISnippetTypeService _service;
 
     /// <summary>
     /// 构造函数
@@ -74,7 +74,7 @@ public class SnippetTypeController : BaseController
     #region 分页查询
 
     /// <summary>
-    /// 分页查询 
+    /// 分页查询
     /// </summary>
     /// <param name="pageIndex">当前页码</param>
     /// <param name="pageSize">每页记录条数</param>
@@ -82,8 +82,7 @@ public class SnippetTypeController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>列表</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true,
-        bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
     {
         var data = await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache);
         return ApiResponse(data: data, cache: cache);
@@ -94,15 +93,15 @@ public class SnippetTypeController : BaseController
     #region 添加
 
     /// <summary>
-    ///  添加 
+    ///  添加
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>操作是否成功。</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(SnippetType entity)
     {
-        bool data = await    _service.AddAsync(entity);
+        bool data = await _service.AddAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -116,7 +115,7 @@ public class SnippetTypeController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>操作是否成功。</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnippetType entity)
     {
         bool data = await _service.UpdateAsync(entity);
@@ -133,7 +132,7 @@ public class SnippetTypeController : BaseController
     /// <param name="id">主键</param>
     /// <returns>操作是否成功。</returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);

@@ -36,10 +36,10 @@ public class SnippetVersionController : BaseController
     /// <param name="cache"></param>
     /// <returns></returns>
     [HttpGet("sum")]
-    public async Task<IActionResult> GetSumAsync(int identity,int snippetId,bool cache = false)
+    public async Task<IActionResult> GetSumAsync(int identity, int snippetId, bool cache = false)
     {
-        int ret = await _service.GetSumAsync(identity,snippetId,cache);
-        return ApiResponse(data: ret,cache: cache);
+        int ret = await _service.GetSumAsync(identity, snippetId, cache);
+        return ApiResponse(data: ret, cache: cache);
     }
 
     #endregion
@@ -47,16 +47,16 @@ public class SnippetVersionController : BaseController
     #region 主键查询
 
     /// <summary>
-    /// 主键查询 
+    /// 主键查询
     /// </summary>
     /// <param name="id">主键</param>
     /// <param name="cache">缓存</param>
     /// <returns>entity</returns>
     [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
     {
-        var ret = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(data: ret,cache: cache);
+        var ret = await _service.GetByIdAsync(id, cache);
+        return ApiResponse(data: ret, cache: cache);
     }
 
     #endregion
@@ -70,10 +70,10 @@ public class SnippetVersionController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>entity</returns>
     [HttpGet("snippetId")]
-    public async Task<IActionResult> GetAllBySnId(int snippetId,bool cache = false)
+    public async Task<IActionResult> GetAllBySnId(int snippetId, bool cache = false)
     {
-        var ret = await _service.GetAllBySnId(snippetId,cache);
-        return ApiResponse(data: ret,cache: cache);
+        var ret = await _service.GetAllBySnId(snippetId, cache);
+        return ApiResponse(data: ret, cache: cache);
     }
 
     #endregion
@@ -85,7 +85,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(SnippetVersion entity)
     {
@@ -101,7 +101,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     [HttpPut("edit")]
     public async Task<IActionResult> UpdateAsync(SnippetVersion entity)
     {
@@ -118,7 +118,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
@@ -137,9 +137,9 @@ public class SnippetVersionController : BaseController
     /// <param name="type">更新字段: name | text</param>
     /// <returns>bool</returns>
     [HttpPut("upPortion")]
-    public async Task<IActionResult> UpdatePortionAsync(SnippetVersion entity,string type)
+    public async Task<IActionResult> UpdatePortionAsync(SnippetVersion entity, string type)
     {
-        bool ret = await _service.UpdatePortionAsync(entity,type);
+        bool ret = await _service.UpdatePortionAsync(entity, type);
         return ApiResponse(data: ret);
     }
 

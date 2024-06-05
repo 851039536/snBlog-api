@@ -6,12 +6,13 @@ namespace Snblog.Controllers.Snippets;
 /// <summary>
 /// 片段分类的子类API
 /// </summary>
-[ApiExplorerSettings(GroupName = "V1")] 
+[ApiExplorerSettings(GroupName = "V1")]
 [ApiController]
 [Route("snippetTypeSub")]
 public class SnippetTypeSubController : BaseController
 {
-    private readonly ISnippetTypeSubService _service; 
+    private readonly ISnippetTypeSubService _service;
+
     /// <summary>
     /// 构造函数
     /// </summary>
@@ -20,7 +21,7 @@ public class SnippetTypeSubController : BaseController
     {
         _service = service;
     }
-        
+
     #region 查询总数
     /// <summary>
     /// 查询总数
@@ -48,7 +49,6 @@ public class SnippetTypeSubController : BaseController
         return ApiResponse(cache: cache, data: data);
     }
 
-
     #endregion
 
     #region 根据主表类别id查询
@@ -59,13 +59,13 @@ public class SnippetTypeSubController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
     [HttpGet("condition")]
-    public async Task<IActionResult> GetCondition(int snippetTypeId,bool cache =false)
+    public async Task<IActionResult> GetCondition(int snippetTypeId, bool cache = false)
     {
-        var data = await _service.GetCondition(snippetTypeId,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetCondition(snippetTypeId, cache);
+        return ApiResponse(cache: cache, data: data);
     }
     #endregion
-    
+
     #region 主键查询
     /// <summary>
     /// 主键查询
@@ -81,9 +81,9 @@ public class SnippetTypeSubController : BaseController
     }
     #endregion
 
-    #region 分页查询 
+    #region 分页查询
     /// <summary>
-    /// 分页查询 
+    /// 分页查询
     /// </summary>
     /// <param name="pageIndex">当前页码</param>
     /// <param name="pageSize">每页记录条数</param>
@@ -100,12 +100,12 @@ public class SnippetTypeSubController : BaseController
 
     #region 添加
     /// <summary>
-    ///  添加 
+    ///  添加
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(SnippetTypeSub entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -120,7 +120,7 @@ public class SnippetTypeSubController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnippetTypeSub entity)
     {
         bool data = await _service.UpdateAsync(entity);
@@ -135,7 +135,7 @@ public class SnippetTypeSubController : BaseController
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);

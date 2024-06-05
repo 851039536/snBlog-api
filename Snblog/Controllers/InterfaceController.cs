@@ -24,38 +24,43 @@ public class InterfaceController : BaseController
     }
     #endregion
 
-    #region 主键查询 
+    #region 主键查询
     /// <summary>
-    /// 主键查询 
+    /// 主键查询
     /// </summary>
     /// <param name="id">主键</param>
     /// <param name="cache">启缓存</param>
     /// <returns></returns>
     [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
     {
-        var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetByIdAsync(id, cache);
+        return ApiResponse(cache: cache, data: data);
     }
     #endregion
 
     #region  条件查询
     /// <summary>
-    ///条件查询 
+    ///条件查询
     /// </summary>
     /// <param name="identity">用户-分类: 0 | 用户: 1 | 分类: 2</param>
     /// <param name="userName">用户名称</param>
     /// <param name="type">类别</param>
     /// <param name="cache">缓存</param>
     [HttpGet("condition")]
-    public async Task<IActionResult> GetConditionAsync(int identity = 0,string userName = "null",string type = "null",bool cache = false)
+    public async Task<IActionResult> GetConditionAsync(
+        int identity = 0,
+        string userName = "null",
+        string type = "null",
+        bool cache = false
+    )
     {
-        var data = await _service.GetConditionAsync(identity,userName,type,cache);
-        return ApiResponse(data: data,cache: cache);
+        var data = await _service.GetConditionAsync(identity, userName, type, cache);
+        return ApiResponse(data: data, cache: cache);
     }
     #endregion
 
-    #region 分页查询 
+    #region 分页查询
     /// <summary>
     /// 分页查询
     /// </summary>
@@ -67,10 +72,17 @@ public class InterfaceController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(
+        int identity = 0,
+        string type = "null",
+        int pageIndex = 1,
+        int pageSize = 10,
+        bool isDesc = true,
+        bool cache = false
+    )
     {
-        var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,isDesc,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, isDesc, cache);
+        return ApiResponse(cache: cache, data: data);
     }
     #endregion
 
@@ -79,7 +91,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(Interface entity)
     {
@@ -93,7 +105,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns></returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(Interface entity)
     {
@@ -108,7 +120,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
@@ -116,5 +128,4 @@ public class InterfaceController : BaseController
         return ApiResponse(data: data);
     }
     #endregion
-
 }

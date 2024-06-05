@@ -10,7 +10,7 @@ namespace Snblog.Controllers.Articles;
 [ApiExplorerSettings(GroupName = "V1")] //版本控制
 [ApiController] //控制路由
 [Route("article")]
-public  class ArticleController : BaseController
+public class ArticleController : BaseController
 {
     #region 服务
 
@@ -47,7 +47,7 @@ public  class ArticleController : BaseController
     public async Task<IActionResult> GetSumAsync(int identity = 0, string type = null, bool cache = false)
     {
         int data = await _service.GetSumAsync(identity, type, cache);
-        if(data==-1)
+        if (data == -1)
         {
             // 如果方法返回-1，表示失败，返回一个失败的API响应
             return ApiResponseFailure<string>();
@@ -68,7 +68,12 @@ public  class ArticleController : BaseController
     /// <param name="cache">是否使用缓存。如果为true，则优先从缓存中获取结果。</param>
     /// <returns>包含匹配文章的列表。</returns>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null", string name = "winfrom", bool cache = false)
+    public async Task<IActionResult> GetContainsAsync(
+        int identity = 0,
+        string type = "null",
+        string name = "winfrom",
+        bool cache = false
+    )
     {
         var data = await _service.GetContainsAsync(identity, type, name, cache);
         return ApiResponse(cache: cache, data: data);
@@ -165,7 +170,7 @@ public  class ArticleController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(Article entity)
     {
@@ -187,14 +192,14 @@ public  class ArticleController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(Article entity)
     {
         bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
-    
+
     #region 条件更新
 
     /// <summary>
@@ -221,7 +226,7 @@ public  class ArticleController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
@@ -230,5 +235,4 @@ public  class ArticleController : BaseController
     }
 
     #endregion
-    
 }

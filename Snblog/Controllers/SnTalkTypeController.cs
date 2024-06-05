@@ -42,7 +42,6 @@ public class SnTalkTypeController : Controller
         return Ok(await _service.GetAllAsync(id));
     }
 
-
     /// <summary>
     /// 分页查询 - 支持排序
     /// </summary>
@@ -54,8 +53,6 @@ public class SnTalkTypeController : Controller
     {
         return Ok(await _service.GetFyAllAsync(pageIndex, pageSize, isDesc));
     }
-
-
 
     /// <summary>
     /// 查询总数
@@ -72,7 +69,7 @@ public class SnTalkTypeController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPost("AddAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(SnTalkType entity)
     {
         return Ok(await _service.AddAsync(entity));
@@ -83,17 +80,18 @@ public class SnTalkTypeController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpDelete("DelAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         return Ok(await _service.DeleteAsync(id));
     }
+
     /// <summary>
     /// 更新数据 （权限）
     /// </summary>
     /// <returns></returns>
     [HttpPut("UpdateAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnTalkType entity)
     {
         return Ok(await _service.UpdateAsync(entity));

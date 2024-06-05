@@ -14,6 +14,7 @@ using Snblog.Enties.Validator;
 using Snblog.Jwt;
 using Snblog.Service.Service.DataBases;
 using Snblog.Util.Exceptions;
+using Snblog.Util.GlobalVar;
 using SnBlogCore.Jwt;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using ArticleService = Snblog.Service.Service.Articles.ArticleService;
@@ -186,13 +187,14 @@ public class Startup
                     RequireExpirationTime = true,
                 };
             });
+
         #region 配置动态授权服务
-        _ = services.AddAuthorization(options =>
-        {
-            //定义是否有编辑策略
-            options.AddPolicy("EditPolicy", policy => policy.Requirements.Add(new DynamicAuthorizationRequirement("Edit")));
-        });
+
+        //配置授权
+        _ = services.AddAuthorization(Permissions.ConfigureAuthorizationPolicies);
+        // 注册动态授权处理程序为单例
         _ = services.AddSingleton<IAuthorizationHandler, DynamicAuthorizationHandler>();
+
         #endregion
 
         //将 JwtHelper 注册为单例模式
@@ -325,7 +327,6 @@ public class Startup
         _ = app.UseAuthorization();
 
         #endregion
-
 
         _ = app.UseEndpoints(endpoints =>
         {

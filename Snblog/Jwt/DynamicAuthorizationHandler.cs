@@ -25,24 +25,22 @@ namespace Snblog.Jwt
         /// 检查用户是否具有特定的权限
         /// </summary>
         /// <param name="user">包含了用户的声明信息</param>
-        /// <param name="permission"> 字符串类型的权限名称，例如 "EditPost" 或 "DeleteUser,或设置通用"</param>
+        /// <param name="permission"> 字符串类型的权限名称，例如 "edit,view,delete"</param>
         /// <returns></returns>
         private bool UserHasPermission(ClaimsPrincipal user, string permission)
         {
-            // 输出用户的声明信息
+            // // 输出用户的声明信息
             foreach (var claim in user.Claims)
             {
                 // 输出声明的类型和值
                 Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
             }
-
-            // 检查roleName，是否有管理员权限
-            if (user.Claims.Any(c => c.Type == "roleName" && c.Value == "admin"))
+            // 判断操作权限, permission 根据数据permission表名和  Claim("roleName", roleName)进行比对
+            if (user.Claims.Any(c => c.Type == "roleName" && c.Value.Contains(permission)))
             {
-                // 如果用户的声明中包含指定的权限，返回 true
                 return true;
             }
-            return false; // 示例返回 true
+            return false;
         }
     }
 }

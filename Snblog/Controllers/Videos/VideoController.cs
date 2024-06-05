@@ -25,17 +25,17 @@ public class VideoController : BaseController
     #region 查询总数
 
     /// <summary>
-    /// 查询总数 
+    /// 查询总数
     /// </summary>
     /// <param name="identity">所有:0 || 分类:1 || 用户:2 </param>
     /// <param name="type">查询条件</param>
     /// <param name="cache">缓存</param>
     /// <returns></returns>
     [HttpGet("sum")]
-    public async Task<IActionResult> GetSumAsync(int identity = 0,string type = "null",bool cache = false)
+    public async Task<IActionResult> GetSumAsync(int identity = 0, string type = "null", bool cache = false)
     {
-        int data = await _service.GetSumAsync(identity,type,cache);
-        return ApiResponse(cache: cache,data: data);
+        int data = await _service.GetSumAsync(identity, type, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -52,7 +52,7 @@ public class VideoController : BaseController
     public async Task<IActionResult> GetAllAsync(bool cache = false)
     {
         var data = await _service.GetAllAsync(cache);
-        return ApiResponse(cache: cache,data: data);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -67,10 +67,15 @@ public class VideoController : BaseController
     /// <param name="name">查询字段</param>
     /// <param name="cache">是否开启缓存</param>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false)
+    public async Task<IActionResult> GetContainsAsync(
+        int identity = 0,
+        string type = "null",
+        string name = "c",
+        bool cache = false
+    )
     {
-        var data = await _service.GetContainsAsync(identity,type,name,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetContainsAsync(identity, type, name, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -83,10 +88,10 @@ public class VideoController : BaseController
     /// <param name="id">主键</param>
     /// <param name="cache">缓存</param>
     [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
     {
-        var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetByIdAsync(id, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -94,16 +99,16 @@ public class VideoController : BaseController
     #region 条件查询
 
     /// <summary>
-    ///条件查询 
+    ///条件查询
     /// </summary>
     /// <param name="identity">分类:1 || 用户:2</param>
     /// <param name="type">类别</param>
     /// <param name="cache">是否开启缓存</param>
     [HttpGet("type")]
-    public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false)
+    public async Task<IActionResult> GetTypeAsync(int identity = 1, string type = "null", bool cache = false)
     {
-        var data = await _service.GetTypeAsync(identity,type,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetTypeAsync(identity, type, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -121,11 +126,17 @@ public class VideoController : BaseController
     /// <param name="cache">是否开启缓存</param>
     /// <returns></returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,
-                                                    bool isDesc = true,bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(
+        int identity = 0,
+        string type = "null",
+        int pageIndex = 1,
+        int pageSize = 10,
+        bool isDesc = true,
+        bool cache = false
+    )
     {
-        var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,isDesc,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, isDesc, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -140,7 +151,7 @@ public class VideoController : BaseController
     public async Task<IActionResult> GetSumAsync(bool cache)
     {
         int data = await _service.GetSumAsync(cache);
-        return ApiResponse(cache: cache,data: data);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -149,7 +160,7 @@ public class VideoController : BaseController
     /// 添加
     /// </summary>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(Video entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -161,20 +172,19 @@ public class VideoController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);
         return ApiResponse(data: data);
     }
 
-
     /// <summary>
     /// 更新
     /// </summary>
     /// <param name="entity"></param>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(Video entity)
     {
         bool data = await _service.UpdateAsync(entity);

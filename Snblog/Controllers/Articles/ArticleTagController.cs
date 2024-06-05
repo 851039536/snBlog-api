@@ -21,8 +21,7 @@ public class ArticleTagController : BaseController
     {
         _service = service;
     }
-    
-    
+
     #region 查询总数
     /// <summary>
     /// 查询总数
@@ -33,7 +32,7 @@ public class ArticleTagController : BaseController
     public async Task<IActionResult> GetSumAsync(bool cache = false)
     {
         int data = await _service.GetSumAsync(cache);
-        return ApiResponse(cache: cache,data: data);
+        return ApiResponse(cache: cache, data: data);
     }
     #endregion
 
@@ -45,16 +44,16 @@ public class ArticleTagController : BaseController
     /// <param name="cache">是否使用缓存。默认为false。</param>
     /// <returns>文章标签的详细信息。</returns>
     [HttpGet("byId")]
-    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
     {
-        var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetByIdAsync(id, cache);
+        return ApiResponse(cache: cache, data: data);
     }
     #endregion
 
-    #region 分页查询 
+    #region 分页查询
     /// <summary>
-    /// 分页查询 
+    /// 分页查询
     /// </summary>
     /// <param name="pageIndex">当前页码，默认为1。</param>
     /// <param name="pageSize">每页显示的记录数，默认为10。</param>
@@ -62,11 +61,12 @@ public class ArticleTagController : BaseController
     /// <param name="cache">是否使用缓存，默认为false。</param>
     /// <returns>分页后的文章标签列表。</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
     {
-        var data = await _service.GetPagingAsync(pageIndex,pageSize,isDesc,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache);
+        return ApiResponse(cache: cache, data: data);
     }
+
     /// <summary>
     /// 分页测试，使用分页通用类。
     /// </summary>
@@ -74,9 +74,9 @@ public class ArticleTagController : BaseController
     /// <param name="pageSize">每页显示的记录数，默认为10。</param>
     /// <returns>分页后的测试数据。</returns>
     [HttpGet("pagingTest")]
-    public async Task<IActionResult> TestPaging(int page = 1, int pageSize = 10)  
-    {  
-        var data = await _service.GetPagingTest(page,pageSize);
+    public async Task<IActionResult> TestPaging(int page = 1, int pageSize = 10)
+    {
+        var data = await _service.GetPagingTest(page, pageSize);
         return ApiResponse(data: data);
     }
     #endregion
@@ -88,7 +88,7 @@ public class ArticleTagController : BaseController
     /// <param name="entity">要添加的文章标签实体。</param>
     /// <returns>操作是否成功。</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(ArticleTag entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -103,7 +103,7 @@ public class ArticleTagController : BaseController
     /// <param name="entity">包含更新信息的文章标签实体。</param>
     /// <returns>操作是否成功。</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(ArticleTag entity)
     {
         bool data = await _service.UpdateAsync(entity);
@@ -112,14 +112,14 @@ public class ArticleTagController : BaseController
 
     #endregion
 
-    #region 删除 
+    #region 删除
     /// <summary>
     /// 删除
     /// </summary>
     /// <param name="id">要删除的文章标签的主键ID。</param>
     /// <returns>操作是否成功。</returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);

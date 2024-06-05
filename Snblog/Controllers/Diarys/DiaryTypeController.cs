@@ -21,6 +21,7 @@ public class DiaryTypeController : BaseController
     {
         _service = service;
     }
+
     #region 查询总数
 
     /// <summary>
@@ -36,7 +37,7 @@ public class DiaryTypeController : BaseController
     }
 
     #endregion
-        
+
     #region 主键查询
 
     /// <summary>
@@ -53,7 +54,7 @@ public class DiaryTypeController : BaseController
     }
 
     #endregion
-    
+
     #region 类别查询
 
     /// <summary>
@@ -71,10 +72,10 @@ public class DiaryTypeController : BaseController
     }
 
     #endregion
-    
-    #region 分页查询 
+
+    #region 分页查询
     /// <summary>
-    /// 分页查询 
+    /// 分页查询
     /// </summary>
     /// <param name="pageIndex">当前页码，默认为1</param>
     /// <param name="pageSize">每页显示的记录数，默认为10</param>
@@ -82,10 +83,10 @@ public class DiaryTypeController : BaseController
     /// <param name="cache">是否使用缓存查询结果</param>
     /// <returns>分页的日记分类信息列表</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int pageIndex = 1,int pageSize = 10,bool isDesc = true,bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10, bool isDesc = true, bool cache = false)
     {
-        var data = await _service.GetPagingAsync(pageIndex,pageSize,isDesc,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetPagingAsync(pageIndex, pageSize, isDesc, cache);
+        return ApiResponse(cache: cache, data: data);
     }
     #endregion
 
@@ -97,7 +98,7 @@ public class DiaryTypeController : BaseController
     /// <param name="entity">要添加的日记分类实体</param>
     /// <returns>操作是否成功</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(DiaryType entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -114,7 +115,7 @@ public class DiaryTypeController : BaseController
     /// <param name="id">要删除的日记分类的主键ID</param>
     /// <returns>操作是否成功</returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);
@@ -131,7 +132,7 @@ public class DiaryTypeController : BaseController
     /// <param name="entity">包含更新信息的日记分类实体</param>
     /// <returns>操作是否成功</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(DiaryType entity)
     {
         bool data = await _service.UpdateAsync(entity);

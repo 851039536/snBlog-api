@@ -46,7 +46,6 @@ public class SnTalkController : Controller
         return Ok(await _service.GetAllAsync(id));
     }
 
-
     /// <summary>
     /// 分页查询 - 支持排序
     /// </summary>
@@ -99,7 +98,7 @@ public class SnTalkController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPost("AddAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(SnTalk entity)
     {
         return Ok(await _service.AddAsync(entity));
@@ -110,7 +109,7 @@ public class SnTalkController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpDelete("DelAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         return Ok(await _service.DeleteAsync(id));
@@ -121,7 +120,7 @@ public class SnTalkController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPut("UpdateAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnTalk entity)
     {
         return Ok(await _service.UpdateAsync(entity));

@@ -12,7 +12,6 @@ namespace Snblog.Controllers;
 public class SnSetBlogController : ControllerBase
 {
     private readonly ISnSetBlogService _service; //IOC依赖注入
-
     #region 构造函数
     /// <summary>
     /// 构造函数
@@ -25,7 +24,7 @@ public class SnSetBlogController : ControllerBase
 
     #region 查询总数 GetCountAsync
     /// <summary>
-    /// 查询总数 
+    /// 查询总数
     /// </summary>
     /// <param name="identity">所有:0 || 分类:1 || 用户2  </param>
     /// <param name="type">条件(identity为0则填0) </param>
@@ -50,15 +49,23 @@ public class SnSetBlogController : ControllerBase
     /// <param name="ordering">排序条件[id排序]</param>
     /// <returns></returns>
     [HttpGet("GetPagingAsync")]
-    public async Task<IActionResult> GetFyAsync(int identity = 0, string type = "null", int pageIndex = 1, int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
+    public async Task<IActionResult> GetFyAsync(
+        int identity = 0,
+        string type = "null",
+        int pageIndex = 1,
+        int pageSize = 10,
+        string ordering = "id",
+        bool isDesc = true,
+        bool cache = false
+    )
     {
         return Ok(await _service.GetFyAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache));
     }
     #endregion
 
-    #region 主键查询 
+    #region 主键查询
     /// <summary>
-    /// 主键查询 
+    /// 主键查询
     /// </summary>
     /// <param name="id">文章id</param>
     /// <param name="cache">是否开启缓存</param>
@@ -76,7 +83,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     [HttpPost("AddAsync")]
     public async Task<IActionResult> AddAsync(SnSetblogDto entity)
     {
@@ -89,7 +96,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     [HttpPut("UpdateAsync")]
     public async Task<IActionResult> UpdateAsync(SnSetblogDto entity)
     {
@@ -102,7 +109,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     [HttpDelete("DelAsync")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
@@ -122,5 +129,4 @@ public class SnSetBlogController : ControllerBase
         return Ok(await _service.UpdatePortionAsync(entity, type));
     }
     #endregion
-
 }

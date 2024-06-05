@@ -33,7 +33,7 @@ public class NavigationTypeController : BaseController
     public async Task<IActionResult> GetSumAsync(bool cache)
     {
         int data = await _service.GetSumAsync(cache);
-        return ApiResponse(cache: cache,data: data);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -63,10 +63,10 @@ public class NavigationTypeController : BaseController
     /// <param name="cache">是否使用缓存</param>
     /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id,bool cache)
+    public async Task<IActionResult> GetByIdAsync(int id, bool cache)
     {
-        var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetByIdAsync(id, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -74,7 +74,7 @@ public class NavigationTypeController : BaseController
     #region 分页查询
 
     /// <summary>
-    /// 分页查询 
+    /// 分页查询
     /// </summary>
     /// <param name="type">查询类型（all表示查询所有）</param>
     /// <param name="pageIndex">当前页码</param>
@@ -83,10 +83,10 @@ public class NavigationTypeController : BaseController
     /// <param name="cache">是否使用缓存</param>
     /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(string type,int pageIndex,int pageSize,bool isDesc,bool cache)
+    public async Task<IActionResult> GetPagingAsync(string type, int pageIndex, int pageSize, bool isDesc, bool cache)
     {
-        var data = await _service.GetPagingAsync(type,pageIndex,pageSize,isDesc,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetPagingAsync(type, pageIndex, pageSize, isDesc, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -99,7 +99,7 @@ public class NavigationTypeController : BaseController
     /// <param name="entity">导航分类数据实体</param>
     /// <returns>返回操作结果</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(NavigationType entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -111,12 +111,12 @@ public class NavigationTypeController : BaseController
     #region 删除
 
     /// <summary>
-    /// 删除 
+    /// 删除
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns>返回操作结果</returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);
@@ -133,7 +133,7 @@ public class NavigationTypeController : BaseController
     /// <param name="entity">导航分类数据实体</param>
     /// <returns>返回操作结果</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(NavigationType entity)
     {
         bool data = await _service.UpdateAsync(entity);

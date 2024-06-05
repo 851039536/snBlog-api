@@ -29,17 +29,17 @@ public class NavigationController : BaseController
     #region 查询总数
 
     /// <summary>
-    /// 查询总数 
+    /// 查询总数
     /// </summary>
     /// <param name="identity">查询类型标识（所有:0, 分类:1, 用户:2）</param>
     /// <param name="type">查询条件</param>
     /// <param name="cache">是否使用缓存</param>
     /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("sum")]
-    public async Task<IActionResult> GetSumAsync(int identity = 0,string type = "null",bool cache = false)
+    public async Task<IActionResult> GetSumAsync(int identity = 0, string type = "null", bool cache = false)
     {
-        int data = await _service.GetSumAsync(identity,type,cache);
-        return ApiResponse(cache: cache,data: data);
+        int data = await _service.GetSumAsync(identity, type, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -53,10 +53,10 @@ public class NavigationController : BaseController
     /// <param name="cache">是否使用缓存</param>
     /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
     {
-        var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetByIdAsync(id, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -72,10 +72,15 @@ public class NavigationController : BaseController
     /// <param name="cache">是否使用缓存</param>
     /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false)
+    public async Task<IActionResult> GetContainsAsync(
+        int identity = 0,
+        string type = "null",
+        string name = "c",
+        bool cache = false
+    )
     {
-        var data = await _service.GetContainsAsync(identity,type,name,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetContainsAsync(identity, type, name, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -90,10 +95,10 @@ public class NavigationController : BaseController
     /// <param name="cache">是否使用缓存</param>
     /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("type")]
-    public async Task<IActionResult> GetTypeAsync(int identity = 1,string type = "null",bool cache = false)
+    public async Task<IActionResult> GetTypeAsync(int identity = 1, string type = "null", bool cache = false)
     {
-        var data = await _service.GetTypeAsync(identity,type,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetTypeAsync(identity, type, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -112,11 +117,18 @@ public class NavigationController : BaseController
     /// <param name="ordering">排序条件</param>
     /// <returns>返回查询结果及是否使用缓存的状态</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetFyAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",
-                                                bool isDesc = true,bool cache = false)
+    public async Task<IActionResult> GetFyAsync(
+        int identity = 0,
+        string type = "null",
+        int pageIndex = 1,
+        int pageSize = 10,
+        string ordering = "id",
+        bool isDesc = true,
+        bool cache = false
+    )
     {
-        var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -130,9 +142,9 @@ public class NavigationController : BaseController
     /// <param name="maxValue">随机数最大值</param>
     /// <returns>返回操作结果</returns>
     [HttpPost("randomImg")]
-    public async Task<IActionResult> RandomImg(int minValue = 1,int maxValue = 11)
+    public async Task<IActionResult> RandomImg(int minValue = 1, int maxValue = 11)
     {
-        bool ret = await _service.RandomImg(minValue,maxValue);
+        bool ret = await _service.RandomImg(minValue, maxValue);
         return ApiResponse(data: ret);
     }
 
@@ -146,7 +158,7 @@ public class NavigationController : BaseController
     /// <param name="entity">导航数据实体</param>
     /// <returns>返回操作结果</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(Navigation entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -163,7 +175,7 @@ public class NavigationController : BaseController
     /// <param name="entity">导航数据实体</param>
     /// <returns>返回操作结果</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(Navigation entity)
     {
         bool data = await _service.UpdateAsync(entity);
@@ -180,7 +192,7 @@ public class NavigationController : BaseController
     /// <param name="id">主键</param>
     /// <returns>返回操作结果</returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);

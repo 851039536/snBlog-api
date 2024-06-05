@@ -10,7 +10,8 @@ namespace Snblog.Controllers;
 [ApiController]
 public class SnPictureTypeController : ControllerBase
 {
-    private readonly ISnPictureTypeService _service; 
+    private readonly ISnPictureTypeService _service;
+
     /// <summary>
     /// 构造函数
     /// </summary>
@@ -19,6 +20,7 @@ public class SnPictureTypeController : ControllerBase
     {
         _service = service;
     }
+
     #region  查询所有（缓存）
     /// <summary>
     /// 查询所有（缓存）
@@ -72,7 +74,7 @@ public class SnPictureTypeController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpPost("AddAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(SnPictureType entity)
     {
         return Ok(await _service.AddAsync(entity));
@@ -84,7 +86,7 @@ public class SnPictureTypeController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpDelete("DelAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         return Ok(await _service.DeleteAsync(id));
@@ -96,11 +98,10 @@ public class SnPictureTypeController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpPut("UpdateAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnPictureType entity)
     {
         return Ok(await _service.UpdateAsync(entity));
     }
     #endregion
-
 }

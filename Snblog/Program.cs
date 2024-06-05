@@ -46,6 +46,6 @@ public class Program
             .UseSerilog() // 使用 Serilog 作为日志提供程序
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup>();
+                _ = webBuilder.UseStartup<Startup>();
             });
 }

@@ -1,6 +1,4 @@
 ﻿using Snblog.Models;
-using System;
-using System.Collections.Generic;
 
 namespace Snblog.Enties.Models;
 
@@ -79,4 +77,6 @@ public partial class User
     public virtual ICollection<UserTalk> UserTalks { get; set; } = new List<UserTalk>();
 
     public virtual ICollection<Video> Videos { get; set; } = new List<Video>();
+
+    public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
 }

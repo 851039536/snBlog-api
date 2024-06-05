@@ -6,12 +6,12 @@ namespace Snblog.Controllers.Articles;
 /// <summary>
 /// 文章分类API
 /// </summary>
-[ApiExplorerSettings(GroupName = "V1")] 
+[ApiExplorerSettings(GroupName = "V1")]
 [ApiController]
 [Route("articleType")]
 public class ArticleTypeController : BaseController
 {
-    private readonly IArticleTypeService _service; 
+    private readonly IArticleTypeService _service;
 
     /// <summary>
     /// 初始化实例
@@ -21,9 +21,9 @@ public class ArticleTypeController : BaseController
     {
         _service = service;
     }
-    
+
     #region 查询总数
-    
+
     /// <summary>
     /// 查询总数
     /// </summary>
@@ -38,7 +38,7 @@ public class ArticleTypeController : BaseController
     #endregion
 
     #region 查询所有
-    
+
     /// <summary>
     /// 查询所有
     /// </summary>
@@ -54,7 +54,7 @@ public class ArticleTypeController : BaseController
     #endregion
 
     #region 主键查询
-    
+
     /// <summary>
     /// 主键查询
     /// </summary>
@@ -65,13 +65,13 @@ public class ArticleTypeController : BaseController
     public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
     {
         var data = await _service.GetByIdAsync(id, cache);
-        return ApiResponse(data: data,cache:cache);
+        return ApiResponse(data: data, cache: cache);
     }
     #endregion
 
-    #region 分页查询 
+    #region 分页查询
     /// <summary>
-    /// 分页查询 
+    /// 分页查询
     /// </summary>
     /// <param name="pageIndex">当前页码</param>
     /// <param name="pageSize">每页记录条数</param>
@@ -93,7 +93,7 @@ public class ArticleTypeController : BaseController
     /// <param name="entity">文章分类实体</param>
     /// <returns>操作是否成功</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Create)]
     public async Task<IActionResult> AddAsync(ArticleType entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -123,7 +123,7 @@ public class ArticleTypeController : BaseController
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);

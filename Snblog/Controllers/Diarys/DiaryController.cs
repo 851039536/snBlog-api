@@ -25,17 +25,17 @@ public class DiaryController : BaseController
     #region 查询总数
 
     /// <summary>
-    /// 查询总数 
+    /// 查询总数
     /// </summary>
     /// <param name="identity">查询条件标识（0:所有, 1:分类, 2:用户）</param>
     /// <param name="type">查询类型（当identity为0时，type为null）</param>
     /// <param name="cache">是否使用缓存</param>
     /// <returns>日记总数</returns>
     [HttpGet("sum")]
-    public async Task<IActionResult> GetSumAsync(int identity = 0,string type = "null",bool cache = false)
+    public async Task<IActionResult> GetSumAsync(int identity = 0, string type = "null", bool cache = false)
     {
-        int data = await _service.GetSumAsync(identity,type,cache);
-        return ApiResponse(cache: cache,data: data);
+        int data = await _service.GetSumAsync(identity, type, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -51,10 +51,15 @@ public class DiaryController : BaseController
     /// <param name="cache">是否使用缓存</param>
     /// <returns>查询结果</returns>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(int identity = 0,string type = "null",string name = "c",bool cache = false)
+    public async Task<IActionResult> GetContainsAsync(
+        int identity = 0,
+        string type = "null",
+        string name = "c",
+        bool cache = false
+    )
     {
-        var data = await _service.GetContainsAsync(identity,type,name,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetContainsAsync(identity, type, name, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -62,16 +67,16 @@ public class DiaryController : BaseController
     #region 主键查询
 
     /// <summary>
-    /// 主键查询 
+    /// 主键查询
     /// </summary>
     /// <param name="id">日记主键</param>
     /// <param name="cache">是否使用缓存</param>
     /// <returns>查询结果</returns>
     [HttpGet("bid")]
-    public async Task<IActionResult> GetByIdAsync(int id,bool cache = false)
+    public async Task<IActionResult> GetByIdAsync(int id, bool cache = false)
     {
-        var data = await _service.GetByIdAsync(id,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetByIdAsync(id, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -85,10 +90,10 @@ public class DiaryController : BaseController
     /// <param name="cache">是否使用缓存</param>
     /// <returns>统计结果</returns>
     [HttpGet("strSum")]
-    public async Task<IActionResult> GetSumAsync(string type,bool cache)
+    public async Task<IActionResult> GetSumAsync(string type, bool cache)
     {
-        int data = await _service.GetSumAsync(type,cache);
-        return ApiResponse(data: data,cache: cache);
+        int data = await _service.GetSumAsync(type, cache);
+        return ApiResponse(data: data, cache: cache);
     }
 
     #endregion
@@ -107,11 +112,18 @@ public class DiaryController : BaseController
     /// <param name="ordering">排序条件（data:时间, read:阅读, give:点赞, id:按id排序）</param>
     /// <returns>分页查询结果</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int identity = 0,string type = "null",int pageIndex = 1,int pageSize = 10,string ordering = "id",
-                                                    bool isDesc = true,bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(
+        int identity = 0,
+        string type = "null",
+        int pageIndex = 1,
+        int pageSize = 10,
+        string ordering = "id",
+        bool isDesc = true,
+        bool cache = false
+    )
     {
-        var data = await _service.GetPagingAsync(identity,type,pageIndex,pageSize,ordering,isDesc,cache);
-        return ApiResponse(cache: cache,data: data);
+        var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
+        return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
@@ -119,12 +131,12 @@ public class DiaryController : BaseController
     #region 添加数据
 
     /// <summary>
-    /// 添加数据 
+    /// 添加数据
     /// </summary>
     /// <param name="entity">日记实体</param>
     /// <returns>操作结果</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Roles = Permissions.Create)]
     public async Task<IActionResult> AddAsync(Diary entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -136,12 +148,12 @@ public class DiaryController : BaseController
     #region 删除数据
 
     /// <summary>
-    /// 删除数据 
+    /// 删除数据
     /// </summary>
     /// <param name="id">日记主键</param>
     /// <returns>操作结果</returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Delete)]
     public async Task<IActionResult> DelAsync(int id)
     {
         bool data = await _service.DelAsync(id);
@@ -153,12 +165,12 @@ public class DiaryController : BaseController
     #region 更新数据
 
     /// <summary>
-    /// 更新数据 
+    /// 更新数据
     /// </summary>
     /// <param name="entity">日记实体</param>
     /// <returns>操作结果</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = Permissions.Edit)]
     public async Task<IActionResult> UpdateAsync(Diary entity)
     {
         bool data = await _service.UpdateAsync(entity);
@@ -176,9 +188,9 @@ public class DiaryController : BaseController
     /// <param name="type">要更新的字段类型</param>
     /// <returns>操作结果</returns>
     [HttpPut("upPortion")]
-    public async Task<IActionResult> UpdatePortionAsync(Diary entity,string type)
+    public async Task<IActionResult> UpdatePortionAsync(Diary entity, string type)
     {
-        bool data = await _service.UpdatePortionAsync(entity,type);
+        bool data = await _service.UpdatePortionAsync(entity, type);
         return ApiResponse(data: data);
     }
 
