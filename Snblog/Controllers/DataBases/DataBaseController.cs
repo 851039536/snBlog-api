@@ -37,21 +37,25 @@ public class DataBaseController : ControllerBase
     /// <param name="database">数据库名称</param>
     /// <returns>操作成功返回"true"，否则返回错误信息</returns>
     [HttpPost("restore")]
-    public ActionResult Restore(string ip = "localhost",string user = "root",string pwd = "woshishui",
-                                string database = "snblog")
+    public ActionResult Restore(
+        string ip = "localhost",
+        string user = "root",
+        string pwd = "woshishui",
+        string database = "snblog"
+    )
     {
-        bool data = _data.Restore(ip,user,pwd,database);
+        bool data = _data.Restore(ip, user, pwd, database);
         return Ok(data);
     }
 
-    /// <summary>
-    /// 测试TOKEN是否存在
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet("token")]
-    [Authorize(Roles = "kai,1")]
-    public ActionResult CheckToken()
-    {
-        return Ok();
-    }
+    ///// <summary>
+    ///// 测试TOKEN是否存在
+    ///// </summary>
+    ///// <returns></returns>
+    //[HttpGet("token")]
+    //[Authorize(Roles = "kai,1")]
+    //public ActionResult CheckToken()
+    //{
+    //    return Ok();
+    //}
 }

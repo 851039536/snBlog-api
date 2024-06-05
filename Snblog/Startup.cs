@@ -260,6 +260,7 @@ public class Startup
         );
 
         #endregion
+
         _ = services.AddControllers();
     }
 
