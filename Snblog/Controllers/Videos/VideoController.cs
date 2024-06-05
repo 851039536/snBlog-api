@@ -1,5 +1,5 @@
 ﻿using Snblog.IService.Videos;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Videos;
 
@@ -160,7 +160,7 @@ public class VideoController : BaseController
     /// 添加
     /// </summary>
     [HttpPost("add")]
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(Video entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -172,7 +172,7 @@ public class VideoController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     [HttpDelete("del")]
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);
@@ -184,7 +184,7 @@ public class VideoController : BaseController
     /// </summary>
     /// <param name="entity"></param>
     [HttpPut("update")]
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(Video entity)
     {
         bool data = await _service.UpdateAsync(entity);

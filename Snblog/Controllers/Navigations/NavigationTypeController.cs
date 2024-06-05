@@ -1,5 +1,5 @@
 ﻿using Snblog.IService.IService.Navigations;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Navigations;
 
@@ -99,7 +99,7 @@ public class NavigationTypeController : BaseController
     /// <param name="entity">导航分类数据实体</param>
     /// <returns>返回操作结果</returns>
     [HttpPost("add")]
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(NavigationType entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -116,7 +116,7 @@ public class NavigationTypeController : BaseController
     /// <param name="id">主键</param>
     /// <returns>返回操作结果</returns>
     [HttpDelete("del")]
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);
@@ -133,7 +133,7 @@ public class NavigationTypeController : BaseController
     /// <param name="entity">导航分类数据实体</param>
     /// <returns>返回操作结果</returns>
     [HttpPut("update")]
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(NavigationType entity)
     {
         bool data = await _service.UpdateAsync(entity);

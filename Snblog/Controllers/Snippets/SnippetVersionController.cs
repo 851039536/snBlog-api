@@ -1,5 +1,5 @@
 ﻿using Snblog.IService.IService.Snippets;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Snippets;
 
@@ -85,7 +85,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(SnippetVersion entity)
     {
@@ -101,7 +101,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     [HttpPut("edit")]
     public async Task<IActionResult> UpdateAsync(SnippetVersion entity)
     {
@@ -118,7 +118,7 @@ public class SnippetVersionController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {

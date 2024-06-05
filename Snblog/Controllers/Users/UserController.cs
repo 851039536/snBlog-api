@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using Snblog.IService.Users;
 using Snblog.Jwt;
-using Snblog.Util.GlobalVar;
 using SnBlogCore.Jwt;
 
 namespace Snblog.Controllers.Users;
@@ -40,7 +39,7 @@ public class UserController : BaseController
     /// 测试编辑权限
     /// </summary>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     [HttpGet("edit")]
     public IActionResult Edit()
     {
@@ -51,7 +50,7 @@ public class UserController : BaseController
     /// 测试查看权限
     /// </summary>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Viewer)]
+    [Authorize(Policy = JPermissions.Viewer)]
     [HttpGet("viewer")]
     public IActionResult Viewer()
     {
@@ -62,7 +61,7 @@ public class UserController : BaseController
     /// 测试删除权限
     /// </summary>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     [HttpGet("delete")]
     public IActionResult Delete()
     {
@@ -73,7 +72,7 @@ public class UserController : BaseController
     /// 测试创建权限
     /// </summary>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     [HttpGet("create")]
     public IActionResult Create()
     {
@@ -84,8 +83,8 @@ public class UserController : BaseController
     /// 测试编辑和查看权限
     /// </summary>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Viewer)]
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Viewer)]
+    [Authorize(Policy = JPermissions.Edit)]
     [HttpGet("viewerEdit")]
     public IActionResult ViewerEdit()
     {
@@ -96,11 +95,11 @@ public class UserController : BaseController
     /// 测试管理员权限
     /// </summary>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Viewer)]
-    [Authorize(Policy = Permissions.Edit)]
-    [Authorize(Policy = Permissions.Delete)]
-    [Authorize(Policy = Permissions.Create)]
-    [Authorize(Policy = Permissions.Admin)]
+    [Authorize(Policy = JPermissions.Viewer)]
+    [Authorize(Policy = JPermissions.Edit)]
+    [Authorize(Policy = JPermissions.Delete)]
+    [Authorize(Policy = JPermissions.Create)]
+    [Authorize(Policy = JPermissions.Admin)]
     [HttpGet("admin")]
     public IActionResult Admin()
     {
@@ -276,7 +275,7 @@ public class UserController : BaseController
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Admin)]
+    [Authorize(Policy = JPermissions.Admin)]
     [HttpPost("add")]
     public async Task<IActionResult> Add(User entity)
     {
@@ -291,7 +290,7 @@ public class UserController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Admin)]
+    [Authorize(Policy = JPermissions.Admin)]
     [HttpDelete("del")]
     public async Task<IActionResult> Del(int id)
     {
@@ -304,7 +303,7 @@ public class UserController : BaseController
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Admin)]
+    [Authorize(Policy = JPermissions.Admin)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(User user)
     {

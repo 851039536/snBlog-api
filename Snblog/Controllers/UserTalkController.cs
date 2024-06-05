@@ -1,4 +1,4 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.Jwt;
 
 namespace Snblog.Controllers;
 
@@ -77,7 +77,7 @@ public class UserTalkController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPost("add")]
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(UserTalk entity)
     {
         var ret = await _validator.ValidateAsync(entity);
@@ -98,7 +98,7 @@ public class UserTalkController : BaseController
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DelAsync(int id)
     {
         bool data = await _service.DelAsync(id);
@@ -114,7 +114,7 @@ public class UserTalkController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPut("update")]
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(UserTalk entity)
     {
         bool data = await _service.UpdateAsync(entity);

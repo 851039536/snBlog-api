@@ -1,4 +1,4 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.Jwt;
 
 namespace Snblog.Controllers;
 
@@ -83,7 +83,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     [HttpPost("AddAsync")]
     public async Task<IActionResult> AddAsync(SnSetblogDto entity)
     {
@@ -96,7 +96,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     [HttpPut("UpdateAsync")]
     public async Task<IActionResult> UpdateAsync(SnSetblogDto entity)
     {
@@ -109,7 +109,7 @@ public class SnSetBlogController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     [HttpDelete("DelAsync")]
     public async Task<IActionResult> DeleteAsync(int id)
     {

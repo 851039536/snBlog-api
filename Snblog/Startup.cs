@@ -14,7 +14,6 @@ using Snblog.Enties.Validator;
 using Snblog.Jwt;
 using Snblog.Service.Service.DataBases;
 using Snblog.Util.Exceptions;
-using Snblog.Util.GlobalVar;
 using SnBlogCore.Jwt;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using ArticleService = Snblog.Service.Service.Articles.ArticleService;
@@ -191,7 +190,7 @@ public class Startup
         #region 配置动态授权服务
 
         //配置授权
-        _ = services.AddAuthorization(Permissions.ConfigureAuthorizationPolicies);
+        _ = services.AddAuthorization(JPermissions.ConfigureAuthorizationPolicies);
         // 注册动态授权处理程序为单例
         _ = services.AddSingleton<IAuthorizationHandler, DynamicAuthorizationHandler>();
 

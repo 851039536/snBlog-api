@@ -1,4 +1,4 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.Jwt;
 
 namespace Snblog.Controllers;
 
@@ -91,7 +91,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(Interface entity)
     {
@@ -105,7 +105,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(Interface entity)
     {
@@ -120,7 +120,7 @@ public class InterfaceController : BaseController
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {

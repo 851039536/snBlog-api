@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Snblog.IService.IService.Snippets;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Snippets;
 
@@ -140,7 +140,7 @@ public class SnippetController : BaseController
     /// </summary>
     /// <param name="entity">要添加的代码片段实体。</param>
     /// <returns>操作结果。</returns>
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(Snippet entity)
     {
@@ -159,7 +159,7 @@ public class SnippetController : BaseController
     /// </summary>
     /// <param name="entity">包含更新信息的代码片段实体。</param>
     /// <returns>操作结果。</returns>
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     [HttpPut("edit")]
     public async Task<IActionResult> UpdateAsync(Snippet entity)
     {
@@ -179,7 +179,7 @@ public class SnippetController : BaseController
     /// </summary>
     /// <param name="id">要删除的代码片段的主键。</param>
     /// <returns>操作结果。</returns>
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {

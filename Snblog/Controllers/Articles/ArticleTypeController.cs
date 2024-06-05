@@ -1,5 +1,5 @@
 ﻿using Snblog.IService.IService.Articles;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Articles;
 
@@ -93,7 +93,7 @@ public class ArticleTypeController : BaseController
     /// <param name="entity">文章分类实体</param>
     /// <returns>操作是否成功</returns>
     [HttpPost("add")]
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(ArticleType entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -123,7 +123,7 @@ public class ArticleTypeController : BaseController
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);

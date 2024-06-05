@@ -1,5 +1,5 @@
 ﻿using Snblog.IService.IService.Snippets;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Snippets;
 
@@ -105,7 +105,7 @@ public class SnippetTypeSubController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPost("add")]
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(SnippetTypeSub entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -120,7 +120,7 @@ public class SnippetTypeSubController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPut("update")]
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnippetTypeSub entity)
     {
         bool data = await _service.UpdateAsync(entity);
@@ -135,7 +135,7 @@ public class SnippetTypeSubController : BaseController
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
     [HttpDelete("del")]
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);

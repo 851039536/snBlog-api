@@ -1,11 +1,9 @@
-﻿using Snblog.Jwt;
-
-namespace Snblog.Util.GlobalVar;
+﻿namespace Snblog.Jwt;
 
 /// <summary>
 /// 权限变量配置
 /// </summary>
-public static class Permissions
+public static class JPermissions
 {
     /// <summary>
     /// 需动态加载权限，待更改

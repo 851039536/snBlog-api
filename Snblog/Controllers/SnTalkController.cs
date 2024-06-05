@@ -1,4 +1,4 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.Jwt;
 
 namespace Snblog.Controllers;
 
@@ -98,7 +98,7 @@ public class SnTalkController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPost("AddAsync")]
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(SnTalk entity)
     {
         return Ok(await _service.AddAsync(entity));
@@ -109,7 +109,7 @@ public class SnTalkController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpDelete("DelAsync")]
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         return Ok(await _service.DeleteAsync(id));
@@ -120,7 +120,7 @@ public class SnTalkController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPut("UpdateAsync")]
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnTalk entity)
     {
         return Ok(await _service.UpdateAsync(entity));

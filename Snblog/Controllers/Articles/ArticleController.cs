@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
 using Snblog.IService.IService.Articles;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Articles;
 
@@ -170,7 +170,7 @@ public class ArticleController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(Article entity)
     {
@@ -192,7 +192,7 @@ public class ArticleController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(Article entity)
     {
@@ -226,7 +226,7 @@ public class ArticleController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {

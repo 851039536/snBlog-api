@@ -1,5 +1,5 @@
 ﻿using Snblog.IService.IService.Diarys;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Diarys;
 
@@ -98,7 +98,7 @@ public class DiaryTypeController : BaseController
     /// <param name="entity">要添加的日记分类实体</param>
     /// <returns>操作是否成功</returns>
     [HttpPost("add")]
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(DiaryType entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -115,7 +115,7 @@ public class DiaryTypeController : BaseController
     /// <param name="id">要删除的日记分类的主键ID</param>
     /// <returns>操作是否成功</returns>
     [HttpDelete("del")]
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);
@@ -132,7 +132,7 @@ public class DiaryTypeController : BaseController
     /// <param name="entity">包含更新信息的日记分类实体</param>
     /// <returns>操作是否成功</returns>
     [HttpPut("update")]
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(DiaryType entity)
     {
         bool data = await _service.UpdateAsync(entity);

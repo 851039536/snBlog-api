@@ -1,5 +1,5 @@
 ﻿using Snblog.IService.IService.Snippets;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers.Snippets;
 
@@ -105,7 +105,7 @@ public class SnippetTagController : BaseController
     /// <param name="entity">要添加的片段标签实体。</param>
     /// <returns>操作是否成功。</returns>
     [HttpPost("add")]
-    [Authorize(Policy = Permissions.Create)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(SnippetTag entity)
     {
         bool data = await _service.AddAsync(entity);
@@ -120,7 +120,7 @@ public class SnippetTagController : BaseController
     /// <param name="entity">包含更新信息的片段标签实体。</param>
     /// <returns>操作是否成功。</returns>
     [HttpPut("update")]
-    [Authorize(Policy = Permissions.Edit)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnippetTag entity)
     {
         bool data = await _service.UpdateAsync(entity);
@@ -135,7 +135,7 @@ public class SnippetTagController : BaseController
     /// <param name="id">要删除的片段标签的主键。</param>
     /// <returns>操作是否成功。</returns>
     [HttpDelete("del")]
-    [Authorize(Policy = Permissions.Delete)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DeleteAsync(int id)
     {
         bool data = await _service.DeleteAsync(id);
