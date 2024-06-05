@@ -1,8 +1,6 @@
 ﻿using Snblog.Models;
-using System;
-using System.Collections.Generic;
 
-namespace Snblog.Enties.ModelsDto;
+namespace Snblog.Enties.Models;
 
 public partial class UserDto
 {
@@ -62,11 +60,11 @@ public partial class UserDto
 
     public virtual ICollection<Interface> Interfaces { get; set; } = new List<Interface>();
 
+    public virtual ICollection<Navigation> Navigations { get; set; } = new List<Navigation>();
+
     public virtual ICollection<PhotoGallery> PhotoGalleries { get; set; } = new List<PhotoGallery>();
 
     public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
-
-    public virtual ICollection<Navigation> Navigations { get; set; } = new List<Navigation>();
 
     public virtual ICollection<SnPicture> SnPictures { get; set; } = new List<SnPicture>();
 
@@ -79,4 +77,6 @@ public partial class UserDto
     public virtual ICollection<UserTalk> UserTalks { get; set; } = new List<UserTalk>();
 
     public virtual ICollection<Video> Videos { get; set; } = new List<Video>();
+
+    public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
 }

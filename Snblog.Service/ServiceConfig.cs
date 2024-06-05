@@ -12,9 +12,17 @@ public  class ServiceConfig
     public const string Sum = "SUM_";
     public const string Contains = "CONTAINS_";
     public const string Paging = "PAGING_";
+    /// <summary>
+    /// 统计
+    /// </summary>
+    public const string Statistics = "Statistics_";
     public const string All = "ALL_";
     public const string Del = "DEL_";
     public const string Add = "ADD_";
+    /// <summary>
+    /// 条件查询
+    /// </summary>
+    public const string Types = "Types_";
     /// <summary>
     /// 更新
     /// </summary>
@@ -29,16 +37,7 @@ public  class ServiceConfig
     public const string Condition = "Condition";
 
 
-    /// <summary>
-    /// 输出log并对CacheKey赋值
-    /// </summary>
-    /// <param name="info"></param>
-    public static string CacheInfo(string info)
-    {
-        CacheKey = info;
-        Log.Information(CacheKey); //赋值给key，方便在是否使用缓存时做判断
-        return CacheKey;
-    }
+  
 
     /// <summary>
     /// 缓存Key

@@ -1,26 +1,33 @@
 ﻿namespace Snblog.Cache.CacheUtil;
 
-public class CacheManager:ICacheManager
+public class CacheManager : ICacheManager
 {
-    public  TimeSpan Time = new TimeSpan(00, 00, 00, 60); //缓存过期时间
-    // public TimeSpan Time1  = TimeSpan.FromSeconds(3);  // 滑动缓存时间
-    private readonly IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+    /// <summary>
+    /// 绝对过期时间为60分钟
+    /// </summary>
+    public TimeSpan AbsoluteExpiration = new(00,00,00,60);
+
+    /// <summary>
+    /// 滑动过期时间为30分钟
+    /// </summary>
+    public TimeSpan SlidingExpiration = TimeSpan.FromSeconds(3);
+
+    private readonly IMemoryCache _cache;
+
+    public CacheManager(IMemoryCache memoryCache)
+    {
+        _cache = memoryCache;
+    }
 
     /// <summary>
     /// 判断是否在缓存中
     /// </summary>
     /// <param name="key">关键字</param>
-    /// <returns></returns>
+    /// <returns>如果键存在于缓存中，返回 true；否则返回 false</returns>
     public bool IsInCache(string key)
     {
-        // 判断是否存在
-        bool found = _cache.TryGetValue(key,out string result);
-        List<string> keys = GetAllKeys();
-        foreach (var i in keys)
-        {
-            if (i == key) return true;
-        }
-        return false;
+        // 使用 TryGetValue 方法检查键是否存在
+        return _cache.TryGetValue(key,out object _);
     }
 
     /// <summary>
@@ -30,35 +37,40 @@ public class CacheManager:ICacheManager
     public List<string> GetAllKeys()
     {
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
-        var entries = _cache.GetType().GetField("_entries", flags)?.GetValue(_cache);
+        object entries = _cache.GetType().GetField("_entries",flags)?.GetValue(_cache);
         var cacheItems = entries as IDictionary;
         var keys = new List<string>();
-        if (cacheItems == null) return keys;
-        foreach (DictionaryEntry cacheItem in cacheItems)
+        if(cacheItems == null) return keys;
+        foreach(DictionaryEntry cacheItem in cacheItems)
         {
             keys.Add(cacheItem.Key.ToString());
         }
+
         return keys;
     }
 
     /// <summary>
-    /// 获取所有的缓存值
+    /// 获取所有指定类型的缓存值
     /// </summary>
-    /// <returns></returns>
+    /// <typeparam name="T">缓存值的类型</typeparam>
+    /// <returns>指定类型的所有缓存值列表</returns>
     public List<T> GetAllValues<T>()
     {
         var cacheKeys = GetAllKeys();
-        List<T> vals = new List<T>();
-        cacheKeys.ForEach(i =>
+        var values = new List<T>();
+
+        // 遍历所有缓存键，尝试获取每个键对应的值，并添加到结果列表中
+        foreach(string key in cacheKeys)
         {
-            T t;
-            if (_cache.TryGetValue(i, out t))
+            if(_cache.TryGetValue(key,out T value))
             {
-                vals.Add(t);
+                values.Add(value);
             }
-        });
-        return vals;
+        }
+
+        return values;
     }
+
     /// <summary>
     /// 取得缓存数据
     /// </summary>
@@ -68,7 +80,7 @@ public class CacheManager:ICacheManager
     public T Get<T>(string key)
     {
         //获取一个缓存（并可得到具体的缓存是否存在）
-        _cache.TryGetValue(key, out T value);
+        _cache.TryGetValue(key,out T value);
         return value;
     }
 
@@ -77,15 +89,14 @@ public class CacheManager:ICacheManager
     /// </summary>
     /// <param name="key">关键字</param>
     /// <param name="value">缓存值</param>
-    public void Set_NotExpire<T>(string key, T value)
+    public void Set_NotExpire<T>(string key,T value)
     {
-        if (string.IsNullOrWhiteSpace(key))
+        if(string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
 
-        T v;
-        if (_cache.TryGetValue(key, out v))
+        if(_cache.TryGetValue(key,out T _))
             _cache.Remove(key);
-        _cache.Set(key, value);
+        _cache.Set(key,value);
     }
 
     /// <summary>
@@ -93,51 +104,57 @@ public class CacheManager:ICacheManager
     /// </summary>
     /// <param name="key">关键字</param>
     /// <param name="value">缓存值</param>
-    public void Set_SlidingExpire<T>(string key, T value, TimeSpan span)
+    /// <param name="span"></param>
+    public void Set_SlidingExpire<T>(string key,T value,TimeSpan span)
     {
-        if (string.IsNullOrWhiteSpace(key))
+        if(string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
 
-        T v;
-        if (_cache.TryGetValue(key, out v))
+        if(_cache.TryGetValue(key,out T _))
             _cache.Remove(key);
-        _cache.Set(key, value, new MemoryCacheEntryOptions()
-        {
-            SlidingExpiration = span
-        });
+        _cache.Set(key,value,new MemoryCacheEntryOptions() { SlidingExpiration = span });
     }
 
     /// <summary>
-    /// 设置缓存(绝对时间过期:从缓存开始持续指定的时间段后就过期,无论有没有持续的访问)
+    /// 设置缓存，使用绝对时间过期策略。一旦缓存被设置，它将在指定的时间段后自动过期，无论期间是否有访问。
     /// </summary>
-    /// <param name="key">关键字</param>
-    /// <param name="value">缓存值</param>
-    public void Set_AbsoluteExpire<T>(string key, T value, TimeSpan span)
+    /// <typeparam name="T">缓存值的类型</typeparam>
+    /// <param name="key">用于检索缓存的唯一标识符</param>
+    /// <param name="value">要存储在缓存中的数据</param>
+    /// <param name="span">缓存的有效期，超过此时间段后缓存将自动失效</param>
+    public void Set_AbsoluteExpire<T>(string key,T value,TimeSpan span)
     {
         _cache.Remove(key);
-        _cache.Set(key, value, span);
+        _cache.Set(key,value,span);
     }
 
     /// <summary>
-    /// 设置缓存(绝对时间过期+滑动过期:比如滑动过期设置半小时,绝对过期时间设置2个小时，那么缓存开始后只要半小时内没有访问就会立马过期,如果半小时内有访问就会向后顺延半小时，但最多只能缓存2个小时)
+    /// 设置具有滑动过期和绝对过期时间的缓存。
+    /// 滑动过期时间（SlidingExpiration）定义了在最后一次访问后多长时间内缓存不过期，
+    /// 而绝对过期时间（AbsoluteExpiration）定义了缓存的最长存活时间。
+    /// 例如，如果滑动过期设置为半小时，绝对过期时间设置为2小时，
+    /// 则缓存开始后，如果半小时内没有访问，缓存将立即过期；
+    /// 如果半小时内有访问，过期时间将向后顺延半小时，但缓存最长只能存活2小时。
     /// </summary>
-    /// <param name="key">关键字</param>
-    /// <param name="value">缓存值</param>
-    /// <param name="slidingSpan"></param>
-    /// <param name="absoluteSpan"></param>
-    public void Set_SlidingAndAbsoluteExpire<T>(string key, T value, TimeSpan slidingSpan, TimeSpan absoluteSpan)
+    /// <typeparam name="T">缓存值的类型。</typeparam>
+    /// <param name="key">用于检索缓存的唯一键。</param>
+    /// <param name="value">要存储在缓存中的值。</param>
+    /// <param name="slidingSpan">滑动过期时间，定义了在最后一次访问后多长时间内缓存不过期。</param>
+    /// <param name="absoluteSpan">绝对过期时间，定义了缓存的最长存活时间。</param>
+    /// <exception cref="ArgumentNullException">当键为空或空白时抛出。</exception>
+    public void Set_SlidingAndAbsoluteExpire<T>(string key,T value,TimeSpan slidingSpan,TimeSpan absoluteSpan)
     {
-        if (string.IsNullOrWhiteSpace(key))
+        if(string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
 
-        T v;
-        if (_cache.TryGetValue(key, out v))
+        if(_cache.TryGetValue(key,out T _))
             _cache.Remove(key);
-        _cache.Set(key, value, new MemoryCacheEntryOptions()
-        {
-            SlidingExpiration = slidingSpan,
-            AbsoluteExpiration = DateTimeOffset.Now.AddMilliseconds(absoluteSpan.Milliseconds)
-        });
+        _cache.Set(key,value,
+            new MemoryCacheEntryOptions()
+            {
+                SlidingExpiration = slidingSpan,
+                AbsoluteExpiration = DateTimeOffset.Now.AddMilliseconds(absoluteSpan.Milliseconds)
+            });
     }
 
     /// <summary>
@@ -146,9 +163,8 @@ public class CacheManager:ICacheManager
     /// <param name="key">关键字</param>
     public void Remove(string key)
     {
-        if (string.IsNullOrWhiteSpace(key))
+        if(string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
-
         _cache.Remove(key);
     }
 
@@ -157,8 +173,7 @@ public class CacheManager:ICacheManager
     /// </summary>
     public void Dispose()
     {
-        if (_cache != null)
-            _cache.Dispose();
+        _cache?.Dispose();
         GC.SuppressFinalize(this);
     }
 }

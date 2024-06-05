@@ -1,4 +1,4 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.Jwt;
 
 namespace Snblog.Controllers;
 
@@ -8,13 +8,13 @@ namespace Snblog.Controllers;
 public class UserTalkController : BaseController
 {
     private readonly IUserTalkService _service;
-    private readonly IValidator <UserTalk> _validator;
+    private readonly IValidator<UserTalk> _validator;
+
     public UserTalkController(IUserTalkService service, IValidator<UserTalk> validator)
     {
         _service = service;
         _validator = validator;
     }
-
 
     #region 模糊查询
 
@@ -26,8 +26,12 @@ public class UserTalkController : BaseController
     /// <param name="name">查询字段</param>
     /// <param name="cache">缓存</param>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null",
-        string name = "winfrom", bool cache = false)
+    public async Task<IActionResult> GetContainsAsync(
+        int identity = 0,
+        string type = "null",
+        string name = "winfrom",
+        bool cache = false
+    )
     {
         var data = await _service.GetContainsAsync(identity, type, name, cache);
         return ApiResponse(cache: cache, data: data);
@@ -49,15 +53,21 @@ public class UserTalkController : BaseController
     /// <param name="ordering">排序规则 data:时间|id:主键</param>
     /// <returns>list-entity</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int identity = 0, string type = "null", int pageIndex = 1,
-        int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(
+        int identity = 0,
+        string type = "null",
+        int pageIndex = 1,
+        int pageSize = 10,
+        string ordering = "id",
+        bool isDesc = true,
+        bool cache = false
+    )
     {
         var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
         return ApiResponse(cache: cache, data: data);
     }
 
     #endregion
-
 
     #region 添加
 
@@ -67,7 +77,7 @@ public class UserTalkController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPost("add")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(UserTalk entity)
     {
         var ret = await _validator.ValidateAsync(entity);
@@ -88,10 +98,10 @@ public class UserTalkController : BaseController
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DelAsync(int id)
     {
-        var data = await _service.DelAsync(id);
+        bool data = await _service.DelAsync(id);
         return ApiResponse(data: data);
     }
 
@@ -104,10 +114,10 @@ public class UserTalkController : BaseController
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(UserTalk entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
 

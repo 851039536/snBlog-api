@@ -20,7 +20,7 @@ indent_style = space
 tab_width = 4
 # CSharpier 支持通过文件进行配置。同一目录中的文件将优先
 # Non-configurable behaviors
-max_line_length = 150
+max_line_length = 130
 
 # 新行首选项，即换行符的风格，有lf和crlf两种，lf表示换行符为\n，crlf表示换行符为\r\n，默认为lf，即\n，即Unix和Linux系统的换行符，Windows系统的换行符为\r\n，即crlf。
 
@@ -280,12 +280,12 @@ csharp_style_var_when_type_is_apparent = true:warning
 # 表示是否使用表达式体访问器
 # 如果设置为 true，则应该使用表达式体访问器，
 # 如果设置为 false，则不应该使用表达式体访问器。
-csharp_style_expression_bodied_accessors = true
+csharp_style_expression_bodied_accessors = true:silent
 
 # 表示是否使用表达式体构造函数
 # 如果设置为 true，则应该使用表达式体构造函数，
 # 如果设置为 false，则不应该使用表达式体构造函数。
-csharp_style_expression_bodied_constructors = false
+csharp_style_expression_bodied_constructors = false:silent
 
 # 表示是否使用表达式体委托
 # 如果设置为 true，则应该使用表达式体委托，
@@ -294,7 +294,7 @@ csharp_style_expression_bodied_constructors = false
 
 # 表示是否使用表达式体索引器
 # 如果设置为 true，则应该使用表达式体索引器，如果设置为 false，则不应该使用表达式体索引器。
-csharp_style_expression_bodied_indexers = true
+csharp_style_expression_bodied_indexers = true:silent
 
 # 表示是否使用表达式体 lambda
 # 如果设置为 true，则应该使用表达式体 lambda，如果设置为 false，则不应该使用表达式体 lambda。
@@ -313,12 +313,12 @@ csharp_style_expression_bodied_methods = false:suggestion
 # 表示是否使用表达式体运算符
 # 如果设置为 true，则应该使用表达式体运算符，
 # 如果设置为 false，则不应该使用表达式体运算符。
-csharp_style_expression_bodied_operators = false
+csharp_style_expression_bodied_operators = false:silent
 
 # 表示是否使用表达式体属性
 # 如果设置为 true，则应该使用表达式体属性，
 # 如果设置为 false，则不应该使用表达式体属性。
-csharp_style_expression_bodied_properties = false
+csharp_style_expression_bodied_properties = false:silent
 
 # 模式匹配首选项
 
@@ -1263,3 +1263,10 @@ dotnet_diagnostic.IDE0008.severity = warning
 
 # IDE0040: 添加可访问性修饰符
 dotnet_diagnostic.IDE0040.severity = warning
+
+[*.{cs,vb}]
+end_of_line = crlf
+dotnet_style_qualification_for_field = false:silent
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion

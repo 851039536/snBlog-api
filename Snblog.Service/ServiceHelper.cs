@@ -6,10 +6,9 @@
 public class ServiceHelper
 {
     private readonly CacheUtils _cache;
-
-    public ServiceHelper(ICacheUtil cache)
+    public ServiceHelper(CacheUtils cache)
     {
-        _cache = (CacheUtils)cache;
+        _cache = cache;
     }
 
     /// <summary>

@@ -1,31 +1,15 @@
 ﻿namespace Snblog.Cache.CacheUtil;
 
-public class CacheUtils : ICacheUtil
+public class CacheUtils
 {
     //创建内存缓存对象
     private readonly CacheManager _cache;
+
     public CacheUtils(ICacheManager cache)
     {
-        _cache = (CacheManager)cache;
+        _cache = cache as CacheManager;
     }
-    /// <summary>
-    /// 设置并返回缓存值(值类型)
-    /// </summary>
-    /// <typeparam name="T">返回类型</typeparam>
-    /// <param name="key">缓存键值</param>
-    /// <param name="value">要缓存的值</param>
-    /// <param name="cache">是否开启缓存</param>
-    /// <returns>result</returns>
-    public T CacheNumber<T>(string key,T value,bool cache)
-    {
-        T ret = default;
-        if (cache) {
-            if (!value.Equals(0)) {
-                _cache.Set_AbsoluteExpire(key,value,_cache.Time);
-            }
-        }
-        return ret;
-    }
+
     /// <summary>
     /// 读取缓存
     /// </summary>
@@ -34,42 +18,19 @@ public class CacheUtils : ICacheUtil
     /// <returns>返回传入的格式数据</returns>
     public T GetValue<T>(string key)
     {
-        T value = _cache.Get<T>(key);
-        return value;
-    }
-    /// <summary>
-    /// 设置缓存
-    /// </summary>
-    /// <typeparam name="T">传入返回格式</typeparam>
-    /// <param name="key">键</param>
-    /// <param name="value">值</param>
-    /// <returns></returns>
-    public T SetValue<T>(string key,T value)
-    {
-        T ret = default;
-        _cache.Set_AbsoluteExpire(key,value,_cache.Time);
+        var ret = _cache.Get<T>(key);
         return ret;
     }
+
     /// <summary>
-    /// 设置并返回缓存值(字符串)
+    /// 设置缓存，使用绝对时间过期策略。一旦缓存被设置，它将在指定的时间段后自动过期，无论期间是否有访问。
     /// </summary>
-    /// <typeparam name="T">返回类型</typeparam>
-    /// <param name="key">缓存键值</param>
-    /// <param name="value">要缓存的值</param>
-    /// <param name="cache">是否开启缓存</param>
-    public T CacheString<T>(string key,T value,bool cache)
+    /// <typeparam name="T">传入返回格式</typeparam>
+    /// <param name="key">用于检索缓存的唯一标识符</param>
+    /// <param name="value">要存储在缓存中的数据</param>
+    /// <returns></returns>
+    public void SetValue<T>(string key, T value)
     {
-        T result = default;
-        if (cache) {
-            if (_cache.IsInCache(key)) //如果存在缓存取值
-            {
-                result = _cache.Get<T>(key);
-            } else {
-                if (value != null) {
-                    _cache.Set_AbsoluteExpire(key,value,_cache.Time);
-                }
-            }
-        }
-        return result;
+        _cache.Set_AbsoluteExpire(key, value, _cache.AbsoluteExpiration);
     }
 }

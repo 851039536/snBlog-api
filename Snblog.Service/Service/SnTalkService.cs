@@ -3,14 +3,12 @@
 public class SnTalkService : ISnTalkService
 {
     private readonly SnblogContext _service;//DB
-    private readonly CacheUtils _cacheutil;
     // private int rInt;
     //  private List<SnTalk> result_List = default;
 
-    public SnTalkService(SnblogContext service, ICacheUtil cacheutil)
+    public SnTalkService(SnblogContext service)
     {
         _service = service;
-        _cacheutil = (CacheUtils)cacheutil;
     }
 
     public async Task<bool> AddAsync(SnTalk entity)

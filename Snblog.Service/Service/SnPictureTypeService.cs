@@ -6,13 +6,12 @@ public class SnPictureTypeService : ISnPictureTypeService
     private readonly ServiceHelper _serviceHelper;
     private readonly SnblogContext _service;
     private readonly CacheUtils _cache;
-    private int _resultInt;
     private List<SnPictureType> _retList;
-    public SnPictureTypeService(SnblogContext service, ICacheUtil cache,ServiceHelper serviceHelper)
+    public SnPictureTypeService(SnblogContext service, CacheUtils cache,ServiceHelper serviceHelper)
     {
         _service = service;
         _serviceHelper = serviceHelper;
-        _cache = (CacheUtils)cache;
+        _cache = cache;
     }
     public async Task<int> CountAsync()
     {
@@ -44,11 +43,11 @@ public class SnPictureTypeService : ISnPictureTypeService
     public async Task<List<SnPictureType>> GetAllAsync()
     {
         const string key = "SnPictureType_GetAllAsync";
-        _retList = _cache.CacheString(key, _retList,true);
+        // _retList = _cache.CacheString(key, _retList,true);
         if (_retList != null) return _retList;
             
         _retList = await _service.SnPictureTypes.ToListAsync();
-        _cache.CacheString(key, _retList,true);
+        // _cache.CacheString(key, _retList,true);
         return _retList;
     }
 
@@ -65,7 +64,7 @@ public class SnPictureTypeService : ISnPictureTypeService
 
     public async Task<SnPictureType> GetByIdAsync(int id)
     {
-        SnPictureType pictureType = default;
+        SnPictureType pictureType;
         pictureType = await _service.SnPictureTypes.FindAsync(id);
         return pictureType;
     }

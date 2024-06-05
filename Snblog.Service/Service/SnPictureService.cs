@@ -5,12 +5,12 @@ public class SnPictureService : ISnPictureService
     private readonly SnblogContext _service; //DB
     private readonly CacheUtils _cacheutil;
     private int result_Int;
-    private List<SnPicture> result_List = default;
+    private List<SnPicture> result_List;
 
-    public SnPictureService(SnblogContext service, ICacheUtil cacheutil)
+    public SnPictureService(SnblogContext service, CacheUtils cacheutil)
     {
         _service = service;
-        _cacheutil = (CacheUtils)cacheutil;
+        _cacheutil = cacheutil;
     }
 
     public async Task<bool> AddAsync(SnPicture entity)
@@ -27,11 +27,11 @@ public class SnPictureService : ISnPictureService
 
     public async Task<int> CountAsync()
     {
-        result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int, true);
+        // result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int, true);
         if (result_Int != 0)
             return result_Int;
         result_Int = await _service.SnPictures.CountAsync();
-        _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int, true);
+        // _cacheutil.CacheNumber("SnPicture_CountAsync", result_Int, true);
         return result_Int;
     }
 
@@ -47,7 +47,7 @@ public class SnPictureService : ISnPictureService
 
     public async Task<SnPicture> GetByIdAsync(int id)
     {
-        SnPicture ret = default;
+        SnPicture ret;
         ret = await _service.SnPictures.FindAsync(id);
         return ret;
     }
@@ -109,13 +109,13 @@ public class SnPictureService : ISnPictureService
 
     public async Task<int> CountAsync(int type)
     {
-        result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync" + type, result_Int, true);
+        // result_Int = _cacheutil.CacheNumber("SnPicture_CountAsync" + type, result_Int, true);
         if (result_Int != 0)
         {
             return result_Int;
         }
         result_Int = await _service.SnPictures.CountAsync(s => s.TypeId == type);
-        _cacheutil.CacheNumber("SnPicture_CountAsync" + type, result_Int, true);
+        // _cacheutil.CacheNumber("SnPicture_CountAsync" + type, result_Int, true);
         return result_Int;
     }
 }

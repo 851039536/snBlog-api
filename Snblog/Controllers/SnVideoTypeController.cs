@@ -1,4 +1,4 @@
-﻿using Snblog.Util.GlobalVar;
+﻿using Snblog.Jwt;
 
 namespace Snblog.Controllers;
 
@@ -51,7 +51,7 @@ public class SnVideoTypeController : BaseController
     [HttpGet("CountAsync")]
     public async Task<IActionResult> CountAsync()
     {
-        var data = await _service.CountAsync();
+        int data = await _service.CountAsync();
         return ApiResponse(data: data);
     }
 
@@ -61,11 +61,11 @@ public class SnVideoTypeController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpPost("AddAsync")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Create)]
     public async Task<IActionResult> AddAsync(SnVideoType entity)
     {
-        var data = await _service.AddAsync(entity);
-        return ApiResponse(data:data);
+        bool data = await _service.AddAsync(entity);
+        return ApiResponse(data: data);
     }
 
     /// <summary>
@@ -74,10 +74,10 @@ public class SnVideoTypeController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpDelete("del")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Delete)]
     public async Task<IActionResult> DeleteAsync(SnVideoType entity)
     {
-        var data = await  _service.DeleteAsync(entity);
+        bool data = await _service.DeleteAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -87,10 +87,10 @@ public class SnVideoTypeController : BaseController
     /// <param name="entity"></param>
     /// <returns></returns>
     [HttpPut("update")]
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Edit)]
     public async Task<IActionResult> UpdateAsync(SnVideoType entity)
     {
-        var data = await _service.UpdateAsync(entity);
-        return  ApiResponse(data: data);
+        bool data = await _service.UpdateAsync(entity);
+        return ApiResponse(data: data);
     }
 }

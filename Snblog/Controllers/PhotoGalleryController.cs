@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
-using Snblog.Util.GlobalVar;
+using Snblog.Jwt;
 
 namespace Snblog.Controllers;
 
 /// <summary>
 /// 图库
 /// </summary>
-[ApiExplorerSettings(GroupName = "V1")] 
+[ApiExplorerSettings(GroupName = "V1")]
 [ApiController]
 [Route("photoGallery")]
 public class PhotoGalleryController : BaseController
@@ -31,7 +31,7 @@ public class PhotoGalleryController : BaseController
     #region 查询总数
 
     /// <summary>
-    /// 查询总数 
+    /// 查询总数
     /// </summary>
     /// <param name="identity">所有:0|分类:1|标签:2|用户3</param>
     /// <param name="type">条件</param>
@@ -58,8 +58,12 @@ public class PhotoGalleryController : BaseController
     /// <param name="cache">缓存</param>
     /// <returns>list-entity</returns>
     [HttpGet("contains")]
-    public async Task<IActionResult> GetContainsAsync(int identity = 0, string type = "null",
-        string name = "", bool cache = false)
+    public async Task<IActionResult> GetContainsAsync(
+        int identity = 0,
+        string type = "null",
+        string name = "",
+        bool cache = false
+    )
     {
         var data = await _service.GetContainsAsync(identity, type, name, cache);
         return ApiResponse(cache: cache, data: data);
@@ -70,7 +74,7 @@ public class PhotoGalleryController : BaseController
     #region 主键查询
 
     /// <summary>
-    /// 主键查询 
+    /// 主键查询
     /// </summary>
     /// <param name="id">主键</param>
     /// <param name="cache">缓存</param>
@@ -98,8 +102,15 @@ public class PhotoGalleryController : BaseController
     /// <param name="ordering">排序规则 data:时间|give:点赞|id:主键</param>
     /// <returns>list-entity</returns>
     [HttpGet("paging")]
-    public async Task<IActionResult> GetPagingAsync(int identity = 0, string type = "null", int pageIndex = 1,
-        int pageSize = 10, string ordering = "id", bool isDesc = true, bool cache = false)
+    public async Task<IActionResult> GetPagingAsync(
+        int identity = 0,
+        string type = "null",
+        int pageIndex = 1,
+        int pageSize = 10,
+        string ordering = "id",
+        bool isDesc = true,
+        bool cache = false
+    )
     {
         var data = await _service.GetPagingAsync(identity, type, pageIndex, pageSize, ordering, isDesc, cache);
         return ApiResponse(cache: cache, data: data);
@@ -114,7 +125,7 @@ public class PhotoGalleryController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Create)]
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync(PhotoGallery entity)
     {
@@ -137,11 +148,11 @@ public class PhotoGalleryController : BaseController
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Edit)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync(PhotoGallery entity)
     {
-        var data = await _service.UpdateAsync(entity);
+        bool data = await _service.UpdateAsync(entity);
         return ApiResponse(data: data);
     }
 
@@ -154,11 +165,11 @@ public class PhotoGalleryController : BaseController
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns>bool</returns>
-    [Authorize(Roles = Permissionss.Name)]
+    [Authorize(Policy = JPermissions.Delete)]
     [HttpDelete("del")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        var data = await _service.DelAsync(id);
+        bool data = await _service.DelAsync(id);
         return ApiResponse(data: data);
     }
 
@@ -175,7 +186,7 @@ public class PhotoGalleryController : BaseController
     [HttpPut("upPortion")]
     public async Task<IActionResult> UpdatePortionAsync(PhotoGallery entity, string type)
     {
-        var data = await _service.UpdatePortionAsync(entity, type);
+        bool data = await _service.UpdatePortionAsync(entity, type);
         return ApiResponse(data: data);
     }
 

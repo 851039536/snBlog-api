@@ -2,26 +2,23 @@
 
 public class UserTalkService : IUserTalkService
 {
-    const string Name = "userTalk_";
-    private readonly EntityData<UserTalk> _ret = new();
+    private const string Name = "userTalk_";
     private readonly EntityDataDto<UserTalkDto> _retDto = new();
 
     //服务
     private readonly SnblogContext _service;
     private readonly CacheUtils _cache;
-    private readonly IMapper _mapper;
 
-    public UserTalkService(SnblogContext service, ICacheUtil cache, IMapper mapper)
+    public UserTalkService(SnblogContext service,CacheUtils cache)
     {
         _service = service;
-        _mapper = mapper;
-        _cache = (CacheUtils)cache;
+        _cache = cache;
     }
 
     public async Task<List<UserTalkDto>> GetContainsAsync(int identity, string type, string name, bool cache)
     {
-        var upNames = name.ToUpper();
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
+        string upNames = name.ToUpper();
+        Log.Information($"{Name}{ServiceConfig.Contains}{identity}_{type}_{name}_{cache}");
 
         if (cache)
         {
@@ -54,7 +51,7 @@ public class UserTalkService : IUserTalkService
     public async Task<List<UserTalkDto>> GetPagingAsync(int identity, string type, int pageIndex, int pageSize,
         string ordering, bool isDesc, bool cache)
     {
-        ServiceConfig.CacheInfo(
+        Log.Information(
             $"{Name}{ServiceConfig.Paging}{identity}_{type}_{pageIndex}_{pageSize}_{ordering}_{isDesc}_{cache}");
 
         if (cache)
@@ -80,7 +77,7 @@ public class UserTalkService : IUserTalkService
     private async Task<List<UserTalkDto>> GetPaging(int pageIndex, int pageSize, string ordering, bool isDesc,
         Expression<Func<UserTalk, bool>> predicate = null)
     {
-        IQueryable<UserTalk> userTalks = _service.UserTalks.AsQueryable();
+        var userTalks = _service.UserTalks.AsQueryable();
 
         // 查询条件,如果为空则无条件查询
         if (predicate != null)
@@ -126,7 +123,7 @@ public class UserTalkService : IUserTalkService
 
     public async Task<bool> DelAsync(int id)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Del}{id}");
+        Log.Information($"{Name}{ServiceConfig.Del}{id}");
         var ret = await _service.UserTalks.FindAsync(id);
         if (ret == null) return false;
         _service.UserTalks.Remove(ret);
@@ -136,7 +133,7 @@ public class UserTalkService : IUserTalkService
     public async Task<bool> AddAsync(UserTalk entity)
     {
             
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Add}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Add}{entity}");
         entity.TimeCreate = DateTime.Now; 
         _service.UserTalks.Add(entity);
         return await _service.SaveChangesAsync() > 0;
@@ -144,7 +141,7 @@ public class UserTalkService : IUserTalkService
 
     public async Task<bool> UpdateAsync(UserTalk entity)
     {
-        ServiceConfig.CacheInfo($"{Name}{ServiceConfig.Up}{entity}");
+        Log.Information($"{Name}{ServiceConfig.Up}{entity}");
 
         _service.UserTalks.Update(entity);
         return await _service.SaveChangesAsync() > 0;
