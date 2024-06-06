@@ -1,4 +1,5 @@
 ﻿using Snblog.IService.IService.Articles;
+using Snblog.Service.pollys;
 
 namespace Snblog.Service.Service.Articles;
 
@@ -10,6 +11,7 @@ public class ArticleService : IArticleService
     private const string Name = "Article_";
     private readonly SnblogContext _service;
     private readonly ServiceHelper _serviceHelper;
+    private readonly RetryPolicyService _retryPolicyService;
 
     #endregion
 
@@ -21,9 +23,11 @@ public class ArticleService : IArticleService
     ///  </summary>
     ///  <param name="serviceProvider"></param>
     ///  <param name="serviceHelper"></param>
-    public ArticleService(IServiceProvider serviceProvider,ServiceHelper serviceHelper)
+    ///  <param name="retryPolicyService"></param>
+    public ArticleService(IServiceProvider serviceProvider,ServiceHelper serviceHelper,RetryPolicyService retryPolicyService)
     {
         _serviceHelper = serviceHelper;
+        _retryPolicyService = retryPolicyService;
         // 获取服务提供程序中的实例
         _service = serviceProvider.GetRequiredService<SnblogContext>();
     }
@@ -37,20 +41,27 @@ public class ArticleService : IArticleService
         // 1.先赋值缓存key
         string cacheKey = $"{Name}{ServiceConfig.Sum}{identity}_{type}_{cache}";
 
-        // 2.调用通用方法：检查是否需要缓存，并执行相应的逻辑
-        return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
-        {
-            // 3.根据当前方法执行逻辑
-            return identity switch
+        // 使用注入的重试策略
+        var retryPolicy = _retryPolicyService.CreateRetryPolicy<int>();
+      
+            return await retryPolicy.ExecuteAsync(async () =>
             {
-                // 读取文章数量，无需筛选条件
-                0 => await GetArticleCountAsync(),
-                1 => await GetArticleCountAsync(c => c.Type.Name == type),
-                2 => await GetArticleCountAsync(c => c.Tag.Name == type),
-                3 => await GetArticleCountAsync(c => c.User.Name == type),
-                var _ => -1,
-            };
-        });
+                // 2.调用通用方法：检查是否需要缓存，并执行相应的逻辑
+                return await _serviceHelper.CheckAndExecuteCacheAsync(cacheKey,cache,async () =>
+                {
+                    // 3.根据当前方法执行逻辑
+                    return identity switch
+                    {
+                        // 读取文章数量，无需筛选条件
+                        0 => await GetArticleCountAsync(),
+                        1 => await GetArticleCountAsync(c => c.Type.Name == type),
+                        2 => await GetArticleCountAsync(c => c.Tag.Name == type),
+                        3 => await GetArticleCountAsync(c => c.User.Name == type),
+                        _ => throw new InvalidOperationException("Invalid identity value."), // 更改为抛出具体异常以触发重试
+                    };
+                });
+            });
+      
     }
 
     /// <summary>
@@ -258,7 +269,7 @@ public class ArticleService : IArticleService
             case 3:
                 return await GetPaging(pageIndex,pageSize,ordering,isDesc,w => w.User.Name == type);
             case 4:
-              string[] name = type.Split(',');
+                string[] name = type.Split(',');
                 return await GetPaging(pageIndex,pageSize,ordering,isDesc,w =>
                     w.Tag.Name == name[0]
                     && w.User.Name == name[1]);
@@ -304,7 +315,6 @@ public class ArticleService : IArticleService
 
     #region 更新
 
-   
     public async Task<bool> UpdateAsync(Article entity)
     {
         Log.Information($"{Name}{ServiceConfig.Up}{entity}");
@@ -359,12 +369,12 @@ public class ArticleService : IArticleService
         //await _service.SaveChangesAsync() > 0;
         return true;
     }
-    
+
     #endregion
 
 
     #region 删除
-    
+
     public async Task<bool> DelAsync(int id)
     {
         Log.Information($"{Name}{ServiceConfig.Del}{id}");
@@ -377,5 +387,6 @@ public class ArticleService : IArticleService
         // 保存更改
         return await _service.SaveChangesAsync() > 0;
     }
+
     #endregion
 }

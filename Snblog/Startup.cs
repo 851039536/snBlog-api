@@ -17,6 +17,7 @@ using Snblog.Util.Exceptions;
 using SnBlogCore.Jwt;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using ArticleService = Snblog.Service.Service.Articles.ArticleService;
+using Snblog.Service.pollys;
 
 namespace Snblog;
 
@@ -248,6 +249,7 @@ public class Startup
         _ = services.AddSingleton<ICacheManager, CacheManager>();
         _ = services.AddSingleton<CacheUtils, CacheUtils>();
         _ = services.AddSingleton<HttpClient, HttpClient>();
+        _ = services.AddSingleton<RetryPolicyService, RetryPolicyService>();
 
         #endregion
 

@@ -1,5 +1,5 @@
 -- MySqlBackup.NET 2.3.5
--- Dump Time: 2024-06-05 15:40:13
+-- Dump Time: 2024-06-06 08:52:07
 -- --------------------------------------
 -- Server version 8.0.24 MySQL Community Server - GPL
 
@@ -1588,7 +1588,7 @@ CREATE TABLE IF NOT EXISTS `snippet_version` (
   `count` int NOT NULL DEFAULT '1' COMMENT '版本变更次数',
   `time_create` datetime NOT NULL DEFAULT (now()) COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=310 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC COMMENT='片段的历史版本表';
+) ENGINE=InnoDB AUTO_INCREMENT=315 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC COMMENT='片段的历史版本表';
 
 -- 
 -- Dumping data for table snippet_version
@@ -1863,7 +1863,12 @@ INSERT INTO `snippet_version`(`id`,`name`,`text`,`snippet_id`,`count`) VALUES
 (306,'test1e2','#### 定义函数3222y\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,36),
 (307,'test1e2','#### 定义函数3222y\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,37),
 (308,'test1e222e','#### 定义函数3222y\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,38),
-(309,'test1e222ee','#### 定义函数3222y\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,39);
+(309,'test1e222ee','#### 定义函数3222y\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,39),
+(310,'test1e222ee','#### 定义函数3222y21\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,40),
+(311,'test1e222ee','#### 定义函数3222y21\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,41),
+(312,'test23','#### 定义函数3222y21\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,42),
+(313,'test231213','#### 定义函数3222y21\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,43),
+(314,'test2312131212','#### 定义函数3222y21\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',869,44);
 /*!40000 ALTER TABLE `snippet_version` ENABLE KEYS */;
 
 -- 
@@ -2776,7 +2781,7 @@ CREATE TABLE IF NOT EXISTS `snippet` (
   CONSTRAINT `FK_snippet_snippet_type_sub` FOREIGN KEY (`type_sub_id`) REFERENCES `snippet_type_sub` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `typeid` FOREIGN KEY (`type_id`) REFERENCES `snippet_type` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `uid` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=1218 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=1220 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
 
 -- 
 -- Dumping data for table snippet
@@ -3545,7 +3550,7 @@ INSERT INTO `snippet`(`id`,`name`,`text`,`type_id`,`type_sub_id`,`tag_id`,`user_
 (865,'模板程序播放录音失败','- 排查装置是否正确安装 , 测试是否有正常音量输出\n- 卸载当前前耳机驱动 , 重新接入Dongle或耳机安装驱动',18,102,332,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
 (866,'工单提示没有BD号','工单没有BD号，返回信息 **Part Type not the Product or Semi Product False**\n\n- 排查系统类别是否维护错误\n- 系统问题 , 需MES或PE更新类别操作',18,102,333,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
 (867,'监听滚动事件','#### 定义函数\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n',2,93,336,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
-(869,'test1e222ee','#### 定义函数3222y21\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',3,97,1,4,39,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
+(869,'test2312131212123213','#### 定义函数3222y21\n\n```js\nconst scroll = () => {\n  // 滚动条高度\n  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;\n  // 可视区的高度\n  const { clientHeight } = document.documentElement;\n  if (scrollTop > clientHeight) {\n    reac.local = false;\n  } else {\n    reac.local = true;e\n  }\n};\n```\n\n#### onMounted中使用\n\n```tsx\n// 给window添加一个滚动监听事件\nwindow.addEventListener(''scroll'', scroll);\n```\n\n#### html\n\n```html\n<nav class=\"sheader\" v-if=\"reac.local\">...</nav>\n```\n\n#### 移除监听事件\n\n```js\nonDeactivated(async () => {\n  // 离开这个界面之后，删除，不然会有问题\n  window.removeEventListener(''scroll'', scroll);\n});\n```\n\n\n',3,97,1,1,44,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
 (870,'使用hooks封装API函数','从原来的代码段中提取出来\n\n```tsx\nimport { useSnippetApi } from ''@hooks/http''\nimport { message } from ''ant-design-vue''\n\nconst { up } = useSnippetApi()\n\nexport function useSnippetPack() {\n  const upSnippet = async (snippet: any) => {\n    const response = await up(snippet)\n    if (response.data) {\n      message.success(''更新成功'')\n      return true\n    }\n    message.warning(''更新失败'')\n    return false\n  }\n  return {\n    upSnippet\n  }\n}\n```\n\nuseSnippetApi\n\n```tsx\n  function up(entity: any) {\n    return update(`/snippet/edit`, entity)\n  }\n```\n\n',2,94,337,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
 (871,'字体配置','使用@font-face属性\n在scss中引入字体包\n\n```css\n@font-face {\n  font-family: PuHuiTi; 字体标题\n  src: url(''/src/assets/fonts/Alibaba_PuHuiTi_2.0_55_Regular.ttf''); 字体包\n}\n```\n\n标签中使用字体\n\n```scss\n@layer base {\n  // html {\n  //   @apply antialiased;\n  // }\n  body {\n    font-family: PuHuiTi;\n  }\n}\n```\n\n',10,76,338,4,1,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
 (872,'定时器使用','### 定时器\n\n```js\nsetInterval(() => {\n  //定时查询桌面\n  _exe();\n}, 5000);\n```\n\n### 异步定时\n\n```js\n// 使用watchEffect创建一个响应式的副作用函数\nwatchEffect((onInvalidate) => {\n  // 创建定时器，每三秒执行一次_exe函数\n  const timerId = setInterval(() => {\n    //定时查询桌面\n    _exe();\n  }, 3000);\n  // 在响应式的副作用函数中使用onInvalidate函数监听组件被销毁的时机\n  onInvalidate(() => {\n    // 组件被销毁时清除定时器\n    clearInterval(timerId);\n  });\n});\n```\n\n',6,89,339,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
@@ -3890,7 +3895,8 @@ INSERT INTO `snippet`(`id`,`name`,`text`,`type_id`,`type_sub_id`,`tag_id`,`user_
 (1214,'修改老接口注意接口的兼容性','很多bug都是因为修改了对外旧接口，但是却**不做兼容**导致的。关键这个问题多数是比较严重的，可能直接导致系统发版失败的。\n\n```csharp\n//老接口\nvoid oldService(A,B){\n  //兼容新接口，传个null代替C\n  newService(A,B,null);\n}\n\n//新接口，暂时不能删掉老接口，需要做兼容。\nvoid newService(A,B,C){\n  ...\n}\n```\n\n',1,156,812,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
 (1215,'使用委托监听方法','监听按键测试的方法`ButtonTest`。该方法接受一个方法参数和一个字符串参数，并执行按键测试操作\n\n```csharp\n/// <summary>\n/// 下指令按键测试\n/// </summary>\n/// <param name=\"func\">传入方法, _button.ButtonTest(() =&gt; BtnTest(\"0x01\"), \"请按Teams键\")) </param>\n/// <param name=\"name\">按键操作对应窗口名</param>\n/// <returns></returns>\npublic bool ButtonTest(Func < bool > func, string name)\n{\n    var flag = true;\n    //用于监控按键操作\n    var buttonMonitor = Task.Run(() =>\n    {\n        Thread.Sleep(50);\n        while(flag)\n        {\n            if(func.Invoke())\n            {   \n                // 如果返回值为true，则设置msgbox的DialogResult为OK\n                msgbox.DialogResult = DialogResult.OK;\n            }\n            Thread.Sleep(100);\n        }\n    });\n    var result = ProgressBarsBox(name);\n    flag = false;\n    return result;\n}\n```\n\n```csharp\n_button.ButtonTest(() =&gt; BtnTest(\"0x01\")\n```',1,157,813,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
 (1216,'FormClosing','当窗口关闭时，它会引发两个事件：Closing 和 Closed。\n\nClosing 在窗口关闭之前引发， 系统会向Closing 事件处理程序传递一个 FormClosingEventArgs e，该参数实现 Boolean Cancel 属性，将该属性设置为 true 可以阻止窗口关闭。\n\n在事件中提示并关闭资源\n\n```csharp\nif(MessageBox.Show(\"是否关闭？\", \"关闭\", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)\n{\n    // 关闭所有的线程\n    this.Dispose();\n    this.Close();\n    Application.Exit();\n}\nelse\n{\n    e.Cancel = true; ////不关闭窗口\n}\n```\n\n取消退出\n\n```csharp\ne.Cancel = true;\n```',1,130,814,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
-(1217,'FormClosed','FormClosed事件 是在 关闭窗体后发生，可以在该事件中处理保存窗口的一些信息等操作，不能取消窗口关闭。\n\n在窗口真正关闭之前，会引发 Closed，这时无法阻止窗口关闭。\n\n```csharp\nprivate void Form2_FormClosed(object sender, FormClosingEventArgs e)\n{\n  Application.Exit();\n}\n```\n\n',1,130,814,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20');
+(1217,'FormClosed','FormClosed事件 是在 关闭窗体后发生，可以在该事件中处理保存窗口的一些信息等操作，不能取消窗口关闭。\n\n在窗口真正关闭之前，会引发 Closed，这时无法阻止窗口关闭。\n\n```csharp\nprivate void Form2_FormClosed(object sender, FormClosingEventArgs e)\n{\n  Application.Exit();\n}\n```\n\n',1,130,814,4,0,'2021-11-13 03:18:20','2021-11-13 03:18:20'),
+(1219,'test11212','123211231232131231',1,9,27,1,0,'2021-11-13 03:18:20','2021-11-13 03:18:20');
 /*!40000 ALTER TABLE `snippet` ENABLE KEYS */;
 
 -- 
@@ -3905,24 +3911,24 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '邮箱',
   `pwd` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '密码',
   `photo` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '头像',
-  `time_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
-  `time_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `time_create` datetime NOT NULL COMMENT '注册时间',
+  `time_modified` datetime NOT NULL COMMENT '更新时间',
   `nickname` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '称呼',
   `brief` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '简介',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
 
 -- 
 -- Dumping data for table user
 -- 
 
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user`(`id`,`ip`,`name`,`email`,`pwd`,`photo`,`nickname`,`brief`) VALUES
-(1,'192.168.1.1','admin','81929392@qq.con','admin','','测试号','哈哈'),
-(2,'1','user2','user2','user2','user2','user2','user2'),
-(3,'1','user3','user3','user3','user3','user3','user3'),
-(4,'192.168.1.2','kai','851039536@qq.com','woshishui','..','少年','人生有梦,各自精彩'),
-(18,'192.168.1.3','user1','user1','user1','131232','测试角色','测试！！！');
+INSERT INTO `user`(`id`,`ip`,`name`,`email`,`pwd`,`photo`,`time_create`,`time_modified`,`nickname`,`brief`) VALUES
+(1,'192.168.1.1','admin','81929392@qq.con','admin','','2021-11-13 03:18:20','2024-06-06 08:49:14','测试管理员','测试管理员！！！！'),
+(2,'1','user2','user2','user2','user2','2024-06-05 02:16:28','2024-06-05 02:16:28','user2','user2'),
+(3,'1','user3','user3','user3','user3','2024-06-05 02:54:11','2024-06-05 02:54:11','user3','user3'),
+(4,'192.168.1.2','kai','851039536@qq.com','woshishui','..','2020-10-19 00:00:00','2024-06-05 00:23:14','少年','人生有梦,各自精彩'),
+(18,'192.168.1.3','user1','user1','user1','user1','2021-11-13 03:18:20','2024-06-06 08:48:50','测试角色','测试！！！');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 -- 
@@ -4024,5 +4030,5 @@ INSERT INTO `video`(`id`,`name`,`img`,`url`,`type_id`,`user_id`,`time_create`,`t
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 
--- Dump completed on 2024-06-05 15:40:14
--- Total time: 0:0:0:0:265 (d:h:m:s:ms)
+-- Dump completed on 2024-06-06 08:52:07
+-- Total time: 0:0:0:0:187 (d:h:m:s:ms)

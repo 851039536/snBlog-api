@@ -780,16 +780,15 @@ public partial class SnblogContext : DbContext
             entity.Property(e => e.Pwd).IsRequired().HasMaxLength(20).HasComment("密码").HasColumnName("pwd");
             entity
                 .Property(e => e.TimeCreate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("now()")
                 .HasComment("注册时间")
-                .HasColumnType("timestamp")
+                .HasColumnType("datetime")
                 .HasColumnName("time_create");
             entity
                 .Property(e => e.TimeModified)
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("now()")
                 .HasComment("更新时间")
-                .HasColumnType("timestamp")
+                .HasColumnType("datetime")
                 .HasColumnName("time_modified");
 
             entity
