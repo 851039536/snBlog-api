@@ -1,4 +1,6 @@
-﻿namespace Snblog.IService.IService.Articles;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Snblog.IService.IService.Articles;
 
 /// <summary>
 /// 文章接口
@@ -13,6 +15,8 @@ public interface IArticleService
     /// <param name="cache">缓存</param>
     /// <returns>int</returns>
     Task<int> GetSumAsync(int identity,string type,bool cache);
+
+
 
     /// <summary>
     /// 执行模糊查询操作，根据不同的标识和类型筛选文章。

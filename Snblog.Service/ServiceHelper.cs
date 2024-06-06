@@ -1,7 +1,7 @@
 ﻿namespace Snblog.Service;
 
 /// <summary>
-/// 常量字符
+/// 服务层帮助类
 /// </summary>
 public class ServiceHelper
 {

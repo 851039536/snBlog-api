@@ -35,6 +35,8 @@ public class ArticleService : IArticleService
     #endregion
 
     #region 查询总数
+    
+   
 
     public async Task<int> GetSumAsync(int identity,string type,bool cache)
     {

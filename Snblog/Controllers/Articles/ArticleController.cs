@@ -3,6 +3,8 @@ using Snblog.IService.IService.Articles;
 using Snblog.Jwt;
 
 namespace Snblog.Controllers.Articles;
+// 定义一个类来存储合并后的结果
+
 
 /// <summary>
 /// 文章API
@@ -16,7 +18,7 @@ public class ArticleController : BaseController
 
     private readonly IArticleService _service;
     private readonly IValidator<Article> _validator;
-
+  
     #endregion
 
     #region 构造函数
@@ -32,7 +34,9 @@ public class ArticleController : BaseController
     }
 
     #endregion
-
+    
+   
+    
     #region 查询总数
 
     /// <summary>
