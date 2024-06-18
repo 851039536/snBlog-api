@@ -5,20 +5,20 @@ using Microsoft.Extensions.Hosting;
 namespace Snblog;
 
 /// <summary>
-/// Program
+/// 应用程序入口点
 /// </summary>
 public class Program
 {
     /// <summary>
-    /// Main
+    /// 应用程序主入口点
     /// </summary>
     /// <param name="args"></param>
     public static void Main(string[] args)
     {
-        // 读取 appsettings.json 配置文件
+        // 读取 appsettings 配置
         var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-        // 配置 Serilog
+        // 配置Serilog日志记录器
         Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 
         try
@@ -37,10 +37,10 @@ public class Program
     }
 
     /// <summary>
-    /// CreateHostBuilder
+    ///创建并配置Web主机构建器
     /// </summary>
-    /// <param name="args"></param>
-    /// <returns></returns>
+    /// <param name="args">命令行参数</param>
+    /// <returns>Web主机构建器</returns>
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .UseSerilog() // 使用 Serilog 作为日志提供程序
