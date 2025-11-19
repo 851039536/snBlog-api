@@ -113,7 +113,7 @@ public class UserService : IUserService
     public async Task<int> AddAsync(User entity)
     {
         Log.Information($"{Name}{ServiceConfig.Add}{entity}");
-        await _service.Users.AddAsync(entity);
+        _=await _service.Users.AddAsync(entity);
         return await _service.SaveChangesAsync();
     }
 
